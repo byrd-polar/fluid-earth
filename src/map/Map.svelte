@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import * as twgl from 'twgl.js';
 
   let canvas;
 
@@ -7,6 +8,7 @@
     let gl = canvas.getContext('webgl');
     canvas.style.backgroundColor = 'red';
     console.log(gl);
+    console.log(twgl);
   })
 </script>
 
