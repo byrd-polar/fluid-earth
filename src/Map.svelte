@@ -1,14 +1,12 @@
 <script>
-  import Map from './Map.svelte';
 </script>
 
-<main>
-  <Map/>
-</main>
+<canvas></canvas>
 
 <style>
-  main {
+  canvas {
     height: 100%;
     width: 100%;
+    background-color: blue;
   }
 </style>
