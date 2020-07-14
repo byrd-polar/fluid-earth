@@ -2,17 +2,27 @@
   import { onMount } from 'svelte';
   import * as twgl from 'twgl.js';
 
-  let canvas;
+  let mapCanvas;
+  let gl;
 
+  // Begin map rendering after Svelte component has been mounted
   onMount(() => {
-    let gl = canvas.getContext('webgl');
-    canvas.style.backgroundColor = 'red';
-    console.log(gl);
-    console.log(twgl);
-  })
+    gl = mapCanvas.getContext('webgl');
+    requestAnimationFrame(render);
+  });
+
+  // Main animation loop
+  function render() {
+    if (twgl.resizeCanvasToDisplaySize(gl.canvas)) {
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      console.log(gl);
+    };
+
+    requestAnimationFrame(render);
+  }
 </script>
 
-<canvas bind:this={canvas}/>
+<canvas bind:this={mapCanvas}/>
 
 <style>
   canvas {
