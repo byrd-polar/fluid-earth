@@ -1,18 +1,19 @@
 # FEV2r (Fluid Earth Viewer 2)
 
-A potential successor to [FEVer](https://fever.byrd.osu.edu), taking potential
-of [WebGL](https://en.wikipedia.org/wiki/WebGL).
+A potential successor to [FEVer](https://fever.byrd.osu.edu), making use of of
+[WebGL](https://en.wikipedia.org/wiki/WebGL).
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org)
 - [git](https://git-scm.com/)
+- [Node.js](https://nodejs.org)
 
 ## Get started
 
 Install the dependencies...
 
 ```bash
+git clone https://github.com/zqianem/fev2r.git
 cd fev2r
 npm install
 ```
