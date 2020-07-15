@@ -11,8 +11,6 @@
   let bgProgramInfo;
   let bgBufferInfo;
   let bgTexture;
-
-  let imageRatio;
   let canvasRatio;
 
   // Attributes passed to the background vertex shader
@@ -48,12 +46,10 @@
     bgBufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
     // loads actual texture asynchronously; will be rendered when available
+    // this should be a plate carée map projection with aspect ratio 2:1
     bgTexture = twgl.createTexture(gl, {
       src: '/8k_earth_daymap.jpg',
-    }, (_err, _texture, src) => {
-      imageRatio = src.width / src.height;
-      drawMapBackground();
-    });
+    }, () => drawMapBackground());
 
     // correct the initial size of canvas and viewport
     twgl.resizeCanvasToDisplaySize(gl.canvas);
@@ -78,7 +74,6 @@
     const bgUniforms = {
       u_texture: bgTexture,
       u_canvasRatio: canvasRatio,
-      u_imageRatio: imageRatio,
     };
 
     gl.useProgram(bgProgramInfo.program);
