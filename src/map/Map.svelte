@@ -12,6 +12,9 @@
   let bgBufferInfo;
   let bgTexture;
 
+  let imageRatio;
+  let canvasRatio;
+
   // Attributes passed to the background vertex shader
   const arrays = {
     a_position: {
@@ -47,7 +50,15 @@
     // loads actual texture asynchronously; will be rendered when available
     bgTexture = twgl.createTexture(gl, {
       src: '/8k_earth_daymap.jpg',
-    }, () => drawMapBackground());
+    }, (_err, _texture, src) => {
+      imageRatio = src.width / src.height;
+      drawMapBackground();
+    });
+
+    // correct the initial size of canvas and viewport
+    twgl.resizeCanvasToDisplaySize(gl.canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
     requestAnimationFrame(render);
   });
@@ -56,6 +67,7 @@
   function render(time) {
     if (twgl.resizeCanvasToDisplaySize(gl.canvas)) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
       drawMapBackground();
     };
 
@@ -65,6 +77,8 @@
   function drawMapBackground() {
     const bgUniforms = {
       u_texture: bgTexture,
+      u_canvasRatio: canvasRatio,
+      u_imageRatio: imageRatio,
     };
 
     gl.useProgram(bgProgramInfo.program);
