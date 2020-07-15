@@ -47,7 +47,7 @@
     // loads actual texture asynchronously; will be rendered when available
     bgTexture = twgl.createTexture(gl, {
       src: '/8k_earth_daymap.jpg',
-    });
+    }, () => drawMapBackground());
 
     requestAnimationFrame(render);
   });
@@ -56,8 +56,13 @@
   function render(time) {
     if (twgl.resizeCanvasToDisplaySize(gl.canvas)) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      drawMapBackground();
     };
 
+    requestAnimationFrame(render);
+  }
+
+  function drawMapBackground() {
     const bgUniforms = {
       u_texture: bgTexture,
     };
@@ -66,8 +71,6 @@
     twgl.setBuffersAndAttributes(gl, bgProgramInfo, bgBufferInfo);
     twgl.setUniforms(bgProgramInfo, bgUniforms);
     twgl.drawBufferInfo(gl, bgBufferInfo);
-
-    requestAnimationFrame(render);
   }
 </script>
 
