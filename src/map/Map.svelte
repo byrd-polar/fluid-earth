@@ -10,6 +10,7 @@
   let gl;
   let bgProgramInfo;
   let bgBufferInfo;
+  let bgTexture;
 
   // Attributes passed to the background vertex shader
   const arrays = {
@@ -42,6 +43,12 @@
     ]);
 
     bgBufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
+
+    // loads actual texture asynchronously; will be rendered when available
+    bgTexture = twgl.createTexture(gl, {
+      src: '/8k_earth_daymap.jpg',
+    });
+
     requestAnimationFrame(render);
   });
 
@@ -51,8 +58,13 @@
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     };
 
+    const bgUniforms = {
+      u_texture: bgTexture,
+    };
+
     gl.useProgram(bgProgramInfo.program);
     twgl.setBuffersAndAttributes(gl, bgProgramInfo, bgBufferInfo);
+    twgl.setUniforms(bgProgramInfo, bgUniforms);
     twgl.drawBufferInfo(gl, bgBufferInfo);
 
     requestAnimationFrame(render);
