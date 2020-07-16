@@ -15,7 +15,7 @@
   let bgTexture;
   let canvasRatio;
 
-  let gridDetail = 255;
+  let gridDetail = 2048;
 
   // Attributes passed to the background vertex shader
   const arrays = {
@@ -25,7 +25,7 @@
       data: clipSpacePointsGrid(gridDetail, gridDetail),
     },
     // Indices for a gl.TRIANGLE_STRIP spanning the above grid
-    indices: triangleStripIndices(gridDetail, gridDetail),
+    indices: new Uint32Array(triangleStripIndices(gridDetail, gridDetail)),
   };
 
   // Begin map rendering after Svelte component has been mounted
@@ -34,11 +34,21 @@
     if (!gl) {
       return;
     }
+
     bgProgramInfo = twgl.createProgramInfo(gl, [
       bgVertexShader,
       bgFragmentShader,
     ]);
 
+    // Checks if larger gridDetails value (via buffer index size) is supported
+    // by browser, otherwise resets gridDetail to smaller value before
+    // creating buffer
+    const ext = gl.getExtension('OES_element_index_uint');
+    if (!ext) {
+      gridDetail = 255;
+      arrays.a_position.data = clipSpacePointsGrid(gridDetail, gridDetail);
+      arrays.indices = triangleStripIndices(gridDetail, gridDetail);
+    }
     bgBufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
     // loads actual texture asynchronously; will be rendered when available
