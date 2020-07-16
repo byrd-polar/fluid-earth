@@ -15,7 +15,7 @@
   let bgTexture;
   let canvasRatio;
 
-  let gridDetail = 2048;
+  let gridDetail = 1024;
 
   // Attributes passed to the background vertex shader
   const arrays = {
@@ -70,16 +70,17 @@
     if (twgl.resizeCanvasToDisplaySize(gl.canvas)) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
-      drawMapBackground();
     };
 
+    drawMapBackground(time);
     requestAnimationFrame(render);
   }
 
-  function drawMapBackground() {
+  function drawMapBackground(time) {
     const bgUniforms = {
       u_texture: bgTexture,
       u_canvasRatio: canvasRatio,
+      u_time: time,
     };
 
     gl.useProgram(bgProgramInfo.program);
