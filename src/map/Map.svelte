@@ -52,7 +52,8 @@
     bgBufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
     // loads actual texture asynchronously; will be rendered when available
-    // this should be a plate carée map projection with aspect ratio 2:1
+    // should be a plate carée map projection with aspect ratio 2:1 and MUST
+    // have pixel dimensions equal a power of 2, e.g. 2048x1024
     bgTexture = twgl.createTexture(gl, {
       src: '/8k_earth_daymap.jpg',
     }, () => drawMapBackground());
