@@ -38,10 +38,8 @@ void main() {
   // points on a graph with (0,0) in the center of the canvas, which is pi units
   // high when zoom = 1 and has width units proportional to height units (unlike
   // clip coordinates)
-  //
-  // also image needs to flipped vertically for some reason
   float zoom = 1.0;
-  vec2 displayCoord = vec2(u_canvasRatio * PI_2, -PI_2) * a_position;
+  vec2 displayCoord = vec2(u_canvasRatio * PI_2, PI_2) * a_position;
   displayCoord = displayCoord / vec2(zoom, zoom);
 
   // longitude and latitude, respectively, in degrees, where positive latitudes
@@ -56,6 +54,9 @@ void main() {
   // be a place to improve performance?
   lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;
   lonLat.y = mod(lonLat.y + PI_2, PI) - PI_2;
+
+  // also image needs to flipped vertically for some reason
+  lonLat = lonLat * vec2(1, -1);
 
   // convert to texture coordinates on a image of a plate carrée map projection,
   // where (0,0) is the bottom left corner and (1,1) is the top right corner
