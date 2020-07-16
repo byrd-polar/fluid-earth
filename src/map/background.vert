@@ -51,6 +51,12 @@ void main() {
   vec2 lonLat;
   orthographic(displayCoord, lonLat);
 
+  // prevent textureCoord from overflowing by keeping longitude in [-PI, PI]
+  // and latitude in [-PI_2, PI_2], but not necessary in many projections, may
+  // be a place to improve performance?
+  lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;
+  lonLat.y = mod(lonLat.y + PI_2, PI) - PI_2;
+
   // convert to texture coordinates on a image of a plate carrée map projection,
   // where (0,0) is the bottom left corner and (1,1) is the top right corner
   // (despite the image having an aspect ratio of 2:1, because that's just how
