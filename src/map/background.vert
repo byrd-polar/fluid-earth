@@ -1,7 +1,6 @@
 attribute vec2 a_position;
 
 uniform float u_canvasRatio;
-uniform float u_time;
 
 varying vec2 v_textureCoord;
 
@@ -18,7 +17,7 @@ void equirectangular(in vec2 coord, out vec2 lonLat) {
 }
 
 void orthographic(in vec2 coord, out vec2 lonLat) {
-  float lon0 = radians(-u_time / 120.0);
+  float lon0 = radians(-90.0);
   float lat0 = radians(40.0);
 
   float rho = sqrt(pow(coord.x, 2.0) + pow(coord.y, 2.0));
