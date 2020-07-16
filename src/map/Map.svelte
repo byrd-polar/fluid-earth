@@ -5,6 +5,8 @@
   import bgVertexShader from './background.vert';
   import bgFragmentShader from './background.frag';
 
+  import { clipSpacePointsGrid, triangleStripIndices } from './triangleGrid.js';
+
   let mapCanvas;
 
   let gl;
@@ -13,25 +15,17 @@
   let bgTexture;
   let canvasRatio;
 
+  let gridDetail = 255;
+
   // Attributes passed to the background vertex shader
-  // Eight triangles
   const arrays = {
+    // A grid of points
     a_position: {
-      // Indicate we are using 2-dimensional points
-      numComponents: 2,
-      data: [
-        -1,  1,
-         0,  1,
-         1,  1,
-        -1,  0,
-         0,  0,
-         1,  0,
-        -1, -1,
-         0, -1,
-         1, -1,
-      ],
+      numComponents: 2, // Indicate we are using 2-dimensional points
+      data: clipSpacePointsGrid(gridDetail, gridDetail),
     },
-    indices: [0, 3, 1, 4, 2, 5, 8, 4, 7, 3, 6],
+    // Indices for a gl.TRIANGLE_STRIP spanning the above grid
+    indices: triangleStripIndices(gridDetail, gridDetail),
   };
 
   // Begin map rendering after Svelte component has been mounted
