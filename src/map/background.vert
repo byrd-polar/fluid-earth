@@ -4,6 +4,9 @@ uniform float u_canvasRatio;
 
 varying vec2 v_textureCoord;
 
+const float PI = radians(180.0);
+const float PI_2 = radians(90.0);
+
 void mercator(in vec2 coord, out vec2 lonLat) {
   lonLat.x = coord.x;
   lonLat.y = 2.0 * atan(exp(coord.y)) - radians(90.0);
@@ -35,8 +38,7 @@ void main() {
   // points on a graph with (0,0) in the center of the canvas, which is pi units
   // high when zoom = 1 and has width units proportional to height units (unlike
   // clip coordinates)
-  float zoom = 3.0;
-  float PI_2 = radians(90.0);
+  float zoom = 1.0;
   vec2 displayCoord = vec2(u_canvasRatio * PI_2, PI_2) * a_position;
   displayCoord = displayCoord / vec2(zoom, zoom);
 
@@ -51,7 +53,7 @@ void main() {
   // where (0,0) is the bottom left corner and (1,1) is the top right corner
   // (despite the image having an aspect ratio of 2:1, because that's just how
   // textures work in WebGL)
-  v_textureCoord = (degrees(lonLat) + vec2(180, 90)) / vec2(360, 180);
+  v_textureCoord = (lonLat + vec2(PI, PI_2)) / vec2(2.0 * PI, PI);
 
   // also image needs to flipped vertically for some reason
   v_textureCoord = vec2(1, -1) * v_textureCoord;
