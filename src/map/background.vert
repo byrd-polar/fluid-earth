@@ -38,8 +38,10 @@ void main() {
   // points on a graph with (0,0) in the center of the canvas, which is pi units
   // high when zoom = 1 and has width units proportional to height units (unlike
   // clip coordinates)
+  //
+  // also image needs to flipped vertically for some reason
   float zoom = 1.0;
-  vec2 displayCoord = vec2(u_canvasRatio * PI_2, PI_2) * a_position;
+  vec2 displayCoord = vec2(u_canvasRatio * PI_2, -PI_2) * a_position;
   displayCoord = displayCoord / vec2(zoom, zoom);
 
   // longitude and latitude, respectively, in degrees, where positive latitudes
@@ -54,9 +56,6 @@ void main() {
   // (despite the image having an aspect ratio of 2:1, because that's just how
   // textures work in WebGL)
   v_textureCoord = (lonLat + vec2(PI, PI_2)) / vec2(2.0 * PI, PI);
-
-  // also image needs to flipped vertically for some reason
-  v_textureCoord = vec2(1, -1) * v_textureCoord;
 
   gl_Position = vec4(a_position, 0, 1);
 }
