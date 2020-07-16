@@ -14,22 +14,24 @@
   let canvasRatio;
 
   // Attributes passed to the background vertex shader
+  // Eight triangles
   const arrays = {
     a_position: {
       // Indicate we are using 2-dimensional points
       numComponents: 2,
-      // Two triangles to form a rectangle from bottom-left corner (-1, -1) to
-      // top-right cornder (1, 1) in clip space coordiantes
       data: [
-        -1, -1,
-         1, -1,
         -1,  1,
-
-        -1,  1,
-         1, -1,
+         0,  1,
          1,  1,
+        -1,  0,
+         0,  0,
+         1,  0,
+        -1, -1,
+         0, -1,
+         1, -1,
       ],
     },
+    indices: [0, 3, 1, 4, 2, 5, 8, 4, 7, 3, 6],
   };
 
   // Begin map rendering after Svelte component has been mounted
@@ -79,7 +81,7 @@
     gl.useProgram(bgProgramInfo.program);
     twgl.setBuffersAndAttributes(gl, bgProgramInfo, bgBufferInfo);
     twgl.setUniforms(bgProgramInfo, bgUniforms);
-    twgl.drawBufferInfo(gl, bgBufferInfo);
+    twgl.drawBufferInfo(gl, bgBufferInfo, gl.TRIANGLE_STRIP);
   }
 </script>
 
