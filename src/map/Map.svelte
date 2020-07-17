@@ -7,8 +7,8 @@
 
   import { clipSpacePointsGrid, triangleStripIndices } from './triangleGrid.js';
 
-  export let latitude = 0;
-  export let longitude = 0;
+  export let latitude = 0; // in degrees
+  export let longitude = 0; // in degrees
   export let zoom = 1;
 
   let bgNeedsRedraw = true;

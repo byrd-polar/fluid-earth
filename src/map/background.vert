@@ -21,14 +21,17 @@ void equirectangular(in vec2 coord, out vec2 lonLat) {
 }
 
 void orthographic(in vec2 coord, out vec2 lonLat) {
+  float lon0 = radians(u_lon0);
+  float lat0 = radians(u_lat0);
+
   float rho = sqrt(pow(coord.x, 2.0) + pow(coord.y, 2.0));
   float c = asin(rho);
 
-  lonLat.x = u_lon0 + atan(
+  lonLat.x = lon0 + atan(
       coord.x * sin(c),
-      rho * cos(c) * cos(u_lat0) - coord.y * sin(c) * sin(u_lat0)
+      rho * cos(c) * cos(lat0) - coord.y * sin(c) * sin(lat0)
   );
-  lonLat.y = asin(cos(c) * sin(u_lat0) + coord.y * sin(c) * cos(u_lat0) / rho);
+  lonLat.y = asin(cos(c) * sin(lat0) + coord.y * sin(c) * cos(lat0) / rho);
 }
 
 void main() {
