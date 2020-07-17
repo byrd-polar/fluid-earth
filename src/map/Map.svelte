@@ -11,6 +11,10 @@
   export let longitude = 0;
   export let zoom = 1;
 
+  let bgNeedsRedraw = true;
+  // Whenever any of these variables change, ask for a redraw on next frame
+  $: latitude, longitude, zoom, bgNeedsRedraw = true;
+
   let mapCanvas;
 
   let gl;
@@ -59,7 +63,7 @@
     // should be a plate carée map projection with aspect ratio 2:1
     bgTexture = twgl.createTexture(gl, {
       src: '/8k_earth_daymap.jpg',
-    }, () => drawMapBackground());
+    }, () => bgNeedsRedraw = true);
 
     // correct the initial size of canvas and viewport
     twgl.resizeCanvasToDisplaySize(gl.canvas);
@@ -74,8 +78,13 @@
     if (twgl.resizeCanvasToDisplaySize(gl.canvas)) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
-      drawMapBackground();
+      bgNeedsRedraw = true;
     };
+
+    if (bgNeedsRedraw) {
+      drawMapBackground();
+      bgNeedsRedraw = false;
+    }
 
     requestAnimationFrame(render);
   }
