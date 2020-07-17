@@ -13,7 +13,7 @@ A potential successor to [FEVer](https://fever.byrd.osu.edu), making use of of
 Install the dependencies...
 
 ```bash
-git clone https://github.com/zqianem/fev2r.git
+git clone <this repo's URL>
 cd fev2r
 npm install
 ```
