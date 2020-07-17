@@ -1,6 +1,9 @@
 attribute vec2 a_position;
 
 uniform float u_canvasRatio;
+uniform float u_lon0;
+uniform float u_lat0;
+uniform float u_zoom;
 
 varying vec2 v_textureCoord;
 
@@ -13,24 +16,19 @@ void mercator(in vec2 coord, out vec2 lonLat) {
 }
 
 void equirectangular(in vec2 coord, out vec2 lonLat) {
-  float lon0 = radians(0.0);
-  float lat0 = radians(0.0);
-  lonLat.x = coord.x / cos(lat0) + lon0;
-  lonLat.y = coord.y + lat0;
+  lonLat.x = coord.x;
+  lonLat.y = coord.y;
 }
 
 void orthographic(in vec2 coord, out vec2 lonLat) {
-  float lon0 = radians(-90.0);
-  float lat0 = radians(40.0);
-
   float rho = sqrt(pow(coord.x, 2.0) + pow(coord.y, 2.0));
   float c = asin(rho);
 
-  lonLat.x = lon0 + atan(
+  lonLat.x = u_lon0 + atan(
       coord.x * sin(c),
-      rho * cos(c) * cos(lat0) - coord.y * sin(c) * sin(lat0)
+      rho * cos(c) * cos(u_lat0) - coord.y * sin(c) * sin(u_lat0)
   );
-  lonLat.y = asin(cos(c) * sin(lat0) + coord.y * sin(c) * cos(lat0) / rho);
+  lonLat.y = asin(cos(c) * sin(u_lat0) + coord.y * sin(c) * cos(u_lat0) / rho);
 }
 
 void main() {
@@ -38,9 +36,8 @@ void main() {
   // points on a graph with (0,0) in the center of the canvas, which is pi units
   // high when zoom = 1 and has width units proportional to height units (unlike
   // clip coordinates)
-  float zoom = 1.0;
   vec2 displayCoord = vec2(u_canvasRatio * PI_2, PI_2) * a_position;
-  displayCoord = displayCoord / vec2(zoom, zoom);
+  displayCoord = displayCoord / vec2(u_zoom, u_zoom);
 
   // longitude and latitude, respectively, in degrees, where positive latitudes
   // correspond to the northern hemisphere, and positive longitudes are east of

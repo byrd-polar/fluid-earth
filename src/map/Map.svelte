@@ -7,6 +7,10 @@
 
   import { clipSpacePointsGrid, triangleStripIndices } from './triangleGrid.js';
 
+  export let latitude = 0;
+  export let longitude = 0;
+  export let zoom = 1;
+
   let mapCanvas;
 
   let gl;
@@ -80,6 +84,9 @@
     const bgUniforms = {
       u_texture: bgTexture,
       u_canvasRatio: canvasRatio,
+      u_lon0: longitude,
+      u_lat0: latitude,
+      u_zoom: zoom,
     };
 
     gl.useProgram(bgProgramInfo.program);
