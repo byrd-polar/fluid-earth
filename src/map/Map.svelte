@@ -15,6 +15,11 @@
   // Whenever any of these variables change, ask for a redraw on next frame
   $: latitude, longitude, zoom, bgNeedsRedraw = true;
 
+  // Limit ranges of latitude and longitude
+  $: latitude = Math.min(latitude, 90);
+  $: latitude = Math.max(latitude, -90);
+  $: longitude = ((longitude + 180) % 360) - 180;
+
   let mapCanvas;
 
   let gl;

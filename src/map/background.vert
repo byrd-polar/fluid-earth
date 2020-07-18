@@ -25,12 +25,16 @@ void orthographic(in vec2 coord, out vec2 lonLat) {
   float lat0 = radians(u_lat0);
 
   float rho = sqrt(pow(coord.x, 2.0) + pow(coord.y, 2.0));
+  if (rho == 0.0) {
+    lonLat = vec2(lon0, lat0);
+    return;
+  }
   float c = asin(rho);
 
-  lonLat.x = lon0 + atan(
-      coord.x * sin(c),
-      rho * cos(c) * cos(lat0) - coord.y * sin(c) * sin(lat0)
-  );
+  float x = coord.x * sin(c);
+  float y = rho * cos(c) * cos(lat0) - coord.y * sin(c) * sin(lat0);
+
+  lonLat.x = lon0 + atan(x, y);
   lonLat.y = asin(cos(c) * sin(lat0) + coord.y * sin(c) * cos(lat0) / rho);
 }
 
