@@ -27,7 +27,9 @@ export default {
     }),
 
     // For GLSL .vert and .frag files
-    glslify(),
+    glslify({
+      compress: false,
+    }),
 
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In

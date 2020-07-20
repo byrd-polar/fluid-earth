@@ -1,3 +1,8 @@
+#pragma glslify: equirectangular = require(./projections/equirectangular.glsl)
+#pragma glslify: mercator = require(./projections/mercator.glsl)
+#pragma glslify: equalEarth = require(./projections/equalEarth.glsl)
+#pragma glslify: orthographic = require(./projections/orthographic.glsl)
+
 attribute vec2 a_position;
 
 uniform float u_canvasRatio;
@@ -9,34 +14,6 @@ varying vec2 v_textureCoord;
 
 const float PI = radians(180.0);
 const float PI_2 = radians(90.0);
-
-void mercator(in vec2 coord, out vec2 lonLat) {
-  lonLat.x = coord.x;
-  lonLat.y = 2.0 * atan(exp(coord.y)) - radians(90.0);
-}
-
-void equirectangular(in vec2 coord, out vec2 lonLat) {
-  lonLat.x = coord.x;
-  lonLat.y = coord.y;
-}
-
-void orthographic(in vec2 coord, out vec2 lonLat) {
-  float lon0 = radians(u_lon0);
-  float lat0 = radians(u_lat0);
-
-  float rho = sqrt(pow(coord.x, 2.0) + pow(coord.y, 2.0));
-  if (rho == 0.0) {
-    lonLat = vec2(lon0, lat0);
-    return;
-  }
-  float c = asin(rho);
-
-  float x = coord.x * sin(c);
-  float y = rho * cos(c) * cos(lat0) - coord.y * sin(c) * sin(lat0);
-
-  lonLat.x = lon0 + atan(x, y);
-  lonLat.y = asin(cos(c) * sin(lat0) + coord.y * sin(c) * cos(lat0) / rho);
-}
 
 void main() {
   // "display" coordinates are my convention here, where they correspond to
@@ -51,11 +28,10 @@ void main() {
   // the prime meridian -- these should be the outputs of the inverse map
   // projection equation for whichever projection we're currently using
   vec2 lonLat;
-  orthographic(displayCoord, lonLat);
+  orthographic(displayCoord, radians(vec2(u_lon0, u_lat0)), lonLat);
 
   // prevent textureCoord from overflowing by keeping longitude in [-PI, PI]
-  // and latitude in [-PI_2, PI_2], but not necessary in many projections, may
-  // be a place to improve performance?
+  // and latitude in [-PI_2, PI_2]
   lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;
   lonLat.y = mod(lonLat.y + PI_2, PI) - PI_2;
 
