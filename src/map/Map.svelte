@@ -27,8 +27,9 @@
   let bgBufferInfo;
   let bgTexture;
   let canvasRatio;
+  let canvasResolution;
 
-  let gridDetail = 2048;
+  let gridDetail = 512;
 
   // Attributes passed to the background vertex shader
   const arrays = {
@@ -74,6 +75,7 @@
     twgl.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    canvasResolution = [gl.canvas.clientWidth, gl.canvas.clientHeight];
 
     requestAnimationFrame(render);
   });
@@ -83,6 +85,7 @@
     if (twgl.resizeCanvasToDisplaySize(gl.canvas)) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
+      canvasResolution = [gl.canvas.clientWidth, gl.canvas.clientHeight];
       bgNeedsRedraw = true;
     };
 
@@ -98,9 +101,15 @@
     const bgUniforms = {
       u_texture: bgTexture,
       u_canvasRatio: canvasRatio,
+      u_canvasResolution: canvasResolution,
       u_lon0: longitude,
       u_lat0: latitude,
       u_zoom: zoom,
+      // see fragment shader as to why these values are duplicated
+      u_frag_canvasRatio: canvasRatio,
+      u_frag_lon0: longitude,
+      u_frag_lat0: latitude,
+      u_frag_zoom: zoom,
     };
 
     gl.useProgram(bgProgramInfo.program);

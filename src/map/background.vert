@@ -11,6 +11,7 @@ uniform float u_lat0;
 uniform float u_zoom;
 
 varying vec2 v_textureCoord;
+varying float v_onSeam; // 1 if on seam, 0 otherwise, will be interpolated
 
 const float PI = radians(180.0);
 const float PI_2 = radians(90.0);
@@ -21,7 +22,7 @@ void main() {
   // high when zoom = 1 and has width units proportional to height units (unlike
   // clip coordinates)
   vec2 displayCoord = vec2(u_canvasRatio * PI_2, PI_2) * a_position;
-  displayCoord = displayCoord / vec2(u_zoom, u_zoom);
+  displayCoord = displayCoord / u_zoom;
 
   // longitude and latitude, respectively, in degrees, where positive latitudes
   // correspond to the northern hemisphere, and positive longitudes are east of
@@ -43,6 +44,15 @@ void main() {
   // (despite the image having an aspect ratio of 2:1, because that's just how
   // textures work in WebGL)
   v_textureCoord = (lonLat + vec2(PI, PI_2)) / vec2(2.0 * PI, PI);
+
+  // determines if texture coordinate is on the seam where it cannot be
+  // correctly interpolated by the fragment shader, which will then handle the
+  // special case
+  if (v_textureCoord.x > 0.99 || v_textureCoord.x < 0.01) {
+    v_onSeam = 1.0;
+  } else {
+    v_onSeam = 0.0;
+  }
 
   gl_Position = vec4(a_position, 0, 1);
 }

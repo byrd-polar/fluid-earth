@@ -16,5 +16,4 @@ void orthographic(in vec2 coord, in vec2 lonLat0, out vec2 lonLat) {
 
   lonLat.x = lon0 + atan(x, y);
   lonLat.y = asin(cos(c) * sin(lat0) + coord.y * sin(c) * cos(lat0) / rho);
-
 }
