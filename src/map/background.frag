@@ -32,10 +32,8 @@ void main() {
   vec2 lonLat;
   orthographic(displayCoord, radians(vec2(u_lon0, u_lat0)), lonLat);
 
-  // prevent textureCoord from overflowing by keeping longitude in [-PI, PI]
-  // and latitude in [-PI_2, PI_2]
+  // prevent textureCoord.x from overflowing by keeping longitude in [-PI, PI]
   lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;
-  lonLat.y = mod(lonLat.y + PI_2, PI) - PI_2;
 
   // also image needs to flipped vertically for some reason
   lonLat = lonLat * vec2(1, -1);
