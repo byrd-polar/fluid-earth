@@ -5,17 +5,11 @@ precision mediump float;
 #pragma glslify: equalEarth = require(./projections/equalEarth.glsl)
 #pragma glslify: orthographic = require(./projections/orthographic.glsl)
 
-varying vec2 v_textureCoord;
-varying float v_onSeam; // 1 if on seam, 0 otherwise, will be interpolated
-
 uniform vec2 u_canvasResolution;
-// using different (reference-wise) but same (value-wise) constants to avoid
-// this issue without resorting to lower precision in vertex shaders:
-// https://stackoverflow.com/questions/37022476/webgl-is-it-forbidden-to-bind-the-same-uniform-in-a-vertex-shader-and-fragment
-uniform float u_frag_canvasRatio;
-uniform float u_frag_lon0;
-uniform float u_frag_lat0;
-uniform float u_frag_zoom;
+uniform float u_canvasRatio;
+uniform float u_lon0;
+uniform float u_lat0;
+uniform float u_zoom;
 
 uniform sampler2D u_texture;
 
@@ -23,36 +17,34 @@ const float PI = radians(180.0);
 const float PI_2 = radians(90.0);
 
 void main() {
-  vec2 textureCoord;
+  // "display" coordinates are my convention here, where they correspond to
+  // points on a graph with (0,0) in the center of the canvas, which is pi units
+  // high when zoom = 1 and has width units proportional to height units (unlike
+  // clip coordinates)
+  vec2 position = 2.0 * gl_FragCoord.xy / u_canvasResolution - 1.0;
+  vec2 displayCoord = vec2(u_canvasRatio * PI_2, PI_2) * position;
+  displayCoord = displayCoord / u_zoom;
 
-  // case when fragment is along the seam that corresponds to between 0.0 and
-  // 1.0 in texture coordinates -- performs same calculations as in the vertex
-  // shader, just on a per fragment level since we no longer can rely on
-  // interpolation between vertices for accurate texture coordinates
-  if (v_onSeam > 0.0) {
-    // convert to "display" coordinates (see explanation of convention in
-    // background.vert)
-    vec2 position = 2.0 * gl_FragCoord.xy / u_canvasResolution - 1.0;
-    vec2 displayCoord = vec2(u_frag_canvasRatio * PI_2, PI_2) * position;
-    displayCoord = displayCoord / vec2(u_frag_zoom, u_frag_zoom);
+  // longitude and latitude, respectively, in degrees, where positive latitudes
+  // correspond to the northern hemisphere, and positive longitudes are east of
+  // the prime meridian -- these should be the outputs of the inverse map
+  // projection equation for whichever projection we're currently using
+  vec2 lonLat;
+  orthographic(displayCoord, radians(vec2(u_lon0, u_lat0)), lonLat);
 
-    // apply map projection inverse
-    vec2 lonLat;
-    vec2 lonLat0 = radians(vec2(u_frag_lon0, u_frag_lat0));
-    orthographic(displayCoord, lonLat0, lonLat);
+  // prevent textureCoord from overflowing by keeping longitude in [-PI, PI]
+  // and latitude in [-PI_2, PI_2]
+  lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;
+  lonLat.y = mod(lonLat.y + PI_2, PI) - PI_2;
 
-    // keep lat/lon in range
-    lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;
-    lonLat.y = mod(lonLat.y + PI_2, PI) - PI_2;
+  // also image needs to flipped vertically for some reason
+  lonLat = lonLat * vec2(1, -1);
 
-    // flip image vertically, for some reason
-    lonLat = lonLat * vec2(1, -1);
-
-    // convert to texture coordinates
-    textureCoord = (lonLat + vec2(PI, PI_2)) / vec2(2.0 * PI, PI);
-  } else {
-    textureCoord = v_textureCoord;
-  }
+  // convert to texture coordinates on a image of a plate carrée map projection,
+  // where (0,0) is the bottom left corner and (1,1) is the top right corner
+  // (despite the image having an aspect ratio of 2:1, because that's just how
+  // textures work in WebGL)
+  vec2 textureCoord = (lonLat + vec2(PI, PI_2)) / vec2(2.0 * PI, PI);
 
   if (textureCoord.x <= 1.0 &&
       textureCoord.x >= 0.0 &&

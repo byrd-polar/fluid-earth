@@ -5,8 +5,6 @@
   import bgVertexShader from './background.vert';
   import bgFragmentShader from './background.frag';
 
-  import { clipSpacePointsGrid, triangleStripIndices } from './triangleGrid.js';
-
   export let latitude = 0; // in degrees
   export let longitude = 0; // in degrees
   export let zoom = 1;
@@ -36,10 +34,15 @@
     // A grid of points
     a_position: {
       numComponents: 2, // Indicate we are using 2-dimensional points
-      data: clipSpacePointsGrid(gridDetail, gridDetail),
+      data: [ // two right triangles that cover entire screen
+        -1, -1,
+        -1,  1,
+         1, -1,
+         1,  1,
+         1, -1,
+        -1,  1,
+      ],
     },
-    // Indices for a gl.TRIANGLE_STRIP spanning the above grid
-    indices: new Uint32Array(triangleStripIndices(gridDetail, gridDetail)),
   };
 
   // Begin map rendering after Svelte component has been mounted
@@ -53,16 +56,6 @@
       bgVertexShader,
       bgFragmentShader,
     ]);
-
-    // Checks if larger gridDetails value (via buffer index size) is supported
-    // by browser, otherwise resets gridDetail to smaller value before
-    // creating buffer
-    const ext = gl.getExtension('OES_element_index_uint');
-    if (!ext) {
-      gridDetail = 255;
-      arrays.a_position.data = clipSpacePointsGrid(gridDetail, gridDetail);
-      arrays.indices = triangleStripIndices(gridDetail, gridDetail);
-    }
     bgBufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
 
     // loads actual texture asynchronously; will be rendered when available,
@@ -115,7 +108,7 @@
     gl.useProgram(bgProgramInfo.program);
     twgl.setBuffersAndAttributes(gl, bgProgramInfo, bgBufferInfo);
     twgl.setUniforms(bgProgramInfo, bgUniforms);
-    twgl.drawBufferInfo(gl, bgBufferInfo, gl.TRIANGLE_STRIP);
+    twgl.drawBufferInfo(gl, bgBufferInfo);
   }
 </script>
 
