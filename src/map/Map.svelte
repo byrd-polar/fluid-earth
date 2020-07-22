@@ -99,11 +99,6 @@
       u_lon0: longitude,
       u_lat0: latitude,
       u_zoom: zoom,
-      // see fragment shader as to why these values are duplicated
-      u_frag_canvasRatio: canvasRatio,
-      u_frag_lon0: longitude,
-      u_frag_lat0: latitude,
-      u_frag_zoom: zoom,
     };
 
     gl.useProgram(bgProgramInfo.program);
