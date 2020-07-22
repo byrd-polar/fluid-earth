@@ -62,6 +62,7 @@
     // should be a plate carée map projection with aspect ratio 2:1
     bgTexture = twgl.createTexture(gl, {
       src: '/8k_earth_daymap.jpg',
+      min: gl.LINEAR,
     }, () => bgNeedsRedraw = true);
 
     // correct the initial size of canvas and viewport
