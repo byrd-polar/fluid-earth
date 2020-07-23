@@ -63,23 +63,30 @@
       min: gl.LINEAR,
     }, () => bgNeedsRedraw = true);
 
-    // correct the initial size of canvas and viewport
-    twgl.resizeCanvasToDisplaySize(gl.canvas);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    canvasResolution = [gl.canvas.clientWidth, gl.canvas.clientHeight];
+    // ensure correct the initial size of canvas and viewport
+    gl.canvas.width = 0;
+    gl.canvas.height = 0;
+    updateSizeVariables(gl);
 
     requestAnimationFrame(render);
   });
 
-  // Main animation loop
-  function render(time) {
-    if (twgl.resizeCanvasToDisplaySize(gl.canvas)) {
+  function updateSizeVariables(gl) {
+    const ratio = window.devicePixelRatio;
+    if (twgl.resizeCanvasToDisplaySize(gl.canvas, ratio)) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
-      canvasResolution = [gl.canvas.clientWidth, gl.canvas.clientHeight];
+      canvasResolution = [
+        gl.canvas.clientWidth * ratio,
+        gl.canvas.clientHeight * ratio
+      ];
       bgNeedsRedraw = true;
-    };
+    }
+  }
+
+  // Main animation loop
+  function render(time) {
+    updateSizeVariables(gl);
 
     if (bgNeedsRedraw) {
       drawMapBackground();
