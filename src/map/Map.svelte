@@ -27,8 +27,6 @@
   let canvasRatio;
   let canvasResolution;
 
-  let gridDetail = 512;
-
   // Attributes passed to the background vertex shader
   const arrays = {
     // A grid of points
