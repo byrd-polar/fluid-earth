@@ -13,10 +13,12 @@
   // Whenever any of these variables change, ask for a redraw on next frame
   $: latitude, longitude, zoom, bgNeedsRedraw = true;
 
-  // Limit ranges of latitude and longitude
+  // Limit ranges of latitude, longitude, and zoom
   $: latitude = Math.min(latitude, 90);
   $: latitude = Math.max(latitude, -90);
   $: longitude = ((longitude + 180) % 360) - 180;
+  $: zoom = Math.min(zoom, 15);
+  $: zoom = Math.max(zoom, 0.5);
 
   let mapCanvas;
 
@@ -111,9 +113,46 @@
     twgl.setUniforms(bgProgramInfo, bgUniforms);
     twgl.drawBufferInfo(gl, bgBufferInfo);
   }
+
+
+  let mouseDown = false;
+  let mouseDownX;
+  let mouseDownY;
+  let mouseDownLon;
+  let mouseDownLat;
+
+  function handleMouseDown(e) {
+    mouseDownX = e.offsetX;
+    mouseDownY = e.offsetY;
+    mouseDownLon = longitude;
+    mouseDownLat = latitude;
+
+    mouseDown = true;
+  }
+
+  function handleMouseMove(e) {
+    if (mouseDown) {
+      let xDiff = e.offsetX - mouseDownX;
+      let yDiff = e.offsetY - mouseDownY;
+
+      longitude = mouseDownLon - xDiff / (3 * zoom);
+      latitude = mouseDownLat + yDiff / (3 * zoom);
+    }
+  }
+
+  function handleWheel(e) {
+    zoom += e.deltaY * -0.01;
+  }
 </script>
 
-<canvas bind:this={mapCanvas}/>
+<canvas
+  bind:this={mapCanvas}
+  on:mousedown={handleMouseDown}
+  on:mousemove={handleMouseMove}
+  on:mouseup={() => mouseDown = false}
+  on:mouseout={() => mouseDown = false}
+  on:wheel={handleWheel}
+/>
 
 <style>
   canvas {
