@@ -32,26 +32,16 @@ export async function download(url) {
   let filepath = path.join(CACHE_DIR, path.basename((new URL(url)).pathname));
 
   if (fs.existsSync(filepath)) {
-    console.log(`Exists in cache, not re-downloading...\n=> ${filepath}`);
+    console.log(`Exists in cache, not re-downloading...\n=> ${filepath}\n`);
   } else {
-    console.log(`Downloading...\n${url}`);
+    console.log(`Downloading...\n${url}\n=> ${filepath}\n`);
     await got(url)
-      .on('downloadProgress', p => {
-        let percent = `${(p.percent * 100).toFixed(2)}%`
-        let total = p.total === undefined ? 'unknown' : prettyBytes(p.total);
-        let fraction = `${prettyBytes(p.transferred)} / ${total}`;
-        let lineEnd = p.percent === 1 && p.transferred !== 0 ? '\n' : '\r';
-        let progressInfo = `${percent} (${fraction})`;
-
-        process.stdout.write(`=> ${filepath} ${progressInfo}${lineEnd}`);
-      })
       .then(res => fsPromises.writeFile(filepath, res.rawBody))
       .catch(err => {
         console.log(`Failed to download... ${url}\n=> ${err}`);
         exit();
       });
   }
-  console.log();
   return filepath;
 }
 
