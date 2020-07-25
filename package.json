@@ -1,14 +1,19 @@
 {
   "name": "svelte-app",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "build": "rollup -c",
+    "data": "node data",
     "dev": "rollup -c -w",
     "start": "sirv public"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^12.0.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
+    "got": "^11.5.1",
+    "mapshaper": "^0.5.11",
+    "pretty-bytes": "^5.3.0",
     "rollup": "^2.3.4",
     "rollup-plugin-glslify": "^1.2.0",
     "rollup-plugin-livereload": "^1.0.0",
