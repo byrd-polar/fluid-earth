@@ -6,7 +6,7 @@ import { URL } from 'url';
 import got from 'got';
 import prettyBytes from 'pretty-bytes';
 
-import { coastlines } from './coastlines.js';
+import { topology } from './topology.js';;
 
 export const OUTPUT_DIR = 'public/data/';
 const CACHE_DIR = 'data/cache/';
@@ -15,7 +15,9 @@ function main() {
   mkdir(OUTPUT_DIR);
   mkdir(CACHE_DIR);
 
-  coastlines();
+  Promise.all([
+    topology(),
+  ]).then(() => console.log('Data processing complete.'));
 }
 
 // create dir if path doesn't exist
