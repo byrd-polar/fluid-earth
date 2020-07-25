@@ -5,7 +5,7 @@ import mapshaper from 'mapshaper';
 let url = 'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_coastline.shp';
 
 export function coastlines() {
-  download(url)
+  return download(url)
     .then(file => {
       let cmds = `-i ${file} -o ${OUTPUT_DIR} format=topojson`;
       console.log(`Converting to TopoJSON...\n<= ${file}\n=> ${OUTPUT_DIR}\n`);
