@@ -5,13 +5,13 @@ precision mediump float;
 #pragma glslify: p2 = require(./projections/equal-earth/invert.glsl)
 #pragma glslify: p3 = require(./projections/orthographic/invert.glsl)
 
-uniform vec2 u_canvasResolution;
 uniform float u_canvasRatio;
 uniform float u_lon0;
 uniform float u_lat0;
 uniform float u_zoom;
 
 uniform sampler2D u_texture;
+varying vec2 v_position;
 
 const float PI = radians(180.0);
 const float PI_2 = radians(90.0);
@@ -21,8 +21,7 @@ void main() {
   // points on a graph with (0,0) in the center of the canvas, which is pi units
   // high when zoom = 1 and has width units proportional to height units (unlike
   // clip coordinates)
-  vec2 position = 2.0 * gl_FragCoord.xy / u_canvasResolution - 1.0;
-  vec2 displayCoord = vec2(u_canvasRatio * PI_2, PI_2) * position;
+  vec2 displayCoord = vec2(u_canvasRatio * PI_2, PI_2) * v_position;
   displayCoord = displayCoord / u_zoom;
 
   // longitude and latitude, respectively, in degrees, where positive latitudes

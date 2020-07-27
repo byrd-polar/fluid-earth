@@ -27,7 +27,6 @@
   let bgBufferInfo;
   let bgTexture;
   let canvasRatio;
-  let canvasResolution;
 
   // Attributes passed to the background vertex shader
   const arrays = {
@@ -78,10 +77,6 @@
     if (twgl.resizeCanvasToDisplaySize(gl.canvas, ratio)) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
-      canvasResolution = [
-        gl.canvas.clientWidth * ratio,
-        gl.canvas.clientHeight * ratio
-      ];
       bgNeedsRedraw = true;
     }
   }
@@ -102,7 +97,6 @@
     const bgUniforms = {
       u_texture: bgTexture,
       u_canvasRatio: canvasRatio,
-      u_canvasResolution: canvasResolution,
       u_lon0: longitude,
       u_lat0: latitude,
       u_zoom: zoom,
