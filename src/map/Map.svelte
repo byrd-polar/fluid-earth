@@ -107,46 +107,9 @@
     twgl.setUniforms(bgProgramInfo, bgUniforms);
     twgl.drawBufferInfo(gl, bgBufferInfo);
   }
-
-
-  let mouseDown = false;
-  let mouseDownX;
-  let mouseDownY;
-  let mouseDownLon;
-  let mouseDownLat;
-
-  function handleMouseDown(e) {
-    mouseDownX = e.offsetX;
-    mouseDownY = e.offsetY;
-    mouseDownLon = longitude;
-    mouseDownLat = latitude;
-
-    mouseDown = true;
-  }
-
-  function handleMouseMove(e) {
-    if (mouseDown) {
-      let xDiff = e.offsetX - mouseDownX;
-      let yDiff = e.offsetY - mouseDownY;
-
-      longitude = mouseDownLon - xDiff / (3 * zoom);
-      latitude = mouseDownLat + yDiff / (3 * zoom);
-    }
-  }
-
-  function handleWheel(e) {
-    zoom += e.deltaY * -0.01;
-  }
 </script>
 
-<canvas
-  bind:this={mapCanvas}
-  on:mousedown={handleMouseDown}
-  on:mousemove={handleMouseMove}
-  on:mouseup={() => mouseDown = false}
-  on:mouseout={() => mouseDown = false}
-  on:wheel={handleWheel}
-/>
+<canvas bind:this={mapCanvas}/>
 
 <style>
   canvas {
