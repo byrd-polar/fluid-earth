@@ -1,3 +1,5 @@
+// Fragment shader for the gridded data layer
+
 precision mediump float;
 
 #pragma glslify: p0 = require(./projections/equirectangular/invert.glsl)

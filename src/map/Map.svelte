@@ -2,8 +2,8 @@
   import { onMount } from 'svelte';
   import * as twgl from 'twgl.js';
 
-  import bgVertexShader from './background.vert';
-  import bgFragmentShader from './background.frag';
+  import griddedVertexShader from './gridded.vert';
+  import griddedFragmentShader from './gridded.frag';
 
   export let latitude = 0; // in degrees
   export let longitude = 0; // in degrees
@@ -21,15 +21,16 @@
   $: zoom = Math.max(zoom, 0.5);
 
   let mapCanvas;
-
-  let gl;
-  let bgProgramInfo;
-  let bgBufferInfo;
-  let bgTexture;
   let canvasRatio;
 
-  // Attributes passed to the background vertex shader
-  const arrays = {
+  let gl;
+
+  let griddedProgramInfo;
+  let griddedBufferInfo;
+  let griddedTexture;
+
+  // Attributes passed to the gridded data layer vertex shader
+  const griddedArrays = {
     // A grid of points
     a_position: {
       numComponents: 2, // Indicate we are using 2-dimensional points
@@ -51,15 +52,15 @@
       return;
     }
 
-    bgProgramInfo = twgl.createProgramInfo(gl, [
-      bgVertexShader,
-      bgFragmentShader,
+    griddedProgramInfo = twgl.createProgramInfo(gl, [
+      griddedVertexShader,
+      griddedFragmentShader,
     ]);
-    bgBufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
+    griddedBufferInfo = twgl.createBufferInfoFromArrays(gl, griddedArrays);
 
     // loads actual texture asynchronously; will be rendered when available,
     // should be a plate carée map projection with aspect ratio 2:1
-    bgTexture = twgl.createTexture(gl, {
+    griddedTexture = twgl.createTexture(gl, {
       src: '/8k_earth_daymap.jpg',
       min: gl.LINEAR,
     }, () => bgNeedsRedraw = true);
@@ -94,18 +95,18 @@
   }
 
   function drawMapBackground() {
-    const bgUniforms = {
-      u_texture: bgTexture,
+    const griddedUniforms = {
+      u_texture: griddedTexture,
       u_canvasRatio: canvasRatio,
       u_lon0: longitude,
       u_lat0: latitude,
       u_zoom: zoom,
     };
 
-    gl.useProgram(bgProgramInfo.program);
-    twgl.setBuffersAndAttributes(gl, bgProgramInfo, bgBufferInfo);
-    twgl.setUniforms(bgProgramInfo, bgUniforms);
-    twgl.drawBufferInfo(gl, bgBufferInfo);
+    gl.useProgram(griddedProgramInfo.program);
+    twgl.setBuffersAndAttributes(gl, griddedProgramInfo, griddedBufferInfo);
+    twgl.setUniforms(griddedProgramInfo, griddedUniforms);
+    twgl.drawBufferInfo(gl, griddedBufferInfo);
   }
 </script>
 

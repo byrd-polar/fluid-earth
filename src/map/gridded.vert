@@ -1,3 +1,5 @@
+// Vertex shader for the gridded data layer
+
 attribute vec2 a_position;
 varying vec2 v_position;
 
