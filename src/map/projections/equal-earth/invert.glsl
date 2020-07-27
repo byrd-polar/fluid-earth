@@ -1,5 +1,5 @@
 #pragma glslify: export(equalEarth)
-#pragma glslify: rotate = require(./rotate.glsl)
+#pragma glslify: rotate = require(../rotate.glsl)
 
 const float A1 = 1.340264;
 const float A2 = -0.081106;

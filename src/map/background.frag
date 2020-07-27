@@ -1,9 +1,9 @@
 precision mediump float;
 
-#pragma glslify: equirectangular = require(./projections/equirectangular.glsl)
-#pragma glslify: mercator = require(./projections/mercator.glsl)
-#pragma glslify: equalEarth = require(./projections/equalEarth.glsl)
-#pragma glslify: orthographic = require(./projections/orthographic.glsl)
+#pragma glslify: p0 = require(./projections/equirectangular/invert.glsl)
+#pragma glslify: p1 = require(./projections/mercator/invert.glsl)
+#pragma glslify: p2 = require(./projections/equal-earth/invert.glsl)
+#pragma glslify: p3 = require(./projections/orthographic/invert.glsl)
 
 uniform vec2 u_canvasResolution;
 uniform float u_canvasRatio;
@@ -30,7 +30,7 @@ void main() {
   // the prime meridian -- these should be the outputs of the inverse map
   // projection equation for whichever projection we're currently using
   vec2 lonLat;
-  orthographic(displayCoord, radians(vec2(u_lon0, u_lat0)), lonLat);
+  p3(displayCoord, radians(vec2(u_lon0, u_lat0)), lonLat);
 
   // prevent textureCoord.x from overflowing by keeping longitude in [-PI, PI]
   lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;

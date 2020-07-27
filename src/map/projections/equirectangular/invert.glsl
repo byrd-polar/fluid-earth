@@ -1,5 +1,5 @@
 #pragma glslify: export(equirectangular)
-#pragma glslify: rotate = require(./rotate.glsl)
+#pragma glslify: rotate = require(../rotate.glsl)
 
 void equirectangular(in vec2 coord, in vec2 lonLat0, out vec2 lonLat) {
   lonLat.x = coord.x;
