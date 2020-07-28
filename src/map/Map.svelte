@@ -1,9 +1,12 @@
 <script>
   import { onMount } from 'svelte';
   import * as twgl from 'twgl.js';
+  import * as topojson from 'topojson-client';
 
   import griddedVertexShader from './gridded.vert';
   import griddedFragmentShader from './gridded.frag';
+  import vectorVertexShader from './vector.vert';
+  import vectorFragmentShader from './vector.frag';
 
   export let latitude = 0; // in degrees
   export let longitude = 0; // in degrees
@@ -45,6 +48,55 @@
     },
   };
 
+  let vectorProgramInfo;
+  let vectorBufferInfos = {}; // temporarily empty until TopoJSON file loads
+
+  // load the TopoJSON file into vectorBufferInfos
+  async function getVectorData(gl) {
+    let data = await fetch('/data/topology.json').then(res => res.json());
+
+    Object.keys(data.objects).forEach(obj => {
+      let mesh = topojson.mesh(data, data.objects[obj]);
+      let lineLengths = mesh.coordinates.map(points => points.length - 1);
+
+      let currentIndex = 0;
+      let indices = lineLengths.map(length => {
+        // creates a subrange of indices with every index except the first and
+        // last doubled, e.g. [0, 1, 1, 2, 2, 3], to represent one line
+        let subRange = [
+          currentIndex,
+          ...Array.from(Array(length - 1).keys(), x => {
+            let i = x + currentIndex + 1;
+            return [i, i];
+          }).flat(),
+          currentIndex + length,
+        ];
+        currentIndex += length + 1;
+        return subRange;
+      }).flat();
+
+      let arrays = {
+        a_latLon: {
+          numComponents: 2,
+          data: mesh.coordinates.flat(2),
+        },
+        indices: indices,
+      };
+
+      vectorBufferInfos[obj] = {
+        bufferInfo: twgl.createBufferInfoFromArrays(gl, arrays),
+        color: (() => {
+          if (obj === 'ne_50m_rivers_lake_centerlines') {
+            return [0.5, 0.5, 0.5, 1]; // gray
+          } else {
+            return [1, 1, 1, 1]; // white
+          }
+        })(),
+      }
+    });
+    bgNeedsRedraw = true;
+  }
+
   // Begin map rendering after Svelte component has been mounted
   onMount(() => {
     gl = mapCanvas.getContext('webgl');
@@ -64,6 +116,13 @@
       src: '/8k_earth_daymap.jpg',
       min: gl.LINEAR,
     }, () => bgNeedsRedraw = true);
+
+
+    vectorProgramInfo = twgl.createProgramInfo(gl, [
+      vectorVertexShader,
+      vectorFragmentShader,
+    ]);
+    getVectorData(gl);
 
     // ensure correct the initial size of canvas and viewport
     gl.canvas.width = 0;
@@ -95,7 +154,7 @@
   }
 
   function drawMapBackground() {
-    const griddedUniforms = {
+    const bgUniforms = {
       u_texture: griddedTexture,
       u_canvasRatio: canvasRatio,
       u_lon0: longitude,
@@ -105,8 +164,19 @@
 
     gl.useProgram(griddedProgramInfo.program);
     twgl.setBuffersAndAttributes(gl, griddedProgramInfo, griddedBufferInfo);
-    twgl.setUniforms(griddedProgramInfo, griddedUniforms);
+    twgl.setUniforms(griddedProgramInfo, bgUniforms);
     twgl.drawBufferInfo(gl, griddedBufferInfo);
+
+    delete bgUniforms.u_texture; // texture not needed for vector layer
+
+    gl.useProgram(vectorProgramInfo.program);
+
+    Object.values(vectorBufferInfos).forEach(data => {
+      bgUniforms.u_color = data.color;
+      twgl.setBuffersAndAttributes(gl, vectorProgramInfo, data.bufferInfo);
+      twgl.setUniforms(vectorProgramInfo, bgUniforms);
+      twgl.drawBufferInfo(gl, data.bufferInfo, gl.LINES);
+    });
   }
 </script>
 
