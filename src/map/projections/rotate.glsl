@@ -10,17 +10,13 @@ void rotate(in vec2 lonLat0, inout vec2 lonLat) {
     sin(lonLat.x) * cos(lonLat.y),
     sin(lonLat.y)
   );
-  mat3 rotateLongitude = mat3(
-    cos(-lonLat0.x), -sin(-lonLat0.x), 0, // first column, not row!
-    sin(-lonLat0.x),  cos(-lonLat0.x), 0,
-    0,                0,               1
-  );
   mat3 rotateLatitude = mat3(
-    cos(-lonLat0.y), 0, -sin(-lonLat0.y),
+    cos(-lonLat0.y), 0, -sin(-lonLat0.y), // first column, not row!
     0,               1,  0,
     sin(-lonLat0.y), 0,  cos(-lonLat0.y)
   );
-  xyzCoord = rotateLatitude * rotateLongitude * xyzCoord;
+  xyzCoord = rotateLatitude * xyzCoord;
 
   lonLat = vec2(atan(xyzCoord.y, xyzCoord.x), asin(xyzCoord.z));
+  lonLat.x += lonLat0.x;
 }
