@@ -88,6 +88,8 @@
         color: (() => {
           if (obj === 'ne_50m_rivers_lake_centerlines') {
             return [0.5, 0.5, 0.5, 1]; // gray
+          } else if (obj === 'ne_50m_graticules_10') {
+            return [0.25, 0.25, 0.25, 1]; // darker gray
           } else {
             return [1, 1, 1, 1]; // white
           }
