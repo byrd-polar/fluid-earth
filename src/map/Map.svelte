@@ -113,7 +113,10 @@
     // loads actual texture asynchronously; will be rendered when available,
     // should be a plate carée map projection with aspect ratio 2:1
     griddedTexture = twgl.createTexture(gl, {
-      src: '/8k_earth_daymap.jpg',
+      src: [
+        42, 42, 42, 255,
+        42, 42, 42, 255,
+      ],
       min: gl.LINEAR,
     }, () => bgNeedsRedraw = true);
 
