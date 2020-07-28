@@ -3,10 +3,10 @@ import * as path from 'path';
 import mapshaper from 'mapshaper';
 
 const urls = [
-  'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_coastline.shp',
+  'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_graticules_all/ne_50m_graticules_10.shp',
   'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_rivers_lake_centerlines.shp',
   'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_lakes.shp',
-  'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_graticules_all/ne_50m_graticules_10.shp',
+  'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_coastline.shp',
 ];
 
 export async function topology() {
