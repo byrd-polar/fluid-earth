@@ -11,22 +11,33 @@ uniform float u_canvasRatio;
 uniform float u_lon0;
 uniform float u_lat0;
 uniform float u_zoom;
+uniform int u_projection;
 
 const float PI_2 = radians(90.0);
 
 void main() {
-  vec2 position;
+  // see gridded.frag for details
+  vec2 displayCoord;
   vec2 latLon0 = radians(vec2(u_lon0, u_lat0));
-  bool clip = false;
+  vec2 latLon = radians(a_latLon);
+  bool clip; // true if vertex will not be rendered
 
-  p1(position, latLon0, radians(a_latLon), clip);
+  if (u_projection == 0) {
+    p0(displayCoord, latLon0, latLon, clip);
+  } else if (u_projection == 1) {
+    p1(displayCoord, latLon0, latLon, clip);
+  } else if (u_projection == 2) {
+    p2(displayCoord, latLon0, latLon, clip);
+  } else if (u_projection == 3) {
+    p3(displayCoord, latLon0, latLon, clip);
+  }
 
   if (clip) {
     return; // not assigning to gl_Position skips rendering of point?
   }
 
-  position = u_zoom * position / PI_2;
-  position.x = position.x / u_canvasRatio;
+  displayCoord = u_zoom * displayCoord / PI_2;
+  displayCoord.x = displayCoord.x / u_canvasRatio;
 
-  gl_Position = vec4(position, 0, 1);
+  gl_Position = vec4(displayCoord, 0, 1);
 }

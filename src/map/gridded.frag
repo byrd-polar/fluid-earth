@@ -11,6 +11,7 @@ uniform float u_canvasRatio;
 uniform float u_lon0;
 uniform float u_lat0;
 uniform float u_zoom;
+uniform int u_projection;
 
 uniform sampler2D u_texture;
 varying vec2 v_position;
@@ -31,7 +32,19 @@ void main() {
   // the prime meridian -- these should be the outputs of the inverse map
   // projection equation for whichever projection we're currently using
   vec2 lonLat;
-  p1(displayCoord, radians(vec2(u_lon0, u_lat0)), lonLat);
+
+  // where the map is centered
+  vec2 lonLat0 = radians(vec2(u_lon0, u_lat0));
+
+  if (u_projection == 0) {
+    p0(displayCoord, lonLat0, lonLat);
+  } else if (u_projection == 1) {
+    p1(displayCoord, lonLat0, lonLat);
+  } else if (u_projection == 2) {
+    p2(displayCoord, lonLat0, lonLat);
+  } else if (u_projection == 3) {
+    p3(displayCoord, lonLat0, lonLat);
+  }
 
   // prevent textureCoord.x from overflowing by keeping longitude in [-PI, PI]
   lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;

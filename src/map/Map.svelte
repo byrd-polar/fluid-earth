@@ -8,6 +8,7 @@
   import vectorVertexShader from './vector.vert';
   import vectorFragmentShader from './vector.frag';
 
+  export let projection = 3; // TODO: make this an enum
   export let latitude = 0; // in degrees
   export let longitude = 0; // in degrees
   export let zoom = 1;
@@ -165,6 +166,7 @@
       u_lon0: longitude,
       u_lat0: latitude,
       u_zoom: zoom,
+      u_projection: projection,
     };
 
     gl.useProgram(griddedProgramInfo.program);

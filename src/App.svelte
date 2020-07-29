@@ -1,6 +1,7 @@
 <script>
   import Map from './map/Map.svelte';
 
+  let projection = 3;
   let longitude = 0;
   let latitude = 0;
   let zoom = 1;
@@ -60,6 +61,7 @@
 
 <main>
   <Map
+    bind:projection
     bind:longitude
     bind:latitude
     bind:zoom
