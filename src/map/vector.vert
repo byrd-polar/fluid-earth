@@ -17,7 +17,7 @@ void main() {
   vec2 latLon0 = radians(vec2(u_lon0, u_lat0));
   bool clip = false;
 
-  p2(position, latLon0, radians(a_latLon));
+  p2(position, latLon0, radians(a_latLon), clip);
 
   if (clip) {
     return; // not assigning to gl_Position skips rendering of point?
