@@ -1,5 +1,7 @@
 // Vertex shader for the vector data layer
 
+#pragma glslify: p0 = require(./projections/equirectangular/forward.glsl)
+#pragma glslify: p1 = require(./projections/mercator/forward.glsl)
 #pragma glslify: p2 = require(./projections/equal-earth/forward.glsl)
 #pragma glslify: p3 = require(./projections/orthographic/forward.glsl)
 
@@ -17,7 +19,7 @@ void main() {
   vec2 latLon0 = radians(vec2(u_lon0, u_lat0));
   bool clip = false;
 
-  p2(position, latLon0, radians(a_latLon), clip);
+  p1(position, latLon0, radians(a_latLon), clip);
 
   if (clip) {
     return; // not assigning to gl_Position skips rendering of point?

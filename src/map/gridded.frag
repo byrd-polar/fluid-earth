@@ -31,7 +31,7 @@ void main() {
   // the prime meridian -- these should be the outputs of the inverse map
   // projection equation for whichever projection we're currently using
   vec2 lonLat;
-  p2(displayCoord, radians(vec2(u_lon0, u_lat0)), lonLat);
+  p1(displayCoord, radians(vec2(u_lon0, u_lat0)), lonLat);
 
   // prevent textureCoord.x from overflowing by keeping longitude in [-PI, PI]
   lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;
