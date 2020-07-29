@@ -1,9 +1,9 @@
 <script>
   import Map from './map/Map.svelte';
 
-  let longitude = 40;
+  let longitude = 0;
   let latitude = 0;
-  let zoom = 2;
+  let zoom = 1;
 
   const speed = 1;
 
