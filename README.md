@@ -18,6 +18,12 @@ cd fev2r
 npm install
 ```
 
+...generate the data...
+
+```bash
+npm run data
+```
+
 ...then start [Rollup](https://rollupjs.org):
 
 ```bash
