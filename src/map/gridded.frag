@@ -46,9 +46,6 @@ void main() {
     p3(displayCoord, lonLat0, lonLat);
   }
 
-  // prevent textureCoord.x from overflowing by keeping longitude in [-PI, PI]
-  lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;
-
   // also image needs to flipped vertically for some reason
   lonLat = lonLat * vec2(1, -1);
 
