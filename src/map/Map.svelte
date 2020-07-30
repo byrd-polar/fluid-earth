@@ -15,7 +15,7 @@
 
   let bgNeedsRedraw = true;
   // Whenever any of these variables change, ask for a redraw on next frame
-  $: latitude, longitude, zoom, bgNeedsRedraw = true;
+  $: latitude, longitude, zoom, projection, bgNeedsRedraw = true;
 
   // Limit ranges of latitude, longitude, and zoom
   $: latitude = Math.min(latitude, 90);
