@@ -66,6 +66,14 @@
     bind:latitude
     bind:zoom
   />
+  <label for="projection-select">Choose a map projection:</label>
+
+  <select bind:value={projection} name="projections" id="projection-select">
+    <option value="0">Equirectangular</option>
+    <option value="1">Mercator</option>
+    <option value="2">Equal Earth</option>
+    <option value="3" selected>Orthographic</option>
+  </select>
 </main>
 
 <svelte:window
@@ -81,5 +89,14 @@
   main {
     height: 100%;
     width: 100%;
+    color: white;
+  }
+
+  label {
+    margin: 1em 0.5em 0 1em;
+  }
+
+  select {
+    margin-top: 1em;
   }
 </style>
