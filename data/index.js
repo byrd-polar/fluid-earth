@@ -31,7 +31,12 @@ function mkdir(dirPath) {
 //
 // returns a Promise that resolves to the path where file was saved to
 export async function download(url) {
-  let filepath = path.join(CACHE_DIR, path.basename((new URL(url)).pathname));
+  url = new URL(url);
+
+  let filepath = path.join(
+    CACHE_DIR,
+    `${path.basename(url.pathname)}${url.search}`
+  );
 
   if (fs.existsSync(filepath)) {
     console.log(`Exists in cache, not re-downloading...\n=> ${filepath}\n`);
