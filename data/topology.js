@@ -1,5 +1,5 @@
 import { download, exit, OUTPUT_DIR } from './index.js';
-import * as path from 'path';
+import path from 'path';
 import mapshaper from 'mapshaper';
 
 const urls = [

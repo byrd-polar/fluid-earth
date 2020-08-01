@@ -1,7 +1,7 @@
-import * as fs from 'fs';
-import * as fsPromises from 'fs/promises';
-import * as https from 'https';
-import * as path from 'path';
+import fs from 'fs';
+import fsPromises from 'fs/promises';
+import https from 'https';
+import path from 'path';
 import { URL } from 'url';
 import got from 'got';
 import prettyBytes from 'pretty-bytes';
