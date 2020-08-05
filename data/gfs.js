@@ -1,6 +1,5 @@
-import { download, exit, OUTPUT_DIR } from './index.js';
+import { download, OUTPUT_DIR } from './index.js';
 import { spawnSync } from 'child_process';
-import { writeFileSync } from 'fs';
 import path from 'path';
 
 // if the below URL breaks, generate a new one from
@@ -19,18 +18,15 @@ export async function gfs() {
   let outputFile = path.join(OUTPUT_DIR, 'gfs.f32');
 
   console.log(`Generating GFS data...\n${file}\n=> ${outputFile}\n`);
+  let wgrib2 = spawnSync(
+    'wgrib2',
+    [file, '-bin', outputFile, '-no_header', '-order', 'raw' ]
+  );
 
-  let grib_dump = spawnSync('grib_dump', ['-j', '-p', 'values', file], {
-    maxBuffer: Infinity, // default is 1024 * 1024, which is not enough
-  });
-
-  if (grib_dump.error) {
-    console.log(`Could not run grib_dump, skipping...\n=> ${grib_dump.error}\n`);
+  if (wgrib2.status !== 0) {
+    console.log(
+      `Could not run wgrib2, skipping...\n=> ${wgrib2.stderr.toString()}\n`
+    );
     return;
   }
-
-  let json = JSON.parse(grib_dump.stdout); 
-  let data = Float32Array.from(json.value);
- 
-  writeFileSync(outputFile, data);
 }
