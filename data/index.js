@@ -7,6 +7,7 @@ import got from 'got';
 import prettyBytes from 'pretty-bytes';
 
 import { topology } from './topology.js';;
+import { gfs } from './gfs.js';;
 
 export const OUTPUT_DIR = 'public/data/';
 const CACHE_DIR = 'data/cache/';
@@ -17,6 +18,7 @@ function main() {
 
   Promise.all([
     topology(),
+    gfs(),
   ]).then(() => console.log('Data processing complete.'));
 }
 
