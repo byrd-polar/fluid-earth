@@ -23,6 +23,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "chroma-js": "^2.1.0",
     "sirv-cli": "^0.4.4",
     "topojson-client": "^3.1.0",
     "twgl.js": "^4.15.2"
