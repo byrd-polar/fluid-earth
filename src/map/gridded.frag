@@ -14,6 +14,9 @@ uniform float u_zoom;
 uniform int u_projection;
 
 uniform sampler2D u_texture;
+uniform float u_gridWidth;
+uniform float u_gridHeight;
+
 varying vec2 v_position;
 
 const float PI = radians(180.0);
@@ -27,7 +30,7 @@ void main() {
   vec2 displayCoord = vec2(u_canvasRatio * PI_2, PI_2) * v_position;
   displayCoord = displayCoord / u_zoom;
 
-  // longitude and latitude, respectively, in degrees, where positive latitudes
+  // longitude and latitude, respectively, in radians, where positive latitudes
   // correspond to the northern hemisphere, and positive longitudes are east of
   // the prime meridian -- these should be the outputs of the inverse map
   // projection equation for whichever projection we're currently using
@@ -46,21 +49,29 @@ void main() {
     p3(displayCoord, lonLat0, lonLat);
   }
 
-  // also image needs to flipped vertically for some reason
-  lonLat = lonLat * vec2(1, -1);
+  // don't render points with lonLat out of range
+  if (lonLat.x >  PI ||
+      lonLat.x < -PI ||
+      lonLat.y >  PI_2 ||
+      lonLat.y < -PI_2) {
+    gl_FragColor = vec4(0, 0, 0, 0); // transparent
+    return;
+  }
 
-  // convert to texture coordinates on a image of a plate carrée map projection,
-  // where (0,0) is the bottom left corner and (1,1) is the top right corner
-  // (despite the image having an aspect ratio of 2:1, because that's just how
-  // textures work in WebGL)
+  // texture coordinates on an equirectangular map projection grid, where (0,0)
+  // is the bottom left corner and (1,1) is the top right corner (despite the
+  // grid having an aspect ratio of ~ 2:1, because that's just how textures work
+  // in WebGL)
   vec2 textureCoord = (lonLat + vec2(PI, PI_2)) / vec2(2.0 * PI, PI);
 
-  if (textureCoord.x <= 1.0 &&
-      textureCoord.x >= 0.0 &&
-      textureCoord.y <= 1.0 &&
-      textureCoord.y >= 0.0) {
-    gl_FragColor = texture2D(u_texture, textureCoord);
-  } else {
-    gl_FragColor = vec4(0, 0, 0, 0); // transparent
-  }
+  // needs to flipped vertically, since (0,0) is bottom-left, not top-left
+  textureCoord.y = 1.0 - textureCoord.y;
+
+  // offset/scale coords so it aligns accurately with given grid (grid points
+  // were offset in the opposite direction earlier when texture was created)
+  float xOffset = 0.5 + (0.5 / u_gridWidth);
+  textureCoord.x = mod(textureCoord.x + xOffset, 1.0);
+  textureCoord.y = ((u_gridHeight - 1.0) / u_gridHeight) * textureCoord.y;
+
+  gl_FragColor = texture2D(u_texture, textureCoord);
 }

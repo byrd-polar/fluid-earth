@@ -14,10 +14,14 @@
     latitude: 0, // in degrees
   };
   export let zoom = 1;
+  export let griddedTextureInfo = {
+    width: 1440,
+    height: 721,
+  };
 
   let bgNeedsRedraw = true;
   // Whenever any of these variables change, ask for a redraw on next frame
-  $: center, zoom, projection, bgNeedsRedraw = true;
+  $: center, zoom, projection, griddedTexture, bgNeedsRedraw = true;
 
   // Limit ranges of latitude, longitude, and zoom
   $: center.latitude = Math.min(center.latitude, 90);
@@ -50,6 +54,26 @@
       ],
     },
   };
+
+  // load the file of floats (gridded data) into texture uniform
+  async function getGriddedData(gl) {
+    // quickly load a default grey texture first
+    griddedTexture = twgl.createTexture(gl, {
+      src: [42, 42, 42, 255],
+      min: gl.LINEAR,
+    });
+
+    let buffer = await fetch('/data/gfs.f32').then(res => res.arrayBuffer());
+    let data = new Float32Array(buffer);
+    let texture = new Uint8Array(buffer);
+
+    griddedTexture = twgl.createTexture(gl, {
+      src: texture,
+      min: gl.LINEAR,
+      width: griddedTextureInfo.width,
+      height: griddedTextureInfo.height,
+    });
+  }
 
   let vectorProgramInfo;
   let vectorBufferInfos = {}; // temporarily empty until TopoJSON file loads
@@ -115,16 +139,7 @@
     ]);
     griddedBufferInfo = twgl.createBufferInfoFromArrays(gl, griddedArrays);
 
-    // loads actual texture asynchronously; will be rendered when available,
-    // should be a plate carée map projection with aspect ratio 2:1
-    griddedTexture = twgl.createTexture(gl, {
-      src: [
-        42, 42, 42, 255,
-        42, 42, 42, 255,
-      ],
-      min: gl.LINEAR,
-    }, () => bgNeedsRedraw = true);
-
+    getGriddedData(gl);
 
     vectorProgramInfo = twgl.createProgramInfo(gl, [
       vectorVertexShader,
@@ -164,6 +179,8 @@
   function drawMapBackground() {
     const bgUniforms = {
       u_texture: griddedTexture,
+      u_gridWidth: griddedTextureInfo.width,
+      u_gridHeight: griddedTextureInfo.height,
       u_canvasRatio: canvasRatio,
       u_lon0: center.longitude,
       u_lat0: center.latitude,
@@ -176,7 +193,10 @@
     twgl.setUniforms(griddedProgramInfo, bgUniforms);
     twgl.drawBufferInfo(gl, griddedBufferInfo);
 
-    delete bgUniforms.u_texture; // texture not needed for vector layer
+    // texture info not needed for vector layer
+    delete bgUniforms.u_texture;
+    delete bgUniforms.u_gridWidth;
+    delete bgUniforms.u_gridHeight;
 
     gl.useProgram(vectorProgramInfo.program);
 
