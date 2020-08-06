@@ -8,6 +8,11 @@ void orthographic(in vec2 coord, in vec2 lonLat0, out vec2 lonLat) {
     lonLat = lonLat0;
     return;
   }
+  // avoid creating NaNs (or clamping, in case of Android) in asin function
+  if (rho > 1.0) {
+    lonLat = vec2(100, 100); // intentionally out of render range
+    return;
+  }
   float c = asin(rho);
 
   float lon0 = lonLat0.x;

@@ -25,7 +25,15 @@ void equalEarth(in vec2 coord, in vec2 lonLat0, out vec2 lonLat) {
 
   lonLat.x = M * coord.x *
     (A1 + 3.0 * A2 * l2 + l6 * (7.0 * A3 + 9.0 * A4 * l2)) / cos(l);
-  lonLat.y = asin(sin(l) / M);
+
+  float sinY = sin(l) / M;
+
+  // avoid creating NaNs (or clamping, in case of Android) in asin function
+  if (sinY < -1.0 || sinY > 1.0) {
+    lonLat.y = 100.0; // intentionally out of render range
+  } else {
+    lonLat.y = asin(sinY);
+  }
 
   rotate(lonLat0, lonLat);
 }
