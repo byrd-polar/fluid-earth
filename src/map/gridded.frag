@@ -70,8 +70,10 @@ void main() {
   // offset/scale coords so it aligns accurately with given grid (grid points
   // were offset in the opposite direction earlier when texture was created)
   float xOffset = 0.5 + (0.5 / u_gridWidth);
+  float yScale = (u_gridHeight - 1.0) / u_gridHeight;
+
   textureCoord.x = mod(textureCoord.x + xOffset, 1.0);
-  textureCoord.y = ((u_gridHeight - 1.0) / u_gridHeight) * textureCoord.y;
+  textureCoord.y = yScale * (textureCoord.y - 0.5) + 0.5;
 
   gl_FragColor = texture2D(u_texture, textureCoord);
 }
