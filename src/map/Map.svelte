@@ -9,18 +9,20 @@
   import vectorFragmentShader from './vector.frag';
 
   export let projection = 3; // TODO: make this an enum
-  export let latitude = 0; // in degrees
-  export let longitude = 0; // in degrees
+  export let center = {
+    longitude: 0, // in degrees
+    latitude: 0, // in degrees
+  };
   export let zoom = 1;
 
   let bgNeedsRedraw = true;
   // Whenever any of these variables change, ask for a redraw on next frame
-  $: latitude, longitude, zoom, projection, bgNeedsRedraw = true;
+  $: center, zoom, projection, bgNeedsRedraw = true;
 
   // Limit ranges of latitude, longitude, and zoom
-  $: latitude = Math.min(latitude, 90);
-  $: latitude = Math.max(latitude, -90);
-  $: longitude = ((longitude + 180) % 360) - 180;
+  $: center.latitude = Math.min(center.latitude, 90);
+  $: center.latitude = Math.max(center.latitude, -90);
+  $: center.longitude = ((center.longitude + 180) % 360) - 180;
   $: zoom = Math.min(zoom, 15);
   $: zoom = Math.max(zoom, 0.5);
 
@@ -163,8 +165,8 @@
     const bgUniforms = {
       u_texture: griddedTexture,
       u_canvasRatio: canvasRatio,
-      u_lon0: longitude,
-      u_lat0: latitude,
+      u_lon0: center.longitude,
+      u_lat0: center.latitude,
       u_zoom: zoom,
       u_projection: projection,
     };

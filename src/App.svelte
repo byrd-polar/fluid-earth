@@ -2,8 +2,10 @@
   import Map from './map/Map.svelte';
 
   let projection = 3;
-  let longitude = 0;
-  let latitude = 0;
+  let center = {
+    longitude: 0,
+    latitude: 0,
+  };
   let zoom = 1;
 
   const speed = 1;
@@ -12,19 +14,19 @@
     switch(event.key) {
       case 'ArrowUp':
       case 'w':
-        latitude += speed;
+        center.latitude += speed;
         break;
       case 's':
       case 'ArrowDown':
-        latitude -= speed;
+        center.latitude -= speed;
         break;
       case 'd':
       case 'ArrowRight':
-        longitude += speed;
+        center.longitude += speed;
         break;
       case 'a':
       case 'ArrowLeft':
-        longitude -= speed;
+        center.longitude -= speed;
         break;
     }
   }
@@ -38,8 +40,8 @@
   function handleMouseDown(e) {
     mouseDownX = e.offsetX;
     mouseDownY = e.offsetY;
-    mouseDownLon = longitude;
-    mouseDownLat = latitude;
+    mouseDownLon = center.longitude;
+    mouseDownLat = center.latitude;
 
     mouseDown = true;
   }
@@ -49,8 +51,8 @@
       let xDiff = e.offsetX - mouseDownX;
       let yDiff = e.offsetY - mouseDownY;
 
-      longitude = mouseDownLon - xDiff / (3 * zoom);
-      latitude = mouseDownLat + yDiff / (3 * zoom);
+      center.longitude = mouseDownLon - xDiff / (3 * zoom);
+      center.latitude = mouseDownLat + yDiff / (3 * zoom);
     }
   }
 
@@ -62,8 +64,7 @@
 <main>
   <Map
     bind:projection
-    bind:longitude
-    bind:latitude
+    bind:center
     bind:zoom
   />
   <label for="projection-select">Choose a map projection:</label>
