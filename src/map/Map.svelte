@@ -69,6 +69,12 @@
     let data = new Float32Array(buffer);
     let texture = new Uint8Array(buffer);
 
+    // The following loop is a major bottleneck for both initial page load and
+    // switching between datasets (especially if we want to animate between
+    // datasets). It is probably best improved by using
+    // https://crates.io/crates/colorous compiled to WebAssembly w/ threads, but
+    // this significantly increases code complexity, so we will keep this
+    // suboptimal solution for now.
     for (let i = 0; i < data.length; i++) {
       let color = rgb(d3.interpolateViridis((data[i] - 240) / 80));
       texture[4*i+0] = color.r;
