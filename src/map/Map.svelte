@@ -136,11 +136,11 @@
         bufferInfo: twgl.createBufferInfoFromArrays(gl, arrays),
         color: (() => {
           if (obj === 'ne_50m_rivers_lake_centerlines') {
-            return [0.5, 0.5, 0.5, 1]; // gray
+            return [1, 1, 1, 0.5]; // light
           } else if (obj === 'ne_50m_graticules_10') {
-            return [0.25, 0.25, 0.25, 1]; // darker gray
+            return [1, 1, 1, 0.2]; // lighter
           } else {
-            return [1, 1, 1, 1]; // white
+            return [1, 1, 1, 1]; // bold
           }
         })(),
       }
@@ -150,10 +150,13 @@
 
   // Begin map rendering after Svelte component has been mounted
   onMount(() => {
-    gl = mapCanvas.getContext('webgl');
+    gl = mapCanvas.getContext('webgl', { alpha: false });
     if (!gl) {
       return;
     }
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
     griddedProgramInfo = twgl.createProgramInfo(gl, [
       griddedVertexShader,
@@ -239,6 +242,5 @@
     width: 100%;
     position: absolute;
     z-index: -1;
-    background-color: black;
   }
 </style>
