@@ -2,7 +2,8 @@
   import { onMount } from 'svelte';
   import * as twgl from 'twgl.js';
   import * as topojson from 'topojson-client';
-  import * as chroma from 'chroma-js';
+  import * as d3 from 'd3-scale-chromatic';
+  import { rgb } from 'd3-color';
 
   import griddedVertexShader from './gridded.vert';
   import griddedFragmentShader from './gridded.frag';
@@ -68,23 +69,11 @@
     let data = new Float32Array(buffer);
     let texture = new Uint8Array(buffer);
 
-    let f = chroma.scale([
-      '#00429d',
-      '#2e59a8',
-      '#4771b2',
-      '#5d8abd',
-      '#73a2c6',
-      '#8abccf',
-      '#a5d5d8',
-      '#c5eddf',
-      '#ffffe0'
-    ]).mode('lrgb').domain([240, 320]);
-
     for (let i = 0; i < data.length; i++) {
-      let color = f(data[i]).rgb();
-      texture[4*i+0] = color[0];
-      texture[4*i+1] = color[1];
-      texture[4*i+3] = color[2];
+      let color = rgb(d3.interpolateViridis((data[i] - 240) / 80));
+      texture[4*i+0] = color.r;
+      texture[4*i+1] = color.g;
+      texture[4*i+3] = color.b;
       texture[4*i+3] = 255;
     }
 
