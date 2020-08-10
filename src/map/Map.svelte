@@ -7,6 +7,7 @@
   import vectorVertexShader from './vector.vert';
   import vectorFragmentShader from './vector.frag';
 
+  import { griddedArrays } from './arrays.js';
   import { getGriddedData, getVectorData } from './loaders.js';
 
   export let projection = 3; // TODO: make this an enum
@@ -41,22 +42,6 @@
   let griddedProgramInfo;
   let griddedBufferInfo;
   let griddedTexture;
-
-  // Attributes passed to the gridded data layer vertex shader
-  const griddedArrays = {
-    // A grid of points
-    a_position: {
-      numComponents: 2, // Indicate we are using 2-dimensional points
-      data: [ // two right triangles that cover entire screen
-        -1, -1,
-        -1,  1,
-         1, -1,
-         1,  1,
-         1, -1,
-        -1,  1,
-      ],
-    },
-  };
 
   let vectorProgramInfo;
   let vectorBufferInfos = {}; // temporarily empty until TopoJSON file loads
