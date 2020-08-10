@@ -137,7 +137,7 @@
 
     gl.useProgram(griddedProgramInfo.program);
     twgl.setBuffersAndAttributes(gl, griddedProgramInfo, griddedBufferInfo);
-    twgl.setUniforms(griddedProgramInfo, bgUniforms);
+    twgl.setUniformsAndBindTextures(griddedProgramInfo, bgUniforms);
     twgl.drawBufferInfo(gl, griddedBufferInfo);
 
     // texture info not needed for vector layer
