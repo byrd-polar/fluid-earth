@@ -1,14 +1,13 @@
 <script>
   import { onMount } from 'svelte';
   import * as twgl from 'twgl.js';
-  import * as topojson from 'topojson-client';
-  import * as d3 from 'd3-scale-chromatic';
-  import { rgb } from 'd3-color';
 
   import griddedVertexShader from './gridded.vert';
   import griddedFragmentShader from './gridded.frag';
   import vectorVertexShader from './vector.vert';
   import vectorFragmentShader from './vector.frag';
+
+  import { getGriddedData, getVectorData } from './loaders.js';
 
   export let projection = 3; // TODO: make this an enum
   export let center = {
@@ -17,13 +16,15 @@
   };
   export let zoom = 1;
   export let griddedTextureInfo = {
+    data: '/data/gfs.f32',
     width: 1440,
     height: 721,
   };
 
   let bgNeedsRedraw = true;
   // Whenever any of these variables change, ask for a redraw on next frame
-  $: center, zoom, projection, griddedTexture, bgNeedsRedraw = true;
+  $: center, zoom, projection, griddedTexture, vectorBufferInfos,
+    bgNeedsRedraw = true;
 
   // Limit ranges of latitude, longitude, and zoom
   $: center.latitude = Math.min(center.latitude, 90);
@@ -57,91 +58,8 @@
     },
   };
 
-  // load the file of floats (gridded data) into texture uniform
-  async function getGriddedData(gl) {
-    // quickly load a default grey texture first
-    griddedTexture = twgl.createTexture(gl, {
-      src: [42, 42, 42, 255],
-      min: gl.LINEAR,
-    });
-
-    let buffer = await fetch('/data/gfs.f32').then(res => res.arrayBuffer());
-    let data = new Float32Array(buffer);
-    let texture = new Uint8Array(buffer);
-
-    // The following loop is a major bottleneck for both initial page load and
-    // switching between datasets (especially if we want to animate between
-    // datasets). It is probably best improved by using
-    // https://crates.io/crates/colorous compiled to WebAssembly w/ threads, but
-    // this significantly increases code complexity, so we will keep this
-    // suboptimal solution for now.
-    for (let i = 0; i < data.length; i++) {
-      let color = rgb(d3.interpolateViridis((data[i] - 240) / 80));
-      texture[4*i+0] = color.r;
-      texture[4*i+1] = color.g;
-      texture[4*i+3] = color.b;
-      texture[4*i+3] = 255;
-    }
-
-    griddedTexture = twgl.createTexture(gl, {
-      src: texture,
-      mag: gl.NEAREST, // show zoomed in data as individual pixels
-      min: gl.LINEAR,
-      width: griddedTextureInfo.width,
-      height: griddedTextureInfo.height,
-    });
-  }
-
   let vectorProgramInfo;
   let vectorBufferInfos = {}; // temporarily empty until TopoJSON file loads
-
-  // load the TopoJSON file into vectorBufferInfos
-  async function getVectorData(gl) {
-    let data = await fetch('/data/topology.json').then(res => res.json());
-
-    Object.keys(data.objects).forEach(obj => {
-      let mesh = topojson.mesh(data, data.objects[obj]);
-      let lineLengths = mesh.coordinates.map(points => points.length - 1);
-
-      let currentIndex = 0;
-      let indices = lineLengths.map(length => {
-        // creates a subrange of indices with every index except the first and
-        // last doubled, e.g. [0, 1, 1, 2, 2, 3], to represent one line
-        let subRange = [
-          currentIndex,
-          ...Array.from(Array(length - 1).keys(), x => {
-            let i = x + currentIndex + 1;
-            return [i, i];
-          }).flat(),
-          currentIndex + length,
-        ];
-        currentIndex += length + 1;
-        return subRange;
-      }).flat();
-
-      let arrays = {
-        a_latLon: {
-          numComponents: 2,
-          data: mesh.coordinates.flat(2),
-        },
-        indices: indices,
-      };
-
-      vectorBufferInfos[obj] = {
-        bufferInfo: twgl.createBufferInfoFromArrays(gl, arrays),
-        color: (() => {
-          if (obj === 'ne_50m_rivers_lake_centerlines') {
-            return [1, 1, 1, 0.5]; // light
-          } else if (obj === 'ne_50m_graticules_10') {
-            return [1, 1, 1, 0.2]; // lighter
-          } else {
-            return [1, 1, 1, 1]; // bold
-          }
-        })(),
-      }
-    });
-    bgNeedsRedraw = true;
-  }
 
   // Begin map rendering after Svelte component has been mounted
   onMount(() => {
@@ -159,13 +77,22 @@
     ]);
     griddedBufferInfo = twgl.createBufferInfoFromArrays(gl, griddedArrays);
 
-    getGriddedData(gl);
+    // quickly load a default grey texture first
+    griddedTexture = twgl.createTexture(gl, {
+      src: [42, 42, 42, 255],
+      min: gl.LINEAR,
+    });
+
+    (async () => {
+      griddedTexture = await getGriddedData(gl, griddedTextureInfo)
+    })();
 
     vectorProgramInfo = twgl.createProgramInfo(gl, [
       vectorVertexShader,
       vectorFragmentShader,
     ]);
-    getVectorData(gl);
+
+    (async () => vectorBufferInfos = await getVectorData(gl))();
 
     // ensure correct the initial size of canvas and viewport
     gl.canvas.width = 0;
