@@ -118,7 +118,7 @@ export async function getVectorData(gl) {
         if (obj === 'ne_50m_rivers_lake_centerlines') {
           return [1, 1, 1, 0.5]; // light
         } else if (obj === 'ne_50m_graticules_10') {
-          return [1, 1, 1, 0.2]; // lighter
+          return [1, 1, 1, 0.1]; // lighter
         } else {
           return [1, 1, 1, 1]; // bold
         }
