@@ -6,12 +6,15 @@ import colormapFragmentShader from './colormap.frag';
 
 import { griddedArrays } from './arrays.js';
 import viridis from './colormaps/viridis.js';
+import magma from './colormaps/magma.js';
 
 // load the file of floats (gridded data) into texture uniform
 export async function getGriddedData(gl, griddedTextureInfo) {
   let buffer = await fetch(griddedTextureInfo.data)
     .then(res => res.arrayBuffer());
   let data = new Float32Array(buffer);
+
+  let colormap = magma;
 
   // texture with float data that will be used as a data source to render to
   // actual texture
@@ -26,11 +29,11 @@ export async function getGriddedData(gl, griddedTextureInfo) {
 
   // colormap as a texture, will be interpolated in fragment shader
   let colormapTexture = twgl.createTexture(gl, {
-    src: viridis.flat().map(x => Math.round(x * 255)),
+    src: colormap.flat().map(x => Math.round(x * 255)),
     format: gl.RGB, // 3 channels per pixel
     minMag: gl.LINEAR, // don't use mipmaps
     height: 1,
-    width: viridis.length,
+    width: colormap.length,
   });
 
   // allocate space for actual texture, empty for now
@@ -62,7 +65,7 @@ export async function getGriddedData(gl, griddedTextureInfo) {
   const uniforms = {
     u_data: dataTexture,
     u_colormap: colormapTexture,
-    u_colormapN: viridis.length,
+    u_colormapN: colormap.length,
   };
 
   gl.useProgram(programInfo.program);
