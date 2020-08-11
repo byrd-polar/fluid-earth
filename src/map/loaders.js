@@ -1,36 +1,79 @@
 import * as twgl from 'twgl.js';
-import * as d3 from 'd3-scale-chromatic';
-import { rgb } from 'd3-color';
 import * as topojson from 'topojson-client';
+
+import griddedVertexShader from './gridded.vert';
+import colormapFragmentShader from './colormap.frag';
+
+import { griddedArrays } from './arrays.js';
+import viridis from './colormaps/viridis.js';
 
 // load the file of floats (gridded data) into texture uniform
 export async function getGriddedData(gl, griddedTextureInfo) {
   let buffer = await fetch(griddedTextureInfo.data)
     .then(res => res.arrayBuffer());
   let data = new Float32Array(buffer);
-  let texture = new Uint8Array(buffer);
 
-  // The following loop is a major bottleneck for both initial page load and
-  // switching between datasets (especially if we want to animate between
-  // datasets). It is probably best improved by using
-  // https://crates.io/crates/colorous compiled to WebAssembly w/ threads, but
-  // this significantly increases code complexity, so we will keep this
-  // suboptimal solution for now.
-  for (let i = 0; i < data.length; i++) {
-    let color = rgb(d3.interpolateViridis((data[i] - 240) / 80));
-    texture[4*i+0] = color.r;
-    texture[4*i+1] = color.g;
-    texture[4*i+3] = color.b;
-    texture[4*i+3] = 255;
-  }
+  // texture with float data that will be used as a data source to render to
+  // actual texture
+  let dataTexture = twgl.createTexture(gl, {
+    src: data,
+    type: gl.FLOAT, // 32-bit floating data
+    format: gl.ALPHA, // 1 channel per pixel
+    mag: gl.NEAREST, // linear filtering not available for float textures
+    min: gl.NEAREST, // linear filtering not available for float textures
+    width: griddedTextureInfo.width,
+    height: griddedTextureInfo.height,
+  });
 
-  return twgl.createTexture(gl, {
-    src: texture,
+  // colormap as a texture, will be interpolated in fragment shader
+  let colormapTexture = twgl.createTexture(gl, {
+    src: viridis.flat().map(x => Math.round(x * 255)),
+    format: gl.RGB, // 3 channels per pixel
+    height: 1,
+    width: viridis.length,
+  });
+
+  // allocate space for actual texture, empty for now
+  let textureOptions = {
     mag: gl.NEAREST, // show zoomed in data as individual pixels
     min: gl.LINEAR,
     width: griddedTextureInfo.width,
     height: griddedTextureInfo.height,
-  });
+  };
+  let texture = twgl.createTexture(gl, textureOptions);
+
+  // relying on Javascript's run-to-completion semantics to ensure the below
+  // calls to the WegGL context (useProgram and bindFramebuffer) don't interfere
+  // with the main animation loop
+
+  // switch rendering destination to our empty texture
+  let framebufferInfo = twgl.createFramebufferInfo(gl, [{
+    attachment: texture,
+    ...textureOptions,
+  }], griddedTextureInfo.width, griddedTextureInfo.height);
+  twgl.bindFramebufferInfo(gl, framebufferInfo);
+
+  // perform colormap interpolation on GPU and render them to our texture
+  let programInfo = twgl.createProgramInfo(gl, [
+    griddedVertexShader,
+    colormapFragmentShader,
+  ]);
+  let bufferInfo = twgl.createBufferInfoFromArrays(gl, griddedArrays);
+  const uniforms = {
+    u_data: dataTexture,
+    u_colormap: colormapTexture,
+    u_colormapN: viridis.length,
+  };
+
+  gl.useProgram(programInfo.program);
+  twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+  twgl.setUniformsAndBindTextures(programInfo, uniforms);
+  twgl.drawBufferInfo(gl, bufferInfo);
+
+  // switch rendering destination back to canvas and return rendered texture
+  twgl.bindFramebufferInfo(gl, null);
+  gl.deleteFramebuffer(framebufferInfo.framebuffer);
+  return texture;
 }
 
 // load the TopoJSON file into vectorBufferInfos

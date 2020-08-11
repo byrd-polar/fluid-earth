@@ -56,6 +56,8 @@
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
+    gl.getExtension('OES_texture_float'); // used to load gridded data
+
     griddedProgramInfo = twgl.createProgramInfo(gl, [
       griddedVertexShader,
       griddedFragmentShader,
