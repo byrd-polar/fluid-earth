@@ -28,7 +28,7 @@ export default {
 
     // For GLSL .vert and .frag files
     glslify({
-      compress: false,
+      compress: production,
     }),
 
     // If you have external dependencies installed from
