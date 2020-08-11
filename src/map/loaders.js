@@ -19,8 +19,7 @@ export async function getGriddedData(gl, griddedTextureInfo) {
     src: data,
     type: gl.FLOAT, // 32-bit floating data
     format: gl.ALPHA, // 1 channel per pixel
-    mag: gl.NEAREST, // linear filtering not available for float textures
-    min: gl.NEAREST, // linear filtering not available for float textures
+    minMag: gl.NEAREST, // linear filtering not available for float textures
     width: griddedTextureInfo.width,
     height: griddedTextureInfo.height,
   });
@@ -29,6 +28,7 @@ export async function getGriddedData(gl, griddedTextureInfo) {
   let colormapTexture = twgl.createTexture(gl, {
     src: viridis.flat().map(x => Math.round(x * 255)),
     format: gl.RGB, // 3 channels per pixel
+    minMag: gl.LINEAR, // don't use mipmaps
     height: 1,
     width: viridis.length,
   });
