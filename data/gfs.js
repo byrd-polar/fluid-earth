@@ -8,10 +8,10 @@ import path from 'path';
 //
 // (will have to change the date)
 const url = `https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl?\
-file=gfs.t18z.pgrb2.0p25.f000&\
+file=gfs.t12z.pgrb2.0p25.f000&\
 lev_surface=on&\
 var_TMP=on&\
-dir=%2Fgfs.20200804%2F18`
+dir=%2Fgfs.20200811%2F12`
 
 export async function gfs() {
   let file = await download(url);
