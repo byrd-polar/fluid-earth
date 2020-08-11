@@ -13,6 +13,8 @@ uniform float u_lat0;
 uniform float u_zoom;
 uniform int u_projection;
 
+varying float v_clip;
+
 const float PI_2 = radians(90.0);
 
 void main() {
@@ -32,8 +34,12 @@ void main() {
     p3(displayCoord, latLon0, latLon, clip);
   }
 
+  // determines if fragment shader should not render line to avoid lines
+  // wrapping across the map from the anti-meridian or map edge
   if (clip) {
-    return; // not assigning to gl_Position skips rendering of point?
+    v_clip = 1.0;
+  } else {
+    v_clip = 0.0;
   }
 
   displayCoord = u_zoom * displayCoord / PI_2;

@@ -3,7 +3,12 @@
 precision mediump float;
 
 uniform vec4 u_color;
+varying float v_clip;
 
 void main() {
-  gl_FragColor = u_color;
+  if (v_clip > 0.0) {
+    gl_FragColor = vec4(0, 0, 0, 0); // transparent
+  } else {
+    gl_FragColor = u_color;
+  }
 }
