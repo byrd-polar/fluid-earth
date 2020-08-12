@@ -1,5 +1,5 @@
 import fs from 'fs';
-import fsPromises from 'fs/promises';
+import { writeFile } from 'fs/promises';
 import https from 'https';
 import path from 'path';
 import { URL } from 'url';
@@ -31,21 +31,25 @@ function mkdir(dirPath) {
 
 // downloads a file from url if it doesn't already exist in cache
 //
+// suffix is appended to file save path
+// headers are sent with the request (used for HTTP range requests)
+//
 // returns a Promise that resolves to the path where file was saved to
-export async function download(url) {
+export async function download(url, suffix='', headers={}) {
   url = new URL(url);
 
+  let fowardSlash = /\//g;
   let filepath = path.join(
     CACHE_DIR,
-    `${path.basename(url.pathname)}${url.search}`
+    url.toString().replace('://', '-').replace(fowardSlash, '-') + suffix,
   );
 
   if (fs.existsSync(filepath)) {
     console.log(`Exists in cache, not re-downloading...\n=> ${filepath}\n`);
   } else {
     console.log(`Downloading...\n${url}\n=> ${filepath}\n`);
-    await got(url)
-      .then(res => fsPromises.writeFile(filepath, res.rawBody))
+    await got(url, { headers: headers })
+      .then(res => writeFile(filepath, res.rawBody))
       .catch(err => {
         console.log(`Failed to download... ${url}\n=> ${err}`);
         exit();
