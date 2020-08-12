@@ -31,18 +31,25 @@ function mkdir(dirPath) {
 
 // downloads a file from url if it doesn't already exist in cache
 //
+// set prefix to true if you want to whole URL in the file save path
 // suffix is appended to file save path
 // headers are sent with the request (used for HTTP range requests)
 //
 // returns a Promise that resolves to the path where file was saved to
-export async function download(url, suffix='', headers={}) {
+export async function download(url, prefix=false, suffix='', headers={}) {
   url = new URL(url);
 
-  let fowardSlash = /\//g;
-  let filepath = path.join(
-    CACHE_DIR,
-    url.toString().replace('://', '-').replace(fowardSlash, '-') + suffix,
-  );
+  let filename;
+  if (prefix) {
+    let fowardSlash = /\//g;
+    filename = url.toString()
+      .replace('://', '-')
+      .replace(fowardSlash, '-')
+      + suffix;
+  } else {
+    filename = path.basename(url.pathname);
+  }
+  let filepath = path.join(CACHE_DIR, filename);
 
   if (fs.existsSync(filepath)) {
     console.log(`Exists in cache, not re-downloading...\n=> ${filepath}\n`);
