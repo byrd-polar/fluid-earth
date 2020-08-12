@@ -17,7 +17,7 @@
   };
   export let zoom = 1;
   export let griddedTextureInfo = {
-    data: '/data/gfs.f32',
+    data: '/data/gfs-temperature.f32',
     width: 1440,
     height: 721,
   };
