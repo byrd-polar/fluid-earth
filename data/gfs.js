@@ -1,20 +1,28 @@
 import { download, OUTPUT_DIR } from './index.js';
 import { spawnSync } from 'child_process';
 import path from 'path';
+import { readFile } from 'fs/promises';
 
-// if the below URL breaks, generate a new one from
-//
-// https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl
-//
-// (will have to change the date)
-const url = `https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_0p25.pl?\
-file=gfs.t12z.pgrb2.0p25.f000&\
-lev_surface=on&\
-var_TMP=on&\
-dir=%2Fgfs.20200811%2F12`
+import { promisify } from 'util';
+
+import _parseCSV from 'csv-parse';
+const parseCSV = promisify(_parseCSV);
+
+// from https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/
+const dataURL = `https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/\
+gfs.20200812/06/gfs.t06z.pgrb2.0p25.f000`
+const indexURL = dataURL + '.idx';
 
 export async function gfs() {
-  let file = await download(url);
+
+  // file containing information for partial downloads
+  let indexFile = await download(indexURL);
+  let indexString = await readFile(indexFile, 'utf-8');
+  let index = await parseCSV(indexString, { delimiter: ':' });
+
+  let tmpRange = getRange(index, 'TMP', 'surface');
+
+  let file = await download(dataURL, true, '_surface_tmp', { Range: tmpRange });
   let outputFile = path.join(OUTPUT_DIR, 'gfs.f32');
 
   console.log(`Generating GFS data...\n${file}\n=> ${outputFile}\n`);
@@ -29,4 +37,21 @@ export async function gfs() {
     );
     return;
   }
+}
+
+// print the parsed index file to make sense of this function
+//
+// returns the string needed for the HTTP Range Request header
+function getRange(index, parameter, level) {
+  let i = index.findIndex((row) => {
+    return row[3] == parameter && row[4] == level;
+  });
+  let start = index[i][1];
+  let end;
+  if (index[i+1] === undefined) {
+    end = '';
+  } else {
+    end = index[i+1][1] - 1;
+  }
+  return `bytes=${start}-${end}`;
 }
