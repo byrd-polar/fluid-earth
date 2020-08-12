@@ -39,7 +39,7 @@ async function saveGFS(url, index, parameter, level, filename) {
 
   if (wgrib2.status !== 0) {
     console.log(
-      `Could not run wgrib2, skipping...\n=> ${wgrib2.stderr.toString()}\n`
+      `Could not run wgrib2, skipping...\n=> ${wgrib2.stderr}\n`,
     );
   }
 }
