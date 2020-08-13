@@ -13,64 +13,88 @@ export function createGriddedDataLoader(gl) {
   ]);
   let bufferInfo = twgl.createBufferInfoFromArrays(gl, griddedArrays);
 
-  // NOTE: This could be further optimized (if needed) by caching the
-  // framebuffer with the empty texture for reuse if the new griddedTextureInfo
-  // has the same height/width as the previous, and by caching the textures for
-  // each colormap. Not implementing for now because it would add code
-  // complexity for currently unneeded performance gain.
+  let previousTextureInfo = {
+    data: {},
+    colormap: {},
+  };
+  let data;
+  let dataTexture;
+  let texture;
+  let framebufferInfo = {};
+  let colormapTexture;
 
   return async griddedTextureInfo => {
-    let buffer = await fetch(griddedTextureInfo.data.path)
-      .then(res => res.arrayBuffer());
-    let data = new Float32Array(buffer);
+    // don't reallocate space if new data has the same dimensions as old
+    if (previousTextureInfo.data.width !== griddedTextureInfo.data.width ||
+      previousTextureInfo.data.height !== griddedTextureInfo.data.height) {
 
-    let colormap = griddedTextureInfo.colormap.lot;
+      // allocate space for actual texture, empty for now
+      let textureOptions = {
+        mag: gl.NEAREST, // show zoomed in data as individual pixels
+        min: gl.LINEAR,
+        width: griddedTextureInfo.data.width,
+        height: griddedTextureInfo.data.height,
+      };
+      texture = twgl.createTexture(gl, textureOptions);
 
-    // texture with float data that will be used as a data source to render to
-    // actual texture
-    let dataTexture = twgl.createTexture(gl, {
-      src: data,
-      type: gl.FLOAT, // 32-bit floating data
-      format: gl.ALPHA, // 1 channel per pixel
-      minMag: gl.NEAREST, // linear filtering not available for float textures
-      width: griddedTextureInfo.data.width,
-      height: griddedTextureInfo.data.height,
-    });
+      gl.deleteFramebuffer(framebufferInfo.framebuffer);
+      framebufferInfo = twgl.createFramebufferInfo(gl, [{
+        attachment: texture,
+        ...textureOptions,
+      }], griddedTextureInfo.data.width, griddedTextureInfo.data.height);
+    }
 
-    // colormap as a texture, will be interpolated in fragment shader
-    let colormapTexture = twgl.createTexture(gl, {
-      src: colormap.flat().map(x => Math.round(x * 255)),
-      format: gl.RGB, // 3 channels per pixel
-      minMag: gl.LINEAR, // don't use mipmaps
-      height: 1,
-      width: colormap.length,
-    });
+    // update data texture if data has changed
+    if (previousTextureInfo.data !== griddedTextureInfo.data) {
+      previousTextureInfo.data = griddedTextureInfo.data;
 
-    // allocate space for actual texture, empty for now
-    let textureOptions = {
-      mag: gl.NEAREST, // show zoomed in data as individual pixels
-      min: gl.LINEAR,
-      width: griddedTextureInfo.data.width,
-      height: griddedTextureInfo.data.height,
-    };
-    let texture = twgl.createTexture(gl, textureOptions);
+      let buffer = await fetch(griddedTextureInfo.data.path)
+        .then(res => res.arrayBuffer());
+      data = new Float32Array(buffer);
+
+      // texture with float data that will be used as a data source to render to
+      // actual texture
+      gl.deleteTexture(dataTexture); // delete old texture
+      dataTexture = twgl.createTexture(gl, {
+        src: data,
+        type: gl.FLOAT, // 32-bit floating data
+        format: gl.ALPHA, // 1 channel per pixel
+        minMag: gl.NEAREST, // linear filtering not available for float textures
+        width: griddedTextureInfo.data.width,
+        height: griddedTextureInfo.data.height,
+      });
+    }
+
+    // update colormap texture if colormap has changed
+    if (previousTextureInfo.colormap.name !==
+      griddedTextureInfo.colormap.name) {
+      previousTextureInfo.colormap = griddedTextureInfo.colormap;
+
+      // colormap as a texture, will be interpolated in fragment shader
+      gl.deleteTexture(colormapTexture);
+      colormapTexture = twgl.createTexture(gl, {
+        src: griddedTextureInfo.colormap.lot.flat().map(x => {
+          return Math.round(x * 255);
+        }),
+        format: gl.RGB, // 3 channels per pixel
+        minMag: gl.LINEAR, // don't use mipmaps
+        height: 1,
+        width: griddedTextureInfo.colormap.lot.length,
+      });
+    }
 
     // relying on Javascript's run-to-completion semantics to ensure the below
     // calls to the WegGL context (useProgram and bindFramebuffer) don't
     // interfere with the main animation loop
 
     // switch rendering destination to our empty texture
-    let framebufferInfo = twgl.createFramebufferInfo(gl, [{
-      attachment: texture,
-      ...textureOptions,
-    }], griddedTextureInfo.data.width, griddedTextureInfo.data.height);
     twgl.bindFramebufferInfo(gl, framebufferInfo);
 
     // perform colormap interpolation on GPU and render them to our texture
     const uniforms = {
       u_data: dataTexture,
       u_colormap: colormapTexture,
-      u_colormapN: colormap.length,
+      u_colormapN: griddedTextureInfo.colormap.lot.length,
       u_domain: griddedTextureInfo.domain,
     };
 
@@ -81,11 +105,6 @@ export function createGriddedDataLoader(gl) {
 
     // switch rendering destination back to canvas
     twgl.bindFramebufferInfo(gl, null);
-
-    // delete what we can
-    gl.deleteFramebuffer(framebufferInfo.framebuffer);
-    gl.deleteTexture(colormapTexture);
-    gl.deleteTexture(dataTexture);
 
     return texture;
   }
