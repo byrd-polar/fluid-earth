@@ -71,7 +71,7 @@
     });
 
     (async () => {
-      griddedTexture = await getGriddedData(gl, griddedTextureInfo)
+      griddedTexture = await getGriddedData(gl, griddedTextureInfo);
     })();
 
     vectorProgramInfo = twgl.createProgramInfo(gl, [
