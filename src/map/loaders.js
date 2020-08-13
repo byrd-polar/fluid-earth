@@ -5,8 +5,6 @@ import griddedVertexShader from './gridded.vert';
 import colormapFragmentShader from './colormap.frag';
 
 import { griddedArrays } from './arrays.js';
-import viridis from './colormaps/viridis.js';
-import magma from './colormaps/magma.js';
 
 // load the file of floats (gridded data) into texture uniform
 export async function getGriddedData(gl, griddedTextureInfo) {
@@ -14,7 +12,7 @@ export async function getGriddedData(gl, griddedTextureInfo) {
     .then(res => res.arrayBuffer());
   let data = new Float32Array(buffer);
 
-  let colormap = magma;
+  let colormap = griddedTextureInfo.colormap;
 
   // texture with float data that will be used as a data source to render to
   // actual texture
@@ -66,6 +64,7 @@ export async function getGriddedData(gl, griddedTextureInfo) {
     u_data: dataTexture,
     u_colormap: colormapTexture,
     u_colormapN: colormap.length,
+    u_domain: griddedTextureInfo.domain,
   };
 
   gl.useProgram(programInfo.program);

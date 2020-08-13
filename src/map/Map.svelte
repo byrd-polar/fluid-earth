@@ -10,6 +10,9 @@
   import { griddedArrays } from './arrays.js';
   import { getGriddedData, getVectorData } from './loaders.js';
 
+  import viridis from './colormaps/viridis.js';
+  import magma from './colormaps/magma.js';
+
   export let projection = 3; // TODO: make this an enum
   export let center = {
     longitude: 0, // in degrees
@@ -18,6 +21,8 @@
   export let zoom = 1;
   export let griddedTextureInfo = {
     data: '/data/gfs-temperature.f32',
+    colormap: magma,
+    domain: [220, 340],
     width: 1440,
     height: 721,
   };
