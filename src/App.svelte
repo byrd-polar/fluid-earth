@@ -1,5 +1,7 @@
 <script>
   import Map from './map/Map.svelte';
+  import viridis from './map/colormaps/viridis.js';
+  import magma from './map/colormaps/magma.js';
 
   let projection = 3;
   let center = {
@@ -7,6 +9,13 @@
     latitude: 0,
   };
   let zoom = 1;
+  let griddedTextureInfo = {
+    data: '/data/gfs-temperature.f32',
+    colormap: magma,
+    domain: [220, 340],
+    width: 1440,
+    height: 721,
+  };
 
   const speed = 1;
 
@@ -66,6 +75,7 @@
     bind:projection
     bind:center
     bind:zoom
+    bind:griddedTextureInfo
   />
   <label for="projection-select">Choose a map projection:</label>
 

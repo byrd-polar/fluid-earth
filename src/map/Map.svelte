@@ -11,7 +11,6 @@
   import { createGriddedDataLoader, getVectorData } from './loaders.js';
 
   import viridis from './colormaps/viridis.js';
-  import magma from './colormaps/magma.js';
 
   export let projection = 3; // TODO: make this an enum
   export let center = {
@@ -21,7 +20,7 @@
   export let zoom = 1;
   export let griddedTextureInfo = {
     data: '/data/gfs-temperature.f32',
-    colormap: magma,
+    colormap: viridis,
     domain: [220, 340],
     width: 1440,
     height: 721,
@@ -48,6 +47,11 @@
   let griddedBufferInfo;
   let griddedDataLoader;;
   let griddedTexture;
+
+  let griddedDataNeedsReload = true;
+  // Whenever texture info changes, ask for reload on next frame
+  $: griddedTextureInfo,
+    griddedDataNeedsReload = true;
 
   let vectorProgramInfo;
   let vectorBufferInfos = {}; // temporarily empty until TopoJSON file loads
@@ -76,10 +80,7 @@
       min: gl.LINEAR,
     });
 
-    (async () => {
-      griddedDataLoader = createGriddedDataLoader(gl);
-      griddedTexture = await griddedDataLoader(griddedTextureInfo);
-    })();
+    griddedDataLoader = createGriddedDataLoader(gl);
 
     vectorProgramInfo = twgl.createProgramInfo(gl, [
       vectorVertexShader,
@@ -108,6 +109,13 @@
   // Main animation loop
   function render(time) {
     updateSizeVariables(gl);
+
+    if (griddedDataNeedsReload) {
+      (async () => {
+        griddedTexture = await griddedDataLoader(griddedTextureInfo);
+      })();
+      griddedDataNeedsReload = false;
+    }
 
     if (bgNeedsRedraw) {
       drawMapBackground();
