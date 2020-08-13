@@ -8,7 +8,7 @@
   import vectorFragmentShader from './vector.frag';
 
   import { griddedArrays } from './arrays.js';
-  import { getGriddedData, getVectorData } from './loaders.js';
+  import { createGriddedDataLoader, getVectorData } from './loaders.js';
 
   import viridis from './colormaps/viridis.js';
   import magma from './colormaps/magma.js';
@@ -46,6 +46,7 @@
 
   let griddedProgramInfo;
   let griddedBufferInfo;
+  let griddedDataLoader;;
   let griddedTexture;
 
   let vectorProgramInfo;
@@ -76,7 +77,8 @@
     });
 
     (async () => {
-      griddedTexture = await getGriddedData(gl, griddedTextureInfo);
+      griddedDataLoader = createGriddedDataLoader(gl);
+      griddedTexture = await griddedDataLoader(griddedTextureInfo);
     })();
 
     vectorProgramInfo = twgl.createProgramInfo(gl, [
