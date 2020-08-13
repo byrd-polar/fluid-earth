@@ -135,7 +135,7 @@
       u_lon0: center.longitude,
       u_lat0: center.latitude,
       u_zoom: zoom,
-      u_projection: projection,
+      u_projection: projection.id,
     };
 
     gl.useProgram(griddedProgramInfo.program);

@@ -1,8 +1,22 @@
 // Enums for map projections
+//
+// ids are passed as uniforms to the gridded and vector shaders
 
 export default Object.freeze({
-  EQUIRECTANGULAR: 0,
-  MERCATOR: 1,
-  EQUAL_EARTH: 2,
-  ORTHOGRAPHIC: 3,
+  EQUIRECTANGULAR: {
+    name: 'equirectangular',
+    id: 0,
+  },
+  MERCATOR: {
+    name: 'Mercator',
+    id: 1,
+  },
+  EQUAL_EARTH: {
+    name: 'Equal Earth',
+    id: 2,
+  },
+  ORTHOGRAPHIC: {
+    name: 'orthographic',
+    id: 3,
+  },
 });

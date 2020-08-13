@@ -2,15 +2,16 @@ import viridis from './viridis.js';
 import magma from './magma.js';
 
 // Enums for colormaps
-// note: 'lot' stands for LookUp Table
+//
+// lot stands for LookUp Table, used to construct a texture
 
 export default Object.freeze({
   VIRIDIS: {
-    id: Symbol('viridis'),
+    name: 'viridis',
     lot: viridis,
   },
   MAGMA: {
-    id: Symbol('magma'),
+    name: 'magma',
     lot: magma,
   },
 });

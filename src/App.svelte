@@ -77,14 +77,20 @@
     bind:zoom
     bind:griddedTextureInfo
   />
-  <label for="projection-select">Choose a map projection:</label>
-
-  <select bind:value={projection} name="projections" id="projection-select">
-    <option value="0">Equirectangular</option>
-    <option value="1">Mercator</option>
-    <option value="2">Equal Earth</option>
-    <option value="3" selected>Orthographic</option>
-  </select>
+  <label>Choose a map projection:
+    <select bind:value={projection} name="projections">
+      {#each Object.values(projections) as projection}
+        <option value={projection}>{projection.name}</option>
+      {/each}
+    </select>
+  </label>
+  <label>Choose a colormap:
+    <select bind:value={griddedTextureInfo.colormap} name="colormaps">
+      {#each Object.values(colormaps) as colormap}
+        <option value={colormap}>{colormap.name}</option>
+      {/each}
+    </select>
+  </label>
 </main>
 
 <svelte:window
@@ -104,10 +110,11 @@
   }
 
   label {
-    margin: 1em 0.5em 0 1em;
+    padding: 1em;
+    display: block;
   }
 
   select {
-    margin-top: 1em;
+    height: 2.5em;
   }
 </style>
