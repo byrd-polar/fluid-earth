@@ -26,7 +26,10 @@ export function createGriddedDataLoader(gl) {
   return async griddedTextureInfo => {
     // don't reallocate space if new data has the same dimensions as old
     if (previousTextureInfo.data.width !== griddedTextureInfo.data.width ||
-      previousTextureInfo.data.height !== griddedTextureInfo.data.height) {
+        previousTextureInfo.data.height !== griddedTextureInfo.data.height) {
+
+      previousTextureInfo.data.width = griddedTextureInfo.data.width;
+      previousTextureInfo.data.height = griddedTextureInfo.data.height;
 
       // allocate space for actual texture, empty for now
       let textureOptions = {
@@ -44,9 +47,10 @@ export function createGriddedDataLoader(gl) {
       }], griddedTextureInfo.data.width, griddedTextureInfo.data.height);
     }
 
-    // update data texture if data has changed
-    if (previousTextureInfo.data !== griddedTextureInfo.data) {
-      previousTextureInfo.data = griddedTextureInfo.data;
+    // update data texture if data path has changed
+    if (previousTextureInfo.data.path !== griddedTextureInfo.data.path) {
+
+      previousTextureInfo.data.path = griddedTextureInfo.data.path;
 
       let buffer = await fetch(griddedTextureInfo.data.path)
         .then(res => res.arrayBuffer());
@@ -68,7 +72,8 @@ export function createGriddedDataLoader(gl) {
     // update colormap texture if colormap has changed
     if (previousTextureInfo.colormap.name !==
       griddedTextureInfo.colormap.name) {
-      previousTextureInfo.colormap = griddedTextureInfo.colormap;
+
+      previousTextureInfo.colormap.name = griddedTextureInfo.colormap.name;
 
       // colormap as a texture, will be interpolated in fragment shader
       gl.deleteTexture(colormapTexture);
