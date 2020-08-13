@@ -20,11 +20,13 @@
   };
   export let zoom = 1;
   export let griddedTextureInfo = {
-    data: '/data/gfs-temperature.f32',
+    data: {
+      path: '/data/gfs-temperature.f32',
+      width: 1440,
+      height: 721,
+    },
     colormap: colormaps.VIRIDIS,
     domain: [220, 340],
-    width: 1440,
-    height: 721,
   };
 
   let bgNeedsRedraw = true;
@@ -129,8 +131,8 @@
   function drawMapBackground() {
     const bgUniforms = {
       u_texture: griddedTexture,
-      u_gridWidth: griddedTextureInfo.width,
-      u_gridHeight: griddedTextureInfo.height,
+      u_gridWidth: griddedTextureInfo.data.width,
+      u_gridHeight: griddedTextureInfo.data.height,
       u_canvasRatio: canvasRatio,
       u_lon0: center.longitude,
       u_lat0: center.latitude,

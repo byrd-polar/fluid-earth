@@ -20,7 +20,7 @@ export function createGriddedDataLoader(gl) {
   // complexity for currently unneeded performance gain.
 
   return async griddedTextureInfo => {
-    let buffer = await fetch(griddedTextureInfo.data)
+    let buffer = await fetch(griddedTextureInfo.data.path)
       .then(res => res.arrayBuffer());
     let data = new Float32Array(buffer);
 
@@ -33,8 +33,8 @@ export function createGriddedDataLoader(gl) {
       type: gl.FLOAT, // 32-bit floating data
       format: gl.ALPHA, // 1 channel per pixel
       minMag: gl.NEAREST, // linear filtering not available for float textures
-      width: griddedTextureInfo.width,
-      height: griddedTextureInfo.height,
+      width: griddedTextureInfo.data.width,
+      height: griddedTextureInfo.data.height,
     });
 
     // colormap as a texture, will be interpolated in fragment shader
@@ -50,8 +50,8 @@ export function createGriddedDataLoader(gl) {
     let textureOptions = {
       mag: gl.NEAREST, // show zoomed in data as individual pixels
       min: gl.LINEAR,
-      width: griddedTextureInfo.width,
-      height: griddedTextureInfo.height,
+      width: griddedTextureInfo.data.width,
+      height: griddedTextureInfo.data.height,
     };
     let texture = twgl.createTexture(gl, textureOptions);
 
@@ -63,7 +63,7 @@ export function createGriddedDataLoader(gl) {
     let framebufferInfo = twgl.createFramebufferInfo(gl, [{
       attachment: texture,
       ...textureOptions,
-    }], griddedTextureInfo.width, griddedTextureInfo.height);
+    }], griddedTextureInfo.data.width, griddedTextureInfo.data.height);
     twgl.bindFramebufferInfo(gl, framebufferInfo);
 
     // perform colormap interpolation on GPU and render them to our texture

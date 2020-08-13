@@ -10,11 +10,13 @@
   };
   let zoom = 1;
   let griddedTextureInfo = {
-    data: '/data/gfs-temperature.f32',
+    data: {
+      path: '/data/gfs-temperature.f32',
+      width: 1440,
+      height: 721,
+    },
     colormap: colormaps.MAGMA,
     domain: [220, 340],
-    width: 1440,
-    height: 721,
   };
 
   const speed = 1;
