@@ -24,7 +24,7 @@ export function createGriddedDataLoader(gl) {
       .then(res => res.arrayBuffer());
     let data = new Float32Array(buffer);
 
-    let colormap = griddedTextureInfo.colormap;
+    let colormap = griddedTextureInfo.colormap.lot;
 
     // texture with float data that will be used as a data source to render to
     // actual texture

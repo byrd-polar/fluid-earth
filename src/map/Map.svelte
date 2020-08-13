@@ -10,9 +10,10 @@
   import { griddedArrays } from './arrays.js';
   import { createGriddedDataLoader, getVectorData } from './loaders.js';
 
-  import viridis from './colormaps/viridis.js';
+  import colormaps from './colormaps/';
+  import projections from './projections/';
 
-  export let projection = 3; // TODO: make this an enum
+  export let projection = projections.ORTHOGRAPHIC;
   export let center = {
     longitude: 0, // in degrees
     latitude: 0, // in degrees
@@ -20,7 +21,7 @@
   export let zoom = 1;
   export let griddedTextureInfo = {
     data: '/data/gfs-temperature.f32',
-    colormap: viridis,
+    colormap: colormaps.VIRIDIS,
     domain: [220, 340],
     width: 1440,
     height: 721,

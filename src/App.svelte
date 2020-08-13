@@ -1,9 +1,9 @@
 <script>
   import Map from './map/Map.svelte';
-  import viridis from './map/colormaps/viridis.js';
-  import magma from './map/colormaps/magma.js';
+  import colormaps from './map/colormaps/';
+  import projections from './map/projections/';
 
-  let projection = 3;
+  let projection = projections.ORTHOGRAPHIC;
   let center = {
     longitude: 0,
     latitude: 0,
@@ -11,7 +11,7 @@
   let zoom = 1;
   let griddedTextureInfo = {
     data: '/data/gfs-temperature.f32',
-    colormap: magma,
+    colormap: colormaps.MAGMA,
     domain: [220, 340],
     width: 1440,
     height: 721,
