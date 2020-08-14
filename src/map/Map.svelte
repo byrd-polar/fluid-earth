@@ -21,12 +21,12 @@
   export let zoom = 1;
   export let griddedTextureInfo = {
     data: {
-      path: '/data/gfs-temperature.f32',
-      width: 1440,
-      height: 721,
+      float32Array: new Float32Array(),
+      width: 0,
+      height: 0,
     },
     colormap: colormaps.VIRIDIS,
-    domain: [220, 340],
+    domain: [0, 1],
   };
 
   let bgNeedsRedraw = true;
@@ -51,7 +51,7 @@
   let griddedDataLoader;;
   let griddedTexture;
 
-  let griddedDataNeedsReload = true;
+  let griddedDataNeedsReload = false;
   // Whenever texture info changes, ask for reload on next frame
   $: griddedTextureInfo,
     griddedDataNeedsReload = true;
@@ -114,9 +114,7 @@
     updateSizeVariables(gl);
 
     if (griddedDataNeedsReload) {
-      (async () => {
-        griddedTexture = await griddedDataLoader(griddedTextureInfo);
-      })();
+      griddedTexture = griddedDataLoader(griddedTextureInfo);
       griddedDataNeedsReload = false;
     }
 

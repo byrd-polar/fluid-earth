@@ -23,7 +23,7 @@ export function createGriddedDataLoader(gl) {
   let framebufferInfo = {};
   let colormapTexture;
 
-  return async griddedTextureInfo => {
+  return griddedTextureInfo => {
     // don't reallocate space if new data has the same dimensions as old
     if (previousTextureInfo.data.width !== griddedTextureInfo.data.width ||
         previousTextureInfo.data.height !== griddedTextureInfo.data.height) {
@@ -47,20 +47,19 @@ export function createGriddedDataLoader(gl) {
       }], griddedTextureInfo.data.width, griddedTextureInfo.data.height);
     }
 
-    // update data texture if data path has changed
-    if (previousTextureInfo.data.path !== griddedTextureInfo.data.path) {
+    // update data texture if data array has changed
+    // this is intentionally a reference comparison since these arrays are huge
+    if (previousTextureInfo.data.float32Array !==
+        griddedTextureInfo.data.float32Array) {
 
-      previousTextureInfo.data.path = griddedTextureInfo.data.path;
-
-      let buffer = await fetch(griddedTextureInfo.data.path)
-        .then(res => res.arrayBuffer());
-      data = new Float32Array(buffer);
+      previousTextureInfo.data.float32Array =
+        griddedTextureInfo.data.float32Array;
 
       // texture with float data that will be used as a data source to render to
       // actual texture
       gl.deleteTexture(dataTexture); // delete old texture
       dataTexture = twgl.createTexture(gl, {
-        src: data,
+        src: griddedTextureInfo.data.float32Array,
         type: gl.FLOAT, // 32-bit floating data
         format: gl.ALPHA, // 1 channel per pixel
         minMag: gl.NEAREST, // linear filtering not available for float textures

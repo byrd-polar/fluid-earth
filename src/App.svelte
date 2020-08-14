@@ -10,14 +10,20 @@
   };
   let zoom = 1;
   let griddedTextureInfo = {
-    data: {
-      path: '/data/gfs-temperature.f32',
-      width: 1440,
-      height: 721,
-    },
+    data: {},
     colormap: colormaps.MAGMA,
     domain: [220, 340],
   };
+
+  (async () => {
+    let path = '/data/gfs-temperature.f32';
+    let buffer = await fetch(path).then(res => res.arrayBuffer());
+    griddedTextureInfo.data = {
+      float32Array: new Float32Array(buffer),
+      width: 1440,
+      height: 721
+    }
+  })();
 
   const speed = 1;
 
