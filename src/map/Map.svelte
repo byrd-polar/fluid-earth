@@ -77,12 +77,6 @@
     ]);
     griddedBufferInfo = twgl.createBufferInfoFromArrays(gl, griddedArrays);
 
-    // quickly load a default grey texture first
-    griddedTexture = twgl.createTexture(gl, {
-      src: [42, 42, 42, 255],
-      min: gl.LINEAR,
-    });
-
     griddedDataLoader = createGriddedDataLoader(gl);
 
     vectorProgramInfo = twgl.createProgramInfo(gl, [

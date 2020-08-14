@@ -10,7 +10,11 @@
   };
   let zoom = 1;
   let griddedTextureInfo = {
-    data: {},
+    data: {
+      float32Array: new Float32Array([240]),
+      width: 1,
+      height: 1,
+    },
     colormap: colormaps.MAGMA,
     domain: [220, 340],
   };
