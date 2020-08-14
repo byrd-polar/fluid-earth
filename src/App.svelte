@@ -19,15 +19,37 @@
     domain: [220, 340],
   };
 
-  (async () => {
-    let path = '/data/gfs-temperature.f32';
+  let datasets = [
+    {
+      name: 'surface temperature',
+      path: '/data/gfs-temperature.f32',
+      domain: [220, 340],
+    },
+    {
+      name: 'u-wind velocity',
+      path: '/data/gfs-u-wind.f32',
+      domain: [-30, 30],
+    },
+    {
+      name: 'v-wind velocity',
+      path: '/data/gfs-v-wind.f32',
+      domain: [-30, 30],
+    },
+  ];
+  let dataset = datasets[0];
+  $: dataset, updateData();
+
+  async function updateData() {
+    let path = dataset.path;
     let buffer = await fetch(path).then(res => res.arrayBuffer());
     griddedTextureInfo.data = {
       float32Array: new Float32Array(buffer),
       width: 1440,
       height: 721
     }
-  })();
+    griddedTextureInfo.domain = dataset.domain;
+  }
+  updateData();
 
   const speed = 1;
 
@@ -96,6 +118,13 @@
       {/each}
     </select>
   </label>
+  <label>Choose a dataset:
+    <select bind:value={dataset} name="colormaps">
+      {#each datasets as dataset}
+        <option value={dataset}>{dataset.name}</option>
+      {/each}
+    </select>
+  </label>
   <label>Choose a colormap:
     <select bind:value={griddedTextureInfo.colormap} name="colormaps">
       {#each Object.values(colormaps) as colormap}
@@ -122,7 +151,8 @@
   }
 
   label {
-    padding: 1em;
+    padding-top: 1em;
+    padding-left: 1em;
     display: block;
   }
 
