@@ -21,9 +21,9 @@
   export let zoom = 1;
   export let griddedTextureInfo = {
     data: {
-      float32Array: new Float32Array(),
-      width: 0,
-      height: 0,
+      float32Array: new Float32Array([0.2]),
+      width: 1,
+      height: 1,
     },
     colormap: colormaps.VIRIDIS,
     domain: [0, 1],
