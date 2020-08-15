@@ -17,7 +17,6 @@ export function createGriddedDataLoader(gl) {
     data: {},
     colormap: {},
   };
-  let data;
   let dataTexture;
   let texture;
   let framebufferInfo = {};
