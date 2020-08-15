@@ -26,15 +26,15 @@ export async function gfs() {
 
 // converts part of a Grib file from GFS to f32 format
 async function saveGFS(url, index, parameter, level, filename) {
-  let file = await download(url, true, `_${parameter}_${level}`, {
+  let inputFile = await download(url, true, `_${parameter}_${level}`, {
     Range: getRange(index, parameter, level),
   });
   let outputFile = path.join(OUTPUT_DIR, filename);
 
-  console.log(`Generating GFS data...\n${file}\n=> ${outputFile}\n`);
+  console.log(`Generating GFS data...\n${inputFile}\n=> ${outputFile}\n`);
   let wgrib2 = spawnSync(
     'wgrib2',
-    [file, '-bin', outputFile, '-no_header', '-order', 'raw' ]
+    [inputFile, '-bin', outputFile, '-no_header', '-order', 'raw' ]
   );
 
   if (wgrib2.status !== 0) {
