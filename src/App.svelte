@@ -49,7 +49,6 @@
     }
     griddedTextureInfo.domain = dataset.domain;
   }
-  updateData();
 
   const speed = 1;
 
