@@ -10,6 +10,8 @@
   import { griddedArrays } from './arrays.js';
   import { createGriddedDataLoader, getVectorData } from './loaders.js';
 
+  import { ParticleSimulator } from './particleSim.js';
+
   import colormaps from './colormaps/';
   import projections from './projections/';
 
@@ -27,6 +29,16 @@
     },
     colormap: colormaps.VIRIDIS,
     domain: [0, 1],
+  };
+  export let vectorFieldOptions = {
+    data: {
+      uVelocities: new Float32Array([0.2]),
+      vVelocities: new Float32Array([0.2]),
+      width: 1,
+      height: 1,
+    },
+    rate: 1000,
+    particleCount: 1e5,
   };
 
   let bgNeedsRedraw = true;
@@ -59,6 +71,8 @@
   let vectorProgramInfo;
   let vectorBufferInfos = {}; // temporarily empty until TopoJSON file loads
 
+  let particleSimulator;
+
   // Begin map rendering after Svelte component has been mounted
   onMount(() => {
     gl = mapCanvas.getContext('webgl', { alpha: false });
@@ -85,6 +99,8 @@
     ]);
 
     (async () => vectorBufferInfos = await getVectorData(gl))();
+
+    particleSimulator = new ParticleSimulator(gl, vectorFieldOptions);
 
     // ensure correct the initial size of canvas and viewport
     gl.canvas.width = 0;
