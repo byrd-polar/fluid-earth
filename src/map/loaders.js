@@ -13,7 +13,7 @@ export function createGriddedDataLoader(gl) {
   ]);
   let bufferInfo = twgl.createBufferInfoFromArrays(gl, griddedArrays);
 
-  let previousTextureInfo = {
+  let previousOptions = {
     data: {},
     colormap: {},
   };
@@ -22,20 +22,20 @@ export function createGriddedDataLoader(gl) {
   let framebufferInfo = {};
   let colormapTexture;
 
-  return griddedTextureInfo => {
+  return griddedOptions => {
     // don't reallocate space if new data has the same dimensions as old
-    if (previousTextureInfo.data.width !== griddedTextureInfo.data.width ||
-        previousTextureInfo.data.height !== griddedTextureInfo.data.height) {
+    if (previousOptions.data.width !== griddedOptions.data.width ||
+        previousOptions.data.height !== griddedOptions.data.height) {
 
-      previousTextureInfo.data.width = griddedTextureInfo.data.width;
-      previousTextureInfo.data.height = griddedTextureInfo.data.height;
+      previousOptions.data.width = griddedOptions.data.width;
+      previousOptions.data.height = griddedOptions.data.height;
 
       // allocate space for actual texture, empty for now
       let textureOptions = {
         mag: gl.NEAREST, // show zoomed in data as individual pixels
         min: gl.LINEAR,
-        width: griddedTextureInfo.data.width,
-        height: griddedTextureInfo.data.height,
+        width: griddedOptions.data.width,
+        height: griddedOptions.data.height,
       };
       texture = twgl.createTexture(gl, textureOptions);
 
@@ -43,46 +43,46 @@ export function createGriddedDataLoader(gl) {
       framebufferInfo = twgl.createFramebufferInfo(gl, [{
         attachment: texture,
         ...textureOptions,
-      }], griddedTextureInfo.data.width, griddedTextureInfo.data.height);
+      }], griddedOptions.data.width, griddedOptions.data.height);
     }
 
     // update data texture if data array has changed
     // this is intentionally a reference comparison since these arrays are huge
-    if (previousTextureInfo.data.float32Array !==
-        griddedTextureInfo.data.float32Array) {
+    if (previousOptions.data.float32Array !==
+        griddedOptions.data.float32Array) {
 
-      previousTextureInfo.data.float32Array =
-        griddedTextureInfo.data.float32Array;
+      previousOptions.data.float32Array =
+        griddedOptions.data.float32Array;
 
       // texture with float data that will be used as a data source to render to
       // actual texture
       gl.deleteTexture(dataTexture); // delete old texture
       dataTexture = twgl.createTexture(gl, {
-        src: griddedTextureInfo.data.float32Array,
+        src: griddedOptions.data.float32Array,
         type: gl.FLOAT, // 32-bit floating data
         format: gl.ALPHA, // 1 channel per pixel
         minMag: gl.NEAREST, // linear filtering not available for float textures
-        width: griddedTextureInfo.data.width,
-        height: griddedTextureInfo.data.height,
+        width: griddedOptions.data.width,
+        height: griddedOptions.data.height,
       });
     }
 
     // update colormap texture if colormap has changed
-    if (previousTextureInfo.colormap.name !==
-      griddedTextureInfo.colormap.name) {
+    if (previousOptions.colormap.name !==
+      griddedOptions.colormap.name) {
 
-      previousTextureInfo.colormap.name = griddedTextureInfo.colormap.name;
+      previousOptions.colormap.name = griddedOptions.colormap.name;
 
       // colormap as a texture, will be interpolated in fragment shader
       gl.deleteTexture(colormapTexture);
       colormapTexture = twgl.createTexture(gl, {
-        src: griddedTextureInfo.colormap.lot.flat().map(x => {
+        src: griddedOptions.colormap.lot.flat().map(x => {
           return Math.round(x * 255);
         }),
         format: gl.RGB, // 3 channels per pixel
         minMag: gl.LINEAR, // don't use mipmaps
         height: 1,
-        width: griddedTextureInfo.colormap.lot.length,
+        width: griddedOptions.colormap.lot.length,
       });
     }
 
@@ -97,8 +97,8 @@ export function createGriddedDataLoader(gl) {
     const uniforms = {
       u_data: dataTexture,
       u_colormap: colormapTexture,
-      u_colormapN: griddedTextureInfo.colormap.lot.length,
-      u_domain: griddedTextureInfo.domain,
+      u_colormapN: griddedOptions.colormap.lot.length,
+      u_domain: griddedOptions.domain,
     };
 
     gl.useProgram(programInfo.program);

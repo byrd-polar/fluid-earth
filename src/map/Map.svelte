@@ -19,7 +19,7 @@
     latitude: 0, // in degrees
   };
   export let zoom = 1;
-  export let griddedTextureInfo = {
+  export let griddedOptions = {
     data: {
       float32Array: new Float32Array([0.2]),
       width: 1,
@@ -53,7 +53,7 @@
 
   let griddedDataNeedsReload = false;
   // Whenever texture info changes, ask for reload on next frame
-  $: griddedTextureInfo,
+  $: griddedOptions,
     griddedDataNeedsReload = true;
 
   let vectorProgramInfo;
@@ -108,7 +108,7 @@
     updateSizeVariables(gl);
 
     if (griddedDataNeedsReload) {
-      griddedTexture = griddedDataLoader(griddedTextureInfo);
+      griddedTexture = griddedDataLoader(griddedOptions);
       griddedDataNeedsReload = false;
     }
 
@@ -123,8 +123,8 @@
   function drawMapBackground() {
     const bgUniforms = {
       u_texture: griddedTexture,
-      u_gridWidth: griddedTextureInfo.data.width,
-      u_gridHeight: griddedTextureInfo.data.height,
+      u_gridWidth: griddedOptions.data.width,
+      u_gridHeight: griddedOptions.data.height,
       u_canvasRatio: canvasRatio,
       u_lon0: center.longitude,
       u_lat0: center.latitude,

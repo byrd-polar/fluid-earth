@@ -9,7 +9,7 @@
     latitude: 0,
   };
   let zoom = 1;
-  let griddedTextureInfo = {
+  let griddedOptions = {
     data: {
       float32Array: new Float32Array([240]),
       width: 1,
@@ -42,12 +42,12 @@
   async function updateData() {
     let path = dataset.path;
     let buffer = await fetch(path).then(res => res.arrayBuffer());
-    griddedTextureInfo.data = {
+    griddedOptions.data = {
       float32Array: new Float32Array(buffer),
       width: 1440,
-      height: 721
+      height: 721,
     }
-    griddedTextureInfo.domain = dataset.domain;
+    griddedOptions.domain = dataset.domain;
   }
 
   const speed = 1;
@@ -108,7 +108,7 @@
     bind:projection
     bind:center
     bind:zoom
-    bind:griddedTextureInfo
+    bind:griddedOptions
   />
   <label>Choose a map projection:
     <select bind:value={projection} name="projections">
@@ -125,7 +125,7 @@
     </select>
   </label>
   <label>Choose a colormap:
-    <select bind:value={griddedTextureInfo.colormap} name="colormaps">
+    <select bind:value={griddedOptions.colormap} name="colormaps">
       {#each Object.values(colormaps) as colormap}
         <option value={colormap}>{colormap.name}</option>
       {/each}
