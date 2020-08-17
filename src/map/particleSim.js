@@ -1,8 +1,20 @@
 import * as twgl from 'twgl.js';
 
+import griddedVertexShader from './gridded.vert';
+import particleFragmentShader from './particles.frag';
+
+import { griddedArrays } from './arrays.js';
+
 export class ParticleSimulator {
   constructor(gl, vectorFieldOptions) {
     this.gl = gl;
+
+    this.simulator = twgl.createProgramInfo(this.gl, [
+      griddedVertexShader,
+      particleFragmentShader,
+    ]);
+
+    this.simBuffer = twgl.createBufferInfoFromArrays(gl, griddedArrays);
 
     this.updateParticleCount(vectorFieldOptions);
     this.updateVectorField(vectorFieldOptions);
@@ -21,9 +33,10 @@ export class ParticleSimulator {
     let actualParticleCount = Math.pow(particleCountSqrt, 2);
 
     // particle positions saved as float textures
+    // format needs to RGBA, or else not "renderable" for simulation
     let textureOptions = {
       type: this.gl.FLOAT, // 32-bit floating data
-      format: this.gl.LUMINANCE_ALPHA, // 2 channels per pixel
+      format: this.gl.RGBA, // 4 channels per pixel, only using first two
       minMag: this.gl.NEAREST,
       width: particleCountSqrt,
       height: particleCountSqrt,
@@ -31,8 +44,8 @@ export class ParticleSimulator {
 
     this.particlePositionsA = twgl.createTexture(this.gl, {
       src: interleave(
-        randomArray(-180, 180, actualParticleCount),
-        randomArray(-90, 90, actualParticleCount),
+        randomArray(-180, 180, 2 * actualParticleCount),
+        randomArray(-90, 90, 2 * actualParticleCount),
       ),
       ...textureOptions
     });
@@ -49,10 +62,10 @@ export class ParticleSimulator {
   }
 
   updateVectorField(vectorFieldOptions) {
-    this.gl.deleteTexture(this.vectorFieldTexture);
+    this.gl.deleteTexture(this.vectorField);
 
     // particle velocities saved as float texture
-    this.vectorFieldTexture = twgl.createTexture(this.gl, {
+    this.vectorField = twgl.createTexture(this.gl, {
       src: interleave(
         vectorFieldOptions.data.uVelocities,
         vectorFieldOptions.data.vVelocities,
@@ -68,20 +81,28 @@ export class ParticleSimulator {
   // using data in this.particlePositionsA, simulate and render to
   // this.framebufferInfoB (with this.particlePositionsB attached) the new
   // particle positions after timeDelta ms have passed
-  stepSimulation(timeDelta) {
+  step(timeDelta) {
     // switch rendering destination to our framebuffer
     twgl.bindFramebufferInfo(this.gl, this.framebufferInfoB);
 
-    // TODO
+    const uniforms = {
+      u_coordinates: this.particlePositionsA,
+      u_vectorField: this.vectorField,
+    }
 
-    // swap texture and frambuffer references for next render
-    [this.particlePositionsA, this.particlePostionsB] =
-      [this.particlePositionsB, this.particlePostionsA];
-    [this.framebufferInfoA, this.framebufferInfoB] =
-      [this.framebufferInfoB, this.framebufferInfoA];
+    this.gl.useProgram(this.simulator.program);
+    twgl.setBuffersAndAttributes(this.gl, this.simulator, this.simBuffer);
+    twgl.setUniformsAndBindTextures(this.simulator, uniforms);
+    twgl.drawBufferInfo(this.gl, this.simBuffer);
 
     // switch rendering destination back to canvas
     twgl.bindFramebufferInfo(this.gl, null);
+
+    // swap texture and frambuffer references for next render
+    [this.particlePositionsA, this.particlePositionsB] =
+      [this.particlePositionsB, this.particlePositionsA];
+    [this.framebufferInfoA, this.framebufferInfoB] =
+      [this.framebufferInfoB, this.framebufferInfoA];
   }
 }
 

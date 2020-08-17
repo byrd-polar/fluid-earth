@@ -85,6 +85,9 @@
 
     gl.getExtension('OES_texture_float'); // used to load gridded data
 
+    gl.getExtension('OES_texture_float_linear'); // used for particle sim
+    gl.getExtension('WEBGL_color_buffer_float'); // used for particle sim
+
     griddedProgramInfo = twgl.createProgramInfo(gl, [
       griddedVertexShader,
       griddedFragmentShader,
@@ -132,6 +135,8 @@
       drawMapBackground();
       bgNeedsRedraw = false;
     }
+
+    particleSimulator.step(1);
 
     requestAnimationFrame(render);
   }
