@@ -1,7 +1,7 @@
 import * as twgl from 'twgl.js';
 
 import griddedVertexShader from './gridded.vert';
-import particleFragmentShader from './particles.frag';
+import particleFragmentShader from './particleSim.frag';
 
 import { griddedArrays } from './arrays.js';
 
