@@ -39,6 +39,7 @@
     },
     rate: 1000,
     particleCount: 1e5,
+    enabled: true,
   };
 
   let bgNeedsRedraw = true;
@@ -72,6 +73,9 @@
   let vectorBufferInfos = {}; // temporarily empty until TopoJSON file loads
 
   let particleSimulator;
+
+  let vectorFieldDataNeedsReload;
+  $: vectorFieldOptions, vectorFieldDataNeedsReload = true;
 
   // Begin map rendering after Svelte component has been mounted
   onMount(() => {
@@ -131,12 +135,20 @@
       griddedDataNeedsReload = false;
     }
 
-    if (bgNeedsRedraw) {
+    if (bgNeedsRedraw || vectorFieldOptions.enabled) {
       drawMapBackground();
       bgNeedsRedraw = false;
     }
 
-    particleSimulator.step(1);
+    if (vectorFieldOptions.enabled) {
+      particleSimulator.step(1);
+    }
+
+    if (vectorFieldDataNeedsReload) {
+      particleSimulator.updateParticleCount(vectorFieldOptions);
+      particleSimulator.updateVectorField(vectorFieldOptions);
+      vectorFieldDataNeedsReload = false;
+    }
 
     requestAnimationFrame(render);
   }
@@ -171,6 +183,10 @@
       twgl.setUniforms(vectorProgramInfo, bgUniforms);
       twgl.drawBufferInfo(gl, data.bufferInfo, gl.LINES);
     });
+
+    delete bgUniforms.u_color;
+
+    particleSimulator.draw(bgUniforms);
   }
 </script>
 

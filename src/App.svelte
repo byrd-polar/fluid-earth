@@ -50,6 +50,27 @@
     griddedOptions.domain = dataset.domain;
   }
 
+  let vectorFieldOptions;
+  async function updateParticleData() {
+    let uPath = '/data/gfs-u-wind.f32';
+    let vPath = '/data/gfs-v-wind.f32';
+    let uBuffer = await fetch(uPath).then(res => res.arrayBuffer());
+    let vBuffer = await fetch(vPath).then(res => res.arrayBuffer());
+    vectorFieldOptions = {
+      data: {
+        uVelocities: new Float32Array(uBuffer),
+        vVelocities: new Float32Array(vBuffer),
+        width: 1440,
+        height: 721,
+      },
+      rate: 1000,
+      particleCount: 5e5,
+      enabled: true,
+    }
+  }
+  updateParticleData();
+
+
   const speed = 1;
 
   function handleKeydown(event) {
@@ -109,6 +130,7 @@
     bind:center
     bind:zoom
     bind:griddedOptions
+    bind:vectorFieldOptions
   />
   <label>Choose a map projection:
     <select bind:value={projection} name="projections">

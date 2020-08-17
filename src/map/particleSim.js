@@ -3,6 +3,9 @@ import * as twgl from 'twgl.js';
 import griddedVertexShader from './gridded.vert';
 import particleFragmentShader from './particleSim.frag';
 
+import particleDrawShader from './particleDraw.vert';
+import vectorFragmentShader from './vector.frag';
+
 import { griddedArrays } from './arrays.js';
 
 export class ParticleSimulator {
@@ -13,14 +16,28 @@ export class ParticleSimulator {
       griddedVertexShader,
       particleFragmentShader,
     ]);
-
     this.simBuffer = twgl.createBufferInfoFromArrays(gl, griddedArrays);
+
+    this.drawer = twgl.createProgramInfo(this.gl, [
+      particleDrawShader,
+      vectorFragmentShader,
+    ]);
 
     this.updateParticleCount(vectorFieldOptions);
     this.updateVectorField(vectorFieldOptions);
   }
 
   updateParticleCount(vectorFieldOptions) {
+    let particleCountSqrt =
+      Math.floor(Math.sqrt(vectorFieldOptions.particleCount));
+    let actualParticleCount = Math.pow(particleCountSqrt, 2);
+
+    if (this.particleCountSqrt === particleCountSqrt) {
+      return;
+    } else {
+      this.particleCountSqrt = particleCountSqrt;
+    }
+
     this.gl.deleteTexture(this.particlePositionsA);
     this.gl.deleteTexture(this.particlePositionsB);
     if (this.framebufferInfoA && this.framebufferInfoB) {
@@ -28,18 +45,14 @@ export class ParticleSimulator {
       this.gl.deleteFramebuffer(this.framebufferInfoB.framebuffer);
     }
 
-    let particleCountSqrt =
-      Math.floor(Math.sqrt(vectorFieldOptions.particleCount));
-    let actualParticleCount = Math.pow(particleCountSqrt, 2);
-
     // particle positions saved as float textures
     // format needs to RGBA, or else not "renderable" for simulation
     let textureOptions = {
       type: this.gl.FLOAT, // 32-bit floating data
       format: this.gl.RGBA, // 4 channels per pixel, only using first two
       minMag: this.gl.NEAREST,
-      width: particleCountSqrt,
-      height: particleCountSqrt,
+      width: this.particleCountSqrt,
+      height: this.particleCountSqrt,
     }
 
     this.particlePositionsA = twgl.createTexture(this.gl, {
@@ -59,6 +72,23 @@ export class ParticleSimulator {
     this.framebufferInfoB = createFbi(
       this.gl, this.particlePositionsB, textureOptions
     );
+
+    // attributes used in draw program
+    let indices = new Float32Array(2 * actualParticleCount);
+    for (let i = 0; i < indices.length; i++) {
+      let j = Math.floor(i / 2);
+      if (i % 2 === 0) {
+        indices[i] = Math.floor(j / this.particleCountSqrt);
+      } else {
+        indices[i] = j % this.particleCountSqrt;
+      }
+    }
+    this.drawBuffer = twgl.createBufferInfoFromArrays(this.gl, {
+      a_particleIndex: {
+        numComponents: 2, // Indicate we are using 2-dimensional points
+        data: indices,
+      }
+    });
   }
 
   updateVectorField(vectorFieldOptions) {
@@ -66,12 +96,12 @@ export class ParticleSimulator {
 
     // particle velocities saved as float texture
     this.vectorField = twgl.createTexture(this.gl, {
-      src: interleave(
+      src: interleave4(
         vectorFieldOptions.data.uVelocities,
         vectorFieldOptions.data.vVelocities,
       ),
       type: this.gl.FLOAT, // 32-bit floating data
-      format: this.gl.LUMINANCE_ALPHA, // 2 channels per pixel
+      format: this.gl.RGBA, // 4 channels per pixel, only using first two
       minMag: this.gl.LINEAR, // requires OES_texture_float_linear
       width: vectorFieldOptions.data.width,
       height: vectorFieldOptions.data.height,
@@ -104,6 +134,20 @@ export class ParticleSimulator {
     [this.framebufferInfoA, this.framebufferInfoB] =
       [this.framebufferInfoB, this.framebufferInfoA];
   }
+
+  draw(sharedUniforms) {
+    const uniforms = {
+      u_particlePositions: this.particlePositionsA,
+      u_particleCountSqrt: this.particleCountSqrt,
+      u_color: [1, 1, 1, 0.2],
+      ...sharedUniforms,
+    }
+
+    this.gl.useProgram(this.drawer.program);
+    twgl.setBuffersAndAttributes(this.gl, this.drawer, this.drawBuffer);
+    twgl.setUniformsAndBindTextures(this.drawer, uniforms);
+    twgl.drawBufferInfo(this.gl, this.drawBuffer, this.gl.POINTS);
+  }
 }
 
 function createFbi(gl, texture, textureOptions) {
@@ -113,14 +157,16 @@ function createFbi(gl, texture, textureOptions) {
   }], textureOptions.width, textureOptions.height);
 }
 
-function interleave(arrayA, arrayB) {
-  let interleaved = new Float32Array(2 * arrayA.length);
+function interleave4(arrayA, arrayB) {
+  let interleaved = new Float32Array(4 * arrayA.length);
 
   for (let i = 0; i < interleaved.length; i++) {
-    if (i % 2 === 0) {
-      interleaved[i] = arrayA[i/2];
+    if (i % 4 === 0) {
+      interleaved[i] = arrayA[i/4];
+    } else if (i % 4 === 1) {
+      interleaved[i] = arrayB[Math.floor(i/4)];
     } else {
-      interleaved[i] = arrayB[Math.floor(i/2)];
+      interleaved[i] = 0;
     }
   }
 
