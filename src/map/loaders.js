@@ -139,7 +139,7 @@ export async function getVectorData(gl) {
     }).flat();
 
     let arrays = {
-      a_latLon: {
+      a_lonLat: {
         numComponents: 2,
         data: mesh.coordinates.flat(2),
       },
