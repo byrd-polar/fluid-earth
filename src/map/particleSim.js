@@ -43,9 +43,9 @@ export class ParticleSimulator {
     }
 
     this.particlePositionsA = twgl.createTexture(this.gl, {
-      src: interleave(
-        randomArray(-180, 180, 2 * actualParticleCount),
-        randomArray(-90, 90, 2 * actualParticleCount),
+      src: interleave4(
+        randomLongitudeArray(actualParticleCount),
+        randomLatitudeArray(actualParticleCount),
       ),
       ...textureOptions
     });
@@ -127,11 +127,21 @@ function interleave(arrayA, arrayB) {
   return interleaved;
 }
 
-function randomArray(min, max, length) {
+function randomLongitudeArray(length) {
   let random = new Float32Array(length);
 
   for (let i = 0; i < random.length; i++) {
-    random[i] = (max - min) * Math.random() + min;
+    random[i] = 360 * Math.random() - 180;
+  }
+
+  return random;
+}
+
+function randomLatitudeArray(length) {
+  let random = new Float32Array(length);
+
+  for (let i = 0; i < random.length; i++) {
+    random[i] = (180 / Math.PI) * Math.asin(2 * Math.random() - 1);
   }
 
   return random;
