@@ -1,6 +1,7 @@
 // Fragment shader for particle simulation
 
-precision mediump float;
+precision highp float; // needed for glsl-random
+#pragma glslify: random = require(glsl-random)
 
 uniform sampler2D u_particleData;
 uniform sampler2D u_vectorField;
@@ -31,7 +32,13 @@ void main() {
   vec2 velocity = texture2D(u_vectorField, texCoord).rg;
 
   if (lifetime > u_particleLifetime) {
-    // TODO: randomly relocate particle to keep grid "full"
+    // "randomly" relocate particle to keep grid "full"
+    float rx = random(id + u_randLonLatOffsets.xx);
+    float ry = random(id + u_randLonLatOffsets.yy);
+    lonLat.x = DIM.x * rx - DIM_2.x;
+    lonLat.y = (DIM.y / radians(DIM.y)) * asin(2.0 * ry - 1.0);
+
+    lonLat.x += DIM.x * u_randLonLatOffsets.x;
 
     lifetime = 0.0;
   } else {
