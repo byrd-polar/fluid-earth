@@ -55,10 +55,12 @@ export class ParticleSimulator {
       height: this.particleCountSqrt,
     }
 
+    this.particleLifetime = vectorFieldOptions.particles.lifetime;
     this.particlePositionsA = twgl.createTexture(this.gl, {
       src: interleave4(
         randomLongitudeArray(actualParticleCount),
         randomLatitudeArray(actualParticleCount),
+        randomLifetimeArray(this.particleLifetime, actualParticleCount),
       ),
       ...textureOptions
     });
@@ -101,7 +103,7 @@ export class ParticleSimulator {
         vectorFieldOptions.data.vVelocities,
       ),
       type: this.gl.FLOAT, // 32-bit floating data
-      format: this.gl.RGBA, // 4 channels per pixel, only using first two
+      format: this.gl.RGBA, // 4 channels per pixel, only using first 3
       minMag: this.gl.LINEAR, // requires OES_texture_float_linear
       width: vectorFieldOptions.data.width,
       height: vectorFieldOptions.data.height,
@@ -116,8 +118,12 @@ export class ParticleSimulator {
     twgl.bindFramebufferInfo(this.gl, this.framebufferInfoB);
 
     const uniforms = {
-      u_coordinates: this.particlePositionsA,
+      u_particleData: this.particlePositionsA,
       u_vectorField: this.vectorField,
+      u_particleLifetime: this.particleLifetime,
+      u_randLonLatOffsets: [Math.random(), Math.random()],
+      u_particleCountSqrt: this.particleCountSqrt,
+      u_timeDelta: timeDelta,
     }
 
     this.gl.useProgram(this.simulator.program);
@@ -157,7 +163,7 @@ function createFbi(gl, texture, textureOptions) {
   }], textureOptions.width, textureOptions.height);
 }
 
-function interleave4(arrayA, arrayB) {
+function interleave4(arrayA, arrayB, arrayC, arrayD) {
   let interleaved = new Float32Array(4 * arrayA.length);
 
   for (let i = 0; i < interleaved.length; i++) {
@@ -165,8 +171,10 @@ function interleave4(arrayA, arrayB) {
       interleaved[i] = arrayA[i/4];
     } else if (i % 4 === 1) {
       interleaved[i] = arrayB[Math.floor(i/4)];
-    } else {
-      interleaved[i] = 0;
+    } else if (i % 4 === 2 && arrayC) {
+      interleaved[i] = arrayC[Math.floor(i/4)];
+    } else if (arrayD) {
+      interleaved[i] = arrayD[Math.floor(i/4)];
     }
   }
 
@@ -188,6 +196,16 @@ function randomLatitudeArray(length) {
 
   for (let i = 0; i < random.length; i++) {
     random[i] = (180 / Math.PI) * Math.asin(2 * Math.random() - 1);
+  }
+
+  return random;
+}
+
+function randomLifetimeArray(max, length) {
+  let random = new Float32Array(length);
+
+  for (let i = 0; i < random.length; i++) {
+    random[i] = max * Math.random();
   }
 
   return random;

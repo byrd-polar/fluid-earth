@@ -40,6 +40,7 @@
     particles: {
       rate: 1000,
       count: 1e5,
+      lifetime: 1000, // milliseconds
       enabled: true,
     },
   };
@@ -128,8 +129,13 @@
     }
   }
 
+  let previousTime;
+
   // Main animation loop
   function render(time) {
+    let timeDelta = previousTime ? (time - previousTime) : 0;
+    previousTime = time;
+
     updateSizeVariables(gl);
 
     if (griddedDataNeedsReload) {
@@ -143,7 +149,7 @@
     }
 
     if (vectorFieldOptions.particles.enabled) {
-      particleSimulator.step(1);
+      particleSimulator.step(Math.min(timeDelta, 100));
     }
 
     if (vectorFieldDataNeedsReload) {
