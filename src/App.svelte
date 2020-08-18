@@ -63,9 +63,11 @@
         width: 1440,
         height: 721,
       },
-      rate: 1000,
-      particleCount: 5e5,
-      enabled: true,
+      particles: {
+        rate: 1000,
+        count: 5e5,
+        enabled: true,
+      }
     }
   }
   updateParticleData();

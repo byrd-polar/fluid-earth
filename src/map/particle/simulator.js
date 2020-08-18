@@ -29,7 +29,7 @@ export class ParticleSimulator {
 
   updateParticleCount(vectorFieldOptions) {
     let particleCountSqrt =
-      Math.floor(Math.sqrt(vectorFieldOptions.particleCount));
+      Math.floor(Math.sqrt(vectorFieldOptions.particles.count));
     let actualParticleCount = Math.pow(particleCountSqrt, 2);
 
     if (this.particleCountSqrt === particleCountSqrt) {

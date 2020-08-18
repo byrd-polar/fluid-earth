@@ -37,9 +37,11 @@
       width: 1,
       height: 1,
     },
-    rate: 1000,
-    particleCount: 1e5,
-    enabled: true,
+    particles: {
+      rate: 1000,
+      count: 1e5,
+      enabled: true,
+    },
   };
 
   let bgNeedsRedraw = true;
@@ -135,12 +137,12 @@
       griddedDataNeedsReload = false;
     }
 
-    if (bgNeedsRedraw || vectorFieldOptions.enabled) {
+    if (bgNeedsRedraw || vectorFieldOptions.particles.enabled) {
       drawMapBackground();
       bgNeedsRedraw = false;
     }
 
-    if (vectorFieldOptions.enabled) {
+    if (vectorFieldOptions.particles.enabled) {
       particleSimulator.step(1);
     }
 
