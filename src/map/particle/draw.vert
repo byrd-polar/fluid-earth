@@ -2,10 +2,10 @@
 //
 // essentially the same as the vertex shader for the vector layer
 
-#pragma glslify: p0 = require(./projections/equirectangular/forward.glsl)
-#pragma glslify: p1 = require(./projections/mercator/forward.glsl)
-#pragma glslify: p2 = require(./projections/equal-earth/forward.glsl)
-#pragma glslify: p3 = require(./projections/orthographic/forward.glsl)
+#pragma glslify: p0 = require(../projections/equirectangular/forward.glsl)
+#pragma glslify: p1 = require(../projections/mercator/forward.glsl)
+#pragma glslify: p2 = require(../projections/equal-earth/forward.glsl)
+#pragma glslify: p3 = require(../projections/orthographic/forward.glsl)
 
 attribute vec2 a_particleIndex;
 uniform sampler2D u_particlePositions;

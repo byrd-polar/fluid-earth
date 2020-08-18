@@ -10,7 +10,7 @@
   import { griddedArrays } from './arrays.js';
   import { createGriddedDataLoader, getVectorData } from './loaders.js';
 
-  import { ParticleSimulator } from './particleSim.js';
+  import { ParticleSimulator } from './particle/simulator.js';
 
   import colormaps from './colormaps/';
   import projections from './projections/';

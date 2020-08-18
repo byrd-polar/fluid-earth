@@ -1,12 +1,12 @@
 import * as twgl from 'twgl.js';
 
-import griddedVertexShader from './gridded.vert';
-import particleFragmentShader from './particleSim.frag';
+import griddedVertexShader from '../gridded.vert';
+import particleStepShader from './step.frag';
 
-import particleDrawShader from './particleDraw.vert';
-import vectorFragmentShader from './vector.frag';
+import particleDrawShader from './draw.vert';
+import vectorFragmentShader from '../vector.frag';
 
-import { griddedArrays } from './arrays.js';
+import { griddedArrays } from '../arrays.js';
 
 export class ParticleSimulator {
   constructor(gl, vectorFieldOptions) {
@@ -14,7 +14,7 @@ export class ParticleSimulator {
 
     this.simulator = twgl.createProgramInfo(this.gl, [
       griddedVertexShader,
-      particleFragmentShader,
+      particleStepShader,
     ]);
     this.simBuffer = twgl.createBufferInfoFromArrays(gl, griddedArrays);
 
