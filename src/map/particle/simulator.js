@@ -32,6 +32,8 @@ export class ParticleSimulator {
       Math.floor(Math.sqrt(vectorFieldOptions.particles.count));
     let actualParticleCount = Math.pow(particleCountSqrt, 2);
 
+    this.rate = vectorFieldOptions.particles.rate;
+
     if (this.particleCountSqrt === particleCountSqrt) {
       return;
     } else {
@@ -124,6 +126,7 @@ export class ParticleSimulator {
       u_randLonLatOffsets: [Math.random(), Math.random()],
       u_particleCountSqrt: this.particleCountSqrt,
       u_timeDelta: timeDelta,
+      u_rate: this.rate,
     }
 
     this.gl.useProgram(this.simulator.program);

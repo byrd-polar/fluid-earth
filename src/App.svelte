@@ -64,7 +64,7 @@
         height: 721,
       },
       particles: {
-        rate: 1000,
+        rate: 5e4,
         count: 5e5,
         lifetime: 1000, // milliseconds
         enabled: true,

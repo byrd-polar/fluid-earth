@@ -11,11 +11,14 @@ uniform vec2 u_randLonLatOffsets;
 uniform float u_particleCountSqrt;
 uniform float u_particleLifetime;
 uniform float u_timeDelta;
+uniform float u_rate;
 
 varying vec2 v_position;
 
 const vec2 DIM = vec2(360.0, 180.0); // size of map in longitude and latitude
 const vec2 DIM_2 = vec2(180.0, 90.0);
+
+const float M_PER_DEG = 111319.5;
 
 void main() {
   vec2 id = (v_position + 1.0) / 2.0; // 2D "id" in between (0,0) and (1,1)
@@ -43,8 +46,9 @@ void main() {
     lifetime = 0.0;
   } else {
     // move particle according to vectorField
-    lonLat.x += 0.01 * velocity.x / cos(radians(lonLat.y));
-    lonLat.y += 0.01 * velocity.y;
+    float multiplier = u_rate * (u_timeDelta / 1000.0) / M_PER_DEG;
+    lonLat.x += multiplier * velocity.x / cos(radians(lonLat.y));
+    lonLat.y += multiplier * velocity.y;
   }
 
   // keep lonLat values in range
