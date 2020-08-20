@@ -23,6 +23,16 @@ export class ParticleSimulator {
       vectorFragmentShader,
     ]);
 
+    let textureSize = 2048;
+    this.randomTexture = twgl.createTexture(this.gl, {
+      src: randomArray(1, Math.pow(textureSize, 2)),
+      type: this.gl.FLOAT,
+      format: this.gl.ALPHA,
+      minMag: this.gl.NEAREST,
+      width: textureSize,
+      height: textureSize,
+    });
+
     this.updateParticleCount(vectorFieldOptions);
     this.updateVectorField(vectorFieldOptions);
   }
@@ -62,7 +72,7 @@ export class ParticleSimulator {
       src: interleave4(
         randomLongitudeArray(actualParticleCount),
         randomLatitudeArray(actualParticleCount),
-        randomLifetimeArray(this.particleLifetime, actualParticleCount),
+        randomArray(this.particleLifetime, actualParticleCount),
       ),
       ...textureOptions
     });
@@ -122,6 +132,7 @@ export class ParticleSimulator {
     const uniforms = {
       u_particleData: this.particlePositionsA,
       u_vectorField: this.vectorField,
+      u_random: this.randomTexture,
       u_particleLifetime: this.particleLifetime,
       u_randLonLatOffsets: [Math.random(), Math.random()],
       u_particleCountSqrt: this.particleCountSqrt,
@@ -204,7 +215,7 @@ function randomLatitudeArray(length) {
   return random;
 }
 
-function randomLifetimeArray(max, length) {
+function randomArray(max, length) {
   let random = new Float32Array(length);
 
   for (let i = 0; i < random.length; i++) {
