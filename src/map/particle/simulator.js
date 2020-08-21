@@ -37,6 +37,13 @@ export default class ParticleSimulator {
 
   set count(c) {
     this._count = sqrtFloor(c);
+
+    this._gl.deleteBuffer(this._buffers.draw.indices);
+    this._gl.deleteTexture(this._textures.simA);
+    this._gl.deleteTexture(this._textures.simB);
+    this._gl.deleteFramebuffer(this._framebuffers.simA.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simB.framebuffer);
+
     this._buffers.draw = this._createDrawBuffer();
     this._textures.simA = this._createSimATexture(),
     this._textures.simB = this._createSimBTexture(),
@@ -49,6 +56,7 @@ export default class ParticleSimulator {
 
   set data(d) {
     this._data = d;
+    this._gl.deleteTexture(this._textures.vectorField);
     this._textures.vectorField = this._createVectorFieldTexture();
   }
 
