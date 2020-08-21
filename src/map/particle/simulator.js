@@ -1,226 +1,229 @@
 import * as twgl from 'twgl.js';
 
-import griddedVertexShader from '../gridded.vert';
-import particleStepShader from './step.frag';
+import simVert from '../gridded.vert';
+import simFrag from './step.frag';
 
-import particleDrawShader from './draw.vert';
-import vectorFragmentShader from '../vector.frag';
+import drawVert from './draw.vert';
+import drawFrag from '../vector.frag';
 
 import { griddedArrays } from '../arrays.js';
+import {
+  randomLongitudeArray,
+  randomLatitudeArray,
+  randomArray,
+} from './random.js';
 
 export class ParticleSimulator {
-  constructor(gl, vectorFieldOptions) {
-    this.gl = gl;
+  constructor(gl, options) {
+    // public variables
+    this.rate = options.particles.rate;
+    this.lifetime = options.particles.lifetime;
 
-    this.simulator = twgl.createProgramInfo(this.gl, [
-      griddedVertexShader,
-      particleStepShader,
-    ]);
-    this.simBuffer = twgl.createBufferInfoFromArrays(gl, griddedArrays);
+    // internal backings of public variables with getters/setters
+    this._count = sqrtFloor(options.particles.count);
+    this._data = options.data;
 
-    this.drawer = twgl.createProgramInfo(this.gl, [
-      particleDrawShader,
-      vectorFragmentShader,
-    ]);
-
-    let textureSize = 2048;
-    this.randomTexture = twgl.createTexture(this.gl, {
-      src: randomArray(1, Math.pow(textureSize, 2)),
-      type: this.gl.FLOAT,
-      format: this.gl.ALPHA,
-      minMag: this.gl.NEAREST,
-      width: textureSize,
-      height: textureSize,
-    });
-
-    this.updateParticleCount(vectorFieldOptions);
-    this.updateVectorField(vectorFieldOptions);
+    // private variables
+    this._gl = gl;
+    this._programs = this._createPrograms();
+    this._buffers = this._createBuffers();
+    this._textures = this._createTextures();
+    this._framebuffers = this._createFramebuffers();
   }
 
-  updateParticleCount(vectorFieldOptions) {
-    let particleCountSqrt =
-      Math.floor(Math.sqrt(vectorFieldOptions.particles.count));
-    let actualParticleCount = Math.pow(particleCountSqrt, 2);
-
-    this.rate = vectorFieldOptions.particles.rate;
-
-    if (this.particleCountSqrt === particleCountSqrt) {
-      return;
-    } else {
-      this.particleCountSqrt = particleCountSqrt;
-    }
-
-    this.gl.deleteTexture(this.particlePositionsA);
-    this.gl.deleteTexture(this.particlePositionsB);
-    if (this.framebufferInfoA && this.framebufferInfoB) {
-      this.gl.deleteFramebuffer(this.framebufferInfoA.framebuffer);
-      this.gl.deleteFramebuffer(this.framebufferInfoB.framebuffer);
-    }
-
-    // particle positions saved as float textures
-    // format needs to RGBA, or else not "renderable" for simulation
-    let textureOptions = {
-      type: this.gl.FLOAT, // 32-bit floating data
-      format: this.gl.RGBA, // 4 channels per pixel, only using first two
-      minMag: this.gl.NEAREST,
-      width: this.particleCountSqrt,
-      height: this.particleCountSqrt,
-    }
-
-    this.particleLifetime = vectorFieldOptions.particles.lifetime;
-    this.particlePositionsA = twgl.createTexture(this.gl, {
-      src: interleave4(
-        randomLongitudeArray(actualParticleCount),
-        randomLatitudeArray(actualParticleCount),
-        randomArray(this.particleLifetime, actualParticleCount),
-      ),
-      ...textureOptions
-    });
-    this.particlePositionsB = twgl.createTexture(this.gl, textureOptions);
-
-    // two framebuffers with textured attached used for simulation by writing
-    // from one texture to the other
-    this.framebufferInfoA = createFbi(
-      this.gl, this.particlePositionsA, textureOptions
-    );
-    this.framebufferInfoB = createFbi(
-      this.gl, this.particlePositionsB, textureOptions
-    );
-
-    // attributes used in draw program
-    let indices = new Float32Array(2 * actualParticleCount);
-    for (let i = 0; i < indices.length; i++) {
-      let j = Math.floor(i / 2);
-      if (i % 2 === 0) {
-        indices[i] = Math.floor(j / this.particleCountSqrt);
-      } else {
-        indices[i] = j % this.particleCountSqrt;
-      }
-    }
-    this.drawBuffer = twgl.createBufferInfoFromArrays(this.gl, {
-      a_particleIndex: {
-        numComponents: 2, // Indicate we are using 2-dimensional points
-        data: indices,
-      }
-    });
+  get count() {
+    return this._count;
   }
 
-  updateVectorField(vectorFieldOptions) {
-    this.gl.deleteTexture(this.vectorField);
-
-    // particle velocities saved as float texture
-    this.vectorField = twgl.createTexture(this.gl, {
-      src: interleave4(
-        vectorFieldOptions.data.uVelocities,
-        vectorFieldOptions.data.vVelocities,
-      ),
-      type: this.gl.FLOAT, // 32-bit floating data
-      format: this.gl.RGBA, // 4 channels per pixel, only using first 3
-      minMag: this.gl.LINEAR, // requires OES_texture_float_linear
-      width: vectorFieldOptions.data.width,
-      height: vectorFieldOptions.data.height,
-    });
+  set count(c) {
+    this._count = sqrtFloor(c);
+    this._buffers.draw = this._createDrawBuffer();
+    this._textures.simA = this._createSimATexture(),
+    this._textures.simB = this._createSimBTexture(),
+    this._framebuffers = this._createFramebuffers();
   }
 
-  // using data in this.particlePositionsA, simulate and render to
-  // this.framebufferInfoB (with this.particlePositionsB attached) the new
+  get data() {
+    return this._data;
+  }
+
+  set data(d) {
+    this._data = d;
+    this._textures.vectorField = this._createVectorFieldTexture();
+  }
+
+  // using data in this._textures.simA, simulate and render to
+  // this._framebuffers.simB (with this._textures.simB attached) the new
   // particle positions after timeDelta ms have passed
   step(timeDelta) {
     // switch rendering destination to our framebuffer
-    twgl.bindFramebufferInfo(this.gl, this.framebufferInfoB);
+    twgl.bindFramebufferInfo(this._gl, this._framebuffers.simB);
 
     const uniforms = {
-      u_particleData: this.particlePositionsA,
-      u_vectorField: this.vectorField,
-      u_random: this.randomTexture,
-      u_particleLifetime: this.particleLifetime,
+      u_particleData: this._textures.simA,
+      u_vectorField: this._textures.vectorField,
+      u_random: this._textures.random,
+      u_particleLifetime: this.lifetime,
       u_randLonLatOffsets: [Math.random(), Math.random()],
-      u_particleCountSqrt: this.particleCountSqrt,
+      u_particleCountSqrt: Math.sqrt(this.count),
       u_timeDelta: timeDelta,
       u_rate: this.rate,
     }
+    const programInfo = this._programs.sim;
 
-    this.gl.useProgram(this.simulator.program);
-    twgl.setBuffersAndAttributes(this.gl, this.simulator, this.simBuffer);
-    twgl.setUniformsAndBindTextures(this.simulator, uniforms);
-    twgl.drawBufferInfo(this.gl, this.simBuffer);
+    this._gl.useProgram(programInfo.program);
+    twgl.setBuffersAndAttributes(this._gl, programInfo, this._buffers.sim);
+    twgl.setUniformsAndBindTextures(programInfo, uniforms);
+    twgl.drawBufferInfo(this._gl, this._buffers.sim);
 
     // switch rendering destination back to canvas
-    twgl.bindFramebufferInfo(this.gl, null);
+    twgl.bindFramebufferInfo(this._gl, null);
 
     // swap texture and frambuffer references for next render
-    [this.particlePositionsA, this.particlePositionsB] =
-      [this.particlePositionsB, this.particlePositionsA];
-    [this.framebufferInfoA, this.framebufferInfoB] =
-      [this.framebufferInfoB, this.framebufferInfoA];
+    [this._textures.simA, this._textures.simB] =
+      [this._textures.simB, this._textures.simA];
+    [this._framebuffers.simA, this._framebuffers.simB] =
+      [this._framebuffers.simB, this._framebuffers.simA];
   }
 
+  // render the particles to the screen, where sharedUnfiorms determines the
+  // projection, zoom, and lonLat centering
   draw(sharedUniforms) {
     const uniforms = {
-      u_particlePositions: this.particlePositionsA,
-      u_particleCountSqrt: this.particleCountSqrt,
+      u_particlePositions: this._textures.simA,
+      u_particleCountSqrt: Math.sqrt(this.count),
       u_color: [1, 1, 1, 0.2],
       ...sharedUniforms,
     }
+    const programInfo = this._programs.draw;
 
-    this.gl.useProgram(this.drawer.program);
-    twgl.setBuffersAndAttributes(this.gl, this.drawer, this.drawBuffer);
-    twgl.setUniformsAndBindTextures(this.drawer, uniforms);
-    twgl.drawBufferInfo(this.gl, this.drawBuffer, this.gl.POINTS);
+    this._gl.useProgram(programInfo.program);
+    twgl.setBuffersAndAttributes(this._gl, programInfo, this._buffers.draw);
+    twgl.setUniformsAndBindTextures(programInfo, uniforms);
+    twgl.drawBufferInfo(this._gl, this._buffers.draw, this._gl.POINTS);
+  }
+
+  _createPrograms() {
+    return {
+      sim: twgl.createProgramInfo(this._gl, [simVert, simFrag]),
+      draw: twgl.createProgramInfo(this._gl, [drawVert, drawFrag]),
+    };
+  }
+
+  _createBuffers() {
+    return {
+      sim: twgl.createBufferInfoFromArrays(this._gl, griddedArrays),
+      draw: this._createDrawBuffer(),
+    };
+  }
+
+  _createDrawBuffer() {
+    let indices = new Float32Array(2 * this.count);
+
+    for (let i = 0; i < indices.length; i++) {
+      let j = Math.floor(i / 2);
+      if (i % 2 === 0) {
+        indices[i] = Math.floor(j / Math.sqrt(this.count));
+      } else {
+        indices[i] = j % Math.sqrt(this.count);
+      }
+    }
+
+    return twgl.createBufferInfoFromArrays(this._gl, {
+      a_particleIndex: {
+        numComponents: 2, // indicate we are using 2-dimensional points
+        data: indices,
+      },
+    });
+  }
+
+  _createTextures() {
+    const randomTextureSize = 2048;
+
+    return {
+      random: twgl.createTexture(this._gl, {
+        src: randomArray(1, Math.pow(randomTextureSize, 2)),
+        type: this._gl.FLOAT,
+        format: this._gl.ALPHA,
+        minMag: this._gl.NEAREST,
+        width: randomTextureSize,
+        height: randomTextureSize,
+      }),
+      simA: this._createSimATexture(),
+      simB: this._createSimBTexture(),
+      vectorField: this._createVectorFieldTexture(),
+    };
+  }
+
+  _createSimATexture() {
+    return twgl.createTexture(this._gl, {
+      type: this._gl.FLOAT,
+      minMag: this._gl.NEAREST,
+      width: Math.sqrt(this.count),
+      height: Math.sqrt(this.count),
+      src: interleave4(
+        randomLongitudeArray(this.count),
+        randomLatitudeArray(this.count),
+        randomArray(this.lifetime, this.count),
+      ),
+    });
+  }
+
+  _createSimBTexture() {
+    return twgl.createTexture(this._gl, {
+      type: this._gl.FLOAT,
+      minMag: this._gl.NEAREST,
+      width: Math.sqrt(this.count),
+      height: Math.sqrt(this.count),
+    });
+  }
+
+  _createVectorFieldTexture() {
+    return twgl.createTexture(this._gl, {
+      src: interleave4(this.data.uVelocities, this.data.vVelocities),
+      type: this._gl.FLOAT,
+      minMag: this._gl.LINEAR, // requires OES_texture_float_linear
+      width: this.data.width,
+      height: this.data.height,
+    });
+  }
+
+  _createFramebuffers() {
+    return {
+      simA: twgl.createFramebufferInfo(
+        this._gl,
+        [{ attachment: this._textures.simA }],
+        Math.sqrt(this.count),
+        Math.sqrt(this.count),
+      ),
+      simB: twgl.createFramebufferInfo(
+        this._gl,
+        [{ attachment: this._textures.simB }],
+        Math.sqrt(this.count),
+        Math.sqrt(this.count),
+      ),
+    };
   }
 }
 
-function createFbi(gl, texture, textureOptions) {
-  return twgl.createFramebufferInfo(gl, [{
-    attachment: texture,
-    ...textureOptions,
-  }], textureOptions.width, textureOptions.height);
+function sqrtFloor(x) {
+  return Math.pow(Math.floor(Math.sqrt(x)), 2);
 }
 
-function interleave4(arrayA, arrayB, arrayC, arrayD) {
-  let interleaved = new Float32Array(4 * arrayA.length);
+function interleave4(arrayR, arrayG, arrayB, arrayA) {
+  let interleaved = new Float32Array(4 * arrayR.length);
 
   for (let i = 0; i < interleaved.length; i++) {
     if (i % 4 === 0) {
-      interleaved[i] = arrayA[i/4];
+      interleaved[i] = arrayR[i/4];
     } else if (i % 4 === 1) {
+      interleaved[i] = arrayG[Math.floor(i/4)];
+    } else if (i % 4 === 2 && arrayB) {
       interleaved[i] = arrayB[Math.floor(i/4)];
-    } else if (i % 4 === 2 && arrayC) {
-      interleaved[i] = arrayC[Math.floor(i/4)];
-    } else if (arrayD) {
-      interleaved[i] = arrayD[Math.floor(i/4)];
+    } else if (arrayA) {
+      interleaved[i] = arrayA[Math.floor(i/4)];
     }
   }
 
   return interleaved;
-}
-
-function randomLongitudeArray(length) {
-  let random = new Float32Array(length);
-
-  for (let i = 0; i < random.length; i++) {
-    random[i] = 360 * Math.random() - 180;
-  }
-
-  return random;
-}
-
-function randomLatitudeArray(length) {
-  let random = new Float32Array(length);
-
-  for (let i = 0; i < random.length; i++) {
-    random[i] = (180 / Math.PI) * Math.asin(2 * Math.random() - 1);
-  }
-
-  return random;
-}
-
-function randomArray(max, length) {
-  let random = new Float32Array(length);
-
-  for (let i = 0; i < random.length; i++) {
-    random[i] = max * Math.random();
-  }
-
-  return random;
 }

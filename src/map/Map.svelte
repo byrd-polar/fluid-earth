@@ -153,8 +153,10 @@
     }
 
     if (vectorFieldDataNeedsReload) {
-      particleSimulator.updateParticleCount(vectorFieldOptions);
-      particleSimulator.updateVectorField(vectorFieldOptions);
+      particleSimulator.rate = vectorFieldOptions.particles.rate;
+      particleSimulator.lifetime = vectorFieldOptions.particles.lifetime;
+      particleSimulator.count = vectorFieldOptions.particles.count;
+      particleSimulator.data = vectorFieldOptions.data;
       vectorFieldDataNeedsReload = false;
     }
 
