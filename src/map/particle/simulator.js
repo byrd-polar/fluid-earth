@@ -2,7 +2,6 @@ import * as twgl from 'twgl.js';
 
 import simVert from '../gridded.vert';
 import simFrag from './step.frag';
-
 import drawVert from './draw.vert';
 import drawFrag from '../vector.frag';
 
@@ -17,10 +16,10 @@ export default class ParticleSimulator {
   constructor(gl, options) {
     // public variables (no special actions needed in setters)
     this.rate = options.particles.rate;
-    this.lifetime = options.particles.lifetime;
 
     // private variables with corresponding public setters
     this._count = sqrtFloor(options.particles.count);
+    this._lifetime = options.particles.lifetime;
     this._data = options.data;
 
     // private variables (no setters)
@@ -46,6 +45,11 @@ export default class ParticleSimulator {
     this._framebuffers = this._createFramebuffers();
   }
 
+  set lifetime(l) {
+    this._lifetime = l;
+    this._textures.simA = this._createSimATexture();
+  }
+
   set data(d) {
     this._data = d;
     this._gl.deleteTexture(this._textures.vectorField);
@@ -63,7 +67,7 @@ export default class ParticleSimulator {
       u_particleData: this._textures.simA,
       u_vectorField: this._textures.vectorField,
       u_random: this._textures.random,
-      u_particleLifetime: this.lifetime,
+      u_particleLifetime: this._lifetime,
       u_randLonLatOffsets: [Math.random(), Math.random()],
       u_particleCountSqrt: Math.sqrt(this._count),
       u_timeDelta: timeDelta,
@@ -164,7 +168,7 @@ export default class ParticleSimulator {
       src: interleave4(
         randomLongitudeArray(this._count),
         randomLatitudeArray(this._count),
-        randomArray(this.lifetime, this._count),
+        randomArray(this._lifetime, this._count),
       ),
     });
   }
