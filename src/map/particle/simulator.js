@@ -15,24 +15,20 @@ import {
 
 export default class ParticleSimulator {
   constructor(gl, options) {
-    // public variables
+    // public variables (no special actions needed in setters)
     this.rate = options.particles.rate;
     this.lifetime = options.particles.lifetime;
 
-    // internal backings of public variables with getters/setters
+    // private variables with corresponding public setters
     this._count = sqrtFloor(options.particles.count);
     this._data = options.data;
 
-    // private variables
+    // private variables (no setters)
     this._gl = gl;
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers();
     this._textures = this._createTextures();
     this._framebuffers = this._createFramebuffers();
-  }
-
-  get count() {
-    return this._count;
   }
 
   set count(c) {
@@ -48,10 +44,6 @@ export default class ParticleSimulator {
     this._textures.simA = this._createSimATexture(),
     this._textures.simB = this._createSimBTexture(),
     this._framebuffers = this._createFramebuffers();
-  }
-
-  get data() {
-    return this._data;
   }
 
   set data(d) {
@@ -73,7 +65,7 @@ export default class ParticleSimulator {
       u_random: this._textures.random,
       u_particleLifetime: this.lifetime,
       u_randLonLatOffsets: [Math.random(), Math.random()],
-      u_particleCountSqrt: Math.sqrt(this.count),
+      u_particleCountSqrt: Math.sqrt(this._count),
       u_timeDelta: timeDelta,
       u_rate: this.rate,
     }
@@ -99,7 +91,7 @@ export default class ParticleSimulator {
   draw(sharedUniforms) {
     const uniforms = {
       u_particlePositions: this._textures.simA,
-      u_particleCountSqrt: Math.sqrt(this.count),
+      u_particleCountSqrt: Math.sqrt(this._count),
       u_color: [1, 1, 1, 0.2],
       ...sharedUniforms,
     }
@@ -126,14 +118,14 @@ export default class ParticleSimulator {
   }
 
   _createDrawBuffer() {
-    let indices = new Float32Array(2 * this.count);
+    let indices = new Float32Array(2 * this._count);
 
     for (let i = 0; i < indices.length; i++) {
       let j = Math.floor(i / 2);
       if (i % 2 === 0) {
-        indices[i] = Math.floor(j / Math.sqrt(this.count));
+        indices[i] = Math.floor(j / Math.sqrt(this._count));
       } else {
-        indices[i] = j % Math.sqrt(this.count);
+        indices[i] = j % Math.sqrt(this._count);
       }
     }
 
@@ -167,12 +159,12 @@ export default class ParticleSimulator {
     return twgl.createTexture(this._gl, {
       type: this._gl.FLOAT,
       minMag: this._gl.NEAREST,
-      width: Math.sqrt(this.count),
-      height: Math.sqrt(this.count),
+      width: Math.sqrt(this._count),
+      height: Math.sqrt(this._count),
       src: interleave4(
-        randomLongitudeArray(this.count),
-        randomLatitudeArray(this.count),
-        randomArray(this.lifetime, this.count),
+        randomLongitudeArray(this._count),
+        randomLatitudeArray(this._count),
+        randomArray(this.lifetime, this._count),
       ),
     });
   }
@@ -181,18 +173,18 @@ export default class ParticleSimulator {
     return twgl.createTexture(this._gl, {
       type: this._gl.FLOAT,
       minMag: this._gl.NEAREST,
-      width: Math.sqrt(this.count),
-      height: Math.sqrt(this.count),
+      width: Math.sqrt(this._count),
+      height: Math.sqrt(this._count),
     });
   }
 
   _createVectorFieldTexture() {
     return twgl.createTexture(this._gl, {
-      src: interleave4(this.data.uVelocities, this.data.vVelocities),
+      src: interleave4(this._data.uVelocities, this._data.vVelocities),
       type: this._gl.FLOAT,
       minMag: this._gl.LINEAR, // requires OES_texture_float_linear
-      width: this.data.width,
-      height: this.data.height,
+      width: this._data.width,
+      height: this._data.height,
     });
   }
 
@@ -201,14 +193,14 @@ export default class ParticleSimulator {
       simA: twgl.createFramebufferInfo(
         this._gl,
         [{ attachment: this._textures.simA }],
-        Math.sqrt(this.count),
-        Math.sqrt(this.count),
+        Math.sqrt(this._count),
+        Math.sqrt(this._count),
       ),
       simB: twgl.createFramebufferInfo(
         this._gl,
         [{ attachment: this._textures.simB }],
-        Math.sqrt(this.count),
-        Math.sqrt(this.count),
+        Math.sqrt(this._count),
+        Math.sqrt(this._count),
       ),
     };
   }
