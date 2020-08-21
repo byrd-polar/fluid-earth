@@ -94,6 +94,7 @@
 
     gl.getExtension('OES_texture_float_linear'); // used for particle sim
     gl.getExtension('WEBGL_color_buffer_float'); // used for particle sim
+    gl.getExtension('EXT_float_blend'); // used for particle sim
 
     griddedProgramInfo = twgl.createProgramInfo(gl, [
       griddedVertexShader,
