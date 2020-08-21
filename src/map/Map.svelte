@@ -1,19 +1,9 @@
 <script>
   import { onMount } from 'svelte';
-  import * as twgl from 'twgl.js';
+  import { resizeCanvasToDisplaySize } from 'twgl.js';
 
-  import griddedVertexShader from './gridded.vert';
-  import griddedFragmentShader from './gridded.frag';
-  import vectorVertexShader from './vector.vert';
-  import vectorFragmentShader from './vector.frag';
-
-  import griddedArrays from './arrays.js';
-  import { createGriddedDataLoader, getVectorData } from './loaders.js';
-
+  import MapBackground from './background.js';
   import ParticleSimulator from './particle/simulator.js';
-
-  import colormaps from './colormaps/';
-  import projections from './projections/';
 
   export let projection = projections.ORTHOGRAPHIC;
   export let center = {
@@ -21,6 +11,11 @@
     latitude: 0, // in degrees
   };
   export let zoom = 1;
+
+  $: center.latitude = clamp(center.latitude, -90, 90);
+  $: center.longitude = ((center.longitude + 180) % 360) - 180;
+  $: zoom = clamp(zoom, 0.5, 15);
+
   export let griddedOptions = {
     data: {
       float32Array: new Float32Array([0.2]),
@@ -45,130 +40,50 @@
     },
   };
 
-  let bgNeedsRedraw = true;
-  // Whenever any of these variables change, ask for a redraw on next frame
-  $: center, zoom, projection, griddedTexture, vectorBufferInfos,
-    bgNeedsRedraw = true;
-
-  // Limit ranges of latitude, longitude, and zoom
-  $: center.latitude = Math.min(center.latitude, 90);
-  $: center.latitude = Math.max(center.latitude, -90);
-  $: center.longitude = ((center.longitude + 180) % 360) - 180;
-  $: zoom = Math.min(zoom, 15);
-  $: zoom = Math.max(zoom, 0.5);
-
-  let mapCanvas;
+  let backgroundCanvas;
+  let particleCanvas;
   let canvasRatio;
 
-  let gl;
+  let backgroundNeedsRedraw;
+  $: projection, center, zoom, griddedOptions, backgroundNeedsRedraw = true;
 
-  let griddedProgramInfo;
-  let griddedBufferInfo;
-  let griddedDataLoader;;
-  let griddedTexture;
+  let backgroundGl;
+  let particleGl;
 
-  let griddedDataNeedsReload = false;
-  // Whenever texture info changes, ask for reload on next frame
-  $: griddedOptions,
-    griddedDataNeedsReload = true;
+  let mapBackground = {};
+  $: mapBackground.data = griddedOptions.data;
+  $: mapBackground.colormap = griddedOptions.colormap;
+  $: mapBackground.domain = griddedOptions.domain;
 
-  let vectorProgramInfo;
-  let vectorBufferInfos = {}; // temporarily empty until TopoJSON file loads
+  let particleSimulator = {};
+  $: particleSimulator.rate = vectorFieldOptions.particles.rate;
+  $: particleSimulator.count = vectorFieldOptions.particles.count;
+  $: particleSimulator.lifetime = vectorFieldOptions.particles.lifetime;
+  $: particleSimulator.data = vectorFieldOptions.data;
 
-  let particleSimulator;
-
-  let vectorFieldDataNeedsReload;
-  $: vectorFieldOptions, vectorFieldDataNeedsReload = true;
-
-  // Begin map rendering after Svelte component has been mounted
   onMount(() => {
-    gl = mapCanvas.getContext('webgl', { alpha: false });
-    if (!gl) {
-      return;
-    }
+    backgroundGl = backgroundCanvas.getContext('webgl', { alpha: false });
+    particleGl = particleCanvas.getContext('webgl');
 
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    mapBackground = new MapBackground(backgroundGl, griddedOptions);
+    particleSimulator = new ParticleSimulator(particleGl, vectorFieldOptions);
 
-    gl.getExtension('OES_texture_float'); // used to load gridded data
-
-    gl.getExtension('OES_texture_float_linear'); // used for particle sim
-    gl.getExtension('WEBGL_color_buffer_float'); // used for particle sim
-    gl.getExtension('EXT_float_blend'); // used for particle sim
-
-    griddedProgramInfo = twgl.createProgramInfo(gl, [
-      griddedVertexShader,
-      griddedFragmentShader,
-    ]);
-    griddedBufferInfo = twgl.createBufferInfoFromArrays(gl, griddedArrays);
-
-    griddedDataLoader = createGriddedDataLoader(gl);
-
-    vectorProgramInfo = twgl.createProgramInfo(gl, [
-      vectorVertexShader,
-      vectorFragmentShader,
-    ]);
-
-    (async () => vectorBufferInfos = await getVectorData(gl))();
-
-    particleSimulator = new ParticleSimulator(gl, vectorFieldOptions);
-
-    // ensure correct the initial size of canvas and viewport
-    gl.canvas.width = 0;
-    gl.canvas.height = 0;
-    updateSizeVariables(gl);
+    updateSizeVariables(backgroundGl);
+    updateSizeVariables(particleGl);
 
     requestAnimationFrame(render);
   });
 
-  function updateSizeVariables(gl) {
-    const ratio = window.devicePixelRatio;
-    if (twgl.resizeCanvasToDisplaySize(gl.canvas, ratio)) {
-      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-      canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
-      bgNeedsRedraw = true;
-    }
-  }
-
-  let previousTime;
-
   // Main animation loop
+  let previousTime;
   function render(time) {
     let timeDelta = previousTime ? (time - previousTime) : 0;
     previousTime = time;
 
-    updateSizeVariables(gl);
+    updateSizeVariables(backgroundGl);
+    updateSizeVariables(particleGl);
 
-    if (griddedDataNeedsReload) {
-      griddedTexture = griddedDataLoader(griddedOptions);
-      griddedDataNeedsReload = false;
-    }
-
-    if (bgNeedsRedraw || vectorFieldOptions.particles.enabled) {
-      drawMapBackground();
-      bgNeedsRedraw = false;
-    }
-
-    if (vectorFieldOptions.particles.enabled) {
-      particleSimulator.step(Math.min(timeDelta, 100));
-    }
-
-    if (vectorFieldDataNeedsReload) {
-      particleSimulator.rate = vectorFieldOptions.particles.rate;
-      particleSimulator.lifetime = vectorFieldOptions.particles.lifetime;
-      particleSimulator.count = vectorFieldOptions.particles.count;
-      particleSimulator.data = vectorFieldOptions.data;
-      vectorFieldDataNeedsReload = false;
-    }
-
-    requestAnimationFrame(render);
-  }
-
-  function drawMapBackground() {
-    const bgUniforms = {
-      u_texture: griddedTexture,
-      u_gridWidth: griddedOptions.data.width,
-      u_gridHeight: griddedOptions.data.height,
+    const sharedUniforms = {
       u_canvasRatio: canvasRatio,
       u_lon0: center.longitude,
       u_lat0: center.latitude,
@@ -176,32 +91,41 @@
       u_projection: projection.id,
     };
 
-    gl.useProgram(griddedProgramInfo.program);
-    twgl.setBuffersAndAttributes(gl, griddedProgramInfo, griddedBufferInfo);
-    twgl.setUniformsAndBindTextures(griddedProgramInfo, bgUniforms);
-    twgl.drawBufferInfo(gl, griddedBufferInfo);
+    if (backgroundNeedsRedraw) {
+      mapBackground.drawGriddedData(sharedUniforms);
+      mapBackground.drawGraticules(sharedUniforms);
+      mapBackground.drawRivers(sharedUniforms);
+      mapBackground.drawLakes(sharedUniforms);
+      mapBackground.drawCoastlines(sharedUniforms);
+      backgroundNeedsRedraw = false;
+    }
 
-    // texture info not needed for vector layer
-    delete bgUniforms.u_texture;
-    delete bgUniforms.u_gridWidth;
-    delete bgUniforms.u_gridHeight;
+    if (vectorFieldOptions.particles.enabled) {
+      particleSimulator.draw(sharedUniforms);
+      particleSimulator.step(Math.min(timeDelta, 100));
+    }
 
-    gl.useProgram(vectorProgramInfo.program);
+    requestAnimationFrame(render);
+  }
 
-    Object.values(vectorBufferInfos).forEach(data => {
-      bgUniforms.u_color = data.color;
-      twgl.setBuffersAndAttributes(gl, vectorProgramInfo, data.bufferInfo);
-      twgl.setUniforms(vectorProgramInfo, bgUniforms);
-      twgl.drawBufferInfo(gl, data.bufferInfo, gl.LINES);
-    });
+  function updateSizeVariables(gl) {
+    const ratio = window.devicePixelRatio;
+    if (resizeCanvasToDisplaySize(gl.canvas, ratio)) {
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
+      backgroundNeedsRedraw = true;
+    }
+  }
 
-    delete bgUniforms.u_color;
-
-    particleSimulator.draw(bgUniforms);
+  function clamp(x, min, max) {
+    return x > max ? max : (x < min ? min : x);
   }
 </script>
 
-<canvas bind:this={mapCanvas}/>
+<div>
+  <canvas bind:this={backgroundCanvas}/>
+  <canvas bind:this={particleCanvas}/>
+</div>
 
 <style>
   canvas {

@@ -24,6 +24,13 @@ export default class ParticleSimulator {
 
     // private variables (no setters)
     this._gl = gl;
+    this._gl.enable(gl.BLEND);
+    this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    this._gl.getExtension('OES_texture_float');
+    this._gl.getExtension('OES_texture_float_linear');
+    this._gl.getExtension('WEBGL_color_buffer_float');
+    this._gl.getExtension('EXT_float_blend');
+
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers();
     this._textures = this._createTextures();
@@ -48,6 +55,7 @@ export default class ParticleSimulator {
   set lifetime(l) {
     this._lifetime = l;
     this._textures.simA = this._createSimATexture();
+    this._framebuffers = this._createFramebuffers();
   }
 
   set data(d) {
