@@ -129,11 +129,11 @@
 
 <main>
   <Map
-    bind:projection
-    bind:center
-    bind:zoom
-    bind:griddedOptions
-    bind:vectorFieldOptions
+    {projection}
+    {center}
+    {zoom}
+    {griddedOptions}
+    {vectorFieldOptions}
   />
   <label>Choose a map projection:
     <select bind:value={projection} name="projections">
