@@ -2,7 +2,8 @@
 // canvas; useful for WebGL programs where all the logic takes place in the
 // fragment shader and the vertex shader is only needed to define the render
 // area
-export const griddedArrays = {
+let griddedArrays;
+export default griddedArrays = {
   // A grid of points
   a_position: {
     numComponents: 2, // Indicate we are using 2-dimensional points

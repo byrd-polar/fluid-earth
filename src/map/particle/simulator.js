@@ -6,14 +6,14 @@ import simFrag from './step.frag';
 import drawVert from './draw.vert';
 import drawFrag from '../vector.frag';
 
-import { griddedArrays } from '../arrays.js';
+import griddedArrays from '../arrays.js';
 import {
   randomLongitudeArray,
   randomLatitudeArray,
   randomArray,
 } from './random.js';
 
-export class ParticleSimulator {
+export default class ParticleSimulator {
   constructor(gl, options) {
     // public variables
     this.rate = options.particles.rate;

@@ -4,7 +4,7 @@ import * as topojson from 'topojson-client';
 import griddedVertexShader from './gridded.vert';
 import colormapFragmentShader from './colormap.frag';
 
-import { griddedArrays } from './arrays.js';
+import griddedArrays from './arrays.js';
 
 export function createGriddedDataLoader(gl) {
   let programInfo = twgl.createProgramInfo(gl, [
