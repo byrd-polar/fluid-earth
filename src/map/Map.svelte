@@ -63,7 +63,9 @@
 
   onMount(() => {
     backgroundGl = backgroundCanvas.getContext('webgl', { alpha: false });
-    particleGl = particleCanvas.getContext('webgl');
+    particleGl = particleCanvas.getContext('webgl', {
+      premultipliedAlpha: false,
+    });
 
     mapBackground = new MapBackground(backgroundGl, griddedOptions);
     particleSimulator = new ParticleSimulator(particleGl, vectorFieldOptions);

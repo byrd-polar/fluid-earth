@@ -25,7 +25,7 @@ export default class ParticleSimulator {
     // private variables (no setters)
     this._gl = gl;
     this._gl.enable(gl.BLEND);
-    this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    this._gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     this._gl.getExtension('OES_texture_float');
     this._gl.getExtension('OES_texture_float_linear');
     this._gl.getExtension('WEBGL_color_buffer_float');
