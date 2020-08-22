@@ -10,12 +10,12 @@ const parseCSV = promisify(_parseCSV);
 
 // from https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/
 const dataURL = `https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/\
-gfs.20200812/06/gfs.t06z.pgrb2.0p25.f000`
+gfs.20200822/06/gfs.t06z.pgrb2.0p25.f000`
 const indexURL = dataURL + '.idx';
 
 export async function gfs() {
   // file containing information for partial downloads
-  let indexFile = await download(indexURL);
+  let indexFile = await download(indexURL, true);
   let indexString = await readFile(indexFile, 'utf-8');
   let index = await parseCSV(indexString, { delimiter: ':' });
 
