@@ -1,5 +1,5 @@
 // Fragment shader for particle simulation
-precision mediump float;
+precision highp float;
 
 uniform sampler2D u_particleData;
 uniform sampler2D u_vectorField;
@@ -53,6 +53,6 @@ void main() {
   lonLat.x = mod(lonLat.x + DIM_2.x, DIM.x) - DIM_2.x;
   lonLat.y = clamp(lonLat.y, -90.0, 90.0);
 
-  // alpha value MUST be 1 for some reason, otherwise simulator doesn't proceed
   gl_FragColor = vec4(lonLat, lifetime, 1);
 }
+
