@@ -3,7 +3,7 @@ import * as twgl from 'twgl.js';
 import simVert from '../gridded.vert';
 import simFrag from './step.frag';
 import drawVert from './draw.vert';
-import drawFrag from '../vector.frag';
+import drawFrag from './draw.frag';
 
 import { glDraw, griddedArrays } from '../webgl.js';
 import {
