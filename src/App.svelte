@@ -65,7 +65,7 @@
       },
       particles: {
         rate: 5e4,
-        count: 5e5,
+        count: 1e5,
         lifetime: 1000, // milliseconds
         enabled: true,
       }

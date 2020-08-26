@@ -99,11 +99,12 @@
       mapBackground.drawRivers(sharedUniforms);
       mapBackground.drawLakes(sharedUniforms);
       mapBackground.drawCoastlines(sharedUniforms);
+      particleSimulator.resetTrails();
       backgroundNeedsRedraw = false;
     }
 
     if (vectorFieldOptions.particles.enabled) {
-      particleSimulator.draw(sharedUniforms);
+      particleSimulator.drawWithTrails(sharedUniforms);
       particleSimulator.step(Math.min(timeDelta, 100));
     }
 

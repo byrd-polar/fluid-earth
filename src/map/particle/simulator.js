@@ -4,6 +4,8 @@ import simVert from '../gridded.vert';
 import simFrag from './step.frag';
 import drawVert from './draw.vert';
 import drawFrag from './draw.frag';
+import textureVert from '../gridded.vert';
+import textureFrag from './texture.frag';
 
 import { glDraw, griddedArrays } from '../webgl.js';
 import {
@@ -105,17 +107,70 @@ export default class ParticleSimulator {
     }, this._gl.POINTS);
   }
 
+  // render particles with trails to the screen
+  drawWithTrails(sharedUniforms) {
+    // first, draw previous background (slightly faded) to empty texture
+    twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);
+    this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+
+    glDraw(this._gl, this._programs.texture, this._buffers.texture, {
+      u_texture: this._textures.particleTrailsA,
+      u_fade: 0.96,
+    });
+
+    // then, draw new particle positions on top of that
+    this._gl.disable(this._gl.BLEND);
+    glDraw(this._gl, this._programs.draw, this._buffers.draw, {
+      u_particlePositions: this._textures.simA,
+      u_particleCountSqrt: Math.sqrt(this._count),
+      u_color: [1, 1, 1, 0.2],
+      ...sharedUniforms,
+    }, this._gl.POINTS);
+
+    // finally, draw texture to screen
+    twgl.bindFramebufferInfo(this._gl, null);
+
+    this._gl.enable(this._gl.BLEND);
+    glDraw(this._gl, this._programs.texture, this._buffers.texture, {
+      u_texture: this._textures.particleTrailsB,
+      u_fade: 1,
+    });
+
+    // swap textures and framebuffers for next call
+    [this._textures.particleTrailsA, this._textures.particleTrailsB] =
+      [this._textures.particleTrailsB, this._textures.particleTrailsA];
+    [this._framebuffers.particleTrailsA, this._framebuffers.particleTrailsB] =
+      [this._framebuffers.particleTrailsB, this._framebuffers.particleTrailsA];
+  }
+
+  // start drawing trails from scratch again (when map is moved or zoomed)
+  resetTrails() {
+    twgl.resizeFramebufferInfo(this._gl, this._framebuffers.particleTrailsA, [{
+      attachment: this._textures.particleTrailsA,
+    }]);
+    twgl.resizeFramebufferInfo(this._gl, this._framebuffers.particleTrailsB, [{
+      attachment: this._textures.particleTrailsB,
+    }]);
+
+    twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsA);
+    this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+    twgl.bindFramebufferInfo(this._gl, null);
+  }
+
   _createPrograms() {
     return {
       sim: twgl.createProgramInfo(this._gl, [simVert, simFrag]),
       draw: twgl.createProgramInfo(this._gl, [drawVert, drawFrag]),
+      texture: twgl.createProgramInfo(this._gl, [textureVert, textureFrag]),
     };
   }
 
   _createBuffers() {
+    let quadBuffer = twgl.createBufferInfoFromArrays(this._gl, griddedArrays);
     return {
-      sim: twgl.createBufferInfoFromArrays(this._gl, griddedArrays),
+      sim: quadBuffer,
       draw: this._createDrawBuffer(),
+      texture: quadBuffer,
     };
   }
 
@@ -154,6 +209,8 @@ export default class ParticleSimulator {
       simA: this._createSimATexture(),
       simB: this._createSimBTexture(),
       vectorField: this._createVectorFieldTexture(),
+      particleTrailsA: this._createParticleTrailsTexture(),
+      particleTrailsB: this._createParticleTrailsTexture(),
     };
   }
 
@@ -190,6 +247,14 @@ export default class ParticleSimulator {
     });
   }
 
+  _createParticleTrailsTexture() {
+    return twgl.createTexture(this._gl, {
+      minMag: this._gl.NEAREST,
+      width: this._gl.canvas.width * window.devicePixelRatio,
+      height: this._gl.canvas.height * window.devicePixelRatio,
+    });
+  }
+
   _createFramebuffers() {
     return {
       simA: twgl.createFramebufferInfo(
@@ -204,7 +269,22 @@ export default class ParticleSimulator {
         Math.sqrt(this._count),
         Math.sqrt(this._count),
       ),
+      particleTrailsA: this._createParticleTrailsFramebuffer(
+        this._textures.particleTrailsA,
+      ),
+      particleTrailsB: this._createParticleTrailsFramebuffer(
+        this._textures.particleTrailsB,
+      ),
     };
+  }
+
+  _createParticleTrailsFramebuffer(texture) {
+    return twgl.createFramebufferInfo(
+      this._gl,
+      [{ attachment: texture }],
+      this._gl.canvas.width * window.devicePixelRatio,
+      this._gl.canvas.height * window.devicePixelRatio,
+    );
   }
 }
 
