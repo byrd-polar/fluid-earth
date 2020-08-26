@@ -119,18 +119,16 @@ export default class ParticleSimulator {
     });
 
     // then, draw new particle positions on top of that
-    this._gl.disable(this._gl.BLEND);
     glDraw(this._gl, this._programs.draw, this._buffers.draw, {
       u_particlePositions: this._textures.simA,
       u_particleCountSqrt: Math.sqrt(this._count),
-      u_color: [1, 1, 1, 0.2],
+      u_color: [1, 1, 1, 0.05],
       ...sharedUniforms,
     }, this._gl.POINTS);
 
     // finally, draw texture to screen
     twgl.bindFramebufferInfo(this._gl, null);
 
-    this._gl.enable(this._gl.BLEND);
     glDraw(this._gl, this._programs.texture, this._buffers.texture, {
       u_texture: this._textures.particleTrailsB,
       u_fade: 1,
