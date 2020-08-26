@@ -5,7 +5,7 @@ import simFrag from './step.frag';
 import drawVert from './draw.vert';
 import drawFrag from '../vector.frag';
 
-import griddedArrays from '../arrays.js';
+import { glDraw, griddedArrays } from '../webgl.js';
 import {
   randomLongitudeArray,
   randomLatitudeArray,
@@ -71,7 +71,7 @@ export default class ParticleSimulator {
     // switch rendering destination to our framebuffer
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.simB);
 
-    const uniforms = {
+    glDraw(this._gl, this._programs.sim, this._buffers.sim, {
       u_particleData: this._textures.simA,
       u_vectorField: this._textures.vectorField,
       u_random: this._textures.random,
@@ -80,13 +80,7 @@ export default class ParticleSimulator {
       u_particleCountSqrt: Math.sqrt(this._count),
       u_timeDelta: timeDelta,
       u_rate: this.rate,
-    }
-    const programInfo = this._programs.sim;
-
-    this._gl.useProgram(programInfo.program);
-    twgl.setBuffersAndAttributes(this._gl, programInfo, this._buffers.sim);
-    twgl.setUniformsAndBindTextures(programInfo, uniforms);
-    twgl.drawBufferInfo(this._gl, this._buffers.sim);
+    });
 
     // switch rendering destination back to canvas
     twgl.bindFramebufferInfo(this._gl, null);
@@ -101,18 +95,12 @@ export default class ParticleSimulator {
   // render the particles to the screen, where sharedUnfiorms determines the
   // projection, zoom, and lonLat centering
   draw(sharedUniforms) {
-    const uniforms = {
+    glDraw(this._gl, this._programs.draw, this._buffers.draw, {
       u_particlePositions: this._textures.simA,
       u_particleCountSqrt: Math.sqrt(this._count),
       u_color: [1, 1, 1, 0.2],
       ...sharedUniforms,
-    }
-    const programInfo = this._programs.draw;
-
-    this._gl.useProgram(programInfo.program);
-    twgl.setBuffersAndAttributes(this._gl, programInfo, this._buffers.draw);
-    twgl.setUniformsAndBindTextures(programInfo, uniforms);
-    twgl.drawBufferInfo(this._gl, this._buffers.draw, this._gl.POINTS);
+    }, this._gl.POINTS);
   }
 
   _createPrograms() {

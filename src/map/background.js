@@ -7,7 +7,7 @@ import vectorVert from './vector.vert';
 import vectorFrag from './vector.frag';
 import colormapFrag from './colormap.frag';
 
-import griddedArrays from './arrays.js';
+import { glDraw, griddedArrays } from './webgl.js';
 
 export default class MapBackground {
   constructor(gl, options) {
@@ -58,7 +58,7 @@ export default class MapBackground {
   }
 
   drawGriddedData(sharedUniforms) {
-    this._draw(this._programs.gridded, this._buffers.gridded, {
+    glDraw(this._gl, this._programs.gridded, this._buffers.gridded, {
       u_texture: this._textures.gridded,
       u_gridWidth: this._data.width,
       u_gridHeight: this._data.height,
@@ -70,7 +70,7 @@ export default class MapBackground {
     if (!this._buffers.vectors.coastlines) {
       return;
     }
-    this._draw(this._programs.vector, this._buffers.vectors.coastlines, {
+    glDraw(this._gl, this._programs.vector, this._buffers.vectors.coastlines, {
       u_color: [1, 1, 1, 1], // bold
       ...sharedUniforms,
     }, this._gl.LINES);
@@ -80,7 +80,7 @@ export default class MapBackground {
     if (!this._buffers.vectors.lakes) {
       return;
     }
-    this._draw(this._programs.vector, this._buffers.vectors.lakes, {
+    glDraw(this._gl, this._programs.vector, this._buffers.vectors.lakes, {
       u_color: [1, 1, 1, 1], // bold
       ...sharedUniforms,
     }, this._gl.LINES);
@@ -90,7 +90,7 @@ export default class MapBackground {
     if (!this._buffers.vectors.rivers) {
       return;
     }
-    this._draw(this._programs.vector, this._buffers.vectors.rivers, {
+    glDraw(this._gl, this._programs.vector, this._buffers.vectors.rivers, {
       u_color: [1, 1, 1, 0.5], // light
       ...sharedUniforms,
     }, this._gl.LINES);
@@ -100,7 +100,7 @@ export default class MapBackground {
     if (!this._buffers.vectors.graticules) {
       return;
     }
-    this._draw(this._programs.vector, this._buffers.vectors.graticules, {
+    glDraw(this._gl, this._programs.vector, this._buffers.vectors.graticules, {
       u_color: [1, 1, 1, 0.1], // lighter
       ...sharedUniforms,
     }, this._gl.LINES);
@@ -195,7 +195,7 @@ export default class MapBackground {
     // switch rendering destination to our framebuffer
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.gridded);
 
-    this._draw(this._programs.colormap, this._buffers.colormap, {
+    glDraw(this._gl, this._programs.colormap, this._buffers.colormap, {
       u_data: this._textures.data,
       u_colormap: this._textures.colormap,
       u_colormapN: this._colormap.lot.length,
@@ -204,13 +204,6 @@ export default class MapBackground {
 
     // switch rendering destination back to canvas
     twgl.bindFramebufferInfo(this._gl, null);
-  }
-
-  _draw(programInfo, bufferInfo, uniforms, type) {
-    this._gl.useProgram(programInfo.program);
-    twgl.setBuffersAndAttributes(this._gl, programInfo, bufferInfo);
-    twgl.setUniformsAndBindTextures(programInfo, uniforms);
-    twgl.drawBufferInfo(this._gl, bufferInfo, type);
   }
 }
 
