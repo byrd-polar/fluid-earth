@@ -10,7 +10,7 @@ const parseCSV = promisify(_parseCSV);
 
 // from https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/
 const dataURL = `https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/\
-gfs.20200822/06/gfs.t06z.pgrb2.0p25.f000`
+gfs.20200825/18/gfs.t18z.pgrb2.0p25.f000`
 const indexURL = dataURL + '.idx';
 
 export async function gfs() {
