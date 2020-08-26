@@ -7,6 +7,9 @@ uniform sampler2D u_random;
 
 uniform vec2 u_randLonLatOffsets;
 
+uniform float u_gridWidth;
+uniform float u_gridHeight;
+
 uniform float u_particleCountSqrt;
 uniform float u_particleLifetime;
 uniform float u_timeDelta;
@@ -30,6 +33,14 @@ void main() {
   vec2 texCoord;
   texCoord.x = mod(lonLat.x, DIM.x) / DIM.x;
   texCoord.y = (-lonLat.y + DIM_2.y) / DIM.y; // y-axis flip!!!
+
+  // offset/scale coords so it aligns accurately with given grid (grid points
+  // were offset in the opposite direction earlier when texture was created)
+  float xOffset = 0.5 / u_gridWidth;
+  float yScale = (u_gridHeight - 1.0) / u_gridHeight;
+
+  texCoord.x = mod(texCoord.x + xOffset, 1.0);
+  texCoord.y = yScale * (texCoord.y - 0.5) + 0.5;
 
   vec2 velocity = texture2D(u_vectorField, texCoord).rg;
 

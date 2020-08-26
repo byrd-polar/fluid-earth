@@ -77,6 +77,8 @@ export default class ParticleSimulator {
       u_random: this._textures.random,
       u_particleLifetime: this._lifetime,
       u_randLonLatOffsets: [Math.random(), Math.random()],
+      u_gridWidth: this._data.width,
+      u_gridHeight: this._data.height,
       u_particleCountSqrt: Math.sqrt(this._count),
       u_timeDelta: timeDelta,
       u_rate: this.rate,
