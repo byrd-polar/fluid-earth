@@ -1,4 +1,5 @@
 <script>
+  import Layering from './Layering.svelte';
   import Map from './map/Map.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
@@ -127,7 +128,7 @@
   }
 </script>
 
-<main>
+<Layering>
   <Map
     bind:projection
     bind:center
@@ -135,28 +136,30 @@
     bind:griddedOptions
     bind:vectorFieldOptions
   />
-  <label>Choose a map projection:
-    <select bind:value={projection} name="projections">
-      {#each Object.values(projections) as projection}
-        <option value={projection}>{projection.name}</option>
-      {/each}
-    </select>
-  </label>
-  <label>Choose a dataset:
-    <select bind:value={dataset} name="colormaps">
-      {#each datasets as dataset}
-        <option value={dataset}>{dataset.name}</option>
-      {/each}
-    </select>
-  </label>
-  <label>Choose a colormap:
-    <select bind:value={griddedOptions.colormap} name="colormaps">
-      {#each Object.values(colormaps) as colormap}
-        <option value={colormap}>{colormap.name}</option>
-      {/each}
-    </select>
-  </label>
-</main>
+  <div>
+    <label>Choose a map projection:
+      <select bind:value={projection} name="projections">
+        {#each Object.values(projections) as projection}
+          <option value={projection}>{projection.name}</option>
+        {/each}
+      </select>
+    </label>
+    <label>Choose a dataset:
+      <select bind:value={dataset} name="colormaps">
+        {#each datasets as dataset}
+          <option value={dataset}>{dataset.name}</option>
+        {/each}
+      </select>
+    </label>
+    <label>Choose a colormap:
+      <select bind:value={griddedOptions.colormap} name="colormaps">
+        {#each Object.values(colormaps) as colormap}
+          <option value={colormap}>{colormap.name}</option>
+        {/each}
+      </select>
+    </label>
+  </div>
+</Layering>
 
 <svelte:window
   on:keydown={handleKeydown}
@@ -168,16 +171,11 @@
 />
 
 <style>
-  main {
-    height: 100%;
-    width: 100%;
-    color: white;
-  }
-
   label {
     padding-top: 1em;
     padding-left: 1em;
     display: block;
+    color: white;
   }
 
   select {
