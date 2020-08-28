@@ -141,10 +141,18 @@
 </div>
 
 <style>
+  div {
+    height: 100%;
+    width: 100%;
+    /* allows UI elements to overlay map */
+    position: absolute;
+    z-index: -1;
+  }
+
   canvas {
     height: 100%;
     width: 100%;
+    /* stacks canvases on top of one another */
     position: absolute;
-    z-index: -1;
   }
 </style>
