@@ -11,6 +11,9 @@ import { glDraw, griddedArrays } from './webgl.js';
 
 export default class MapBackground {
   constructor(gl, options) {
+    // public variable
+    this.vectorDataLoaded = false;
+
     // private variables with corresponding public setters
     this._data = options.data;
     this._colormap = options.colormap;
@@ -28,7 +31,10 @@ export default class MapBackground {
     this._framebuffers = this._createFramebuffers();
 
     this._mapDataToColors();
-    (async () => this._buffers.vectors = await this._createVectorBuffers())();
+    (async () => {
+      this._buffers.vectors = await this._createVectorBuffers();
+      this.vectorDataLoaded = true;
+    })();
   }
 
   set data(d) {

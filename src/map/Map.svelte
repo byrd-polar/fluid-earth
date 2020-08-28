@@ -53,14 +53,6 @@
     u_projection: projection.id,
   };
 
-  let backgroundNeedsRedraw;
-  // when following variables are updated, redraw
-  $: sharedUniforms, griddedOptions, backgroundNeedsRedraw = true;
-
-  let simulatorNeedsReset;
-  // when following variables are updated, reset
-  $: sharedUniforms, vectorFieldOptions, simulatorNeedsReset = true;
-
   let backgroundGl;
   let particleGl;
 
@@ -74,6 +66,15 @@
   $: particleSimulator.count = vectorFieldOptions.particles.count;
   $: particleSimulator.lifetime = vectorFieldOptions.particles.lifetime;
   $: particleSimulator.data = vectorFieldOptions.data;
+
+  let backgroundNeedsRedraw;
+  // when following variables are updated, redraw
+  $: sharedUniforms, griddedOptions, mapBackground.vectorDataLoaded,
+    backgroundNeedsRedraw = true;
+
+  let simulatorNeedsReset;
+  // when following variables are updated, reset
+  $: sharedUniforms, vectorFieldOptions, simulatorNeedsReset = true;
 
   onMount(() => {
     backgroundGl = backgroundCanvas.getContext('webgl', { alpha: false });
