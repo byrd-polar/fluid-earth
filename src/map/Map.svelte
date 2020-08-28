@@ -67,11 +67,11 @@
       premultipliedAlpha: false,
     });
 
-    mapBackground = new MapBackground(backgroundGl, griddedOptions);
-    particleSimulator = new ParticleSimulator(particleGl, vectorFieldOptions);
-
     updateSizeVariables(backgroundGl);
     updateSizeVariables(particleGl);
+
+    mapBackground = new MapBackground(backgroundGl, griddedOptions);
+    particleSimulator = new ParticleSimulator(particleGl, vectorFieldOptions);
 
     requestAnimationFrame(render);
   });
