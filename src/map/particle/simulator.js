@@ -73,6 +73,7 @@ export default class ParticleSimulator {
     // switch rendering destination to our framebuffer
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.simB);
 
+    this._gl.disable(this._gl.BLEND);
     glDraw(this._gl, this._programs.sim, this._buffers.sim, {
       u_particleData: this._textures.simA,
       u_vectorField: this._textures.vectorField,
@@ -85,6 +86,7 @@ export default class ParticleSimulator {
       u_timeDelta: timeDelta,
       u_rate: this.rate,
     });
+    this._gl.enable(this._gl.BLEND);
 
     // switch rendering destination back to canvas
     twgl.bindFramebufferInfo(this._gl, null);

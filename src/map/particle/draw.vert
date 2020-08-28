@@ -18,6 +18,7 @@ uniform float u_zoom;
 uniform int u_projection;
 
 varying float v_clip;
+varying float v_speed;
 
 const float PI_2 = radians(90.0);
 
@@ -27,7 +28,9 @@ void main() {
   vec2 lonLat0 = radians(vec2(u_lon0, u_lat0));
 
   vec2 texCoord = a_particleIndex / u_particleCountSqrt;
-  vec2 lonLat = radians(texture2D(u_particlePositions, texCoord).rg);
+  vec4 data = texture2D(u_particlePositions, texCoord);
+  vec2 lonLat = radians(data.rg);
+  v_speed = data.a;
 
   bool clip; // true if vertex will not be rendered
 

@@ -43,6 +43,7 @@ void main() {
   texCoord.y = yScale * (texCoord.y - 0.5) + 0.5;
 
   vec2 velocity = texture2D(u_vectorField, texCoord).rg;
+  float speed = length(velocity);
 
   if (lifetime > u_particleLifetime) {
     // "randomly" relocate particle to keep grid "full"
@@ -64,6 +65,6 @@ void main() {
   lonLat.x = mod(lonLat.x + DIM_2.x, DIM.x) - DIM_2.x;
   lonLat.y = clamp(lonLat.y, -90.0, 90.0);
 
-  gl_FragColor = vec4(lonLat, lifetime, 1);
+  gl_FragColor = vec4(lonLat, lifetime, speed);
 }
 
