@@ -44,8 +44,22 @@
   let particleCanvas;
   let canvasRatio;
 
+  let sharedUniforms;
+  $: sharedUniforms = {
+    u_canvasRatio: canvasRatio,
+    u_lon0: center.longitude,
+    u_lat0: center.latitude,
+    u_zoom: zoom,
+    u_projection: projection.id,
+  };
+
   let backgroundNeedsRedraw;
-  $: projection, center, zoom, griddedOptions, backgroundNeedsRedraw = true;
+  // when following variables are updated, redraw
+  $: sharedUniforms, griddedOptions, backgroundNeedsRedraw = true;
+
+  let simulatorNeedsReset;
+  // when following variables are updated, reset
+  $: sharedUniforms, vectorFieldOptions, simulatorNeedsReset = true;
 
   let backgroundGl;
   let particleGl;
@@ -67,8 +81,8 @@
       premultipliedAlpha: false,
     });
 
-    updateSizeVariables(backgroundGl);
-    updateSizeVariables(particleGl);
+    updateSizeVariables(backgroundGl, true);
+    updateSizeVariables(particleGl, true);
 
     mapBackground = new MapBackground(backgroundGl, griddedOptions);
     particleSimulator = new ParticleSimulator(particleGl, vectorFieldOptions);
@@ -85,22 +99,18 @@
     updateSizeVariables(backgroundGl);
     updateSizeVariables(particleGl);
 
-    const sharedUniforms = {
-      u_canvasRatio: canvasRatio,
-      u_lon0: center.longitude,
-      u_lat0: center.latitude,
-      u_zoom: zoom,
-      u_projection: projection.id,
-    };
-
     if (backgroundNeedsRedraw) {
       mapBackground.drawGriddedData(sharedUniforms);
       mapBackground.drawGraticules(sharedUniforms);
       mapBackground.drawRivers(sharedUniforms);
       mapBackground.drawLakes(sharedUniforms);
       mapBackground.drawCoastlines(sharedUniforms);
-      particleSimulator.resetTrails();
       backgroundNeedsRedraw = false;
+    }
+
+    if (simulatorNeedsReset) {
+      particleSimulator.resetTrails();
+      simulatorNeedsReset = false;
     }
 
     if (vectorFieldOptions.particles.enabled) {
@@ -111,12 +121,11 @@
     requestAnimationFrame(render);
   }
 
-  function updateSizeVariables(gl) {
+  function updateSizeVariables(gl, force) {
     const ratio = window.devicePixelRatio;
-    if (resizeCanvasToDisplaySize(gl.canvas, ratio)) {
+    if (resizeCanvasToDisplaySize(gl.canvas, ratio) || force) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
-      backgroundNeedsRedraw = true;
     }
   }
 
