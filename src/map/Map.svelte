@@ -127,6 +127,7 @@
     if (resizeCanvasToDisplaySize(gl.canvas, ratio) || force) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
+      backgroundNeedsRedraw = true;
     }
   }
 
