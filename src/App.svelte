@@ -1,5 +1,4 @@
 <script>
-  import Layering from './Layering.svelte';
   import Map from './map/Map.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
@@ -128,7 +127,8 @@
   }
 </script>
 
-<Layering>
+<nav></nav>
+<main>
   <Map
     bind:projection
     bind:center
@@ -159,7 +159,8 @@
       </select>
     </label>
   </div>
-</Layering>
+</main>
+<aside></aside>
 
 <svelte:window
   on:keydown={handleKeydown}
@@ -171,6 +172,31 @@
 />
 
 <style>
+  :global(body) {
+    display: flex;
+    flex-direction: row;
+  }
+
+  nav {
+    /* width: 500px; */
+  }
+
+  main {
+    position: relative;
+    flex: 1;
+  }
+
+  :global(main > *) {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  aside {
+    /* width: 500px; */
+    margin-left: auto;
+  }
+
   label {
     padding-top: 1em;
     padding-left: 1em;
