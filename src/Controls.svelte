@@ -2,6 +2,14 @@
   export let center;
   export let zoom;
 
+  function clamp(x, min, max) {
+    return x > max ? max : (x < min ? min : x);
+  }
+
+  $: center.latitude = clamp(center.latitude, -90, 90);
+  $: center.longitude = ((center.longitude + 180) % 360) - 180;
+  $: zoom = clamp(zoom, 0.5, 15);
+
   const speed = 1;
 
   function handleKeydown(event) {
