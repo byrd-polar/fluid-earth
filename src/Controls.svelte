@@ -1,6 +1,30 @@
 <script>
+  import { onMount } from 'svelte';
+  import Hammer from 'hammerjs';
+
   export let center;
   export let zoom;
+
+  let interactionSurface;
+  let manager;
+
+  onMount(() => {
+    manager = new Hammer.Manager(interactionSurface, {
+      recognizers: [
+        [Hammer.Pan, {
+          threshold: 0,
+        }],
+      ],
+    });
+    manager.on('pan', e => handlePan(e));
+  });
+
+  let scale = 5;
+
+  function handlePan(e) {
+    center.longitude -= scale * e.velocityX / zoom;
+    center.latitude += scale * e.velocityY / zoom;
+  }
 
   function clamp(x, min, max) {
     return x > max ? max : (x < min ? min : x);
@@ -33,41 +57,13 @@
     }
   }
 
-  let mouseDown = false;
-  let mouseDownX;
-  let mouseDownY;
-  let mouseDownLon;
-  let mouseDownLat;
-
-  function handleMouseDown(e) {
-    mouseDownX = e.offsetX;
-    mouseDownY = e.offsetY;
-    mouseDownLon = center.longitude;
-    mouseDownLat = center.latitude;
-
-    mouseDown = true;
-  }
-
-  function handleMouseMove(e) {
-    if (mouseDown) {
-      let xDiff = e.offsetX - mouseDownX;
-      let yDiff = e.offsetY - mouseDownY;
-
-      center.longitude = mouseDownLon - xDiff / (3 * zoom);
-      center.latitude = mouseDownLat + yDiff / (3 * zoom);
-    }
-  }
-
   function handleWheel(e) {
     zoom += e.deltaY * -0.01;
   }
 </script>
 
 <div
-  on:mousedown={handleMouseDown}
-  on:mousemove={handleMouseMove}
-  on:mouseup={() => mouseDown = false}
-  on:mouseout={() => mouseDown = false}
+  bind:this={interactionSurface}
   on:wheel={handleWheel}
 ></div>
 
