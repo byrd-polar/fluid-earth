@@ -31,6 +31,14 @@
           },
         }
       });
+    window.addEventListener('wheel', handleWheel);
+
+    // Workaround for pinch-to-zoom (geturable-move) not working on Firefox on
+    // Android, disables zooming with wheel if Firefox on Android is detected
+    let ua = navigator.userAgent;
+    if (ua.includes("Firefox") && ua.includes("Android")) {
+      window.removeEventListener('wheel', handleWheel);
+    }
   });
 
   function clamp(x, min, max) {
@@ -71,7 +79,6 @@
 
 <div
   bind:this={interactionSurfaceElement}
-  on:wheel={handleWheel}
 ></div>
 
 <svelte:window
