@@ -19,7 +19,7 @@
     manager.on('pan', e => handlePan(e));
   });
 
-  let scale = 5;
+  let scale = 5 * window.devicePixelRatio;
 
   function handlePan(e) {
     center.longitude -= scale * e.velocityX / zoom;
