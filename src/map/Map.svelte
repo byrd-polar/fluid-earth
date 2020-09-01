@@ -12,10 +12,6 @@
   };
   export let zoom = 1;
 
-  $: center.latitude = clamp(center.latitude, -90, 90);
-  $: center.longitude = ((center.longitude + 180) % 360) - 180;
-  $: zoom = clamp(zoom, 0.5, 15);
-
   export let griddedOptions = {
     data: {
       float32Array: new Float32Array([0.2]),

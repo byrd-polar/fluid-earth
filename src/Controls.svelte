@@ -8,7 +8,9 @@
   let interactionSurfaceElement;
   let baseScale;
 
-  const panFactor = 0.25 * window.devicePixelRatio;
+  const PAN_FACTOR = 0.25 * window.devicePixelRatio;
+  const MIN_ZOOM = 0.5;
+  const MAX_ZOOM = 15;
 
   onMount(() => {
     interact(interactionSurfaceElement)
@@ -16,8 +18,10 @@
         inertia: true,
         listeners: {
           move (e) {
-            center.longitude -= panFactor * e.dx / zoom;
-            center.latitude += panFactor * e.dy / zoom;
+            let lon = center.longitude - PAN_FACTOR * e.dx / zoom;
+            let lat = center.latitude + PAN_FACTOR * e.dy / zoom;
+            center.longitude = ((lon + 180) % 360) - 180;
+            center.latitude = clamp(lat, -90, 90);
           },
         },
       })
@@ -27,7 +31,7 @@
             baseScale = zoom;
           },
           move (e) {
-            zoom = baseScale * e.scale;
+            zoom = clamp(baseScale * e.scale, MIN_ZOOM, MAX_ZOOM);
           },
         }
       });
@@ -41,49 +45,17 @@
     }
   });
 
+  function handleWheel(e) {
+    let z = zoom - 0.01 * e.deltaY;
+    zoom = clamp(z, MIN_ZOOM, MAX_ZOOM);
+  }
+
   function clamp(x, min, max) {
     return x > max ? max : (x < min ? min : x);
   }
-
-  $: center.latitude = clamp(center.latitude, -90, 90);
-  $: center.longitude = ((center.longitude + 180) % 360) - 180;
-  $: zoom = clamp(zoom, 0.5, 15);
-
-  const speed = 1;
-
-  function handleKeydown(event) {
-    switch(event.key) {
-      case 'ArrowUp':
-      case 'w':
-        center.latitude += speed;
-        break;
-      case 's':
-      case 'ArrowDown':
-        center.latitude -= speed;
-        break;
-      case 'd':
-      case 'ArrowRight':
-        center.longitude += speed;
-        break;
-      case 'a':
-      case 'ArrowLeft':
-        center.longitude -= speed;
-        break;
-    }
-  }
-
-  function handleWheel(e) {
-    zoom += e.deltaY * -0.01;
-  }
 </script>
 
-<div
-  bind:this={interactionSurfaceElement}
-></div>
-
-<svelte:window
-  on:keydown={handleKeydown}
-/>
+<div bind:this={interactionSurfaceElement}></div>
 
 <style>
   div {
