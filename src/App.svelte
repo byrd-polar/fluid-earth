@@ -68,7 +68,7 @@
         rate: 5e4,
         count: 3e5,
         lifetime: 1000, // milliseconds
-        enabled: true,
+        enabled: false,
       }
     }
   }

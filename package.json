@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "csv-parse": "^4.12.0",
-    "hammerjs": "^2.0.8",
+    "interactjs": "^1.9.22",
     "sirv-cli": "^0.4.4",
     "topojson-client": "^3.1.0",
     "twgl.js": "^4.15.2"

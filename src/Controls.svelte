@@ -1,38 +1,37 @@
 <script>
   import { onMount } from 'svelte';
-  import Hammer from 'hammerjs';
+  import interact from 'interactjs';
 
   export let center;
   export let zoom;
 
-  let interactionSurface;
-  let manager;
+  let interactionSurfaceElement;
+  let baseScale;
+
+  const panFactor = 0.25 * window.devicePixelRatio;
 
   onMount(() => {
-    manager = new Hammer.Manager(interactionSurface);
-    manager.add(new Hammer.Pan());
-    manager.add(new Hammer.Pinch());
-
-    manager.on('pan', handlePan);
-    manager.on('pinchstart pinchmove', handlePinch);
+    interact(interactionSurfaceElement)
+      .draggable({
+        inertia: true,
+        listeners: {
+          move (e) {
+            center.longitude -= panFactor * e.dx / zoom;
+            center.latitude += panFactor * e.dy / zoom;
+          },
+        },
+      })
+      .gesturable({
+        listeners: {
+          start (e) {
+            baseScale = zoom;
+          },
+          move (e) {
+            zoom = baseScale * e.scale;
+          },
+        }
+      });
   });
-
-  let panFactor = 5 * window.devicePixelRatio;
-
-  function handlePan(e) {
-    center.longitude -= panFactor * e.velocityX / zoom;
-    center.latitude += panFactor * e.velocityY / zoom;
-  }
-
-  let baseScale = zoom;
-
-  function handlePinch(e) {
-    if (e.type === 'pinchstart') {
-      baseScale = zoom;
-    }
-
-    zoom = baseScale * e.scale;
-  }
 
   function clamp(x, min, max) {
     return x > max ? max : (x < min ? min : x);
@@ -71,10 +70,16 @@
 </script>
 
 <div
-  bind:this={interactionSurface}
+  bind:this={interactionSurfaceElement}
   on:wheel={handleWheel}
 ></div>
 
 <svelte:window
   on:keydown={handleKeydown}
 />
+
+<style>
+  div {
+    touch-action: none;
+  }
+</style>
