@@ -9,32 +9,29 @@
   let manager;
 
   onMount(() => {
-    manager = new Hammer.Manager(interactionSurface, {
-      recognizers: [
-        [Hammer.Pan, {
-          threshold: 20,
-        }],
-        [Hammer.Pinch],
-      ],
-    });
-    manager.on('pan', e => handlePan(e));
-    manager.on('pinchin', e => handlePinch(e));
-    manager.on('pinchout', e => handlePinch(e));
+    manager = new Hammer.Manager(interactionSurface);
+    manager.add(new Hammer.Pan());
+    manager.add(new Hammer.Pinch());
+
+    manager.on('pan', handlePan);
+    manager.on('pinchstart pinchmove', handlePinch);
   });
 
-  let scale = 5 * window.devicePixelRatio;
+  let panFactor = 5 * window.devicePixelRatio;
 
   function handlePan(e) {
-    center.longitude -= scale * e.velocityX / zoom;
-    center.latitude += scale * e.velocityY / zoom;
+    center.longitude -= panFactor * e.velocityX / zoom;
+    center.latitude += panFactor * e.velocityY / zoom;
   }
 
+  let baseScale = zoom;
+
   function handlePinch(e) {
-    if (e.type === 'pinchout') {
-      zoom += 0.02 * e.scale;
-    } else {
-      zoom -= 0.08 * e.scale;
+    if (e.type === 'pinchstart') {
+      baseScale = zoom;
     }
+
+    zoom = baseScale * e.scale;
   }
 
   function clamp(x, min, max) {
