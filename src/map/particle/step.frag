@@ -63,8 +63,7 @@ void main() {
 
   // keep lonLat values in range
   lonLat.x = mod(lonLat.x + DIM_2.x, DIM.x) - DIM_2.x;
-  lonLat.y = clamp(lonLat.y, -90.0, 90.0);
+  lonLat.y = clamp(lonLat.y, -DIM_2.y, DIM_2.y);
 
   gl_FragColor = vec4(lonLat, lifetime, speed);
 }
-
