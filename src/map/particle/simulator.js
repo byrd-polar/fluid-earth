@@ -257,6 +257,18 @@ export default class ParticleSimulator {
 
   _createFramebuffers() {
     return {
+      ...this._createSimFramebuffers(),
+      particleTrailsA: this._createParticleTrailsFramebuffer(
+        this._textures.particleTrailsA,
+      ),
+      particleTrailsB: this._createParticleTrailsFramebuffer(
+        this._textures.particleTrailsB,
+      ),
+    };
+  }
+
+  _createSimFramebuffers() {
+    return {
       simA: twgl.createFramebufferInfo(
         this._gl,
         [{ attachment: this._textures.simA }],
@@ -268,12 +280,6 @@ export default class ParticleSimulator {
         [{ attachment: this._textures.simB }],
         Math.sqrt(this._count),
         Math.sqrt(this._count),
-      ),
-      particleTrailsA: this._createParticleTrailsFramebuffer(
-        this._textures.particleTrailsA,
-      ),
-      particleTrailsB: this._createParticleTrailsFramebuffer(
-        this._textures.particleTrailsB,
       ),
     };
   }
