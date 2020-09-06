@@ -27,7 +27,7 @@ export default class ParticleSimulator {
     // private variables (no setters)
     this._gl = gl;
     this._gl.enable(gl.BLEND);
-    this._gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     this._gl.getExtension('OES_texture_float');
     this._gl.getExtension('OES_texture_float_linear');
     this._gl.getExtension('WEBGL_color_buffer_float');
@@ -112,18 +112,19 @@ export default class ParticleSimulator {
   drawWithTrails(sharedUniforms) {
     // first, draw previous background (slightly faded) to empty texture
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);
-    this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 
+    this._gl.disable(this._gl.BLEND);
     glDraw(this._gl, this._programs.texture, this._buffers.texture, {
       u_texture: this._textures.particleTrailsA,
       u_fade: 0.96,
     });
+    this._gl.enable(this._gl.BLEND);
 
     // then, draw new particle positions on top of that
     glDraw(this._gl, this._programs.draw, this._buffers.draw, {
       u_particlePositions: this._textures.simA,
       u_particleCountSqrt: Math.sqrt(this._count),
-      u_color: [1, 1, 1, 0.05],
+      u_color: [1, 1, 1, 0.2],
       ...sharedUniforms,
     }, this._gl.POINTS);
 

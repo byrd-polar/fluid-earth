@@ -75,9 +75,7 @@
 
   onMount(() => {
     backgroundGl = backgroundCanvas.getContext('webgl', { alpha: false });
-    particleGl = particleCanvas.getContext('webgl', {
-      premultipliedAlpha: false,
-    });
+    particleGl = particleCanvas.getContext('webgl');
 
     updateSizeVariables(backgroundGl, true);
     updateSizeVariables(particleGl, true);
