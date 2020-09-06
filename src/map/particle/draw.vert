@@ -56,6 +56,6 @@ void main() {
   displayCoord = u_zoom * displayCoord / PI_2;
   displayCoord.x = displayCoord.x / u_canvasRatio;
 
-  gl_PointSize = pow(u_zoom * u_pixelRatio, 0.8);
+  gl_PointSize = pow(u_zoom * u_pixelRatio / 2.0, 0.8);
   gl_Position = vec4(displayCoord, 0, 1);
 }
