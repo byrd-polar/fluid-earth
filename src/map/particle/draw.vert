@@ -15,7 +15,6 @@ uniform float u_canvasRatio;
 uniform float u_lon0;
 uniform float u_lat0;
 uniform float u_zoom;
-uniform float u_pixelRatio;
 uniform int u_projection;
 
 varying float v_clip;
@@ -56,6 +55,6 @@ void main() {
   displayCoord = u_zoom * displayCoord / PI_2;
   displayCoord.x = displayCoord.x / u_canvasRatio;
 
-  gl_PointSize = pow(u_zoom * u_pixelRatio / 2.0, 0.8);
+  gl_PointSize = pow(u_zoom, 0.8);
   gl_Position = vec4(displayCoord, 0, 1);
 }
