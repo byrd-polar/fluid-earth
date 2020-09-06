@@ -104,6 +104,7 @@ export default class ParticleSimulator {
       u_particlePositions: this._textures.simA,
       u_particleCountSqrt: Math.sqrt(this._count),
       u_color: [1, 1, 1, 0.2],
+      u_pixelRatio: window.devicePixelRatio,
       ...sharedUniforms,
     }, this._gl.POINTS);
   }
@@ -125,6 +126,7 @@ export default class ParticleSimulator {
       u_particlePositions: this._textures.simA,
       u_particleCountSqrt: Math.sqrt(this._count),
       u_color: [1, 1, 1, 0.2],
+      u_pixelRatio: window.devicePixelRatio,
       ...sharedUniforms,
     }, this._gl.POINTS);
 
