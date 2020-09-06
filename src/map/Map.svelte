@@ -4,6 +4,7 @@
 
   import MapBackground from './background.js';
   import ParticleSimulator from './particle/simulator.js';
+  import ParticleSimulatorMobile from './particle/mobile/simulator.js';
 
   export let projection = projections.ORTHOGRAPHIC;
   export let center = {
@@ -82,7 +83,15 @@
     updateSizeVariables(particleGl, true);
 
     mapBackground = new MapBackground(backgroundGl, griddedOptions);
-    particleSimulator = new ParticleSimulator(particleGl, vectorFieldOptions);
+
+    // use a different particle simulator for mobile devices because of issues
+    // rendering to float textures
+    if (navigator.userAgent.includes("Mobi")) {
+      particleSimulator =
+        new ParticleSimulatorMobile(particleGl, vectorFieldOptions);
+    } else {
+      particleSimulator = new ParticleSimulator(particleGl, vectorFieldOptions);
+    }
 
     requestAnimationFrame(render);
   });
