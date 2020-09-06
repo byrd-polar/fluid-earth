@@ -15,7 +15,7 @@ import {
 } from './random.js';
 
 export default class ParticleSimulator {
-  constructor(gl, options) {
+  constructor(gl, options, webkit) {
     // public variables (no special actions needed in setters)
     this.rate = options.particles.rate;
 
@@ -27,7 +27,6 @@ export default class ParticleSimulator {
     // private variables (no setters)
     this._gl = gl;
     this._gl.enable(gl.BLEND);
-    this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     this._gl.getExtension('OES_texture_float');
     this._gl.getExtension('OES_texture_float_linear');
     this._gl.getExtension('WEBGL_color_buffer_float');
@@ -37,6 +36,14 @@ export default class ParticleSimulator {
     this._buffers = this._createBuffers();
     this._textures = this._createTextures();
     this._framebuffers = this._createFramebuffers();
+
+    this._webkit = webkit;
+    // hack to get around premultipliedAlpha: false not working on iOS/Safari
+    if (webkit) {
+      this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    } else {
+      this._gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    }
   }
 
   set count(c) {
@@ -114,12 +121,22 @@ export default class ParticleSimulator {
     // first, draw previous background (slightly faded) to empty texture
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);
 
-    this._gl.disable(this._gl.BLEND);
+    // hack to get around premultipliedAlpha: false not working on iOS/Safari
+    if (this._webkit) {
+      this._gl.disable(this._gl.BLEND);
+      opacity *= 4;
+    } else {
+      this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+    }
+
     glDraw(this._gl, this._programs.texture, this._buffers.texture, {
       u_texture: this._textures.particleTrailsA,
       u_fade: 0.96,
     });
-    this._gl.enable(this._gl.BLEND);
+
+    if (this._webkit) {
+      this._gl.enable(this._gl.BLEND);
+    }
 
     // then, draw new particle positions on top of that
     glDraw(this._gl, this._programs.draw, this._buffers.draw, {

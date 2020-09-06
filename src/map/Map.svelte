@@ -74,8 +74,13 @@
   $: sharedUniforms, vectorFieldOptions, simulatorNeedsReset = true;
 
   onMount(() => {
+    // work around an issue with iOS / Safari
+    const webkit = navigator.userAgent.includes("WebKit");
+
     backgroundGl = backgroundCanvas.getContext('webgl', { alpha: false });
-    particleGl = particleCanvas.getContext('webgl');
+    particleGl = particleCanvas.getContext('webgl', {
+      premultipliedAlpha: webkit,
+    });
 
     updateSizeVariables(backgroundGl, true);
     updateSizeVariables(particleGl, true);
@@ -86,9 +91,10 @@
     // rendering to float textures
     if (navigator.userAgent.includes("Mobi")) {
       particleSimulator =
-        new ParticleSimulatorMobile(particleGl, vectorFieldOptions);
+        new ParticleSimulatorMobile(particleGl, vectorFieldOptions, webkit);
     } else {
-      particleSimulator = new ParticleSimulator(particleGl, vectorFieldOptions);
+      particleSimulator =
+        new ParticleSimulator(particleGl, vectorFieldOptions, webkit);
     }
 
     requestAnimationFrame(render);
