@@ -21,7 +21,25 @@ import {
 
 export default class ParticleSimulatorMobile extends ParticleSimulator {
   set count(c) {
-    // TODO: delete textures and stuff
+    this._count = this._sqrtFloor(c);
+
+    this._gl.deleteBuffer(this._buffers.draw.indices);
+    this._gl.deleteTexture(this._textures.simA.longitudes);
+    this._gl.deleteTexture(this._textures.simA.latitudes);
+    this._gl.deleteTexture(this._textures.simA.lifetimes);
+    this._gl.deleteTexture(this._textures.simA.speeds);
+    this._gl.deleteTexture(this._textures.simB.longitudes);
+    this._gl.deleteTexture(this._textures.simB.latitudes);
+    this._gl.deleteTexture(this._textures.simB.lifetimes);
+    this._gl.deleteTexture(this._textures.simB.speeds);
+    this._gl.deleteFramebuffer(this._framebuffers.simA.longitudes.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simA.latitudes.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simA.lifetimes.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simA.speeds.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simB.longitudes.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simB.latitudes.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simB.lifetimes.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simB.speeds.framebuffer);
 
     this._buffers.draw = this._createDrawBuffer();
     this._textures.simA = this._createSimATexture(),

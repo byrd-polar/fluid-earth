@@ -20,7 +20,7 @@ export default class ParticleSimulator {
     this.rate = options.particles.rate;
 
     // private variables with corresponding public setters
-    this._count = sqrtFloor(options.particles.count);
+    this._count = this._sqrtFloor(options.particles.count);
     this._lifetime = options.particles.lifetime;
     this._data = options.data;
 
@@ -47,7 +47,7 @@ export default class ParticleSimulator {
   }
 
   set count(c) {
-    this._count = sqrtFloor(c);
+    this._count = this._sqrtFloor(c);
 
     this._gl.deleteBuffer(this._buffers.draw.indices);
     this._gl.deleteTexture(this._textures.simA);
@@ -311,10 +311,10 @@ export default class ParticleSimulator {
       this._gl.canvas.height * window.devicePixelRatio,
     );
   }
-}
 
-function sqrtFloor(x) {
-  return Math.pow(Math.floor(Math.sqrt(x)), 2);
+  _sqrtFloor(x) {
+    return Math.pow(Math.floor(Math.sqrt(x)), 2);
+  }
 }
 
 function interleave4(arrayR, arrayG, arrayB, arrayA) {
