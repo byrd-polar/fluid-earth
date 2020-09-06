@@ -10,7 +10,6 @@ uniform vec2 u_randLonLatOffsets;
 uniform float u_gridWidth;
 uniform float u_gridHeight;
 
-uniform float u_particleCountSqrt;
 uniform float u_particleLifetime;
 uniform float u_timeDelta;
 uniform float u_rate;
