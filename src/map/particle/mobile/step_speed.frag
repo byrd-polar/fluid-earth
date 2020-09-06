@@ -6,10 +6,14 @@ precision highp float;
 
 uniform sampler2D u_particleLongitudes;
 uniform sampler2D u_particleLatitudes;
+uniform sampler2D u_particleLifetimes;
 uniform sampler2D u_vectorField;
 
 uniform float u_gridWidth;
 uniform float u_gridHeight;
+
+uniform float u_particleLifetime;
+uniform float u_timeDelta;
 
 varying vec2 v_position;
 
@@ -24,6 +28,9 @@ void main() {
     decode(texture2D(u_particleLongitudes, id), DIM.x, -DIM_2.x),
     decode(texture2D(u_particleLatitudes, id), DIM.y, -DIM_2.y)
   );
+  float lifetime = decode(texture2D(u_particleLifetimes, id),
+      u_particleLifetime, 0.0);
+  lifetime += u_timeDelta;
 
   // 90N 0E corresponds top-left corner
   // y-axis is flipped because textures start at bottom, not top
@@ -41,6 +48,10 @@ void main() {
 
   vec2 velocity = texture2D(u_vectorField, texCoord).rg;
   float speed = length(velocity);
+
+  if (lifetime > u_particleLifetime) {
+    speed = 0.0;
+  }
 
   gl_FragColor = encode(speed, MAX_SPEED, 0.0);
 }

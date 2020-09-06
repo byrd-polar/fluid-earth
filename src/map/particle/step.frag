@@ -52,6 +52,7 @@ void main() {
     lonLat.x = DIM.x * rx - DIM_2.x;
     lonLat.y = (DIM.y / radians(DIM.y)) * asin(2.0 * ry - 1.0);
 
+    speed = 0.0;
     lifetime -= u_particleLifetime;
   } else {
     // move particle according to vectorField
