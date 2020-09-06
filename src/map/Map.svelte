@@ -118,7 +118,7 @@
     }
 
     if (vectorFieldOptions.particles.enabled) {
-      particleSimulator.drawWithTrails(sharedUniforms);
+      particleSimulator.drawWithTrails(sharedUniforms, 0.1);
       particleSimulator.step(Math.min(timeDelta, 100));
     }
 

@@ -99,18 +99,18 @@ export default class ParticleSimulator {
 
   // render the particles to the screen, where sharedUnfiorms determines the
   // projection, zoom, and lonLat centering
-  draw(sharedUniforms) {
+  draw(sharedUniforms, opacity) {
     glDraw(this._gl, this._programs.draw, this._buffers.draw, {
       u_particlePositions: this._textures.simA,
       u_particleCountSqrt: Math.sqrt(this._count),
-      u_color: [1, 1, 1, 0.4],
+      u_color: [1, 1, 1, opacity],
       u_pixelRatio: window.devicePixelRatio,
       ...sharedUniforms,
     }, this._gl.POINTS);
   }
 
   // render particles with trails to the screen
-  drawWithTrails(sharedUniforms) {
+  drawWithTrails(sharedUniforms, opacity) {
     // first, draw previous background (slightly faded) to empty texture
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);
 
@@ -125,7 +125,7 @@ export default class ParticleSimulator {
     glDraw(this._gl, this._programs.draw, this._buffers.draw, {
       u_particlePositions: this._textures.simA,
       u_particleCountSqrt: Math.sqrt(this._count),
-      u_color: [1, 1, 1, 0.4],
+      u_color: [1, 1, 1, opacity],
       u_pixelRatio: window.devicePixelRatio,
       ...sharedUniforms,
     }, this._gl.POINTS);
