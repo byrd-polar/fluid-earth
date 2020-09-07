@@ -9,7 +9,7 @@
   import colormaps from './colormaps/';
   import projections from './projections/';
 
-  export let projection = projections.ORTHOGRAPHIC;
+  export let projection = projections.EQUIRECTANGULAR;
   export let center = {
     longitude: 0, // in degrees
     latitude: 0, // in degrees
