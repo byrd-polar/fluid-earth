@@ -69,8 +69,9 @@
   $: particleSimulator.lifetime = vectorFieldOptions.particles.lifetime;
 
   let backgroundNeedsRedraw;
+  let vectorDataLoaded = false;
   // when following variables are updated, redraw
-  $: sharedUniforms, griddedOptions, mapBackground.vectorDataLoaded,
+  $: sharedUniforms, griddedOptions, vectorDataLoaded,
     backgroundNeedsRedraw = true;
 
   let simulatorNeedsReset;
@@ -112,6 +113,8 @@
 
     updateSizeVariables(backgroundGl);
     updateSizeVariables(particleGl);
+
+    vectorDataLoaded = mapBackground.vectorDataLoaded;
 
     if (backgroundNeedsRedraw) {
       mapBackground.drawGriddedData(sharedUniforms);
