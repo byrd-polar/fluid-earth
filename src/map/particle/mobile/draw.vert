@@ -6,6 +6,7 @@
 #pragma glslify: p3 = require(../../projections/orthographic/forward.glsl)
 
 #pragma glslify: decode = require(./decode.glsl)
+#pragma glslify: MAX_SPEED = require(./speed.glsl)
 
 attribute vec2 a_particleIndex;
 
@@ -26,10 +27,8 @@ varying float v_speed;
 
 const float PI_2 = radians(90.0);
 
-// constants copied from the various mobile step shaders
 const vec2 DIM = vec2(360.0, 180.0); // size of map in longitude and latitude
 const vec2 DIM_2 = vec2(180.0, 90.0);
-const float MAX_SPEED = 1000000.0;
 
 void main() {
   // see gridded.frag for details

@@ -3,6 +3,7 @@ precision highp float;
 
 #pragma glslify: encode = require(./encode.glsl)
 #pragma glslify: decode = require(./decode.glsl)
+#pragma glslify: MAX_SPEED = require(./speed.glsl)
 
 uniform sampler2D u_particleLongitudes;
 uniform sampler2D u_particleLatitudes;
@@ -19,8 +20,6 @@ varying vec2 v_position;
 
 const vec2 DIM = vec2(360.0, 180.0); // size of map in longitude and latitude
 const vec2 DIM_2 = vec2(180.0, 90.0);
-
-const float MAX_SPEED = 1000000.0;
 
 void main() {
   vec2 id = (v_position + 1.0) / 2.0; // 2D "id" in between (0,0) and (1,1)
