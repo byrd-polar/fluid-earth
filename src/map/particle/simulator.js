@@ -16,9 +16,6 @@ import {
 
 export default class ParticleSimulator {
   constructor(gl, options, webkit) {
-    // public variables (no special actions needed in setters)
-    this.rate = options.particles.rate;
-
     // private variables with corresponding public setters
     this._count = this._sqrtFloor(options.particles.count);
     this._lifetime = options.particles.lifetime;
@@ -76,7 +73,10 @@ export default class ParticleSimulator {
   // using data in this._textures.simA, simulate and render to
   // this._framebuffers.simB (with this._textures.simB attached) the new
   // particle positions after timeDelta ms have passed
-  step(timeDelta) {
+  //
+  // timeDelta: milliseconds passed since last step
+  // rate: how many times faster than real-world speed particles should move at
+  step(timeDelta, rate) {
     // switch rendering destination to our framebuffer
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.simB);
 
@@ -90,7 +90,7 @@ export default class ParticleSimulator {
       u_gridWidth: this._data.width,
       u_gridHeight: this._data.height,
       u_timeDelta: timeDelta,
-      u_rate: this.rate,
+      u_rate: rate,
     });
     this._gl.enable(this._gl.BLEND);
 
@@ -106,6 +106,8 @@ export default class ParticleSimulator {
 
   // render the particles to the screen, where sharedUnfiorms determines the
   // projection, zoom, and lonLat centering
+  //
+  // opacity: from 0 to 1, how opaque the particles are
   draw(sharedUniforms, opacity) {
     glDraw(this._gl, this._programs.draw, this._buffers.draw, {
       u_particlePositions: this._textures.simA,
@@ -116,6 +118,14 @@ export default class ParticleSimulator {
   }
 
   // render particles with trails to the screen
+  //
+  // opacity: from 0 to 1, how opaque the particles initially are (will actually
+  // be higher than this value if new position overlaps old position, which is
+  // likely the case)
+  //
+  // fade: from 0 to 1, what proportion of the opacity from the previous
+  // drawWithTrails draw call should be maintained as the background for this
+  // draw call
   drawWithTrails(sharedUniforms, opacity, fade) {
     // first, draw previous background (slightly faded) to empty texture
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);

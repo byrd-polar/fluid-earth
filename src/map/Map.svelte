@@ -61,10 +61,9 @@
   $: mapBackground.domain = griddedOptions.domain;
 
   let particleSimulator = {};
-  $: particleSimulator.rate = vectorFieldOptions.particles.rate;
+  $: particleSimulator.data = vectorFieldOptions.data;
   $: particleSimulator.count = vectorFieldOptions.particles.count;
   $: particleSimulator.lifetime = vectorFieldOptions.particles.lifetime;
-  $: particleSimulator.data = vectorFieldOptions.data;
 
   let backgroundNeedsRedraw;
   // when following variables are updated, redraw
@@ -131,7 +130,10 @@
         vectorFieldOptions.particles.opacity,
         vectorFieldOptions.particles.fade
       );
-      particleSimulator.step(Math.min(timeDelta, 100));
+      particleSimulator.step(
+        Math.min(timeDelta, 100),
+        vectorFieldOptions.particles.rate
+      );
     }
 
     requestAnimationFrame(render);
