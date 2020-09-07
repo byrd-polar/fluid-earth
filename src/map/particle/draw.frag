@@ -12,5 +12,5 @@ void main() {
     discard;
   }
   gl_FragColor = u_color;
-  gl_FragColor.a *= min(v_speed / 5.0, 1.0);
+  gl_FragColor.a *= 1.0 - pow(0.8, v_speed);
 }
