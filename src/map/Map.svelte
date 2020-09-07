@@ -6,6 +6,9 @@
   import ParticleSimulator from './particle/simulator.js';
   import ParticleSimulatorMobile from './particle/mobile/simulator.js';
 
+  import colormaps from './colormaps/';
+  import projections from './projections/';
+
   export let projection = projections.ORTHOGRAPHIC;
   export let center = {
     longitude: 0, // in degrees
