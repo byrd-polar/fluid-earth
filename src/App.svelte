@@ -80,11 +80,11 @@
 <nav></nav>
 <main>
   <Map
-    bind:projection
-    bind:center
-    bind:zoom
-    bind:griddedOptions
-    bind:vectorFieldOptions
+    {projection}
+    {center}
+    {zoom}
+    {griddedOptions}
+    {vectorFieldOptions}
   />
   <Controls
     bind:center
