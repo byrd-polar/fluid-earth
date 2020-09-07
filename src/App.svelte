@@ -67,6 +67,8 @@
       particles: {
         rate: 5e4,
         count: 1e5,
+        opacity: 0.1,
+        fade: 0.96,
         lifetime: 1000, // milliseconds
         enabled: true,
       }

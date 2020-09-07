@@ -31,7 +31,9 @@
     },
     particles: {
       rate: 5e4,
-      count: 1e5,
+      count: 1,
+      opacity: 0.1,
+      fade: 0.96,
       lifetime: 1000, // milliseconds
       enabled: true,
     },
@@ -124,7 +126,11 @@
     }
 
     if (vectorFieldOptions.particles.enabled) {
-      particleSimulator.drawWithTrails(sharedUniforms, 0.1);
+      particleSimulator.drawWithTrails(
+        sharedUniforms,
+        vectorFieldOptions.particles.opacity,
+        vectorFieldOptions.particles.fade
+      );
       particleSimulator.step(Math.min(timeDelta, 100));
     }
 

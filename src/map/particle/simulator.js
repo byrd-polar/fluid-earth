@@ -116,7 +116,7 @@ export default class ParticleSimulator {
   }
 
   // render particles with trails to the screen
-  drawWithTrails(sharedUniforms, opacity) {
+  drawWithTrails(sharedUniforms, opacity, fade) {
     // first, draw previous background (slightly faded) to empty texture
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);
 
@@ -130,7 +130,7 @@ export default class ParticleSimulator {
 
     glDraw(this._gl, this._programs.texture, this._buffers.texture, {
       u_texture: this._textures.particleTrailsA,
-      u_fade: 0.96,
+      u_fade: fade,
     });
 
     if (this._webkit) {
