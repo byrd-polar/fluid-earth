@@ -74,9 +74,9 @@
   $: sharedUniforms, griddedOptions, vectorDataLoaded,
     backgroundNeedsRedraw = true;
 
-  let simulatorNeedsReset;
+  let trailsNeedsReset;
   // when following variables are updated, reset
-  $: sharedUniforms, vectorFieldOptions, simulatorNeedsReset = true;
+  $: sharedUniforms, vectorFieldOptions, trailsNeedsReset = true;
 
   onMount(() => {
     // work around an issue with iOS / Safari
@@ -125,9 +125,9 @@
       backgroundNeedsRedraw = false;
     }
 
-    if (simulatorNeedsReset) {
+    if (trailsNeedsReset) {
       particleSimulator.resetTrails();
-      simulatorNeedsReset = false;
+      trailsNeedsReset = false;
     }
 
     if (vectorFieldOptions.particles.enabled) {
