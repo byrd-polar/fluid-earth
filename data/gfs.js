@@ -8,12 +8,22 @@ import { promisify } from 'util';
 import _parseCSV from 'csv-parse';
 const parseCSV = promisify(_parseCSV);
 
-// from https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/
-const dataURL = `https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/\
-gfs.20200827/18/gfs.t18z.pgrb2.0p25.f000`
-const indexURL = dataURL + '.idx';
-
 export async function gfs() {
+  // from https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/
+  let now = new Date();
+  let year = now.getUTCFullYear();
+  let month = (now.getUTCMonth() + 1).toString().padStart(2, '0');
+  let day = (now.getUTCDate()).toString().padStart(2, '0');
+  let hour = [18, 12, 6, 0].find(h => h <= now.getUTCHours());
+
+  // use the previous forecast, to lazily avoid case where current forecast is
+  // still processing
+  hour = (hour - 6 + 24) % 24;
+
+  const dataURL = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/' +
+    `gfs.${year}${month}${day}/${hour}/gfs.t${hour}z.pgrb2.0p25.f000`;
+  const indexURL = dataURL + '.idx';
+
   // file containing information for partial downloads
   let indexFile = await download(indexURL, true);
   let indexString = await readFile(indexFile, 'utf-8');
