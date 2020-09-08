@@ -17,8 +17,8 @@ import {
 export default class ParticleSimulator {
   constructor(gl, options, webkit) {
     // private variables with corresponding public setters
-    this._count = this._sqrtFloor(options.particles.count);
-    this._lifetime = options.particles.lifetime;
+    this._count = this._sqrtFloor(options.count);
+    this._lifetime = options.lifetime;
     this._data = options.data;
 
     // private variables (no setters)

@@ -16,30 +16,27 @@
   };
   export let zoom = 1;
 
-  export let griddedOptions = {
-    data: {
-      float32Array: new Float32Array([0.2]),
-      width: 1,
-      height: 1,
-    },
-    colormap: colormaps.VIRIDIS,
-    domain: [0, 1],
+  export let griddedData = {
+    float32Array: new Float32Array([0.2]),
+    width: 1,
+    height: 1,
   };
-  export let vectorFieldOptions = {
-    data: {
-      uVelocities: new Float32Array([0.2]),
-      vVelocities: new Float32Array([0.2]),
-      width: 1,
-      height: 1,
-    },
-    particles: {
-      rate: 5e4,
-      count: 1,
-      opacity: 0.1,
-      fade: 0.96,
-      lifetime: 1000, // milliseconds
-      enabled: true,
-    },
+  export let griddedColormap = colormaps.VIRIDIS;
+  export let griddedDomain = [0, 1];
+
+  export let particleData = {
+    uVelocities: new Float32Array([0.2]),
+    vVelocities: new Float32Array([0.2]),
+    width: 1,
+    height: 1,
+  };
+  export let particleLifetime = 1000; // milliseconds
+  export let particleCount = 1e5;
+  export let particleDisplay = {
+    rate: 5e4,
+    opacity: 0.1,
+    fade: 0.96,
+    enabled: true,
   };
 
   let backgroundCanvas;
@@ -59,24 +56,33 @@
   let particleGl;
 
   let mapBackground = {};
-  $: mapBackground.data = griddedOptions.data;
-  $: mapBackground.colormap = griddedOptions.colormap;
-  $: mapBackground.domain = griddedOptions.domain;
+  $: mapBackground.data = griddedData;
+  $: mapBackground.colormap = griddedColormap;
+  $: mapBackground.domain = griddedDomain;
 
   let particleSimulator = {};
-  $: particleSimulator.data = vectorFieldOptions.data;
-  $: particleSimulator.count = vectorFieldOptions.particles.count;
-  $: particleSimulator.lifetime = vectorFieldOptions.particles.lifetime;
+  $: particleSimulator.data = particleData;
+  $: particleSimulator.count = particleCount;
+  $: particleSimulator.lifetime = particleLifetime;
 
   let backgroundNeedsRedraw;
   let vectorDataLoaded = false;
   // when following variables are updated, redraw
-  $: sharedUniforms, griddedOptions, vectorDataLoaded,
+  $: sharedUniforms,
+      griddedData,
+      griddedColormap,
+      griddedDomain,
+      vectorDataLoaded,
     backgroundNeedsRedraw = true;
 
   let trailsNeedsReset;
   // when following variables are updated, reset
-  $: sharedUniforms, vectorFieldOptions, trailsNeedsReset = true;
+  $: sharedUniforms,
+      particleData,
+      particleCount,
+      particleLifetime,
+      particleDisplay,
+    trailsNeedsReset = true;
 
   onMount(() => {
     // work around an issue with iOS / Safari
@@ -90,7 +96,17 @@
     updateSizeVariables(backgroundGl, true);
     updateSizeVariables(particleGl, true);
 
-    mapBackground = new MapBackground(backgroundGl, griddedOptions);
+    mapBackground = new MapBackground(backgroundGl, {
+      data: griddedData,
+      colormap: griddedColormap,
+      domain: griddedDomain,
+    });
+
+    let vectorFieldOptions = {
+      count: particleCount,
+      lifetime: particleLifetime,
+      data: particleData,
+    }
 
     // use a different particle simulator for mobile devices because of issues
     // rendering to float textures
@@ -130,15 +146,15 @@
       trailsNeedsReset = false;
     }
 
-    if (vectorFieldOptions.particles.enabled) {
+    if (particleDisplay.enabled) {
       particleSimulator.drawWithTrails(
         sharedUniforms,
-        vectorFieldOptions.particles.opacity,
-        vectorFieldOptions.particles.fade
+        particleDisplay.opacity,
+        particleDisplay.fade
       );
       particleSimulator.step(
         Math.min(timeDelta, 100),
-        vectorFieldOptions.particles.rate
+        particleDisplay.rate
       );
     }
 

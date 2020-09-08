@@ -10,15 +10,9 @@
     latitude: 0,
   };
   let zoom = 1;
-  let griddedOptions = {
-    data: {
-      float32Array: new Float32Array([240]),
-      width: 1,
-      height: 1,
-    },
-    colormap: colormaps.MAGMA,
-    domain: [220, 340],
-  };
+  let griddedData;
+  let griddedColormap;
+  let griddedDomain;
 
   let datasets = [
     {
@@ -43,36 +37,26 @@
   async function updateData() {
     let path = dataset.path;
     let buffer = await fetch(path).then(res => res.arrayBuffer());
-    griddedOptions.data = {
+    griddedData = {
       float32Array: new Float32Array(buffer),
       width: 1440,
       height: 721,
     }
-    griddedOptions.domain = dataset.domain;
+    griddedDomain = dataset.domain;
   }
 
-  let vectorFieldOptions;
+  let particleData;
   async function updateParticleData() {
     let uPath = '/data/gfs-u-wind.f32';
     let vPath = '/data/gfs-v-wind.f32';
     let uBuffer = await fetch(uPath).then(res => res.arrayBuffer());
     let vBuffer = await fetch(vPath).then(res => res.arrayBuffer());
-    vectorFieldOptions = {
-      data: {
-        uVelocities: new Float32Array(uBuffer),
-        vVelocities: new Float32Array(vBuffer),
-        width: 1440,
-        height: 721,
-      },
-      particles: {
-        rate: 5e4,
-        count: 1e5,
-        opacity: 0.1,
-        fade: 0.96,
-        lifetime: 1000, // milliseconds
-        enabled: true,
-      }
-    }
+    particleData = {
+      uVelocities: new Float32Array(uBuffer),
+      vVelocities: new Float32Array(vBuffer),
+      width: 1440,
+      height: 721,
+    };
   }
   updateParticleData();
 </script>
@@ -83,8 +67,10 @@
     {projection}
     {center}
     {zoom}
-    {griddedOptions}
-    {vectorFieldOptions}
+    {griddedData}
+    {griddedColormap}
+    {griddedDomain}
+    {particleData}
   />
   <Controls
     bind:center
@@ -106,7 +92,7 @@
       </select>
     </label>
     <label>Choose a colormap:
-      <select bind:value={griddedOptions.colormap} name="colormaps">
+      <select bind:value={griddedColormap} name="colormaps">
         {#each Object.values(colormaps) as colormap}
           <option value={colormap}>{colormap.name}</option>
         {/each}
