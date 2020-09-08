@@ -31,6 +31,8 @@ export default class MapBackground {
     this._framebuffers = this._createFramebuffers();
 
     this._mapDataToColors();
+    this._dataNeedsRecolor = false;
+
     (async () => {
       this._buffers.vectors = await this._createVectorBuffers();
       this.vectorDataLoaded = true;
@@ -47,23 +49,25 @@ export default class MapBackground {
     }
     this._textures.data = this._createDataTexture();
     this._framebuffers = this._createFramebuffers();
-    this._mapDataToColors();
+    this._dataNeedsRecolor = true;
   }
 
   set colormap(c) {
     this._colormap = c;
-
     this._textures.colormap = this._createColormapTexture();
-    this._mapDataToColors();
+    this._dataNeedsRecolor = true;
   }
 
   set domain(d) {
     this._domain = d;
-
-    this._mapDataToColors();
+    this._dataNeedsRecolor = true;
   }
 
   drawGriddedData(sharedUniforms) {
+    if (this._dataNeedsRecolor) {
+      this._mapDataToColors();
+      this._dataNeedsRecolor = false;
+    }
     glDraw(this._gl, this._programs.gridded, this._buffers.gridded, {
       u_texture: this._textures.gridded,
       u_gridWidth: this._data.width,
