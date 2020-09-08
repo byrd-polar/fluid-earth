@@ -153,10 +153,6 @@
       backgroundNeedsRedraw = true;
     }
   }
-
-  function clamp(x, min, max) {
-    return x > max ? max : (x < min ? min : x);
-  }
 </script>
 
 <canvas bind:this={backgroundCanvas}/>
