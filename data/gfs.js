@@ -19,6 +19,7 @@ export async function gfs() {
   // use the previous forecast, to lazily avoid case where current forecast is
   // still processing
   hour = (hour - 6 + 24) % 24;
+  hour = hour.toString().padStart(2, '0');
 
   const dataURL = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/' +
     `gfs.${year}${month}${day}/${hour}/gfs.t${hour}z.pgrb2.0p25.f000`;
