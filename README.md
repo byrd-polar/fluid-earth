@@ -7,6 +7,7 @@ A potential successor to [FEVer](https://fever.byrd.osu.edu), making use of of
 
 - [git](https://git-scm.com/)
 - [Node.js](https://nodejs.org)
+- [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/)
 
 ## Get started
 
