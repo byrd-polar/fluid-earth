@@ -11,6 +11,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^12.0.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
+    "csv-parse": "^4.12.0",
     "fx": "^19.0.1",
     "got": "^11.5.1",
     "mapshaper": "^0.5.11",
@@ -23,7 +24,6 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "csv-parse": "^4.12.0",
     "interactjs": "^1.9.22",
     "sirv-cli": "^0.4.4",
     "topojson-client": "^3.1.0",
