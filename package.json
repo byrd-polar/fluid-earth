@@ -28,5 +28,8 @@
     "sirv-cli": "^0.4.4",
     "topojson-client": "^3.1.0",
     "twgl.js": "^4.15.2"
+  },
+  "engines": {
+    "node": ">=13"
   }
 }
