@@ -177,14 +177,14 @@ export default Object.freeze(colormaps);
 function lutFromD3(interpolationFunction) {
   return Array.from({ length: 256 }, (_, i) => {
     let c = color(interpolationFunction(i / 255));
-    return [c.r, c.g, c.b];
+    return [c.r, c.g, c.b].map(x => x / 255);
   });
 }
 
 function lutFromD3Scheme(scheme, kmax) {
   return scheme[kmax].map(hex => {
     let c = color(hex);
-    return [c.r, c.g, c.b];
+    return [c.r, c.g, c.b].map(x => x / 255);
   });
 }
 
