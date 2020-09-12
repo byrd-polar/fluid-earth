@@ -5,7 +5,7 @@ import * as d3 from 'd3-scale-chromatic';
 //
 // lut stands for LookUp Table, used to construct a texture
 
-export default Object.freeze({
+let colormaps = {
   /////////////////////////////////////////////////////////////////////////////
   // Diverging
   /////////////////////////////////////////////////////////////////////////////
@@ -166,7 +166,13 @@ export default Object.freeze({
     name: 'sinebow',
     get lut() { return lutFromD3(d3.interpolateSinebow) }
   },
-});
+};
+
+for (let colormap in colormaps) {
+  colormaps[colormap + '_INVERTED'] = invert(colormaps[colormap]);
+}
+
+export default Object.freeze(colormaps);
 
 function lutFromD3(interpolationFunction) {
   return Array.from({ length: 256 }, (_, i) => {
@@ -180,4 +186,13 @@ function lutFromD3Scheme(scheme, kmax) {
     let c = color(hex);
     return [c.r, c.g, c.b];
   });
+}
+
+function invert(colormap) {
+  let flippedLut = colormap.lut.slice();
+  flippedLut.reverse();
+  return {
+    name: colormap.name + ' (inverted)',
+    lut: flippedLut,
+  }
 }
