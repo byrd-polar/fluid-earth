@@ -18,7 +18,7 @@
     {
       name: 'surface temperature',
       path: '/data/gfs-temperature.f32',
-      domain: [220, 340],
+      domain: [273.15 - 70, 273.15 + 70],
     },
     {
       name: 'u-wind velocity',
