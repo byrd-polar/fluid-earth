@@ -181,8 +181,17 @@ let colormaps = {
   },
 };
 
-for (let colormap in colormaps) {
-  colormaps[colormap + '_INVERTED'] = invert(colormaps[colormap]);
+for (let prop in colormaps) {
+  let colormap = colormaps[prop];
+
+  colormaps[prop + '_REVERSED'] = {
+    name: colormap.name + ' (reversed)',
+    get lut() {
+      let flippedLut = colormap.lut.slice();
+      flippedLut.reverse();
+      return flippedLut;
+    }
+  };
 }
 
 export default Object.freeze(colormaps);
@@ -199,13 +208,4 @@ function lutFromD3Scheme(scheme, kmax) {
     let c = color(hex);
     return [c.r, c.g, c.b].map(x => x / 255);
   });
-}
-
-function invert(colormap) {
-  let flippedLut = colormap.lut.slice();
-  flippedLut.reverse();
-  return {
-    name: colormap.name + ' (inverted)',
-    lut: flippedLut,
-  }
 }
