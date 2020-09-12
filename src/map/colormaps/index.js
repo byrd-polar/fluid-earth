@@ -61,7 +61,7 @@ let colormaps = {
     get lut() { return lutFromD3Scheme(d3.schemeBlues, 9) }
   },
   GREENS: {
-    name: 'blues',
+    name: 'greens',
     get lut() { return lutFromD3Scheme(d3.schemeGreens, 9) }
   },
   GREYS: {
