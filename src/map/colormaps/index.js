@@ -1,11 +1,19 @@
 import { color } from 'd3-color';
 import * as d3 from 'd3-scale-chromatic';
 
+import {
+  ice,
+} from './cmocean.js';
+
 // Enums for colormaps
 //
 // lut stands for LookUp Table, used to construct a texture
 
 let colormaps = {
+  ICE: {
+    name: 'ice',
+    lut: ice,
+  },
   /////////////////////////////////////////////////////////////////////////////
   // Diverging
   /////////////////////////////////////////////////////////////////////////////
