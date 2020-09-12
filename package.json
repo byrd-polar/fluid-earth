@@ -24,6 +24,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "d3-scale-chromatic": "^2.0.0",
     "interactjs": "^1.9.22",
     "sirv-cli": "^0.4.4",
     "topojson-client": "^3.1.0",

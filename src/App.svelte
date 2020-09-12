@@ -11,7 +11,7 @@
   };
   let zoom = 1;
   let griddedData;
-  let griddedColormap;
+  let griddedColormap = colormaps.VIRIDIS;
   let griddedDomain;
 
   let datasets = [

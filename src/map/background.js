@@ -180,7 +180,7 @@ export default class MapBackground {
 
   _createColormapTexture() {
     return twgl.createTexture(this._gl, {
-      src: this._colormap.lut.flat().map(x => Math.round(x * 255)),
+      src: this._colormap.lut.flat(),
       format: this._gl.RGB,
       minMag: this._gl.LINEAR,
       width: this._colormap.lut.length,
