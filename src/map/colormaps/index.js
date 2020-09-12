@@ -2,6 +2,7 @@ import { color } from 'd3-color';
 import * as d3 from 'd3-scale-chromatic';
 
 import {
+  thermal,
   ice,
 } from './cmocean.js';
 
@@ -10,6 +11,10 @@ import {
 // lut stands for LookUp Table, used to construct a texture
 
 let colormaps = {
+  THERMAL: {
+    name: 'thermal',
+    lut: thermal,
+  },
   ICE: {
     name: 'ice',
     lut: ice,
