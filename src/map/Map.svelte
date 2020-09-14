@@ -96,6 +96,11 @@
     updateSizeVariables(backgroundGl, true);
     updateSizeVariables(particleGl, true);
 
+    window.addEventListener('resize', () => {
+      updateSizeVariables(backgroundGl);
+      updateSizeVariables(particleGl);
+    });
+
     mapBackground = new MapBackground(backgroundGl, {
       data: griddedData,
       colormap: griddedColormap,
@@ -127,8 +132,8 @@
     let timeDelta = previousTime ? (time - previousTime) : 0;
     previousTime = time;
 
-    updateSizeVariables(backgroundGl);
-    updateSizeVariables(particleGl);
+    updateCanvasRatio(backgroundGl);
+    updateCanvasRatio(particleGl);
 
     vectorDataLoaded = mapBackground.vectorDataLoaded;
 
@@ -168,6 +173,12 @@
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
       backgroundNeedsRedraw = true;
     }
+  }
+
+  // partial update of size variables for vastly improved performance when
+  // opening side menus, but causes particle width to be slightly incorrect
+  function updateCanvasRatio(gl) {
+    canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
   }
 </script>
 
