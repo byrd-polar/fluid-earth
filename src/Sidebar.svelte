@@ -14,9 +14,18 @@
 
 <style>
   nav {
-    background: lightgrey;
-    width: 3em;
-    z-index: 1;
+    background: grey;
+    width: 3.5em;
+    z-index: 2;
     cursor: pointer;
+  }
+
+  @media (max-width: 36rem) {
+    nav {
+      position: absolute;
+      height: 3.5em;
+      width: 100%;
+      opacity: 0.5;
+    }
   }
 </style>
