@@ -13,6 +13,8 @@
     visibility: hidden;
     transition: margin-left 0.3s ease 0s, visibility 0s linear 0.3s;
     background-color: white;
+    padding: 1em;
+    overflow: auto;
   }
 
   div.selected {
