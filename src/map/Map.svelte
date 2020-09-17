@@ -132,8 +132,15 @@
     let timeDelta = previousTime ? (time - previousTime) : 0;
     previousTime = time;
 
-    updateCanvasRatio(backgroundGl);
-    updateCanvasRatio(particleGl);
+    // partial update of size variables for vastly improved performance when
+    // opening side menus, but causes particle width to be slightly incorrect
+    //
+    // manually updating here instead of relying on $: notation to ensure
+    // frame-by-frame accuracy
+    canvasRatio = backgroundCanvas.clientWidth / backgroundCanvas.clientHeight;
+    if (sharedUniforms.u_canvasRatio !== canvasRatio) {
+      sharedUniforms.u_canvasRatio = canvasRatio;
+    }
 
     vectorDataLoaded = mapBackground.vectorDataLoaded;
 
@@ -173,12 +180,6 @@
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
       backgroundNeedsRedraw = true;
     }
-  }
-
-  // partial update of size variables for vastly improved performance when
-  // opening side menus, but causes particle width to be slightly incorrect
-  function updateCanvasRatio(gl) {
-    canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
   }
 </script>
 
