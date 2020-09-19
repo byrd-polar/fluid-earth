@@ -19,4 +19,8 @@ export default Object.freeze({
     name: 'orthographic',
     id: 3,
   },
+  VERTICAL_PERSPECTIVE: {
+    name: 'vertical perspective',
+    id: 4,
+  },
 });

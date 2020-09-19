@@ -9,7 +9,7 @@
 
   let openedMenu = null;
 
-  let projection = projections.ORTHOGRAPHIC;
+  let projection = projections.VERTICAL_PERSPECTIVE;
   let center = {
     longitude: 0,
     latitude: 0,
