@@ -4,7 +4,6 @@ import https from 'https';
 import path from 'path';
 import { URL } from 'url';
 import got from 'got';
-import prettyBytes from 'pretty-bytes';
 
 import { topology } from './topology.js';;
 import { gfs } from './gfs.js';;
