@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@smui/icon-button": "^1.0.0",
+    "carbon-icons-svelte": "^10.17.0",
     "d3-scale-chromatic": "^2.0.0",
     "interactjs": "^1.9.22",
     "sass": "^1.26.11",
