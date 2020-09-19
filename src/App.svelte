@@ -1,5 +1,6 @@
 <script>
   import Sidebar from './Sidebar.svelte';
+  import Menu from './menus/Menu.svelte';
   import Demo from './menus/Demo.svelte';
 
   import Map from './map/Map.svelte';
@@ -36,13 +37,14 @@
 </script>
 
 <Sidebar bind:openedMenu/>
-<Demo
-  opened={openedMenu === 'Demo'}
-  bind:projection
-  bind:griddedData
-  bind:griddedColormap
-  bind:griddedDomain
-/>
+<Menu bind:openedMenu>
+  <Demo
+    bind:projection
+    bind:griddedData
+    bind:griddedColormap
+    bind:griddedDomain
+  />
+</Menu>
 <main>
   <Map
     {projection}

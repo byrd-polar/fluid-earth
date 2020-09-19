@@ -1,8 +1,8 @@
 <script>
-  export let opened = false;
+  export let openedMenu;
 </script>
 
-<div class:selected={opened}>
+<div class:selected={openedMenu === 'Demo'}>
   <slot></slot>
 </div>
 
