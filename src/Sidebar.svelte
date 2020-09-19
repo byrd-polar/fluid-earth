@@ -1,4 +1,6 @@
 <script>
+  import IconButton, {Icon} from '@smui/icon-button';
+
   export let openedMenu;
 
   function toggleDemo() {
