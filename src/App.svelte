@@ -46,19 +46,21 @@
   />
 </Menu>
 <main>
-  <Map
-    {projection}
-    {center}
-    {zoom}
-    {griddedData}
-    {griddedColormap}
-    {griddedDomain}
-    {particleData}
-  />
-  <Controls
-    bind:center
-    bind:zoom
-  />
+  <div class="layers">
+    <Map
+      {projection}
+      {center}
+      {zoom}
+      {griddedData}
+      {griddedColormap}
+      {griddedDomain}
+      {particleData}
+    />
+    <Controls
+      bind:center
+      bind:zoom
+    />
+  </div>
 </main>
 <aside></aside>
 
@@ -69,11 +71,23 @@
   }
 
   main {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+  }
+
+  @media (orientation: portrait) {
+    main {
+      flex-direction: column;
+    }
+  }
+
+  div.layers {
     position: relative;
     flex: 1;
   }
 
-  :global(main > *) {
+  :global(div.layers > *) {
     width: 100%;
     height: 100%;
     position: absolute;
