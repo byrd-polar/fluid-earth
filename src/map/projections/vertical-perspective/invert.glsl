@@ -19,11 +19,12 @@ void verticalPerspective(
   float P = 1.0 + (FOV_SCALAR / zoom);
 
   // from https://github.com/d3/d3-geo-projection/blob/master/src/satellite.js
-  float sinc = (P - sqrt(1.0 - rho2 * (P + 1.0) / (P - 1.0))) /
-    ((P - 1.0) / rho + rho / (P - 1.0));
+  float squaredVal = 1.0 - rho2 * (P + 1.0) / (P - 1.0);
+  float sinc = (P - sqrt(squaredVal)) / ((P - 1.0) / rho + rho / (P - 1.0));
 
   // avoid creating NaNs (or clamping, in case of Android) in asin function
-  if (sinc > 1.0) {
+  // and avoid taking sqrt of negative number
+  if (sinc > 1.0 || squaredVal < 0.0) {
     lonLat = vec2(100, 100); // intentionally out of render range
     return;
   }
