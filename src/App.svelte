@@ -34,6 +34,12 @@
     };
   }
   updateParticleData();
+
+  // JS implementation of 100vh for mobile, see:
+  // https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html
+  window.addEventListener('resize', () => {
+    document.body.style.height = `${window.innerHeight}px`;
+  });
 </script>
 
 <Sidebar bind:openedMenu/>
