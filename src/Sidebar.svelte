@@ -53,31 +53,29 @@
   </IconButton>
   {/each}
 </nav>
-<div class="drawer-container">
-  <Drawer variant="modal" bind:open={drawerOpen}>
-    <Header>
-      <Title>Fluid Earth Viewer 2</Title>
-      <Subtitle>From the FEVer Team at Byrd</Subtitle>
-    </Header>
-    <Content>
-      <List>
-        <!--
-          SMUI:action also listens for space and enter keys, so that the span
-          element acts like a button with on:click
-        -->
-        {#each {length: 3} as _}
-        <Item on:SMUI:action={() => openMenu('Demo')}>
-          <Graphic>
-            <Chemistry32 />
-          </Graphic>
-          <Text>Demo Menu</Text>
-        </Item>
-        {/each}
-      </List>
-    </Content>
-  </Drawer>
-  <Scrim/>
-</div>
+<Drawer variant="modal" bind:open={drawerOpen} id="drawer">
+  <Header>
+    <Title>Fluid Earth Viewer 2</Title>
+    <Subtitle>From the FEVer Team at Byrd</Subtitle>
+  </Header>
+  <Content>
+    <List>
+      <!--
+        SMUI:action also listens for space and enter keys, so that the span
+        element acts like a button with on:click
+      -->
+      {#each {length: 3} as _}
+      <Item on:SMUI:action={() => openMenu('Demo')}>
+        <Graphic>
+          <Chemistry32 />
+        </Graphic>
+        <Text>Demo Menu</Text>
+      </Item>
+      {/each}
+    </List>
+  </Content>
+</Drawer>
+<Scrim/>
 
 <style>
   nav {
@@ -100,7 +98,7 @@
     margin: 0.5em 0;
   }
 
-  :global(div.drawer-container > *) {
+  :global(#drawer > *) {
     user-select: none;
   }
 
