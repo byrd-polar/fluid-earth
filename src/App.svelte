@@ -43,7 +43,7 @@
 </script>
 
 <Sidebar bind:openedMenu/>
-<Menu bind:openedMenu>
+<Menu bind:openedMenu menuName="Demo">
   <Demo
     bind:projection
     bind:griddedData
@@ -74,6 +74,7 @@
   :global(body) {
     display: flex;
     flex-direction: row;
+    position: relative;
   }
 
   main {

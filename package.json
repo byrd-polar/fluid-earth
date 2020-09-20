@@ -27,6 +27,7 @@
     "@smui/drawer": "^1.0.0",
     "@smui/icon-button": "^1.0.0",
     "@smui/list": "^1.0.0",
+    "@smui/top-app-bar": "^1.0.0",
     "carbon-icons-svelte": "^10.17.0",
     "d3-scale-chromatic": "^2.0.0",
     "interactjs": "^1.9.22",
