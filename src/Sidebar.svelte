@@ -61,19 +61,22 @@
     <Menu32 />
   </IconButton>
   <IconButton
-    class="rail-btn {openedMenu === 'Demo Menu 1' ? 'selected' : ''}"
+    class="rail-btn"
+    data-selected={openedMenu === 'Demo Menu 1'}
     on:click={() => toggleMenu('Demo Menu 1')}
   >
     <Globe32 />
   </IconButton>
   <IconButton
-    class="rail-btn {openedMenu === 'Demo Menu 2' ? 'selected' : ''}"
+    class="rail-btn"
+    data-selected={openedMenu === 'Demo Menu 2'}
     on:click={() => toggleMenu('Demo Menu 2')}
   >
     <Grid32 />
   </IconButton>
   <IconButton
-    class="rail-btn {openedMenu === 'Demo Menu 3' ? 'selected' : ''}"
+    class="rail-btn"
+    data-selected={openedMenu === 'Demo Menu 3'}
     on:click={() => toggleMenu('Demo Menu 3')}
   >
     <ColorPalette32 />
@@ -134,7 +137,7 @@
     margin: 0.5em 0;
   }
 
-  :global(nav#rail .rail-btn.selected svg) {
+  :global(nav#rail .rail-btn[data-selected=true] svg) {
     fill: #00BFA5;
   }
 
