@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import IconButton from '@smui/icon-button';
   import Drawer, {
     Content,
@@ -43,10 +44,20 @@
       openMenu(menu);
     }
   }
+
+  onMount(() => {
+    let drawer = document.querySelector('#drawer');
+    drawer.addEventListener('transitionend', () => {
+      if (openedMenu !== null) {
+        document.querySelector('#open-drawer-btn').blur();
+        console.log('TODO: set focus on the just-opened menu');
+      }
+    });
+  });
 </script>
 
 <nav id="rail">
-  <IconButton class="rail-btn" on:click={toggleDrawer}>
+  <IconButton class="rail-btn" on:click={toggleDrawer} id="open-drawer-btn">
     <Menu32 />
   </IconButton>
   <IconButton
