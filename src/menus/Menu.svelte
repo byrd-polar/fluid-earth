@@ -5,9 +5,17 @@
 
   export let openedMenu;
   export let menuName;
+
+  // avoid animating menu open/close when there is already a menu open
+  let previousOpenedMenu = null;
+  let noAnimate;
+  $: {
+    noAnimate = (previousOpenedMenu !== null && openedMenu !== null);
+    previousOpenedMenu = openedMenu;
+  }
 </script>
 
-<aside class:open={openedMenu === menuName}>
+<aside class:open={openedMenu === menuName} class:no-animate={noAnimate}>
   <TopAppBar variant="static" color="secondary">
     <Row>
       <Section>
@@ -39,6 +47,10 @@
     visibility: visible;
     margin-left: 0;
     transition: margin-left 0.3s ease 0s, visibility 0s linear 0s;
+  }
+
+  aside.no-animate {
+    transition: none;
   }
 
   div {
