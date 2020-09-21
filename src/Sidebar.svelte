@@ -45,7 +45,7 @@
   }
 </script>
 
-<nav id="rail" bind:this={rail}>
+<nav id="rail">
   <IconButton class="rail-btn" on:click={toggleDrawer}>
     <Menu32 />
   </IconButton>
