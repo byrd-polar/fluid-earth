@@ -45,17 +45,26 @@
   }
 </script>
 
-<nav id="rail">
+<nav id="rail" bind:this={rail}>
   <IconButton class="rail-btn" on:click={toggleDrawer}>
     <Menu32 />
   </IconButton>
-  <IconButton class="rail-btn" on:click={() => toggleMenu('Demo Menu 1')}>
+  <IconButton
+    class="rail-btn {openedMenu === 'Demo Menu 1' ? 'selected' : ''}"
+    on:click={() => toggleMenu('Demo Menu 1')}
+  >
     <Globe32 />
   </IconButton>
-  <IconButton class="rail-btn" on:click={() => toggleMenu('Demo Menu 2')}>
+  <IconButton
+    class="rail-btn {openedMenu === 'Demo Menu 2' ? 'selected' : ''}"
+    on:click={() => toggleMenu('Demo Menu 2')}
+  >
     <Grid32 />
   </IconButton>
-  <IconButton class="rail-btn" on:click={() => toggleMenu('Demo Menu 3')}>
+  <IconButton
+    class="rail-btn {openedMenu === 'Demo Menu 3' ? 'selected' : ''}"
+    on:click={() => toggleMenu('Demo Menu 3')}
+  >
     <ColorPalette32 />
   </IconButton>
 </nav>
@@ -112,6 +121,10 @@
 
   :global(.rail-btn) {
     margin: 0.5em 0;
+  }
+
+  :global(nav#rail .rail-btn.selected svg) {
+    fill: #00BFA5;
   }
 
   :global(#drawer > *) {
