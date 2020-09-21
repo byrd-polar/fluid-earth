@@ -17,7 +17,9 @@
   // not using { Icon } import syntax for significantly faster build times, as
   // recommended in the carbon-icons-svelte README
   import Menu32 from "carbon-icons-svelte/lib/Menu32";
-  import Chemistry32 from "carbon-icons-svelte/lib/Chemistry32";
+  import Globe32 from "carbon-icons-svelte/lib/Globe32";
+  import Grid32 from "carbon-icons-svelte/lib/Grid32";
+  import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
 
   export let openedMenu;
   let drawerOpen = false;
@@ -47,11 +49,15 @@
   <IconButton class="rail-btn" on:click={toggleDrawer}>
     <Menu32 />
   </IconButton>
-  {#each {length: 3} as _}
-  <IconButton class="rail-btn" on:click={() => toggleMenu('Demo')}>
-    <Chemistry32 />
+  <IconButton class="rail-btn" on:click={() => toggleMenu('Demo Menu 1')}>
+    <Globe32 />
   </IconButton>
-  {/each}
+  <IconButton class="rail-btn" on:click={() => toggleMenu('Demo Menu 2')}>
+    <Grid32 />
+  </IconButton>
+  <IconButton class="rail-btn" on:click={() => toggleMenu('Demo Menu 3')}>
+    <ColorPalette32 />
+  </IconButton>
 </nav>
 <Drawer variant="modal" bind:open={drawerOpen} id="drawer">
   <Header>
@@ -64,14 +70,24 @@
         SMUI:action also listens for space and enter keys, so that the span
         element acts like a button with on:click
       -->
-      {#each {length: 3} as _}
-      <Item on:SMUI:action={() => openMenu('Demo')}>
+      <Item on:SMUI:action={() => openMenu('Demo Menu 1')}>
         <Graphic>
-          <Chemistry32 />
+          <Globe32 />
         </Graphic>
-        <Text>Demo Menu</Text>
+        <Text>Demo Menu 1</Text>
       </Item>
-      {/each}
+      <Item on:SMUI:action={() => openMenu('Demo Menu 2')}>
+        <Graphic>
+          <Grid32 />
+        </Graphic>
+        <Text>Demo Menu 2</Text>
+      </Item>
+      <Item on:SMUI:action={() => openMenu('Demo Menu 3')}>
+        <Graphic>
+          <ColorPalette32 />
+        </Graphic>
+        <Text>Demo Menu 3</Text>
+      </Item>
     </List>
   </Content>
 </Drawer>

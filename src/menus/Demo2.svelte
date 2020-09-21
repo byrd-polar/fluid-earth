@@ -1,10 +1,5 @@
 <script>
-  import colormaps from '../map/colormaps/';
-  import projections from '../map/projections/';
-
-  export let projection;
   export let griddedData;
-  export let griddedColormap;
   export let griddedDomain;
 
   let datasets = [
@@ -39,24 +34,10 @@
   }
 </script>
 
-<label>Choose a map projection:
-  <select bind:value={projection} name="projections">
-    {#each Object.values(projections) as projection}
-      <option value={projection}>{projection.name}</option>
-    {/each}
-  </select>
-</label>
 <label>Choose a dataset:
   <select bind:value={dataset} name="colormaps">
     {#each datasets as dataset}
       <option value={dataset}>{dataset.name}</option>
-    {/each}
-  </select>
-</label>
-<label>Choose a colormap:
-  <select bind:value={griddedColormap} name="colormaps">
-    {#each Object.values(colormaps) as colormap}
-      <option value={colormap}>{colormap.name}</option>
     {/each}
   </select>
 </label>
