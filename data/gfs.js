@@ -20,6 +20,9 @@ export async function gfs() {
   // still processing
   hour = (hour - 6 + 24) % 24;
   hour = hour.toString().padStart(2, '0');
+  if (hour === '18') {
+    day = (day - 1).toString().padStart(2, '0');
+  }
 
   const dataURL = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/' +
     `gfs.${year}${month}${day}/${hour}/gfs.t${hour}z.pgrb2.0p25.f000`;
