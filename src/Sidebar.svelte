@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import IconButton from '@smui/icon-button';
   import Drawer, {
     Content,
@@ -32,9 +32,11 @@
     }
   }
 
-  function openMenu(menu) {
+  async function openMenu(menu) {
     drawerOpen = false;
     openedMenu = menu;
+    await tick();
+    document.querySelector('aside.open > div').focus();
   }
 
   function toggleMenu(menu) {
@@ -49,15 +51,16 @@
     let drawer = document.querySelector('#drawer');
     drawer.addEventListener('transitionend', () => {
       if (openedMenu !== null) {
-        document.querySelector('#open-drawer-btn').blur();
-        console.log('TODO: set focus on the just-opened menu');
+        // needed again here because Material Design focuses back on the button
+        // that opened the drawer by default
+        document.querySelector('aside.open > div').focus();
       }
     });
   });
 </script>
 
 <nav id="rail">
-  <IconButton class="rail-btn" on:click={toggleDrawer} id="open-drawer-btn">
+  <IconButton class="rail-btn" on:click={toggleDrawer}>
     <Menu32 />
   </IconButton>
   <IconButton

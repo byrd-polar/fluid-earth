@@ -13,20 +13,26 @@
     noAnimate = (previousOpenedMenu !== null && openedMenu !== null);
     previousOpenedMenu = openedMenu;
   }
+
+  function closeMenu() {
+    // foucs on the rail button that corresonds to this menu
+    document.querySelector('.rail-btn[data-selected=true]').focus()
+    openedMenu = null;
+  }
 </script>
 
 <aside class:open={openedMenu === menuName} class:no-animate={noAnimate}>
   <TopAppBar variant="static" color="secondary">
     <Row>
       <Section>
-        <IconButton on:click={() => openedMenu = null}>
+        <IconButton on:click={closeMenu}>
           <ArrowLeft24 />
         </IconButton>
         <Title>{menuName}</Title>
       </Section>
     </Row>
   </TopAppBar>
-  <div>
+  <div tabindex="0">
     <slot></slot>
   </div>
 </aside>
