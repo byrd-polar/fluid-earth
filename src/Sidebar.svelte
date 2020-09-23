@@ -57,7 +57,7 @@
   });
 
   // fix an issue with tabindex in list in drawer by setting all to -1 when
-  // drawer closes (then some MDC code will set the first one to 0)
+  // drawer closes (then some Material Design code will set the first one to 0)
   $: if (!drawerOpen) {
     document.querySelectorAll('aside.mdc-drawer span.mdc-list-item')
             .forEach(e => e.setAttribute('tabindex', '-1'));
@@ -99,7 +99,7 @@
     <List>
       <!--
         SMUI:action also listens for space and enter keys, so that the span
-        element acts like a button with on:click
+        element in <Item> acts like a button with on:click
       -->
       <Item on:SMUI:action={() => openMenu('Demo Menu 1')}>
         <Graphic>
@@ -146,7 +146,7 @@
   }
 
   :global(nav#rail .rail-btn[data-selected=true] svg) {
-    fill: #00BFA5;
+    fill: #00BFA5; /* color for selected rail button, should match theme */
   }
 
   :global(#drawer > *) {
