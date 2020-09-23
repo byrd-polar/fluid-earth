@@ -36,7 +36,7 @@
     drawerOpen = false;
     openedMenu = menu;
     await tick();
-    document.querySelector('aside.open > div').focus();
+    document.querySelector('aside.open button').focus();
   }
 
   function toggleMenu(menu) {
@@ -53,7 +53,7 @@
       if (openedMenu !== null) {
         // needed again here because Material Design focuses back on the button
         // that opened the drawer by default
-        document.querySelector('aside.open > div').focus();
+        document.querySelector('aside.open button').focus();
       }
     });
   });

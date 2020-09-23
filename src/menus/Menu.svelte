@@ -32,7 +32,7 @@
       </Section>
     </Row>
   </TopAppBar>
-  <div tabindex="0">
+  <div>
     <slot></slot>
   </div>
 </aside>
