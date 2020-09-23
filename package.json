@@ -23,6 +23,7 @@
     "rollup-plugin-postcss": "^3.1.8",
     "rollup-plugin-svelte": "^5.0.3",
     "rollup-plugin-terser": "^7.0.2",
+    "sass": "^1.26.11",
     "svelte": "^3.25.1"
   },
   "dependencies": {
@@ -33,7 +34,6 @@
     "carbon-icons-svelte": "^10.17.0",
     "d3-scale-chromatic": "^2.0.0",
     "interactjs": "^1.9.22",
-    "sass": "^1.26.11",
     "sirv-cli": "^0.4.4",
     "topojson-client": "^3.1.0",
     "twgl.js": "^4.16.1"
