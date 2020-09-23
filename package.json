@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "rollup -c",
-    "data": "node data",
+    "data": "node ./data/index.js",
     "dev": "rollup -c -w",
     "start": "sirv public --host",
     "postinstall": "patch-package"
