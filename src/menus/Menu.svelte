@@ -79,16 +79,24 @@
       margin-left: auto;
 
       height: 100%;
-      margin-top: 100vh;
-      transition: margin-top 0.3s ease 0s, visibility 0s linear 0.3s;
+      opacity: 0;
+      transform: translateY(10%);
+      transition:
+        opacity 0.3s ease 0s,
+        transform 0.3s ease 0s,
+        visibility 0s linear 0.3s;
 
       position: absolute;
       z-index: 2;
     }
 
     aside.open {
-      margin-top: 0;
-      transition: margin-top 0.3s ease 0s, visibility 0s linear 0s;
+      opacity: 1;
+      transform: translateY(0%);
+      transition:
+        opacity 0.3s ease 0s,
+        transform 0.3s ease 0s,
+        visibility 0s linear 0s;
     }
   }
 </style>
