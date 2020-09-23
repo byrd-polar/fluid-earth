@@ -25,11 +25,9 @@
   export let openedMenu;
   let drawerOpen = false;
 
-  function toggleDrawer() {
-    drawerOpen = !drawerOpen;
-    if (drawerOpen) {
-      openedMenu = null;
-    }
+  function openDrawer() {
+    openedMenu = null;
+    drawerOpen = true;
   }
 
   async function openMenu(menu) {
@@ -57,10 +55,17 @@
       }
     });
   });
+
+  // fix an issue with tabindex in list in drawer by setting all to -1 when
+  // drawer closes (then some MDC code will set the first one to 0)
+  $: if (!drawerOpen) {
+    document.querySelectorAll('aside.mdc-drawer span.mdc-list-item')
+            .forEach(e => e.setAttribute('tabindex', '-1'));
+  }
 </script>
 
 <nav id="rail">
-  <IconButton class="rail-btn" on:click={toggleDrawer}>
+  <IconButton class="rail-btn" on:click={openDrawer}>
     <Menu32 />
   </IconButton>
   <IconButton
