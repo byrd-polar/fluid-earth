@@ -22,7 +22,7 @@
 </script>
 
 <aside class:open={openedMenu === menuName} class:no-animate={noAnimate}>
-  <TopAppBar variant="static" color="secondary">
+  <TopAppBar variant="static">
     <Row>
       <Section>
         <IconButton on:click={closeMenu}>
