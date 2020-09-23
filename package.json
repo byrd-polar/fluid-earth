@@ -6,7 +6,8 @@
     "build": "rollup -c",
     "data": "node data",
     "dev": "rollup -c -w",
-    "start": "sirv public --host"
+    "start": "sirv public --host",
+    "postinstall": "patch-package"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^12.0.0",
@@ -15,6 +16,7 @@
     "fx": "^19.0.1",
     "got": "^11.7.0",
     "mapshaper": "^0.5.21",
+    "patch-package": "^6.2.2",
     "rollup": "^2.27.1",
     "rollup-plugin-glslify": "^1.2.0",
     "rollup-plugin-livereload": "^1.0.0",
