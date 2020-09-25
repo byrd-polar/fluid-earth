@@ -34,6 +34,7 @@ export default {
     postcss({
       extract: true,
       minimize: true,
+      sourceMap: true,
       use: [
         ['sass', {
           includePaths: [
