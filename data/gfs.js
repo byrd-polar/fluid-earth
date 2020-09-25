@@ -1,7 +1,7 @@
 import { download, OUTPUT_DIR, exit } from './index.js';
 import { spawnSync } from 'child_process';
 import path from 'path';
-import { readFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises';
 
 import { promisify } from 'util';
 
@@ -36,6 +36,11 @@ export async function gfs() {
   await saveGFS(dataURL, index, 'TMP', 'surface', 'gfs-temperature.f32');
   await saveGFS(dataURL, index, 'UGRD', '10 m above ground', 'gfs-u-wind.f32');
   await saveGFS(dataURL, index, 'VGRD', '10 m above ground', 'gfs-v-wind.f32');
+  await calculateAndSaveWindSpeed(
+    path.join(OUTPUT_DIR, 'gfs-wind-speed.f32'),
+    path.join(OUTPUT_DIR, 'gfs-u-wind.f32'),
+    path.join(OUTPUT_DIR, 'gfs-v-wind.f32'),
+  );
 }
 
 // converts part of a Grib file from GFS to f32 format
@@ -56,6 +61,21 @@ async function saveGFS(url, index, parameter, level, filename) {
       `Could not run wgrib2, skipping...\n=> ${wgrib2.stderr}\n`,
     );
   }
+}
+
+async function calculateAndSaveWindSpeed(outputFile, uFile, vFile) {
+  let uBuffer = await readFile(uFile);
+  let vBuffer = await readFile(vFile);
+  let uVelocities = new Float32Array(uBuffer.buffer);
+  let vVelocities = new Float32Array(vBuffer.buffer);
+
+  let speeds = new Float32Array(uVelocities.length);
+  for (let i = 0; i < speeds.length; i++) {
+    speeds[i] = Math.sqrt(uVelocities[i]**2 + vVelocities[i]**2);
+  }
+
+  console.log(`Generating GFS data...\n${uFile} + ${vFile}\n=> ${outputFile}\n`);
+  writeFile(outputFile, Buffer.from(speeds.buffer));
 }
 
 // print the parsed index file to make sense of this function

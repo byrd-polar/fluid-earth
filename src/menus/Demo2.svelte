@@ -11,12 +11,17 @@
     {
       name: 'u-wind velocity',
       path: '/data/gfs-u-wind.f32',
-      domain: [-30, 30],
+      domain: [-35, 35],
     },
     {
       name: 'v-wind velocity',
       path: '/data/gfs-v-wind.f32',
-      domain: [-30, 30],
+      domain: [-35, 35],
+    },
+    {
+      name: 'wind speed',
+      path: '/data/gfs-wind-speed.f32',
+      domain: [0, 35],
     },
   ];
   let dataset = datasets[0];
