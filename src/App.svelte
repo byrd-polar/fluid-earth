@@ -1,9 +1,9 @@
 <script>
   import Sidebar from './Sidebar.svelte';
   import Menu from './menus/Menu.svelte';
-  import Demo1 from './menus/Demo1.svelte';
-  import Demo2 from './menus/Demo2.svelte';
-  import Demo3 from './menus/Demo3.svelte';
+  import MapProjections from './menus/MapProjections.svelte';
+  import GriddedDatasets from './menus/GriddedDatasets.svelte';
+  import Colormaps from './menus/Colormaps.svelte';
 
   import Map from './map/Map.svelte';
   import Controls from './Controls.svelte';
@@ -45,19 +45,19 @@
 </script>
 
 <Sidebar bind:openedMenu/>
-<Menu bind:openedMenu menuName="Demo Menu 1">
-  <Demo1
+<Menu bind:openedMenu menuName="Map Projections">
+  <MapProjections
     bind:projection
   />
 </Menu>
-<Menu bind:openedMenu menuName="Demo Menu 2">
-  <Demo2
+<Menu bind:openedMenu menuName="Gridded Datasets">
+  <GriddedDatasets
     bind:griddedData
     bind:griddedDomain
   />
 </Menu>
-<Menu bind:openedMenu menuName="Demo Menu 3">
-  <Demo3
+<Menu bind:openedMenu menuName="Colormaps">
+  <Colormaps
     bind:griddedColormap
   />
 </Menu>

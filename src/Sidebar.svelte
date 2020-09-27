@@ -71,22 +71,22 @@
   </IconButton>
   <IconButton
     class="rail-btn"
-    data-selected={openedMenu === 'Demo Menu 1'}
-    on:click={() => toggleMenu('Demo Menu 1')}
+    data-selected={openedMenu === 'Map Projections'}
+    on:click={() => toggleMenu('Map Projections')}
   >
     <Globe32 />
   </IconButton>
   <IconButton
     class="rail-btn"
-    data-selected={openedMenu === 'Demo Menu 2'}
-    on:click={() => toggleMenu('Demo Menu 2')}
+    data-selected={openedMenu === 'Gridded Datasets'}
+    on:click={() => toggleMenu('Gridded Datasets')}
   >
     <Grid32 />
   </IconButton>
   <IconButton
     class="rail-btn"
-    data-selected={openedMenu === 'Demo Menu 3'}
-    on:click={() => toggleMenu('Demo Menu 3')}
+    data-selected={openedMenu === 'Colormaps'}
+    on:click={() => toggleMenu('Colormaps')}
   >
     <ColorPalette32 />
   </IconButton>
@@ -108,23 +108,23 @@
         </Graphic>
         <Text>Return to map</Text>
       </Item>
-      <Item on:SMUI:action={() => openMenu('Demo Menu 1')}>
+      <Item on:SMUI:action={() => openMenu('Map Projections')}>
         <Graphic>
           <Globe32 />
         </Graphic>
-        <Text>Demo Menu 1</Text>
+        <Text>Map Projections</Text>
       </Item>
-      <Item on:SMUI:action={() => openMenu('Demo Menu 2')}>
+      <Item on:SMUI:action={() => openMenu('Gridded Datasets')}>
         <Graphic>
           <Grid32 />
         </Graphic>
-        <Text>Demo Menu 2</Text>
+        <Text>Gridded Datasets</Text>
       </Item>
-      <Item on:SMUI:action={() => openMenu('Demo Menu 3')}>
+      <Item on:SMUI:action={() => openMenu('Colormaps')}>
         <Graphic>
           <ColorPalette32 />
         </Graphic>
-        <Text>Demo Menu 3</Text>
+        <Text>Colormaps</Text>
       </Item>
     </List>
   </Content>
