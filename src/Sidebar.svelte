@@ -18,6 +18,7 @@
   // not using { Icon } import syntax for significantly faster build times, as
   // recommended in the carbon-icons-svelte README
   import Menu32 from "carbon-icons-svelte/lib/Menu32";
+  import ArrowLeft32 from "carbon-icons-svelte/lib/ArrowLeft32";
   import Globe32 from "carbon-icons-svelte/lib/Globe32";
   import Grid32 from "carbon-icons-svelte/lib/Grid32";
   import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
@@ -101,6 +102,12 @@
         SMUI:action also listens for space and enter keys, so that the span
         element in <Item> acts like a button with on:click
       -->
+      <Item on:SMUI:action={() => drawerOpen = false}>
+        <Graphic>
+          <ArrowLeft32 />
+        </Graphic>
+        <Text>Return to map</Text>
+      </Item>
       <Item on:SMUI:action={() => openMenu('Demo Menu 1')}>
         <Graphic>
           <Globe32 />
