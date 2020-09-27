@@ -11,6 +11,10 @@
     {/each}
   </select>
 </label>
+<h2>Note</h2>
+<p>These demo menus exist only to illustrate the process of binding
+configuration variables between various menus and the map.</p>
+<p>Their content and the variables they configure will change in the future.</p>
 
 <style>
   label {
