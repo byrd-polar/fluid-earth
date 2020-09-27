@@ -1,6 +1,6 @@
 <script>
   import IconButton from '@smui/icon-button';
-  import ArrowLeft24 from "carbon-icons-svelte/lib/ArrowLeft24";
+  import ArrowLeft32 from "carbon-icons-svelte/lib/ArrowLeft32";
   import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
 
   export let openedMenu;
@@ -26,7 +26,7 @@
     <Row>
       <Section>
         <IconButton on:click={closeMenu}>
-          <ArrowLeft24 />
+          <ArrowLeft32 />
         </IconButton>
         <Title>{menuName}</Title>
       </Section>
