@@ -12,6 +12,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^12.0.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
+    "@rollup/plugin-replace": "^2.3.3",
     "csv-parse": "^4.12.0",
     "fx": "^19.0.1",
     "got": "^11.7.0",
@@ -35,6 +36,7 @@
     "d3-scale-chromatic": "^2.0.0",
     "interactjs": "^1.9.22",
     "sirv-cli": "^0.4.4",
+    "tippy.js": "^6.2.6",
     "topojson-client": "^3.1.0",
     "twgl.js": "^4.16.1"
   },

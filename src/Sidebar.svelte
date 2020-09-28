@@ -1,4 +1,5 @@
 <script>
+  import { tooltip, tips } from './tooltip.js';
   import { onMount, tick } from 'svelte';
   import IconButton from '@smui/icon-button';
   import Drawer, {
@@ -55,6 +56,18 @@
         document.querySelector('aside.open button').focus({preventScroll:true});
       }
     });
+
+    // hide tooltips on small screens / mobile
+    let mediaQuery = window.matchMedia('(max-width: 36rem)');
+    function handleResize() {
+      if (mediaQuery.matches) {
+        tips.forEach(t => t.disable());
+      } else {
+        tips.forEach(t => t.enable());
+      }
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
   });
 
   // fix an issue with tabindex in list in drawer by setting all to -1 when
@@ -66,13 +79,18 @@
 </script>
 
 <nav id="rail">
-  <IconButton class="rail-btn" on:click={openDrawer}>
+  <IconButton
+    class="rail-btn"
+    on:click={openDrawer}
+    use={[[tooltip, {content: 'Menus'}]]}
+  >
     <Menu32 />
   </IconButton>
   <IconButton
     class="rail-btn"
     data-selected={openedMenu === 'Map Projections'}
     on:click={() => toggleMenu('Map Projections')}
+    use={[[tooltip, {content: 'Map Projections'}]]}
   >
     <Globe32 />
   </IconButton>
@@ -80,6 +98,7 @@
     class="rail-btn"
     data-selected={openedMenu === 'Gridded Datasets'}
     on:click={() => toggleMenu('Gridded Datasets')}
+    use={[[tooltip, {content: 'Gridded Datasets'}]]}
   >
     <Grid32 />
   </IconButton>
@@ -87,6 +106,7 @@
     class="rail-btn"
     data-selected={openedMenu === 'Colormaps'}
     on:click={() => toggleMenu('Colormaps')}
+    use={[[tooltip, {content: 'Colormaps'}]]}
   >
     <ColorPalette32 />
   </IconButton>
@@ -154,6 +174,10 @@
 
   :global(nav#rail .rail-btn[data-selected=true] svg) {
     fill: #00BFA5; /* color for selected rail button, should match theme */
+  }
+
+  :global(#drawer) {
+    z-index: 10000; /* place above tooltip (z-index: 9999) when opening */
   }
 
   :global(#drawer > *) {
