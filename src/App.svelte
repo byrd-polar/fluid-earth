@@ -44,6 +44,11 @@
   });
 </script>
 
+<!--
+  Note: for the attributes/props in the components below, {variable} is
+  shorthand for variable={variable} and bind:variable is shorthand for
+  bind:variable={variable}
+-->
 <Sidebar bind:openedMenu/>
 <Menu bind:openedMenu menuName="Map Projections">
   <MapProjections
