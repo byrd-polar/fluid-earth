@@ -4,13 +4,18 @@
   export let projection;
 </script>
 
-<label>Choose a map projection:
-  <select bind:value={projection} name="projections">
-    {#each Object.values(projections) as projection}
-      <option value={projection}>{projection.name}</option>
-    {/each}
-  </select>
+<p>Choose a map projection:</p>
+{#each Object.values(projections) as p}
+<label>
+  <input
+    type="radio"
+    bind:group={projection}
+    value={p}
+  >
+  {p.name}
 </label>
+{/each}
+
 <h2>Note</h2>
 <p>These demo menus exist only to illustrate the process of binding
 configuration variables between various menus and the map.</p>
@@ -18,11 +23,11 @@ configuration variables between various menus and the map.</p>
 
 <style>
   label {
-    padding-top: 1em;
+    padding: 0.25em 0;
     display: block;
   }
 
-  select {
-    height: 2.5em;
+  label:hover {
+    background-color: rgba(1, 1, 1, 0.04);
   }
 </style>

@@ -4,13 +4,18 @@
   export let griddedColormap;
 </script>
 
-<label>Choose a colormap:
-  <select bind:value={griddedColormap} name="colormaps">
-    {#each Object.values(colormaps) as colormap}
-      <option value={colormap}>{colormap.name}</option>
-    {/each}
-  </select>
+<p>Choose a colormap:</p>
+{#each Object.values(colormaps) as c}
+<label>
+  <input
+    type="radio"
+    bind:group={griddedColormap}
+    value={c}
+  >
+  {c.name}
 </label>
+{/each}
+
 <h2>Note</h2>
 <p>These demo menus exist only to illustrate the process of binding
 configuration variables between various menus and the map.</p>
@@ -18,11 +23,11 @@ configuration variables between various menus and the map.</p>
 
 <style>
   label {
-    padding-top: 1em;
+    padding: 0.25em 0;
     display: block;
   }
 
-  select {
-    height: 2.5em;
+  label:hover {
+    background-color: rgba(1, 1, 1, 0.04);
   }
 </style>
