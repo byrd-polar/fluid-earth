@@ -25,6 +25,13 @@
   import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
 
   export let openedMenu;
+
+  const menus = [
+    { name: 'Map Projections', icon: Globe32 },
+    { name: 'Gridded Datasets', icon: Grid32 },
+    { name: 'Colormaps', icon: ColorPalette32 },
+  ];
+
   let drawerOpen = false;
 
   function openDrawer() {
@@ -86,30 +93,16 @@
   >
     <Menu32 />
   </IconButton>
-  <IconButton
-    class="rail-btn"
-    data-selected={openedMenu === 'Map Projections'}
-    on:click={() => toggleMenu('Map Projections')}
-    use={[[tooltip, {content: 'Map Projections'}]]}
-  >
-    <Globe32 />
-  </IconButton>
-  <IconButton
-    class="rail-btn"
-    data-selected={openedMenu === 'Gridded Datasets'}
-    on:click={() => toggleMenu('Gridded Datasets')}
-    use={[[tooltip, {content: 'Gridded Datasets'}]]}
-  >
-    <Grid32 />
-  </IconButton>
-  <IconButton
-    class="rail-btn"
-    data-selected={openedMenu === 'Colormaps'}
-    on:click={() => toggleMenu('Colormaps')}
-    use={[[tooltip, {content: 'Colormaps'}]]}
-  >
-    <ColorPalette32 />
-  </IconButton>
+  {#each menus as menu}
+    <IconButton
+      class="rail-btn"
+      data-selected={openedMenu === menu.name}
+      on:click={() => toggleMenu(menu.name)}
+      use={[[tooltip, {content: menu.name}]]}
+    >
+      <svelte:component this={menu.icon}/>
+    </IconButton>
+  {/each}
 </nav>
 <Drawer variant="modal" bind:open={drawerOpen} id="drawer">
   <Header>
@@ -128,24 +121,14 @@
         </Graphic>
         <Text>Return to map</Text>
       </Item>
-      <Item on:SMUI:action={() => openMenu('Map Projections')}>
-        <Graphic>
-          <Globe32 />
-        </Graphic>
-        <Text>Map Projections</Text>
-      </Item>
-      <Item on:SMUI:action={() => openMenu('Gridded Datasets')}>
-        <Graphic>
-          <Grid32 />
-        </Graphic>
-        <Text>Gridded Datasets</Text>
-      </Item>
-      <Item on:SMUI:action={() => openMenu('Colormaps')}>
-        <Graphic>
-          <ColorPalette32 />
-        </Graphic>
-        <Text>Colormaps</Text>
-      </Item>
+      {#each menus as menu}
+        <Item on:SMUI:action={() => openMenu(menu.name)}>
+          <Graphic>
+            <svelte:component this={menu.icon}/>
+          </Graphic>
+          <Text>{menu.name}</Text>
+        </Item>
+      {/each}
     </List>
   </Content>
 </Drawer>
