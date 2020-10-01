@@ -4,6 +4,7 @@
   import MapProjections from './menus/MapProjections.svelte';
   import GriddedDatasets from './menus/GriddedDatasets.svelte';
   import Colormaps from './menus/Colormaps.svelte';
+  import MapOptions from './menus/MapOptions.svelte';
 
   import Map from './map/Map.svelte';
   import Controls from './Controls.svelte';
@@ -65,6 +66,9 @@
   <Colormaps
     bind:griddedColormap
   />
+</Menu>
+<Menu bind:openedMenu menuName="Map Options" darkBackground="true">
+  <MapOptions/>
 </Menu>
 <main>
   <div class="layers">

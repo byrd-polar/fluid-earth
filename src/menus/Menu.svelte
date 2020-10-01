@@ -5,6 +5,7 @@
 
   export let openedMenu;
   export let menuName;
+  export let darkBackground = false;
 
   // avoid animating menu open/close when there is already a menu open
   let previousOpenedMenu = null;
@@ -21,7 +22,11 @@
   }
 </script>
 
-<aside class:open={openedMenu === menuName} class:no-animate={noAnimate}>
+<aside
+  class:open={openedMenu === menuName}
+  class:no-animate={noAnimate}
+  class:dark={darkBackground}
+>
   <TopAppBar variant="static">
     <Row>
       <Section>
@@ -57,6 +62,10 @@
 
   aside.no-animate {
     transition: none;
+  }
+
+  aside.dark {
+    background-color: #1d1d1d;
   }
 
   div {

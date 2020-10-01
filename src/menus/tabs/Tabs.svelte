@@ -1,0 +1,40 @@
+<script context="module">
+  import { onDestroy } from 'svelte';
+  import { writable } from 'svelte/store';
+
+  const tabs = [];
+  const panels = [];
+
+  export const selectedTab = writable(null);
+  export const selectedPanel = writable(null);
+  export function registerTab(tab) {
+    tabs.push(tab);
+    selectedTab.update(current => current || tab);
+
+    onDestroy(() => {
+      const i = tabs.indexOf(tab);
+      tabs.splice(i, 1);
+      selectedTab.update(current => current === tab ? (tabs[i] || tabs[tabs.length - 1]) : current);
+    });
+  };
+  export function selectTab (tab) {
+    const i = tabs.indexOf(tab);
+    selectedTab.set(tab);
+    selectedPanel.set(panels[i]);
+  };
+  export function registerPanel (panel) {
+    panels.push(panel);
+    selectedPanel.update(current => current || panel);
+
+    onDestroy(() => {
+      const i = panels.indexOf(panel);
+      panels.splice(i, 1);
+      selectedPanel.update(current => current === panel ? (panels[i] || panels[panels.length - 1]) : current);
+    });
+  };
+</script>
+
+
+<div class="tabs">
+  <slot></slot>
+</div>

@@ -23,6 +23,7 @@
   import Globe32 from "carbon-icons-svelte/lib/Globe32";
   import Grid32 from "carbon-icons-svelte/lib/Grid32";
   import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
+  import EarthFilled32 from "carbon-icons-svelte/lib/EarthFilled32";
 
   export let openedMenu;
 
@@ -30,6 +31,7 @@
     { name: 'Map Projections', icon: Globe32 },
     { name: 'Gridded Datasets', icon: Grid32 },
     { name: 'Colormaps', icon: ColorPalette32 },
+    { name: 'Map Options', icon: EarthFilled32 },
   ];
 
   let drawerOpen = false;
