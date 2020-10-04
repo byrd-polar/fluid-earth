@@ -93,10 +93,11 @@
       transition:
         opacity 0.3s ease 0s,
         transform 0.3s ease 0s,
-        visibility 0s linear 0.3s;
+        visibility 0s linear 0.3s,
+        z-index 0s linear 0.3s;
 
       position: absolute;
-      z-index: 2;
+      z-index: 0; /* ensure hidden menus are below Controls.svelte */
     }
 
     aside.open {
@@ -106,6 +107,7 @@
         opacity 0.3s ease 0s,
         transform 0.3s ease 0s,
         visibility 0s linear 0s;
+      z-index: 2;
     }
   }
 </style>
