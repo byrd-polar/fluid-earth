@@ -24,7 +24,7 @@
       domain: [0, 35],
     },
   ];
-  let dataset = datasets[0];
+  let dataset = datasets[3];
   $: dataset, updateData();
 
   async function updateData() {
