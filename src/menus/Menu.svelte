@@ -106,7 +106,8 @@
       transition:
         opacity 0.3s ease 0s,
         transform 0.3s ease 0s,
-        visibility 0s linear 0s;
+        visibility 0s linear 0s,
+        z-index 0s linear 0s;
       z-index: 2;
     }
   }
