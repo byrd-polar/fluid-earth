@@ -7,6 +7,7 @@
   import MapOptions from './menus/MapOptions.svelte';
 
   import Map from './map/Map.svelte';
+  import Legend from './Legend.svelte';
   import Controls from './Controls.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
@@ -80,6 +81,10 @@
       {griddedColormap}
       {griddedDomain}
       {particleData}
+    />
+    <Legend
+      {griddedColormap}
+      {griddedDomain}
     />
     <Controls
       bind:center
