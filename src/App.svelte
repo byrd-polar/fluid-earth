@@ -83,6 +83,7 @@
       {particleData}
     />
     <Legend
+      {griddedData}
       {griddedColormap}
       {griddedDomain}
     />

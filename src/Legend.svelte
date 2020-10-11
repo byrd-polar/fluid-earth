@@ -4,6 +4,7 @@
   import { scaleLinear } from 'd3-scale';
   import { onMount } from 'svelte';
 
+  export let griddedData = { description: 'Loading...' };
   export let griddedColormap;
   export let griddedDomain = [0, 0];
 
@@ -27,7 +28,10 @@
 </script>
 
 <div class="legend-wrapper">
-  <p>Hello there, I'm a color legend! (without units yet...)</p>
+  <p>
+    {griddedData.description}
+    {#if griddedData.units}({griddedData.units}){/if}
+  </p>
   <div
     class="legend"
     style="background: linear-gradient(to right, {cssLut});"
