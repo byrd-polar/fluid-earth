@@ -53,7 +53,8 @@
 
   p {
     color: white;
-    margin-bottom: 0.25em;
+    margin: 0;
+    padding-bottom: 0.125em;
   }
 
   div.legend {
@@ -64,7 +65,13 @@
     font-size: 0.875em;
     overflow: visible;
     color: white;
-    height: 3em;
+    height: 2em;
     margin-bottom: 2rem;
+  }
+
+  @media (max-width: 36rem) {
+    svg {
+      margin-bottom: 1rem;
+    }
   }
 </style>
