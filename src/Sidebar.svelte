@@ -180,6 +180,10 @@
 
     :global(.rail-btn) {
       margin: 0 0.5em;
+      /* multiple shadows used to increase intensity */
+      filter:
+        drop-shadow(0 0 0.125em black)
+        drop-shadow(0 0 0.25em rgba(0, 0, 0, 0.5));
     }
   }
 </style>

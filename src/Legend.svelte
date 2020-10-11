@@ -56,7 +56,6 @@
   }
 
   p {
-    color: white;
     margin: 0;
     padding-bottom: 0.125em;
   }
@@ -68,9 +67,17 @@
   svg {
     font-size: 0.875em;
     overflow: visible;
-    color: white;
     height: 2em;
     margin-bottom: 2rem;
+  }
+
+  p, svg {
+    color: white;
+    /* multiple comma-separated shadows used to increase intensity */
+    text-shadow:
+      0 0 0.25em black,
+      0 0 0.5em black,
+      0 0 1em black;
   }
 
   @media (max-width: 36rem) {
