@@ -28,10 +28,11 @@
 </script>
 
 <div class="legend-wrapper">
-  <p>
+  <h2 class="datetime">Monday, October 12th, 2020 — 2:00pm EDT</h2>
+  <h2 class="title">
     {griddedData.description}
     {#if griddedData.units}({griddedData.units}){/if}
-  </p>
+  </h2>
   <div
     class="legend"
     style="background: linear-gradient(to right, {cssLut});"
@@ -51,27 +52,12 @@
 
   div.legend-wrapper > * {
     max-width: 90%;
-    width: 30rem;
+    width: 36rem;
     z-index: 1;
   }
 
-  p {
-    margin: 0;
-    padding-bottom: 0.125em;
-  }
-
-  div.legend {
-    height: 2em;
-  }
-
-  svg {
-    font-size: 0.875em;
-    overflow: visible;
-    height: 2em;
-    margin-bottom: 2rem;
-  }
-
-  p, svg {
+  h2, svg {
+    font-size: 1rem;
     color: white;
     /* multiple comma-separated shadows used to increase intensity */
     text-shadow:
@@ -80,9 +66,39 @@
       0 0 1em black;
   }
 
+  h2.datetime {
+    text-align: center;
+    margin: 3.9vh 0 auto;
+  }
+
+  h2.title {
+    margin: 0;
+    padding-bottom: 0.125em;
+  }
+
+  div.legend {
+    height: 3.5vh;
+  }
+
+  svg {
+    font-size: 0.875rem;
+    overflow: visible;
+    height: 1.25rem;
+    margin-bottom: 3.9vh;
+  }
+
   @media (max-width: 36rem) {
+    h2.datetime {
+      /* height of nav rail plus the margin-bottom in the svg rule */
+      margin: calc(3.5em + 0.5rem) 0 auto;
+    }
+
+    div.legend {
+      height: 5vh;
+    }
+
     svg {
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
   }
 </style>
