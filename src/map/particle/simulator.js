@@ -119,6 +119,9 @@ export default class ParticleSimulator {
 
   // render particles with trails to the screen
   //
+  // size: any value > 0, diameter of particles in pixels at a zoom value of 1
+  // and a canvas (drawing buffer) height of 1080 pixels.
+  //
   // opacity: from 0 to 1, how opaque the particles initially are (will actually
   // be higher than this value if new position overlaps old position, which is
   // likely the case)
@@ -126,7 +129,7 @@ export default class ParticleSimulator {
   // fade: from 0 to 1, what proportion of the opacity from the previous
   // drawWithTrails draw call should be maintained as the background for this
   // draw call
-  drawWithTrails(sharedUniforms, opacity, fade) {
+  drawWithTrails(sharedUniforms, size, opacity, fade) {
     // first, draw previous background (slightly faded) to empty texture
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);
 
@@ -151,6 +154,7 @@ export default class ParticleSimulator {
     glDraw(this._gl, this._programs.draw, this._buffers.draw, {
       u_particlePositions: this._textures.simA,
       u_particleCountSqrt: Math.sqrt(this._count),
+      u_size: size,
       u_color: [1, 1, 1, opacity],
       ...sharedUniforms,
     }, this._gl.POINTS);

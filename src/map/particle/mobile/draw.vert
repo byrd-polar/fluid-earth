@@ -18,10 +18,13 @@ uniform sampler2D u_particleSpeeds;
 uniform float u_particleCountSqrt;
 
 uniform float u_canvasRatio;
+uniform float u_screenRatio;
 uniform float u_lon0;
 uniform float u_lat0;
 uniform float u_zoom;
 uniform int u_projection;
+
+uniform float u_size;
 
 varying float v_clip;
 varying float v_speed;
@@ -68,6 +71,6 @@ void main() {
   displayCoord = u_zoom * displayCoord / PI_2;
   displayCoord.x = displayCoord.x / u_canvasRatio;
 
-  gl_PointSize = pow(u_zoom, 0.8);
+  gl_PointSize = u_size * u_zoom * u_screenRatio;
   gl_Position = vec4(displayCoord, 0, 1);
 }

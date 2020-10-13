@@ -32,6 +32,7 @@
   export let particleLifetime = 1000; // milliseconds
   export let particleCount = 1e5;
   export let particleDisplay = {
+    size: 0.8,
     rate: 5e4,
     opacity: 0.1,
     fade: 0.96,
@@ -40,11 +41,13 @@
 
   let backgroundCanvas;
   let particleCanvas;
-  let canvasRatio;
+  let canvasRatio; // aspect ratio (width / height) of the canvas
+  let screenRatio; // ratio of canvas height to our reference height
 
   let sharedUniforms;
   $: sharedUniforms = {
     u_canvasRatio: canvasRatio,
+    u_screenRatio: screenRatio,
     u_lon0: center.longitude,
     u_lat0: center.latitude,
     u_zoom: zoom,
@@ -160,6 +163,7 @@
     if (particleDisplay.enabled) {
       particleSimulator.drawWithTrails(
         sharedUniforms,
+        particleDisplay.size,
         particleDisplay.opacity,
         particleDisplay.fade
       );
@@ -177,6 +181,14 @@
     if (resizeCanvasToBodySize(gl.canvas, ratio) || force) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
+
+      // We want our particles to be sized relative to the scale of the map,
+      // which by our design shrinks when we decrease the canvas height (see the
+      // draw.vert files). A height of 1080 pixels is chosen as reference for
+      // developer convenience, but this only really changes the units of the
+      // particleDisplay.size variable.
+      screenRatio = gl.canvas.height / 1080;
+
       backgroundNeedsRedraw = true;
     }
   }
