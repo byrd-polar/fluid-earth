@@ -5,6 +5,7 @@
   import GriddedDatasets from './menus/GriddedDatasets.svelte';
   import Colormaps from './menus/Colormaps.svelte';
   import MapOptions from './menus/MapOptions.svelte';
+  import ZoomSlider from './menus/ZoomSlider.svelte';
 
   import Map from './map/Map.svelte';
   import Legend from './Legend.svelte';
@@ -70,6 +71,11 @@
 </Menu>
 <Menu bind:openedMenu menuName="Map Options" darkBackground="true">
   <MapOptions/>
+</Menu>
+<Menu bind:openedMenu menuName="Zoom Slider">
+  <ZoomSlider
+    bind:zoom
+  />
 </Menu>
 <main>
   <div class="layers">

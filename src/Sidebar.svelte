@@ -24,6 +24,7 @@
   import Grid32 from "carbon-icons-svelte/lib/Grid32";
   import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
   import EarthFilled32 from "carbon-icons-svelte/lib/EarthFilled32";
+  import WatsonHealthFusionBlender32 from "carbon-icons-svelte/lib/WatsonHealthFusionBlender32";
 
   export let openedMenu;
 
@@ -32,6 +33,7 @@
     { name: 'Gridded Datasets', icon: Grid32 },
     { name: 'Colormaps', icon: ColorPalette32 },
     { name: 'Map Options', icon: EarthFilled32 },
+    { name: 'Zoom Slider', icon: WatsonHealthFusionBlender32 }
   ];
 
   let drawerOpen = false;
