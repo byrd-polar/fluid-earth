@@ -176,7 +176,6 @@
       flex-direction: row;
       background: transparent;
       position: absolute;
-      height: 3.5em;
       width: 100%;
     }
 

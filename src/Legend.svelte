@@ -89,8 +89,9 @@
 
   @media (max-width: 36rem) {
     h2.datetime {
-      /* height of nav rail plus the margin-bottom in the svg rule */
-      margin: calc(3.5em + 0.5rem) 0 auto;
+      /* height of nav rail (top plus bottom padding plus mdc-icon-button
+       * height) plus the margin-bottom in the svg rule */
+      margin: calc(1em + 48px + 0.5rem) 0 auto;
     }
 
     div.legend {
