@@ -30,7 +30,7 @@
   class:no-animate={noAnimate}
   class:dark={darkBackground}
 >
-  <TopAppBar variant="static">
+  <TopAppBar variant="static" class="top-app-drawer">
     <Row>
       <Section>
         <IconButton on:click={closeMenu}>
@@ -54,7 +54,11 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-    z-index: 0;
+    z-index: 1;
+    box-shadow:
+      2px 0 1px -1px rgba(0,0,0,.2),
+      1px 0 1px  0   rgba(0,0,0,.14),
+      1px 0 3px  0   rgba(0,0,0,.12);
   }
 
   aside.open {
@@ -75,6 +79,13 @@
     padding: 1em;
     flex: 1;
     overflow: auto;
+  }
+
+  :global(.top-app-drawer) {
+    box-shadow:
+      0 2px  4px -1px rgba(0,0,0,.2),
+      0 4px  5px  0   rgba(0,0,0,.14),
+      0 1px 10px  0   rgba(0,0,0,.12);
   }
 
   @media (max-width: 36rem) {

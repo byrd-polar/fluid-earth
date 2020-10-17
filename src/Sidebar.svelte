@@ -150,6 +150,10 @@
     z-index: 2;
     background: #202124;
     overflow: auto;
+    box-shadow:
+      2px 0 1px -1px rgba(0,0,0,.2),
+      1px 0 1px  0   rgba(0,0,0,.14),
+      1px 0 3px  0   rgba(0,0,0,.12);
   }
 
   nav {
@@ -187,6 +191,7 @@
       background: transparent;
       position: absolute;
       width: 100%;
+      box-shadow: none;
     }
 
     nav {
