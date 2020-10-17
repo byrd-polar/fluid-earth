@@ -65,6 +65,9 @@
         // needed again here because Material Design focuses back on the button
         // that opened the drawer by default
         document.querySelector('aside.open button').focus({preventScroll:true});
+      } else {
+        // hide the Menu tooltip when just closing the menu
+        tips.forEach(t => t.hide());
       }
     });
 

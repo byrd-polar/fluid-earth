@@ -2,6 +2,7 @@
   import IconButton from '@smui/icon-button';
   import ArrowLeft32 from "carbon-icons-svelte/lib/ArrowLeft32";
   import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
+  import { tips } from '../tooltip.js';
 
   export let openedMenu;
   export let menuName;
@@ -19,6 +20,8 @@
     // foucs on the rail button that corresonds to this menu
     document.querySelector('.rail-btn[data-selected=true]').focus()
     openedMenu = null;
+    // hide the tooltip for the just-closed menu
+    tips.forEach(t => t.hide());
   }
 </script>
 
