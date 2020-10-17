@@ -89,6 +89,7 @@
   }
 </script>
 
+<div class="rail-overflow-wrapper">
 <nav id="rail">
   <IconButton
     class="rail-btn"
@@ -108,6 +109,7 @@
     </IconButton>
   {/each}
 </nav>
+</div>
 <Drawer variant="modal" bind:open={drawerOpen} id="drawer">
   <Header>
     <Title>Fluid Earth Viewer 2</Title>
@@ -139,9 +141,13 @@
 <Scrim/>
 
 <style>
-  nav {
-    background: #202124;
+  div.rail-overflow-wrapper {
     z-index: 2;
+    background: #202124;
+    overflow: auto;
+  }
+
+  nav {
     display: flex;
     flex-direction: column;
     padding: 0.5em;
@@ -172,11 +178,15 @@
   }
 
   @media (max-width: 36rem) {
-    nav {
-      flex-direction: row;
+    div.rail-overflow-wrapper {
       background: transparent;
       position: absolute;
       width: 100%;
+    }
+
+    nav {
+      flex-direction: row;
+      width: min-content;
     }
 
     :global(.rail-btn) {
