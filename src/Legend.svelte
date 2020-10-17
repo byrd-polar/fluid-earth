@@ -7,6 +7,7 @@
   export let griddedData = { description: 'Loading...' };
   export let griddedColormap;
   export let griddedDomain = [0, 0];
+  export let particleDisplay;
 
   let svgScale;
   let svgScaleWidth;
@@ -28,11 +29,15 @@
 </script>
 
 <div class="legend-wrapper">
-  <h2 class="datetime">Monday, October 12th, 2020 — 2:00pm EDT</h2>
-  <h2 class="title">
+  <span class="datetime">Monday, October 12th, 2020 — 2:00pm EDT</span>
+  <span class="streamlines">
+    Streamlines for wind at 10m above ground level, moving
+    {particleDisplay.rate.toLocaleString()} times faster than actual
+  </span>
+  <span class="gridded">
     {griddedData.description}
     {#if griddedData.units}({griddedData.units}){/if}
-  </h2>
+  </span>
   <div
     class="legend"
     style="background: linear-gradient(to right, {cssLut});"
@@ -56,7 +61,7 @@
     z-index: 1;
   }
 
-  h2, svg {
+  span, svg {
     font-size: 1rem;
     color: white;
     /* multiple comma-separated shadows used to increase intensity */
@@ -66,12 +71,24 @@
       0 0 1em black;
   }
 
-  h2.datetime {
-    text-align: center;
-    margin: 3.9vh 0 auto;
+  span {
+    font-weight: bold;
+    font-size: 0.875em;
   }
 
-  h2.title {
+  span.datetime {
+    text-align: center;
+    margin-top: 3.9vh;
+  }
+
+  span.streamlines {
+    font-weight: normal;
+    font-size: 0.75em;
+    text-align: center;
+    margin-bottom: auto;
+  }
+
+  span.gridded {
     margin: 0;
     padding-bottom: 0.125em;
   }
@@ -81,17 +98,17 @@
   }
 
   svg {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     overflow: visible;
     height: 1.25rem;
     margin-bottom: 3.9vh;
   }
 
   @media (max-width: 36rem) {
-    h2.datetime {
+    span.datetime {
       /* height of nav rail (top plus bottom padding plus mdc-icon-button
        * height) plus the margin-bottom in the svg rule */
-      margin: calc(1em + 48px + 0.5rem) 0 auto;
+      margin-top: calc(1em + 48px + 0.25rem);
     }
 
     div.legend {
@@ -99,7 +116,7 @@
     }
 
     svg {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
   }
 </style>

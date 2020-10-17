@@ -40,6 +40,14 @@
   }
   updateParticleData();
 
+  let particleDisplay = {
+    size: 0.8,
+    rate: 5e4,
+    opacity: 0.1,
+    fade: 0.96,
+    enabled: true,
+  };
+
   // JS implementation of 100vh for mobile, see:
   // https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html
   window.addEventListener('resize', () => {
@@ -92,6 +100,7 @@
       {griddedData}
       {griddedColormap}
       {griddedDomain}
+      {particleDisplay}
     />
     <Controls
       bind:center
