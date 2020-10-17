@@ -53,6 +53,8 @@
   function toggleMenu(menu) {
     if (openedMenu === menu) {
       openedMenu = null;
+      // hide the tooltip for the just-closed menu
+      tips.forEach(t => t.hide());
     } else {
       openMenu(menu);
     }
