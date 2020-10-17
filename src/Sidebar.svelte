@@ -171,7 +171,7 @@
   }
 
   :global(.rail-btn) {
-    margin: 0.5em 0;
+    margin: 0.75em 0;
   }
 
   :global(nav#rail .rail-btn[data-selected=true] svg) {
