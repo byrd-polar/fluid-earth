@@ -33,7 +33,7 @@
   <TopAppBar variant="static" class="top-app-drawer">
     <Row>
       <Section>
-        <IconButton on:click={closeMenu}>
+        <IconButton on:click={closeMenu} class="back-button">
           <ArrowLeft32 />
         </IconButton>
         <Title>{menuName}</Title>
@@ -86,6 +86,12 @@
       0 2px  4px -1px rgba(0,0,0,.2),
       0 4px  5px  0   rgba(0,0,0,.14),
       0 1px 10px  0   rgba(0,0,0,.12);
+  }
+
+  :global(.back-button) {
+    height: 42px;
+    width: 42px;
+    padding: 9px;
   }
 
   @media (max-width: 36rem) {
