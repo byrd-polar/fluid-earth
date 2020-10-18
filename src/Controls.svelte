@@ -46,7 +46,7 @@
   });
 
   function handleWheel(e) {
-    let z = zoom - 0.01 * e.deltaY;
+    let z = zoom - 0.25 * Math.sign(e.deltaY);
     zoom = clamp(z, MIN_ZOOM, MAX_ZOOM);
   }
 
