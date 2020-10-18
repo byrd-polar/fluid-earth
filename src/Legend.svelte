@@ -29,7 +29,7 @@
 </script>
 
 <div class="legend-wrapper">
-  <span class="datetime">Monday, October 17th, 2020 — 8:00am EDT</span>
+  <span class="datetime">Saturday, October 17th, 2020 — 2:00pm EDT</span>
   <span class="streamlines">
     Streamlines for wind at 10m above ground level, moving
     {particleDisplay.rate.toLocaleString()} times faster than actual
