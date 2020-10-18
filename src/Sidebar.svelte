@@ -98,6 +98,7 @@
 <nav id="rail">
   <IconButton
     class="rail-btn"
+    aria-label="Menus"
     on:click={openDrawer}
     use={[[tooltip, {content: 'Menus'}]]}
   >
@@ -106,6 +107,7 @@
   {#each menus as menu}
     <IconButton
       class="rail-btn"
+      aria-label={menu.name}
       data-selected={openedMenu === menu.name}
       on:click={() => toggleMenu(menu.name)}
       use={[[tooltip, {content: menu.name}]]}
