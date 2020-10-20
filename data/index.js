@@ -69,7 +69,7 @@ export async function download(url, prefix=false, suffix='', headers={}) {
 // update an URL
 export function exit() {
   console.log('\nPlease fix this script.\n\nExiting...');
-  process.exit();
+  process.exit(1);
 }
 
 main();
