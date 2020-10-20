@@ -54,12 +54,13 @@ export async function download(url, prefix=false, suffix='', headers={}) {
     console.log(`Exists in cache, not re-downloading...\n=> ${filepath}\n`);
   } else {
     console.log(`Downloading...\n${url}\n=> ${filepath}\n`);
-    await got(url, { headers: headers })
-      .then(res => writeFile(filepath, res.rawBody))
-      .catch(err => {
-        console.log(`Failed to download... ${url}\n=> ${err}`);
-        exit();
-      });
+    try {
+      let res = await got(url, { headers: headers });
+      await writeFile(filepath, res.rawBody);
+    } catch(err) {
+      console.log(`Failed to download... ${url}\n=> ${err}`);
+      exit();
+    }
   }
   return filepath;
 }
