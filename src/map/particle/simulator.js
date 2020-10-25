@@ -15,7 +15,7 @@ import {
 } from './random.js';
 
 export default class ParticleSimulator {
-  constructor(gl, options, webkit) {
+  constructor(gl, options) {
     // private variables with corresponding public setters
     this._count = this._sqrtFloor(options.count);
     this._lifetime = options.lifetime;
@@ -33,9 +33,9 @@ export default class ParticleSimulator {
     this._textures = this._createTextures();
     this._framebuffers = this._createFramebuffers();
 
-    this._webkit = webkit;
+    this._webkit = options.webkit;
     // hack to get around premultipliedAlpha: false not working on iOS/Safari
-    if (webkit) {
+    if (this._webkit) {
       this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     } else {
       this._gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);

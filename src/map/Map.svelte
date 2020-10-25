@@ -109,20 +109,21 @@
       domain: griddedDomain,
     });
 
-    let vectorFieldOptions = {
+    let particleSimulatorOptions = {
       count: particleCount,
       lifetime: particleLifetime,
       data: particleData,
+      webkit: webkit,
     }
 
     // use a different particle simulator for mobile devices because of issues
     // rendering to float textures
     if (navigator.userAgent.includes("Mobi")) {
       particleSimulator =
-        new ParticleSimulatorMobile(particleGl, vectorFieldOptions, webkit);
+        new ParticleSimulatorMobile(particleGl, particleSimulatorOptions);
     } else {
       particleSimulator =
-        new ParticleSimulator(particleGl, vectorFieldOptions, webkit);
+        new ParticleSimulator(particleGl, particleSimulatorOptions);
     }
 
     requestAnimationFrame(render);
