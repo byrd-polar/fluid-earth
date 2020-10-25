@@ -110,10 +110,16 @@ export default class ParticleSimulatorMobile extends ParticleSimulator {
   }
 
   _createPrograms() {
+    let simLonFrag2 = this._webgl2 ?
+      simLonFrag.replace(/\)\.a;/g, ').r;') :
+      simLonFrag;
+    let simLatFrag2 = this._webgl2 ?
+      simLatFrag.replace(/\)\.a;/g, ').r;') :
+      simLatFrag;
     return {
       sim: {
-        longitudes: twgl.createProgramInfo(this._gl, [simVert, simLonFrag]),
-        latitudes: twgl.createProgramInfo(this._gl, [simVert, simLatFrag]),
+        longitudes: twgl.createProgramInfo(this._gl, [simVert, simLonFrag2]),
+        latitudes: twgl.createProgramInfo(this._gl, [simVert, simLatFrag2]),
         lifetimes: twgl.createProgramInfo(this._gl, [simVert, simLifeFrag]),
         speeds: twgl.createProgramInfo(this._gl, [simVert, simSpeedFrag]),
       },

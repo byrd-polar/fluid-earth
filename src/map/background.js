@@ -21,6 +21,7 @@ export default class MapBackground {
 
     // private variables (no setters)
     this._gl = gl;
+    this._webgl2 = options.webgl2;
     this._gl.enable(gl.BLEND);
     this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     this._gl.getExtension('OES_texture_float');
@@ -117,10 +118,16 @@ export default class MapBackground {
   }
 
   _createPrograms() {
+    // switch from using the ALPHA channel to the RED channel if using webgl2,
+    // as those are the only single-channel float textures supported by webgl
+    // and webgl2 respectively
+    let colormapFrag2 = this._webgl2 ?
+      colormapFrag.replace(/\)\.a;/g, ').r;') :
+      colormapFrag;
     return {
       gridded: twgl.createProgramInfo(this._gl, [griddedVert, griddedFrag]),
       vector: twgl.createProgramInfo(this._gl, [vectorVert, vectorFrag]),
-      colormap: twgl.createProgramInfo(this._gl, [griddedVert, colormapFrag]),
+      colormap: twgl.createProgramInfo(this._gl, [griddedVert, colormapFrag2]),
     };
   }
 
@@ -171,7 +178,8 @@ export default class MapBackground {
     return twgl.createTexture(this._gl, {
       src: this._data.float32Array,
       type: this._gl.FLOAT,
-      format: this._gl.ALPHA,
+      format: this._webgl2 ? this._gl.RED : this._gl.ALPHA,
+      internalFormat: this._webgl2 ? this._gl.R32F : this._gl.ALPHA,
       minMag: this._gl.NEAREST, // don't filter between data points
       width: this._data.width,
       height: this._data.height,

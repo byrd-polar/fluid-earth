@@ -23,10 +23,15 @@ export default class ParticleSimulator {
 
     // private variables (no setters)
     this._gl = gl;
+    this._webgl2 = options.webgl2;
     this._gl.enable(gl.BLEND);
     this._gl.getExtension('OES_texture_float');
     this._gl.getExtension('OES_texture_float_linear');
-    this._gl.getExtension('WEBGL_color_buffer_float');
+    if (this._webgl2) {
+      this._gl.getExtension('EXT_color_buffer_float');
+    } else {
+      this._gl.getExtension('WEBGL_color_buffer_float');
+    }
 
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers();
@@ -188,8 +193,11 @@ export default class ParticleSimulator {
   }
 
   _createPrograms() {
+    let simFrag2 = this._webgl2 ?
+      simFrag.replace(/\)\.a;/g, ').r;') :
+      simFrag;
     return {
-      sim: twgl.createProgramInfo(this._gl, [simVert, simFrag]),
+      sim: twgl.createProgramInfo(this._gl, [simVert, simFrag2]),
       draw: twgl.createProgramInfo(this._gl, [drawVert, drawFrag]),
       texture: twgl.createProgramInfo(this._gl, [textureVert, textureFrag]),
     };
@@ -231,7 +239,8 @@ export default class ParticleSimulator {
       random: twgl.createTexture(this._gl, {
         src: randomArray(1, Math.pow(randomTextureSize, 2)),
         type: this._gl.FLOAT,
-        format: this._gl.ALPHA,
+        format: this._webgl2 ? this._gl.RED : this._gl.ALPHA,
+        internalFormat: this._webgl2 ? this._gl.R32F : this._gl.ALPHA,
         minMag: this._gl.NEAREST,
         width: randomTextureSize,
         height: randomTextureSize,
@@ -247,6 +256,8 @@ export default class ParticleSimulator {
   _createSimATexture() {
     return twgl.createTexture(this._gl, {
       type: this._gl.FLOAT,
+      format: this._gl.RGBA,
+      internalFormat: this._webgl2 ? this._gl.RGBA32F : this._gl.RGBA,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
@@ -261,6 +272,8 @@ export default class ParticleSimulator {
   _createSimBTexture() {
     return twgl.createTexture(this._gl, {
       type: this._gl.FLOAT,
+      format: this._gl.RGBA,
+      internalFormat: this._webgl2 ? this._gl.RGBA32F : this._gl.RGBA,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
@@ -271,6 +284,8 @@ export default class ParticleSimulator {
     return twgl.createTexture(this._gl, {
       src: interleave4(this._data.uVelocities, this._data.vVelocities),
       type: this._gl.FLOAT,
+      format: this._gl.RGBA,
+      internalFormat: this._webgl2 ? this._gl.RGBA32F : this._gl.RGBA,
       minMag: this._gl.LINEAR, // requires OES_texture_float_linear
       width: this._data.width,
       height: this._data.height,

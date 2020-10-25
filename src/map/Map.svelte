@@ -39,6 +39,7 @@
     enabled: true,
   };
 
+  let webgl2TestCanvas;
   let backgroundCanvas;
   let particleCanvas;
   let canvasRatio; // aspect ratio (width / height) of the canvas
@@ -90,8 +91,15 @@
     // work around an issue with iOS / Safari
     const webkit = navigator.userAgent.includes("WebKit");
 
-    backgroundGl = backgroundCanvas.getContext('webgl', { alpha: false });
-    particleGl = particleCanvas.getContext('webgl', {
+    // Upgrade to webgl2 if supported so that the particle simulator works on
+    // devices that support webgl2 but not OES_texture_float. Using a separate
+    // canvas because getting context twice from the same canvas causes some
+    // weird behavior across browsers.
+    const webgl2 = (webgl2TestCanvas.getContext('webgl2') !== null);
+    const webglVersion = webgl2 ? 'webgl2' : 'webgl';
+
+    backgroundGl = backgroundCanvas.getContext(webglVersion, { alpha: false });
+    particleGl = particleCanvas.getContext(webglVersion, {
       premultipliedAlpha: webkit,
     });
 
@@ -107,6 +115,7 @@
       data: griddedData,
       colormap: griddedColormap,
       domain: griddedDomain,
+      webgl2: webgl2,
     });
 
     let particleSimulatorOptions = {
@@ -114,6 +123,7 @@
       lifetime: particleLifetime,
       data: particleData,
       webkit: webkit,
+      webgl2: webgl2,
     }
 
     // use a different particle simulator for mobile devices because of issues
@@ -212,5 +222,6 @@
   }
 </script>
 
+<canvas bind:this={webgl2TestCanvas} hidden/>
 <canvas bind:this={backgroundCanvas}/>
 <canvas bind:this={particleCanvas}/>
