@@ -1,4 +1,5 @@
 import * as twgl from 'twgl.js';
+import { Float16Array } from '@petamoriken/float16';
 
 import simVert from '../gridded.vert';
 import simFrag from './step.frag';
@@ -26,7 +27,15 @@ export default class ParticleSimulator {
     this._webgl2 = options.webgl2;
     this._gl.enable(gl.BLEND);
     this._gl.getExtension('OES_texture_float');
-    this._gl.getExtension('OES_texture_float_linear');
+    if (!this._gl.getExtension('OES_texture_float_linear')) {
+      // these are promoted extensions in webgl2, so we don't need to load them
+      // in the case we are using webgl2
+      if (!this._webgl2) {
+        this._ext = this._gl.getExtension('OES_texture_half_float');
+        this._gl.getExtension('OES_texture_half_float_linear');
+      }
+      this._halfFloat = true;
+    }
 
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers();
@@ -276,12 +285,36 @@ export default class ParticleSimulator {
   }
 
   _createVectorFieldTexture() {
+    let type, internalFormat;
+
+    if (this._webgl2) {
+      if (this._halfFloat) {
+        type = this._gl.HALF_FLOAT;
+        internalFormat = this._gl.RGBA16F;
+      } else {
+        type = this._gl.FLOAT;
+        internalFormat = this._gl.RGBA32F;
+      }
+    } else {
+      if (this._halfFloat) {
+        type = this._ext.HALF_FLOAT_OES;
+      } else {
+        type = this._gl.FLOAT;
+      }
+    }
+
     return twgl.createTexture(this._gl, {
-      src: interleave4(this._data.uVelocities, this._data.vVelocities),
-      type: this._gl.FLOAT,
+      src: interleave4(
+        this._data.uVelocities,
+        this._data.vVelocities,
+        undefined,
+        undefined,
+        this._halfFloat,
+      ),
+      type: type,
       format: this._gl.RGBA,
-      internalFormat: this._webgl2 ? this._gl.RGBA32F : this._gl.RGBA,
-      minMag: this._gl.LINEAR, // requires OES_texture_float_linear
+      internalFormat: internalFormat,
+      minMag: this._gl.LINEAR,
       width: this._data.width,
       height: this._data.height,
     });
@@ -338,8 +371,13 @@ export default class ParticleSimulator {
   }
 }
 
-function interleave4(arrayR, arrayG, arrayB, arrayA) {
-  let interleaved = new Float32Array(4 * arrayR.length);
+function interleave4(arrayR, arrayG, arrayB, arrayA, halfFloat) {
+  let interleaved;
+  if (halfFloat) {
+    interleaved = new Float16Array(4 * arrayR.length);
+  } else {
+    interleaved = new Float32Array(4 * arrayR.length);
+  }
 
   for (let i = 0; i < interleaved.length; i++) {
     if (i % 4 === 0) {
@@ -353,5 +391,9 @@ function interleave4(arrayR, arrayG, arrayB, arrayA) {
     }
   }
 
-  return interleaved;
+  if (halfFloat) {
+    return new Uint16Array(interleaved.buffer);
+  } else {
+    return interleaved;
+  }
 }

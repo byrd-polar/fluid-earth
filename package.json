@@ -28,6 +28,7 @@
     "svelte": "^3.25.1"
   },
   "dependencies": {
+    "@petamoriken/float16": "^2.0.0",
     "@smui/drawer": "^1.0.0",
     "@smui/icon-button": "^1.0.0",
     "@smui/list": "^1.0.0",
