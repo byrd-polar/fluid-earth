@@ -126,9 +126,14 @@
       webgl2: webgl2,
     }
 
-    // use a different particle simulator for mobile devices because of issues
-    // rendering to float textures
-    if (navigator.userAgent.includes("Mobi")) {
+    // Use a different particle simulator for older devices that don't support
+    // rendering to float textures at all and for mobile devices because of
+    // issues rendering to float textures despite supporting the extension.
+    let canRenderToFloat =
+      particleGl.getExtension('EXT_color_buffer_float') ||
+      particleGl.getExtension('WEBGL_color_buffer_float');
+
+    if (!canRenderToFloat || navigator.userAgent.includes("Mobi")) {
       particleSimulator =
         new ParticleSimulatorMobile(particleGl, particleSimulatorOptions);
     } else {

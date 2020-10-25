@@ -27,11 +27,6 @@ export default class ParticleSimulator {
     this._gl.enable(gl.BLEND);
     this._gl.getExtension('OES_texture_float');
     this._gl.getExtension('OES_texture_float_linear');
-    if (this._webgl2) {
-      this._gl.getExtension('EXT_color_buffer_float');
-    } else {
-      this._gl.getExtension('WEBGL_color_buffer_float');
-    }
 
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers();
