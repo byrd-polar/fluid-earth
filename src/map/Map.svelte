@@ -227,6 +227,22 @@
   }
 </script>
 
-<canvas bind:this={webgl2TestCanvas} hidden/>
-<canvas bind:this={backgroundCanvas}/>
-<canvas bind:this={particleCanvas}/>
+<div class="layers">
+  <canvas bind:this={webgl2TestCanvas} hidden/>
+  <canvas bind:this={backgroundCanvas}/>
+  <canvas bind:this={particleCanvas}/>
+  <slot></slot>
+</div>
+
+<style>
+  div.layers {
+    position: relative;
+    flex: 1;
+  }
+
+  :global(div.layers > *) {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+</style>

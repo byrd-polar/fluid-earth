@@ -86,16 +86,15 @@
   />
 </Menu>
 <main>
-  <div class="layers">
-    <Map
-      {projection}
-      {center}
-      {zoom}
-      {griddedData}
-      {griddedColormap}
-      {griddedDomain}
-      {particleData}
-    />
+  <Map
+    {projection}
+    {center}
+    {zoom}
+    {griddedData}
+    {griddedColormap}
+    {griddedDomain}
+    {particleData}
+  >
     <Legend
       {griddedData}
       {griddedColormap}
@@ -106,7 +105,7 @@
       bind:center
       bind:zoom
     />
-  </div>
+  </Map>
 </main>
 <aside></aside>
 
@@ -127,17 +126,6 @@
     main {
       flex-direction: column;
     }
-  }
-
-  div.layers {
-    position: relative;
-    flex: 1;
-  }
-
-  :global(div.layers > *) {
-    width: 100%;
-    height: 100%;
-    position: absolute;
   }
 
   /* Fix for SVGs not being vertically centered in icon button. Doesn't seem to
