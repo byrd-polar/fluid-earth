@@ -9,7 +9,7 @@
   import colormaps from './colormaps/';
   import projections from './projections/';
 
-  export let projection = projections.EQUIRECTANGULAR;
+  export let projection = projections.VERTICAL_PERSPECTIVE;
   export let center = {
     longitude: 0, // in degrees
     latitude: 0, // in degrees
@@ -223,6 +223,13 @@
   }
 
   :global(div.layers > *) {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+
+  /* following rules are the equivalent of the above for the web component */
+  div.layers > *, ::slotted(*) {
     width: 100%;
     height: 100%;
     position: absolute;
