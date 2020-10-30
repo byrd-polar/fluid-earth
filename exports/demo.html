@@ -5,22 +5,20 @@
   <meta name='viewport' content='width=device-width,initial-scale=1'>
 
   <title>Demo</title>
-
-  <script defer src='../public/build/webcomponent.js'></script>
 </head>
 
 <body>
   <fever-map style="display: flex; height: 300px; width: 400px">
     <p style="color: white; text-align: center">Hello World!</p>
   </fever-map>
+
+  <script src='../public/build/webcomponent.js'></script>
   <script>
     let fever = document.querySelector("fever-map");
 
     function spinnn(x) {
-      if (fever.center) {
-        fever.center.longitude = x / -42;
-        fever.center = fever.center;
-      }
+      fever.center.longitude = x / -42;
+      fever.center = fever.center;
       requestAnimationFrame(spinnn);
     }
     requestAnimationFrame(spinnn);
