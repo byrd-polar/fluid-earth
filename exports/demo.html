@@ -13,5 +13,17 @@
   <fever-map style="display: flex; height: 300px; width: 400px">
     <p style="color: white; text-align: center">Hello World!</p>
   </fever-map>
+  <script>
+    let fever = document.querySelector("fever-map");
+
+    function spinnn(x) {
+      if (fever.center) {
+        fever.center.longitude = x / -42;
+        fever.center = fever.center;
+      }
+      requestAnimationFrame(spinnn);
+    }
+    requestAnimationFrame(spinnn);
+  </script>
 </body>
 </html>
