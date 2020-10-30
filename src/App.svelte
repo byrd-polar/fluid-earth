@@ -95,15 +95,15 @@
     {griddedDomain}
     {particleData}
   >
+    <Controls
+      bind:center
+      bind:zoom
+    />
     <Legend
       {griddedData}
       {griddedColormap}
       {griddedDomain}
       {particleDisplay}
-    />
-    <Controls
-      bind:center
-      bind:zoom
     />
   </Map>
 </main>

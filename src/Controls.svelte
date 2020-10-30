@@ -60,5 +60,6 @@
 <style>
   div {
     touch-action: none;
+    pointer-events: auto;
   }
 </style>

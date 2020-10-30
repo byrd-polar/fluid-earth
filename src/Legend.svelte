@@ -53,12 +53,13 @@
     justify-content: flex-end;
     align-items: center;
     user-select: none;
+    pointer-events: none;
   }
 
   div.legend-wrapper > * {
     max-width: 90%;
     width: 36rem;
-    z-index: 1;
+    pointer-events: auto;
   }
 
   span, svg {
