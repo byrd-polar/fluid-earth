@@ -228,3 +228,5 @@
     position: absolute;
   }
 </style>
+
+<svelte:options tag="fever-map"/>
