@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { resizeCanvasToDisplaySize } from 'twgl.js';
 
   import MapBackground from './background.js';
   import ParticleSimulator from './particle/simulator.js';
@@ -103,14 +104,6 @@
       premultipliedAlpha: webkit,
     });
 
-    updateSizeVariables(backgroundGl, true);
-    updateSizeVariables(particleGl, true);
-
-    window.addEventListener('resize', () => {
-      updateSizeVariables(backgroundGl);
-      updateSizeVariables(particleGl);
-    });
-
     mapBackground = new MapBackground(backgroundGl, {
       data: griddedData,
       colormap: griddedColormap,
@@ -141,6 +134,7 @@
         new ParticleSimulator(particleGl, particleSimulatorOptions);
     }
 
+    updateWebglSize(true);
     requestAnimationFrame(render);
   });
 
@@ -194,7 +188,7 @@
 
   function updateSizeVariables(gl, force) {
     const ratio = window.devicePixelRatio;
-    if (resizeCanvasToBodySize(gl.canvas, ratio) || force) {
+    if (resizeCanvasToDisplaySize(gl.canvas, ratio) || force) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
 
@@ -209,21 +203,9 @@
     }
   }
 
-  function resizeCanvasToBodySize(canvas, multiplier) {
-    let width = document.body.clientWidth * multiplier;
-    let height = document.body.clientHeight * multiplier;
-
-    // subtract the width of Sidebar.svelte, if present
-    if (!window.matchMedia('(max-width: 36rem)').matches) {
-      width -= document.querySelector('#rail').clientWidth;
-    }
-
-    if (canvas.width !== width || canvas.height !== height) {
-      canvas.width = width;
-      canvas.height = height;
-      return true;
-    }
-    return false;
+  export function updateWebglSize(force) {
+    updateSizeVariables(backgroundGl, force);
+    updateSizeVariables(particleGl, force);
   }
 </script>
 

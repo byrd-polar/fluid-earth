@@ -48,10 +48,13 @@
     enabled: true,
   };
 
+  let updateWebglSize = () => {}; // to be bound from Map
+
   // JS implementation of 100vh for mobile, see:
   // https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html
   window.addEventListener('resize', () => {
     document.body.style.height = `${window.innerHeight}px`;
+    updateWebglSize();
   });
 </script>
 
@@ -61,26 +64,31 @@
   bind:variable={variable}
 -->
 <Sidebar bind:openedMenu/>
-<Menu bind:openedMenu menuName="Map Projections">
+<Menu bind:openedMenu menuName="Map Projections"
+      on:resize={updateWebglSize}>
   <MapProjections
     bind:projection
   />
 </Menu>
-<Menu bind:openedMenu menuName="Gridded Datasets">
+<Menu bind:openedMenu menuName="Gridded Datasets"
+      on:resize={updateWebglSize}>
   <GriddedDatasets
     bind:griddedData
     bind:griddedDomain
   />
 </Menu>
-<Menu bind:openedMenu menuName="Colormaps">
+<Menu bind:openedMenu menuName="Colormaps"
+      on:resize={updateWebglSize}>
   <Colormaps
     bind:griddedColormap
   />
 </Menu>
-<Menu bind:openedMenu menuName="Map Options" darkBackground="true">
+<Menu bind:openedMenu menuName="Map Options" darkBackground="true"
+      on:resize={updateWebglSize}>
   <MapOptions/>
 </Menu>
-<Menu bind:openedMenu menuName="Zoom Slider">
+<Menu bind:openedMenu menuName="Zoom Slider"
+      on:resize={updateWebglSize}>
   <ZoomSlider
     bind:zoom
   />
@@ -94,6 +102,7 @@
     {griddedColormap}
     {griddedDomain}
     {particleData}
+    bind:updateWebglSize
   >
     <Controls
       bind:center

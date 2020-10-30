@@ -1,4 +1,6 @@
 <script>
+  import { onMount } from 'svelte';
+  import { createEventDispatcher } from "svelte";
   import IconButton from '@smui/icon-button';
   import ArrowLeft32 from "carbon-icons-svelte/lib/ArrowLeft32";
   import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
@@ -23,12 +25,23 @@
     // hide the tooltip for the just-closed menu
     tips.forEach(t => t.hide());
   }
+
+  let aside;
+  const dispatch = createEventDispatcher();
+  onMount(() => {
+    aside.addEventListener('transitionend', e => {
+      if (e.propertyName === 'margin-left') {
+        dispatch("resize");
+      }
+    });
+  });
 </script>
 
 <aside
   class:open={openedMenu === menuName}
   class:no-animate={noAnimate}
   class:dark={darkBackground}
+  bind:this={aside}
 >
   <TopAppBar variant="static" class="top-app-drawer">
     <Row>
