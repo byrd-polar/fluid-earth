@@ -2,6 +2,7 @@ import svelte from 'rollup-plugin-svelte';
 import glslify from 'rollup-plugin-glslify';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
@@ -29,6 +30,9 @@ export default {
     glslify({
       compress: production,
     }),
+
+    // For in-lining topojson (for web component)
+    json(),
 
     // For Svelte Material UI, from:
     // https://github.com/hperrin/smui-example-rollup/blob/master/rollup.config.js

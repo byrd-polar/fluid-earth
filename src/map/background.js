@@ -1,6 +1,7 @@
 import * as twgl from 'twgl.js';
 import * as topojson from 'topojson-client';
 
+import topology from '../../public/data/topology.json';
 import griddedVert from './gridded.vert';
 import griddedFrag from './gridded.frag';
 import vectorVert from './vector.vert';
@@ -141,7 +142,7 @@ export default class MapBackground {
   }
 
   async _createVectorBuffers() {
-    let data = await fetch('/data/topology.json').then(res => res.json());
+    let data = topology;
 
     // update the following if sources for topology.json change
     let coastlineObj = data.objects.ne_50m_coastline;
