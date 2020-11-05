@@ -1,4 +1,6 @@
 <script>
+  import { Float16Array } from '@petamoriken/float16';
+
   export let griddedData;
   export let griddedDomain;
 
@@ -7,28 +9,28 @@
       name: 'surface temperature',
       description: 'Temperature at ground level',
       units: 'K',
-      path: '/data/gfs-temperature.f32',
+      path: '/data/gfs-temperature.fp16',
       domain: [273.15 - 70, 273.15 + 70],
     },
     {
       name: 'u-wind velocity',
       description: 'Wind velocity west to east at 10m above ground level',
       units: 'm/s',
-      path: '/data/gfs-u-wind.f32',
+      path: '/data/gfs-u-wind.fp16',
       domain: [-35, 35],
     },
     {
       name: 'v-wind velocity',
       description: 'Wind velocity south to north at 10m above ground level',
       units: 'm/s',
-      path: '/data/gfs-v-wind.f32',
+      path: '/data/gfs-v-wind.fp16',
       domain: [-35, 35],
     },
     {
       name: 'wind speed',
       description: 'Wind speed at 10m above ground level',
       units: 'm/s',
-      path: '/data/gfs-wind-speed.f32',
+      path: '/data/gfs-wind-speed.fp16',
       domain: [0, 35],
     },
   ];
@@ -39,7 +41,7 @@
     let path = dataset.path;
     let buffer = await fetch(path).then(res => res.arrayBuffer());
     griddedData = {
-      float32Array: new Float32Array(buffer),
+      float16Array: new Float16Array(buffer),
       width: 1440,
       height: 721,
       description: dataset.description,

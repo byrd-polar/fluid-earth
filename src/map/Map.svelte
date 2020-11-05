@@ -10,6 +10,8 @@
   import projections from './projections/';
   import topology from '../../public/data/topology.json';
 
+  import { Float16Array } from '@petamoriken/float16';
+
   export let projection = projections.VERTICAL_PERSPECTIVE;
   export let center = {
     longitude: 0, // in degrees
@@ -18,7 +20,7 @@
   export let zoom = 1;
 
   export let griddedData = {
-    float32Array: new Float32Array([0.2]),
+    float16Array: new Float16Array([0.2]),
     width: 1,
     height: 1,
   };

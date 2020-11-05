@@ -8,6 +8,8 @@ import { promisify } from 'util';
 import _parseCSV from 'csv-parse';
 const parseCSV = promisify(_parseCSV);
 
+import { Float16Array } from '@petamoriken/float16';
+
 export async function gfs() {
   // from https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/
   let now = new Date();
@@ -61,6 +63,7 @@ async function saveGFS(url, index, parameter, level, filename) {
       `Could not run wgrib2, skipping...\n=> ${wgrib2.stderr}\n`,
     );
   }
+  await halveFloatFile(outputFile);
 }
 
 async function calculateAndSaveWindSpeed(outputFile, uFile, vFile) {
@@ -75,7 +78,19 @@ async function calculateAndSaveWindSpeed(outputFile, uFile, vFile) {
   }
 
   console.log(`Generating GFS data...\n${uFile} + ${vFile}\n=> ${outputFile}\n`);
-  writeFile(outputFile, Buffer.from(speeds.buffer));
+  await writeFile(outputFile, Buffer.from(speeds.buffer));
+  await halveFloatFile(outputFile);
+}
+
+// convert from f32 file to fp16 file
+async function halveFloatFile(file) {
+  let outputFile = file.replace(/\.[^.]+$/, '.fp16');
+
+  console.log(`Converting to half floats...\n${file}\n=> ${outputFile}\n`);
+  let f32File = await readFile(file)
+  let f32 = new Float32Array(f32File.buffer);
+  let fp16 = new Float16Array(f32);
+  writeFile(outputFile, Buffer.from(fp16.buffer));
 }
 
 // print the parsed index file to make sense of this function

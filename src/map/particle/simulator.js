@@ -27,14 +27,11 @@ export default class ParticleSimulator {
     this._webgl2 = options.webgl2;
     this._gl.enable(gl.BLEND);
     this._gl.getExtension('OES_texture_float');
-    if (!this._gl.getExtension('OES_texture_float_linear')) {
-      // these are promoted extensions in webgl2, so we don't need to load them
-      // in the case we are using webgl2
-      if (!this._webgl2) {
-        this._ext = this._gl.getExtension('OES_texture_half_float');
-        this._gl.getExtension('OES_texture_half_float_linear');
-      }
-      this._halfFloat = true;
+    // these are promoted extensions in webgl2, so we don't need to load them
+    // in the case we are using webgl2
+    if (!this._webgl2) {
+      this._ext = this._gl.getExtension('OES_texture_half_float');
+      this._gl.getExtension('OES_texture_half_float_linear');
     }
 
     this._programs = this._createPrograms();
@@ -288,28 +285,16 @@ export default class ParticleSimulator {
     let type, internalFormat;
 
     if (this._webgl2) {
-      if (this._halfFloat) {
-        type = this._gl.HALF_FLOAT;
-        internalFormat = this._gl.RGBA16F;
-      } else {
-        type = this._gl.FLOAT;
-        internalFormat = this._gl.RGBA32F;
-      }
+      type = this._gl.HALF_FLOAT;
+      internalFormat = this._gl.RGBA16F;
     } else {
-      if (this._halfFloat) {
-        type = this._ext.HALF_FLOAT_OES;
-      } else {
-        type = this._gl.FLOAT;
-      }
+      type = this._ext.HALF_FLOAT_OES;
     }
 
     return twgl.createTexture(this._gl, {
-      src: interleave4(
+      src: interleave2(
         this._data.uVelocities,
         this._data.vVelocities,
-        undefined,
-        undefined,
-        this._halfFloat,
       ),
       type: type,
       format: this._gl.RGBA,
@@ -371,13 +356,9 @@ export default class ParticleSimulator {
   }
 }
 
-function interleave4(arrayR, arrayG, arrayB, arrayA, halfFloat) {
-  let interleaved;
-  if (halfFloat) {
-    interleaved = new Float16Array(4 * arrayR.length);
-  } else {
-    interleaved = new Float32Array(4 * arrayR.length);
-  }
+// for Float32Arrays
+function interleave4(arrayR, arrayG, arrayB, arrayA) {
+  let interleaved = new Float32Array(4 * arrayR.length);
 
   for (let i = 0; i < interleaved.length; i++) {
     if (i % 4 === 0) {
@@ -391,9 +372,21 @@ function interleave4(arrayR, arrayG, arrayB, arrayA, halfFloat) {
     }
   }
 
-  if (halfFloat) {
-    return new Uint16Array(interleaved.buffer);
-  } else {
-    return interleaved;
+  return interleaved;
+}
+
+// for Float16Arrays
+function interleave2(arrayR, arrayG) {
+  let interleaved = new Float16Array(4 * arrayR.length);
+
+  for (let i = 0; i < interleaved.length; i++) {
+    if (i % 4 === 0) {
+      interleaved[i] = arrayR[i/4];
+    } else if (i % 4 === 1) {
+      interleaved[i] = arrayG[Math.floor(i/4)];
+    }
   }
+
+  interleaved = new Uint16Array(interleaved.buffer);
+  return interleaved;
 }
