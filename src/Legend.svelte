@@ -8,6 +8,22 @@
   export let griddedColormap;
   export let griddedDomain = [0, 0];
   export let particleDisplay;
+  export let date = new Date(Date.UTC(
+    2020,   // year
+    11 - 1, // month starts at 0
+     5,     // day
+    12,     // hour
+  ));
+  // see options parameter here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat
+  let dateStringOptions = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    timeZoneName: 'short',
+  };
 
   let svgScale;
   let svgScaleWidth;
@@ -29,7 +45,9 @@
 </script>
 
 <div class="legend-wrapper">
-  <span class="datetime">Saturday, October 17th, 2020 — 2:00pm EDT</span>
+  <span class="datetime">
+    {date.toLocaleDateString(undefined, dateStringOptions)}
+  </span>
   <span class="streamlines">
     Streamlines for wind at 10m above ground level, moving
     {particleDisplay.rate.toLocaleString()} times faster than actual
