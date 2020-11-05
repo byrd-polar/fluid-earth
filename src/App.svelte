@@ -13,6 +13,8 @@
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
 
+  import { Float16Array } from '@petamoriken/float16';
+
   let openedMenu = null;
 
   let projection = projections.VERTICAL_PERSPECTIVE;
@@ -27,13 +29,13 @@
 
   let particleData;
   async function updateParticleData() {
-    let uPath = '/data/gfs-u-wind.f32';
-    let vPath = '/data/gfs-v-wind.f32';
+    let uPath = '/data/gfs-u-wind.fp16';
+    let vPath = '/data/gfs-v-wind.fp16';
     let uBuffer = await fetch(uPath).then(res => res.arrayBuffer());
     let vBuffer = await fetch(vPath).then(res => res.arrayBuffer());
     particleData = {
-      uVelocities: new Float32Array(uBuffer),
-      vVelocities: new Float32Array(vBuffer),
+      uVelocities: new Float16Array(uBuffer),
+      vVelocities: new Float16Array(vBuffer),
       width: 1440,
       height: 721,
     };

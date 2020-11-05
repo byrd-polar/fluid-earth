@@ -377,7 +377,9 @@ function interleave4(arrayR, arrayG, arrayB, arrayA) {
 
 // for Float16Arrays
 function interleave2(arrayR, arrayG) {
-  let interleaved = new Float16Array(4 * arrayR.length);
+  let interleaved = new Uint16Array(4 * arrayR.length);
+  arrayR = new Uint16Array(arrayR.buffer);
+  arrayG = new Uint16Array(arrayG.buffer);
 
   for (let i = 0; i < interleaved.length; i++) {
     if (i % 4 === 0) {
@@ -387,6 +389,5 @@ function interleave2(arrayR, arrayG) {
     }
   }
 
-  interleaved = new Uint16Array(interleaved.buffer);
   return interleaved;
 }

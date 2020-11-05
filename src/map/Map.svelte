@@ -28,8 +28,8 @@
   export let griddedDomain = [0, 1];
 
   export let particleData = {
-    uVelocities: new Float32Array([0.2]),
-    vVelocities: new Float32Array([0.2]),
+    uVelocities: new Float16Array([0.2]),
+    vVelocities: new Float16Array([0.2]),
     width: 1,
     height: 1,
   };
