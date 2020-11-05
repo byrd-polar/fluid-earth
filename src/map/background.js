@@ -1,7 +1,6 @@
 import * as twgl from 'twgl.js';
 import * as topojson from 'topojson-client';
 
-import topology from '../../public/data/topology.json';
 import griddedVert from './gridded.vert';
 import griddedFrag from './gridded.frag';
 import vectorVert from './vector.vert';
@@ -12,9 +11,6 @@ import { glDraw, griddedArrays } from './webgl.js';
 
 export default class MapBackground {
   constructor(gl, options) {
-    // public variable
-    this.vectorDataLoaded = false;
-
     // private variables with corresponding public setters
     this._data = options.data;
     this._colormap = options.colormap;
@@ -28,17 +24,12 @@ export default class MapBackground {
     this._gl.getExtension('OES_texture_float');
 
     this._programs = this._createPrograms();
-    this._buffers = this._createBuffers();
+    this._buffers = this._createBuffers(options.vectorData);
     this._textures = this._createTextures();
     this._framebuffers = this._createFramebuffers();
 
     this._mapDataToColors();
     this._dataNeedsRecolor = false;
-
-    (async () => {
-      this._buffers.vectors = await this._createVectorBuffers();
-      this.vectorDataLoaded = true;
-    })();
   }
 
   set data(d) {
@@ -65,6 +56,10 @@ export default class MapBackground {
     this._dataNeedsRecolor = true;
   }
 
+  set vectorData(d) {
+    this._buffer.vectors = this._createVectorBuffers(d);
+  }
+
   drawGriddedData(sharedUniforms) {
     if (this._dataNeedsRecolor) {
       this._mapDataToColors();
@@ -78,44 +73,13 @@ export default class MapBackground {
     });
   }
 
-  drawCoastlines(sharedUniforms) {
-    if (!this._buffers.vectors.coastlines) {
-      return;
+  drawVectorData(sharedUniforms, colors) {
+    for (const [name, color] of Object.entries(colors)) {
+      glDraw(this._gl, this._programs.vector, this._buffers.vectors[name], {
+        u_color: color,
+        ...sharedUniforms,
+      }, this._gl.LINES);
     }
-    glDraw(this._gl, this._programs.vector, this._buffers.vectors.coastlines, {
-      u_color: [1, 1, 1, 1], // bold
-      ...sharedUniforms,
-    }, this._gl.LINES);
-  }
-
-  drawLakes(sharedUniforms) {
-    if (!this._buffers.vectors.lakes) {
-      return;
-    }
-    glDraw(this._gl, this._programs.vector, this._buffers.vectors.lakes, {
-      u_color: [1, 1, 1, 1], // bold
-      ...sharedUniforms,
-    }, this._gl.LINES);
-  }
-
-  drawRivers(sharedUniforms) {
-    if (!this._buffers.vectors.rivers) {
-      return;
-    }
-    glDraw(this._gl, this._programs.vector, this._buffers.vectors.rivers, {
-      u_color: [1, 1, 1, 0.5], // light
-      ...sharedUniforms,
-    }, this._gl.LINES);
-  }
-
-  drawGraticules(sharedUniforms) {
-    if (!this._buffers.vectors.graticules) {
-      return;
-    }
-    glDraw(this._gl, this._programs.vector, this._buffers.vectors.graticules, {
-      u_color: [1, 1, 1, 0.1], // lighter
-      ...sharedUniforms,
-    }, this._gl.LINES);
   }
 
   _createPrograms() {
@@ -132,30 +96,22 @@ export default class MapBackground {
     };
   }
 
-  _createBuffers() {
+  _createBuffers(vectorData) {
     let gridded = twgl.createBufferInfoFromArrays(this._gl, griddedArrays);
     return {
       gridded: gridded,
-      vectors: {}, // loaded asynchronously later
+      vectors: this._createVectorBuffers(vectorData),
       colormap: gridded,
     };
   }
 
-  async _createVectorBuffers() {
-    let data = topology;
+  _createVectorBuffers(data) {
+    let buffers = {};
 
-    // update the following if sources for topology.json change
-    let coastlineObj = data.objects.ne_50m_coastline;
-    let lakesObj = data.objects.ne_50m_lakes;
-    let riversObj = data.objects.ne_50m_rivers_lake_centerlines;
-    let graticulesObj = data.objects.ne_50m_graticules_10;
-
-    return {
-      coastlines: createBufferInfoFromTopojson(this._gl, data, coastlineObj),
-      lakes: createBufferInfoFromTopojson(this._gl, data, lakesObj),
-      rivers: createBufferInfoFromTopojson(this._gl, data, riversObj),
-      graticules: createBufferInfoFromTopojson(this._gl, data, graticulesObj),
-    };
+    for (const [name, obj] of Object.entries(data.objects)) {
+      buffers[name] = createBufferInfoFromTopojson(this._gl, data, obj);
+    }
+    return buffers;
   }
 
   _createTextures() {

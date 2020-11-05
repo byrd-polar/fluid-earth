@@ -8,6 +8,7 @@
 
   import colormaps from './colormaps/';
   import projections from './projections/';
+  import topology from '../../public/data/topology.json';
 
   export let projection = projections.VERTICAL_PERSPECTIVE;
   export let center = {
@@ -40,6 +41,15 @@
     enabled: true,
   };
 
+  export let vectorData = topology;
+  export let vectorColors = {
+    // update the following if sources for topology.json change
+    ne_50m_coastline: [1, 1, 1, 1],
+    ne_50m_lakes: [1, 1, 1, 1],
+    ne_50m_rivers_lake_centerlines: [1, 1, 1, 0.5],
+    ne_50m_graticules_10: [1, 1, 1, 0.1],
+  };
+
   let webgl2TestCanvas;
   let backgroundCanvas;
   let particleCanvas;
@@ -63,6 +73,7 @@
   $: mapBackground.data = griddedData;
   $: mapBackground.colormap = griddedColormap;
   $: mapBackground.domain = griddedDomain;
+  $: mapBackground.vectorData = vectorData;
 
   let particleSimulator = {};
   $: particleSimulator.data = particleData;
@@ -70,13 +81,12 @@
   $: particleSimulator.lifetime = particleLifetime;
 
   let backgroundNeedsRedraw;
-  let vectorDataLoaded = false;
   // when following variables are updated, redraw
   $: sharedUniforms,
       griddedData,
       griddedColormap,
       griddedDomain,
-      vectorDataLoaded,
+      vectorData,
     backgroundNeedsRedraw = true;
 
   let trailsNeedsReset;
@@ -108,6 +118,7 @@
       data: griddedData,
       colormap: griddedColormap,
       domain: griddedDomain,
+      vectorData: vectorData,
       webgl2: webgl2,
     });
 
@@ -154,14 +165,9 @@
       sharedUniforms.u_canvasRatio = canvasRatio;
     }
 
-    vectorDataLoaded = mapBackground.vectorDataLoaded;
-
     if (backgroundNeedsRedraw) {
       mapBackground.drawGriddedData(sharedUniforms);
-      mapBackground.drawGraticules(sharedUniforms);
-      mapBackground.drawRivers(sharedUniforms);
-      mapBackground.drawLakes(sharedUniforms);
-      mapBackground.drawCoastlines(sharedUniforms);
+      mapBackground.drawVectorData(sharedUniforms, vectorColors);
       backgroundNeedsRedraw = false;
     }
 
