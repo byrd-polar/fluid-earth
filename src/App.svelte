@@ -42,6 +42,8 @@
   }
   updateParticleData();
 
+  let particleLifetime = 1000;
+  let particleCount = 1e5;
   let particleDisplay = {
     size: 0.8,
     rate: 5e4,
@@ -104,6 +106,9 @@
     {griddedColormap}
     {griddedDomain}
     {particleData}
+    {particleLifetime}
+    {particleCount}
+    {particleDisplay}
     bind:updateWebglSize
   >
     <Controls
