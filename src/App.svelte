@@ -31,11 +31,11 @@
   async function updateParticleData() {
     let uPath = '/data/gfs-u-wind.fp16';
     let vPath = '/data/gfs-v-wind.fp16';
-    let uBuffer = await fetch(uPath).then(res => res.arrayBuffer());
-    let vBuffer = await fetch(vPath).then(res => res.arrayBuffer());
+    let uBuffer = fetch(uPath).then(res => res.arrayBuffer());
+    let vBuffer = fetch(vPath).then(res => res.arrayBuffer());
     particleData = {
-      uVelocities: new Float16Array(uBuffer),
-      vVelocities: new Float16Array(vBuffer),
+      uVelocities: new Float16Array(await uBuffer),
+      vVelocities: new Float16Array(await vBuffer),
       width: 1440,
       height: 721,
     };
