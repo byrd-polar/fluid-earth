@@ -11,7 +11,7 @@
   export let date = new Date(Date.UTC(
     2020,   // year
     11 - 1, // month starts at 0
-     5,     // day
+    10,     // day
     12,     // hour
   ));
   // see options parameter here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat
