@@ -75,10 +75,13 @@ export default class MapBackground {
 
   drawVectorData(sharedUniforms, colors) {
     for (const [name, color] of Object.entries(colors)) {
-      glDraw(this._gl, this._programs.vector, this._buffers.vectors[name], {
-        u_color: color,
-        ...sharedUniforms,
-      }, this._gl.LINES);
+      let bufferInfo = this._buffers.vectors[name];
+      if (bufferInfo !== undefined) {
+        glDraw(this._gl, this._programs.vector, bufferInfo, {
+          u_color: color,
+          ...sharedUniforms,
+        }, this._gl.LINES);
+      }
     }
   }
 
