@@ -19,3 +19,22 @@ body {
   height: 100%;
   background-color: black;
 }
+
+/* Modified from https://stephanwagner.me/only-css-loading-spinner */
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+.spinner:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10em;
+  height: 10em;
+  margin-top: -5em;
+  margin-left: -5em;
+  border-radius: 50%;
+  border: 0.5em solid #222;
+  border-top-color: #aaa;
+  animation: spinner 1s linear infinite;
+}
