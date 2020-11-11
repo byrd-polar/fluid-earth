@@ -57,7 +57,7 @@ export default class MapBackground {
   }
 
   set vectorData(d) {
-    this._buffer.vectors = this._createVectorBuffers(d);
+    this._buffers.vectors = this._createVectorBuffers(d);
   }
 
   drawGriddedData(sharedUniforms) {
