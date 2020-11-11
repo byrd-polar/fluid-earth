@@ -34,7 +34,7 @@ body {
   margin-top: -5em;
   margin-left: -5em;
   border-radius: 50%;
-  border: 0.5em solid #222;
-  border-top-color: #aaa;
+  border: 0.5em solid #202124;
+  border-top-color: #015b5b;
   animation: spinner 1s linear infinite;
 }
