@@ -14,6 +14,7 @@
   import projections from './map/projections/';
 
   import { Float16Array } from '@petamoriken/float16';
+  import { onMount } from 'svelte';
 
   let openedMenu = null;
 
@@ -53,6 +54,7 @@
   };
 
   let updateWebglSize = () => {}; // to be bound from Map
+  onMount(updateWebglSize); // workaround some race condition loading bugs
 
   // JS implementation of 100vh for mobile, see:
   // https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html
