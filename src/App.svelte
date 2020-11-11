@@ -29,7 +29,9 @@
   let griddedDomain;
 
   let particleData;
-  async function updateParticleData() {
+  let vectorData;
+  (async () => {
+    vectorData = await fetch('/data/topology.json').then(res => res.json());
     let uPath = '/data/gfs-u-wind.fp16';
     let vPath = '/data/gfs-v-wind.fp16';
     let uBuffer = fetch(uPath).then(res => res.arrayBuffer());
@@ -40,8 +42,7 @@
       width: 1440,
       height: 721,
     };
-  }
-  updateParticleData();
+  })();
 
   let particleLifetime = 1000;
   let particleCount = 1e5;
@@ -112,6 +113,7 @@
     {particleLifetime}
     {particleCount}
     {particleDisplay}
+    {vectorData}
     bind:updateWebglSize
   >
     <Controls
