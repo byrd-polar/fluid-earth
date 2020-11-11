@@ -54,7 +54,8 @@
   };
 
   let updateWebglSize = () => {}; // to be bound from Map
-  onMount(updateWebglSize); // workaround some race condition loading bugs
+  // workaround some race condition loading bugs
+  onMount(() => setTimeout(updateWebglSize, 0.5));
 
   // JS implementation of 100vh for mobile, see:
   // https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html
