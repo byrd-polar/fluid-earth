@@ -9,6 +9,7 @@
 
   import Map from './map/Map.svelte';
   import Legend from './Legend.svelte';
+  import Loading from './fetcher/Loading.svelte';
   import Controls from './Controls.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
@@ -17,6 +18,7 @@
   import { onMount } from 'svelte';
 
   let openedMenu = null;
+  let fetcher;
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let center = {
@@ -120,6 +122,7 @@
       bind:center
       bind:zoom
     />
+    <Loading bind:fetcher />
     <Legend
       {griddedData}
       {griddedColormap}

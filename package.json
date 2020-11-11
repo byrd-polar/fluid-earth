@@ -33,6 +33,7 @@
     "@petamoriken/float16": "^2.0.0",
     "@smui/drawer": "^1.0.0",
     "@smui/icon-button": "^1.0.0",
+    "@smui/linear-progress": "^1.0.0",
     "@smui/list": "^1.0.0",
     "@smui/top-app-bar": "^1.0.0",
     "carbon-icons-svelte": "^10.17.0",
