@@ -42,7 +42,7 @@
     "d3-scale-chromatic": "^2.0.0",
     "d3-selection": "^2.0.0",
     "interactjs": "^1.9.22",
-    "sirv-cli": "^0.4.4",
+    "sirv-cli": "^1.0.0",
     "tippy.js": "^6.2.6",
     "topojson-client": "^3.1.0",
     "twgl.js": "^4.16.1"
