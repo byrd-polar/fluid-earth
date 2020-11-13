@@ -10,6 +10,7 @@
   import Map from './map/Map.svelte';
   import Legend from './Legend.svelte';
   import Loading from './fetcher/Loading.svelte';
+  import Fetcher from './fetcher/fetcher.js';
   import Controls from './Controls.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
@@ -18,7 +19,7 @@
   import { onMount } from 'svelte';
 
   let openedMenu = null;
-  let fetcher;
+  let fetcher = new Fetcher();
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let center = {
@@ -33,11 +34,12 @@
   let particleData;
   let vectorData;
   (async () => {
-    vectorData = await fetch('/data/topology.json').then(res => res.json());
     let uPath = '/data/gfs-u-wind.fp16';
     let vPath = '/data/gfs-v-wind.fp16';
-    let uBuffer = fetch(uPath).then(res => res.arrayBuffer());
-    let vBuffer = fetch(vPath).then(res => res.arrayBuffer());
+    let uBuffer = fetcher.fetch(uPath, 'particle');
+    let vBuffer = fetcher.fetch(vPath, 'particle', false);
+
+    vectorData = await fetcher.fetch('/data/topology.json', 'vector');
     particleData = {
       uVelocities: new Float16Array(await uBuffer),
       vVelocities: new Float16Array(await vBuffer),
@@ -83,6 +85,7 @@
 <Menu bind:openedMenu menuName="Gridded Datasets"
       on:resize={updateWebglSize}>
   <GriddedDatasets
+    {fetcher}
     bind:griddedData
     bind:griddedDomain
   />
@@ -122,7 +125,7 @@
       bind:center
       bind:zoom
     />
-    <Loading bind:fetcher />
+    <Loading {fetcher} />
     <Legend
       {griddedData}
       {griddedColormap}

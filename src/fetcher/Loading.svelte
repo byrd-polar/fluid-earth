@@ -1,17 +1,16 @@
 <script>
   import LinearProgress from '@smui/linear-progress';
-  import { onMount } from 'svelte';
 
   export let fetcher;
 
   let progress = 0;
-  let closed = false;
+  let closed = true;
 
-  onMount(() => {
-    setTimeout(() => {
-      progress = 1;
-      closed = true;
-    }, 2000);
+  fetcher.addDownloadListener(p => {
+    closed = (p.transferredBytes === p.totalBytes);
+    if (!closed) {
+      progress = p.transferredBytes / p.totalBytes;
+    }
   });
 </script>
 

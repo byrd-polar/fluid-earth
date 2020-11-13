@@ -3,6 +3,7 @@
 
   export let griddedData;
   export let griddedDomain;
+  export let fetcher;
 
   let datasets = [
     {
@@ -39,7 +40,7 @@
 
   async function updateData() {
     let path = dataset.path;
-    let buffer = await fetch(path).then(res => res.arrayBuffer());
+    let buffer = await fetcher.fetch(path, 'gridded');
     griddedData = {
       float16Array: new Float16Array(buffer),
       width: 1440,
