@@ -4,7 +4,7 @@ export default class Fetcher {
   constructor() {
     this._downloadListeners = [];
 
-    this._progressPerUrl = {};
+    this._progressPerURL = {};
     this._progressPerType = {};
     this._progressOverall = {};
 
@@ -16,12 +16,12 @@ export default class Fetcher {
     this._downloadListeners.push(func);
   }
 
-  async _fetch(url, type, abortPreviousOfType=true) {
+  async fetch(url, type='default', abortPreviousOfType=true) {
     if (abortPreviousOfType) {
       this._abortControllers[type]?.abort();
       this._abortControllers[type] = new AbortController();
     }
-    
+
     let cachedResponse = this._cache[url];
     if (cachedResponse) {
       return cachedResponse;
@@ -32,15 +32,11 @@ export default class Fetcher {
     let response = await ky(url, {
       signal: this._abortControllers[type].signal,
       onDownloadProgress: progress => {
-        this._progressPerUrl[url].transferredBytes = progress.transferredBytes;
-        this._progressPerUrl[url].totalBytes = progress.totalBytes;
+        this._progressPerURL[url].transferredBytes = progress.transferredBytes;
+        this._progressPerURL[url].totalBytes = progress.totalBytes;
         this._updateProgresses(type);
         this._triggerListeners();
       },
-    }).finally(() => {
-      delete this._progressPerURL[url];
-      this._updateProgresses(type);
-      this._triggerListeners();
     });
 
     this._cache[url] = response;
@@ -48,7 +44,7 @@ export default class Fetcher {
   }
 
   _updateProgresses(type) {
-    let progs = Object.values(this._progressPerUrl)
+    let progs = Object.values(this._progressPerURL)
       .filter(p => p.type === type);
     this._progressPerType[type] = {
       transferredBytes: sumOverProp(progs, 'transferredBytes'),
