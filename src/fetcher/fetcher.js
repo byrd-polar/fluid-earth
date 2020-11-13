@@ -31,13 +31,13 @@ export default class Fetcher {
 
     let response = await ky(url, {
       signal: this._abortControllers[type].signal,
-      onDownloadProgress: (progress, _chunk) => {
+      onDownloadProgress: progress => {
         this._updateProgresses(url, type, progress);
         for (const listener of this._downloadListeners) {
           listener(
-            this._progressPerUrl,
-            this._progressPerType,
             this._progressOverall,
+            this._progressPerType,
+            this._progressPerUrl,
           );
         }
       },
