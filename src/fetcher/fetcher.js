@@ -32,25 +32,22 @@ export default class Fetcher {
     let response = await ky(url, {
       signal: this._abortControllers[type].signal,
       onDownloadProgress: progress => {
-        this._updateProgresses(url, type, progress);
-        for (const listener of this._downloadListeners) {
-          listener(
-            this._progressOverall,
-            this._progressPerType,
-            this._progressPerUrl,
-          );
-        }
+        this._progressPerUrl[url].transferredBytes = progress.transferredBytes;
+        this._progressPerUrl[url].totalBytes = progress.totalBytes;
+        this._updateProgresses(type);
+        this._triggerListeners();
       },
-    }).finally(() => delete this._progressPerURL[url]);
+    }).finally(() => {
+      delete this._progressPerURL[url];
+      this._updateProgresses(type);
+      this._triggerListeners();
+    });
 
     this._cache[url] = response;
     return response;
   }
 
-  _updateProgresses(url, type, progress) {
-    this._progressPerUrl[url].transferredBytes = progress.transferredBytes;
-    this._progressPerUrl[url].totalBytes = progress.totalBytes;
-
+  _updateProgresses(type) {
     let progs = Object.values(this._progressPerUrl)
       .filter(p => p.type === type);
     this._progressPerType[type] = {
@@ -63,6 +60,14 @@ export default class Fetcher {
       transferredBytes: sumOverProp(progs, 'transferredBytes'),
       totalBytes: sumOverProp(progs, 'totalBytes'),
     };
+  }
+
+  _triggerListeners() {
+    for (const listener of this._downloadListeners) {
+      listener(
+        this._progressOverall, this._progressPerType, this._progressPerUrl
+      );
+    }
   }
 }
 
