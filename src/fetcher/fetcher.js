@@ -53,21 +53,19 @@ export default class Fetcher {
 
     let progs = Object.values(this._progressPerUrl)
       .filter(p => p.type === type);
-    let trans = progs.reduce((acc, curr) => acc + curr.transferredBytes, 0);
-    let total = progs.reduce((acc, curr) => acc + curr.totalBytes, 0);
-
     this._progressPerType[type] = {
-      transferredBytes: trans,
-      totalBytes: total,
+      transferredBytes: sumOverProp(progs, 'transferredBytes'),
+      totalBytes: sumOverProp(progs, 'totalBytes'),
     };
 
     progs = Object.values(this._progressPerType);
-    trans = progs.reduce((acc, curr) => acc + curr.transferredBytes, 0);
-    total = progs.reduce((acc, curr) => acc + curr.totalBytes, 0);
-
     this._progressOverall = {
-      transferredBytes: trans,
-      totalBytes: total,
+      transferredBytes: sumOverProp(progs, 'transferredBytes'),
+      totalBytes: sumOverProp(progs, 'totalBytes'),
     };
   }
+}
+
+function sumOverProp(array, prop) {
+  return array.reduce((acc, curr) => acc + curr[prop], 0);
 }
