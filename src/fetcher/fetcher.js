@@ -41,9 +41,8 @@ export default class Fetcher {
           );
         }
       },
-    });
+    }).finally(() => delete this._progressPerURL[url]);
 
-    delete this._progressPerURL[url];
     this._cache[url] = response;
     return response;
   }
