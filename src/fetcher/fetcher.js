@@ -29,7 +29,7 @@ export default class Fetcher {
 
     this._progressPerURL[url] = { type };
 
-    let response = await ky(url, {
+    let buffer = await ky(url, {
       signal: this._abortControllers[type].signal,
       onDownloadProgress: progress => {
         this._progressPerURL[url].transferredBytes = progress.transferredBytes;
@@ -37,10 +37,18 @@ export default class Fetcher {
         this._updateProgresses(type);
         this._triggerListeners();
       },
+    }).then(res => {
+      let fileExtension = url.split('.').pop();
+      return fileExtension === 'json' ? res.json() : res.arrayBuffer();
+
+    }).finally(() => {
+       delete this._progressPerURL[url];
+       this._updateProgresses(type);
+       this._triggerListeners();
     });
 
-    this._cache[url] = response;
-    return response;
+    this._cache[url] = buffer;
+    return buffer;
   }
 
   _updateProgresses(type) {
