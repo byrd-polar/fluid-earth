@@ -53,6 +53,11 @@
     ne_50m_graticules_10: [1, 1, 1, 0.1],
   };
 
+  export const updateWebglSize = force => {
+    updateSizeVariables(backgroundGl, force);
+    updateSizeVariables(particleGl, force);
+  };
+
   let webgl2TestCanvas;
   let backgroundCanvas;
   let particleCanvas;
@@ -210,11 +215,6 @@
 
       backgroundNeedsRedraw = true;
     }
-  }
-
-  export function updateWebglSize(force) {
-    updateSizeVariables(backgroundGl, force);
-    updateSizeVariables(particleGl, force);
   }
 </script>
 
