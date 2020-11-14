@@ -11,7 +11,8 @@
 
   fetcher.addDownloadListener(p => {
     closed = (p.transferredBytes === p.totalBytes);
-    series[0].perc = closed ? 0 : 100 * p.transferredBytes / p.totalBytes;
+    series[0].perc =
+      closed ? 0 : Math.floor(100 * p.transferredBytes / p.totalBytes);
   });
 </script>
 
