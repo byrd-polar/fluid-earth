@@ -1,5 +1,14 @@
 import ky from 'ky';
 
+// TODO: generate this as a JSON file from the data scripts
+const fileSizeInBytes = {
+  '/data/gfs-temperature.fp16': 2076480,
+  '/data/gfs-u-wind.fp16': 2076480,
+  '/data/gfs-v-wind.fp16': 2076480,
+  '/data/gfs-wind-speed.fp16': 2076480,
+  '/data/topology.json': 1207774,
+};
+
 export default class Fetcher {
   constructor() {
     this._downloadListeners = [];
@@ -32,7 +41,7 @@ export default class Fetcher {
     this._progressPerURL[url] = {
       type,
       transferredBytes: 0,
-      totalBytes: 0,
+      totalBytes: fileSizeInBytes[url],
     };
 
     let data;
@@ -41,7 +50,6 @@ export default class Fetcher {
         signal: this._abortControllers[type].signal,
         onDownloadProgress: prog => {
           this._progressPerURL[url].transferredBytes = prog.transferredBytes;
-          this._progressPerURL[url].totalBytes = prog.totalBytes;
           this._updateProgresses(type);
           this._triggerListeners();
           this._resetIfComplete();
