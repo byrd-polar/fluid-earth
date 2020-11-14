@@ -49,6 +49,8 @@ export default class Fetcher {
       let res = await ky(url, {
         signal: this._abortControllers[type].signal,
         onDownloadProgress: prog => {
+          if (!this._progressPerURL[url]) return;
+
           this._progressPerURL[url].transferredBytes = prog.transferredBytes;
           this._updateProgresses(type);
           this._triggerListeners();
@@ -61,8 +63,7 @@ export default class Fetcher {
     } catch (error) {
       delete this._progressPerURL[url];
 
-      // Chromium returns a TypeError on abort for some reason
-      if (error.name === 'AbortError' || error.name === 'TypeError') {
+      if (error.name === 'AbortError') {
         console.log('Fetch aborted:', url);
         console.log(
           'Ignore the surrounding errors (if any), please. AbortController',
