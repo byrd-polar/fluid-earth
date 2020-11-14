@@ -52,7 +52,11 @@ export default class Fetcher {
       // Chromium returns a TypeError on abort for some reason
       if (error.name === 'AbortError' || error.name === 'TypeError') {
         console.log('Fetch aborted:', url);
-        console.log('Ignore the surrounding abort errors in Firefox, please.');
+        console.log(
+          'Ignore the surrounding errors (if any), please. AbortController',
+          '(experimental web API) throws some weird errors sometimes but the',
+          'desired behavior seems to work regardless.'
+        );
       } else {
         console.error('Fetch error:', error);
       }
