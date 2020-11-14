@@ -44,12 +44,18 @@ export default class Fetcher {
       data = await (ext === 'json' ? res.json() : res.arrayBuffer());
 
     } catch (error) {
-      if (error.name !== 'AbortError') {
+      // Chromium returns a TypeError on abort for some reason
+      if (error.name === 'AbortError' || error.name === 'TypeError') {
+        console.log('Fetch aborted:', url);
+        console.log('(Ignore the surrounding abort errors in Firefox, please)');
+      } else {
         console.error('Fetch error:', error);
       }
       return false;
 
     } finally {
+      // note: this finally block is always executed, even though there is a
+      // return in the catch block
       delete this._progressPerURL[url];
       this._updateProgresses(type);
       this._triggerListeners();
