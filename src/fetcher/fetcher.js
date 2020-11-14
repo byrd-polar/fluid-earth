@@ -29,7 +29,11 @@ export default class Fetcher {
       return cachedResponse;
     }
 
-    this._progressPerURL[url] = { type };
+    this._progressPerURL[url] = {
+      type,
+      transferredBytes: 0,
+      totalBytes: 0,
+    };
 
     let data;
     try {
