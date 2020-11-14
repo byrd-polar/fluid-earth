@@ -40,6 +40,7 @@ export default class Fetcher {
           this._progressPerURL[url].totalBytes = prog.totalBytes;
           this._updateProgresses(type);
           this._triggerListeners();
+          this._resetIfComplete();
         },
       });
       let ext = url.split('.').pop();
@@ -56,15 +57,6 @@ export default class Fetcher {
         console.error('Fetch error:', error);
       }
       return false;
-
-    } finally {
-      // note: this finally block is always executed, even though there is a
-      // return in the catch block
-      if (this._progressPerURL[url]) {
-        this._completedURLs.push(this._progressPerURL[url]);
-      }
-      this._updateProgresses(type);
-      this._triggerListeners();
     }
 
     this._cache[url] = data;
@@ -84,12 +76,6 @@ export default class Fetcher {
       transferredBytes: sumOverProp(progs, 'transferredBytes'),
       totalBytes: sumOverProp(progs, 'totalBytes'),
     };
-
-    if (this._progressOverall.transferredBytes ===
-        this._progressOverall.totalBytes) {
-      this._completedURLs.forEach(url => delete this._progressPerURL[url]);
-      this._completedURLs = [];
-    }
   }
 
   _triggerListeners() {
@@ -97,6 +83,15 @@ export default class Fetcher {
       listener(
         this._progressOverall, this._progressPerType, this._progressPerURL
       );
+    }
+  }
+
+  _resetIfComplete() {
+    if (this._progressOverall.transferredBytes ===
+        this._progressOverall.totalBytes) {
+      this._progressPerURL = {};
+      this._progressPerType = {};
+      this._progressOverall = {};
     }
   }
 }
