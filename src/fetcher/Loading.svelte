@@ -1,21 +1,22 @@
 <script>
-  import LinearProgress from '@smui/linear-progress';
+  import ProgressBar from '@okrad/svelte-progressbar';
 
   export let fetcher;
 
-  let progress = 0;
+  let series = [{
+    perc: 0,
+    color: '#015B5B', // theme color
+  }];
   let closed = true;
 
   fetcher.addDownloadListener(p => {
     closed = (p.transferredBytes === p.totalBytes);
-    if (!closed) {
-      progress = p.transferredBytes / p.totalBytes;
-    }
+    series[0].perc = closed ? 0 : 100 * p.transferredBytes / p.totalBytes;
   });
 </script>
 
-<div>
-  <LinearProgress class="prog" {progress} {closed} />
+<div class:closed>
+  <ProgressBar rx="0" width="200" {series} />
 </div>
 
 <style>
@@ -26,9 +27,7 @@
     justify-content: center;
   }
 
-  :global(.prog) {
-    max-width: 75%;
-    width: 24rem;
-    height: 0.75em;
+  div.closed {
+    display: none;
   }
 </style>
