@@ -83,7 +83,7 @@ export default class Fetcher {
   _triggerListeners() {
     for (const listener of this._downloadListeners) {
       listener(
-        this._progressOverall, this._progressPerType, this._progressPerUrl
+        this._progressOverall, this._progressPerType, this._progressPerURL
       );
     }
   }
