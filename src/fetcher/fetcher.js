@@ -63,6 +63,10 @@ export default class Fetcher {
     } catch (error) {
       delete this._progressPerURL[url];
 
+      this._updateProgresses(type);
+      this._triggerListeners();
+      this._resetIfComplete();
+
       if (error.name === 'AbortError') {
         console.log('Fetch aborted:', url);
         console.log(
