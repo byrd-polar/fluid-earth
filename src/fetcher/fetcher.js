@@ -29,26 +29,34 @@ export default class Fetcher {
 
     this._progressPerURL[url] = { type };
 
-    let buffer = await ky(url, {
-      signal: this._abortControllers[type].signal,
-      onDownloadProgress: progress => {
-        this._progressPerURL[url].transferredBytes = progress.transferredBytes;
-        this._progressPerURL[url].totalBytes = progress.totalBytes;
-        this._updateProgresses(type);
-        this._triggerListeners();
-      },
-    }).then(res => {
-      let fileExtension = url.split('.').pop();
-      return fileExtension === 'json' ? res.json() : res.arrayBuffer();
+    let data;
+    try {
+      let res = await ky(url, {
+        signal: this._abortControllers[type].signal,
+        onDownloadProgress: prog => {
+          this._progressPerURL[url].transferredBytes = prog.transferredBytes;
+          this._progressPerURL[url].totalBytes = prog.totalBytes;
+          this._updateProgresses(type);
+          this._triggerListeners();
+        },
+      });
+      let ext = url.split('.').pop();
+      data = await (ext === 'json' ? res.json() : res.arrayBuffer());
 
-    }).finally(() => {
-       delete this._progressPerURL[url];
-       this._updateProgresses(type);
-       this._triggerListeners();
-    });
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('Fetch error:', error);
+      }
+      return false;
 
-    this._cache[url] = buffer;
-    return buffer;
+    } finally {
+      delete this._progressPerURL[url];
+      this._updateProgresses(type);
+      this._triggerListeners();
+    }
+
+    this._cache[url] = data;
+    return data;
   }
 
   _updateProgresses(type) {
