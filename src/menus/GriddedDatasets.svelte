@@ -41,6 +41,8 @@
   async function updateData() {
     let path = dataset.path;
     let buffer = await fetcher.fetch(path, 'gridded');
+    if (!buffer) return;
+
     griddedData = {
       float16Array: new Float16Array(buffer),
       width: 1440,
