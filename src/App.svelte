@@ -10,7 +10,7 @@
   import Advanced from './menus/Advanced.svelte';
   import ZoomSlider from './menus/ZoomSlider.svelte';
   import SiteNav from './menus/OldTopBarItems.svelte';
-
+  import AddComment32 from "carbon-icons-svelte/lib/AddComment32";
 
   import Map from './map/Map.svelte';
   import Legend from './Legend.svelte';
@@ -165,6 +165,17 @@
       {griddedDomain}
       {particleDisplay}
     />
+    <div class = "title" style = 'pointer-events: none;'>
+      <p>Fluid Earth Viewer<p>
+    </div>
+
+   <div class = "logos" >
+    <AddComment32 width = "35" height = "35"/>&nbsp;
+    <img src = "NSF-logo-white-small.png" width = "35" height = "35">&nbsp;
+    <img src = "OSU-logo-white-small.png" width = "30" height = "35">
+  </div>
+
+
   </Map>
 </main>
 <aside></aside>
@@ -188,6 +199,15 @@
     }
   }
 
+  @media (max-width: 750px) {
+    .title {
+        display: none;
+    }
+    .logos{
+      display: none;
+    }
+  }
+
   /* Fix for SVGs not being vertically centered in icon button. Doesn't seem to
    * affect Chromium, which is probably why it was missed. Considered patching
    * it in the @material source but it is determined by a Sass mixin, so it's
@@ -199,5 +219,20 @@
   aside {
     /* width: 500px; */
     margin-left: auto;
+  }
+  .title {
+   color: #D3D3D3;
+    font-family: Quicksand-bold;
+    font-size: 1.2rem;
+    pointer-events: auto;
+    font-weight: bolder;
+    margin-left: .75rem;
+  }
+  .logos{
+    text-align: end;
+    color: white;
+    pointer-events: none;
+    margin-right: 0rem;
+    margin-top: .50rem;
   }
 </style>

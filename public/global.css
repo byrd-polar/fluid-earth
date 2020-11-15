@@ -2,6 +2,10 @@
   font-family: 'Quicksand-regular';
   src: url('/fonts/Quicksand-Regular.ttf') format('truetype');
 }
+@font-face{
+  font-family: 'Quicksand-bold';
+  src: url('/fonts/Quicksand-Bold.ttf') format('truetype');
+}
 
 html {
   font-family: Roboto, sans-serif;
