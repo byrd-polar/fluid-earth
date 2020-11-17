@@ -44,7 +44,7 @@
     if (!buffer) return;
 
     griddedData = {
-      float16Array: new Float16Array(buffer),
+      floatArray: new Float16Array(buffer),
       width: 1440,
       height: 721,
       description: dataset.description,

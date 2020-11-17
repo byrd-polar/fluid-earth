@@ -20,7 +20,7 @@
   export let zoom = 1;
 
   export let griddedData = {
-    float16Array: new Float16Array([0.2]),
+    floatArray: new Float16Array([0.2]),
     width: 1,
     height: 1,
   };

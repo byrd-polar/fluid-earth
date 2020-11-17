@@ -22,6 +22,7 @@ export default class MapBackground {
     this._gl.enable(gl.BLEND);
     this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     this._ext = this._gl.getExtension('OES_texture_half_float');
+    this._gl.getExtension('OES_texture_float');
 
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers(options.vectorData);
@@ -135,11 +136,23 @@ export default class MapBackground {
   }
 
   _createDataTexture() {
+    let src, type, internalFormat;
+
+    if (this._data.floatArray.constructor.name !== 'Float32Array') {
+      src = new Uint16Array(this._data.floatArray.buffer);
+      type = this._webgl2 ? this._gl.HALF_FLOAT : this._ext.HALF_FLOAT_OES;
+      internalFormat = this._webgl2 ? this._gl.R16F : this._gl.ALPHA;
+    } else {
+      src = this._data.floatArray;
+      type = this._gl.FLOAT;
+      internalFormat = this._webgl2 ? this._gl.R32F : this._gl.ALPHA;
+    }
+
     return twgl.createTexture(this._gl, {
-      src: new Uint16Array(this._data.float16Array.buffer),
-      type: this._webgl2 ? this._gl.HALF_FLOAT : this._ext.HALF_FLOAT_OES,
+      src,
+      type,
       format: this._webgl2 ? this._gl.RED : this._gl.ALPHA,
-      internalFormat: this._webgl2 ? this._gl.R16F : this._gl.ALPHA,
+      internalFormat,
       minMag: this._gl.NEAREST, // don't filter between data points
       width: this._data.width,
       height: this._data.height,

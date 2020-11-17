@@ -26,13 +26,14 @@ export default class ParticleSimulator {
     this._gl = gl;
     this._webgl2 = options.webgl2;
     this._gl.enable(gl.BLEND);
-    this._gl.getExtension('OES_texture_float');
     // these are promoted extensions in webgl2, so we don't need to load them
     // in the case we are using webgl2
     if (!this._webgl2) {
       this._ext = this._gl.getExtension('OES_texture_half_float');
       this._gl.getExtension('OES_texture_half_float_linear');
+      this._gl.getExtension('OES_texture_float');
     }
+    this._gl.getExtension('OES_texture_float_linear');
 
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers();
@@ -282,23 +283,23 @@ export default class ParticleSimulator {
   }
 
   _createVectorFieldTexture() {
-    let type, internalFormat;
+    let src, type, internalFormat;
 
-    if (this._webgl2) {
-      type = this._gl.HALF_FLOAT;
-      internalFormat = this._gl.RGBA16F;
+    if (this._data.uVelocities.constructor.name !== 'Float32Array') {
+      src = interleave2(this._data.uVelocities, this._data.vVelocities);
+      type = this._webgl2 ? this._gl.HALF_FLOAT : this._ext.HALF_FLOAT_OES;
+      internalFormat = this._webgl2 ? this._gl.RGBA16F : this._gl.RGBA;
     } else {
-      type = this._ext.HALF_FLOAT_OES;
+      src = interleave4(this._data.uVelocities, this._data.vVelocities);
+      type = this._gl.FLOAT;
+      internalFormat = this._webgl2 ? this._gl.RGBA32F : this._gl.RGBA;
     }
 
     return twgl.createTexture(this._gl, {
-      src: interleave2(
-        this._data.uVelocities,
-        this._data.vVelocities,
-      ),
-      type: type,
+      src,
+      type,
       format: this._gl.RGBA,
-      internalFormat: internalFormat,
+      internalFormat,
       minMag: this._gl.LINEAR,
       width: this._data.width,
       height: this._data.height,
