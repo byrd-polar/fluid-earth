@@ -30,7 +30,9 @@ export default class Fetcher {
 
   async fetch(url, type='default', abortPreviousOfType=true) {
     if (abortPreviousOfType) {
-      this._abortControllers[type]?.abort();
+      if (this._abortControllers[type]) {
+        this._abortControllers[type].abort();
+      }
       this._abortControllers[type] = new AbortController();
     }
 
@@ -61,7 +63,29 @@ export default class Fetcher {
       if (url.split('.').pop() === 'json') {
         data = await res.json();
       } else {
-        data = new Float16Array(await res.arrayBuffer());
+        // TODO: find reliable detection for iOS <= 12
+        if (false) {
+          let temp = new Float16Array(await res.arrayBuffer());
+          data = new Float32Array(temp.length);
+
+          // TODO: Move the following loop to a Web Worker so it doesn't block
+          // the main thread. Will also want to add an additional loading
+          // indicator.
+          //
+          // Intereseting side-effect on an iPhone 6 is that processing all
+          // these floats causes the particles to flicker afterwards (some sort
+          // of optimization attempt?), which is fixed after switching to
+          // another tab and back. When less particles are used, or f32 files
+          // are loaded directly without conversion, the flickering doesn't
+          // happen. The hope is the Web Worker will fix that as well.
+
+          // convert from Float16s to Float32s
+          for (let i = 0; i < data.length; i++) {
+            data[i] = temp[i];
+          }
+        } else {
+          data = new Float16Array(await res.arrayBuffer());
+        }
       }
 
     } catch (error) {
