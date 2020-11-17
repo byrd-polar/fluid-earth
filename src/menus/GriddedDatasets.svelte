@@ -1,6 +1,4 @@
 <script>
-  import { Float16Array } from '@petamoriken/float16';
-
   export let griddedData;
   export let griddedDomain;
   export let fetcher;
@@ -40,11 +38,11 @@
 
   async function updateData() {
     let path = dataset.path;
-    let buffer = await fetcher.fetch(path, 'gridded');
-    if (!buffer) return;
+    let array = await fetcher.fetch(path, 'gridded');
+    if (!array) return;
 
     griddedData = {
-      floatArray: new Float16Array(buffer),
+      floatArray: array,
       width: 1440,
       height: 721,
       description: dataset.description,

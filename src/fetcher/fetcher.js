@@ -1,4 +1,5 @@
 import ky from 'ky';
+import { Float16Array } from '@petamoriken/float16';
 
 // TODO: generate this as a JSON file from the data scripts
 const fileSizeInBytes = {
@@ -57,8 +58,11 @@ export default class Fetcher {
           this._resetIfComplete();
         },
       });
-      let ext = url.split('.').pop();
-      data = await (ext === 'json' ? res.json() : res.arrayBuffer());
+      if (url.split('.').pop() === 'json') {
+        data = await res.json();
+      } else {
+        data = new Float16Array(await res.arrayBuffer());
+      }
 
     } catch (error) {
       delete this._progressPerURL[url];

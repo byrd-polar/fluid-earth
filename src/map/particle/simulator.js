@@ -1,5 +1,4 @@
 import * as twgl from 'twgl.js';
-import { Float16Array } from '@petamoriken/float16';
 
 import simVert from '../gridded.vert';
 import simFrag from './step.frag';

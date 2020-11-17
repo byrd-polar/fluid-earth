@@ -15,7 +15,6 @@
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
 
-  import { Float16Array } from '@petamoriken/float16';
   import { onMount } from 'svelte';
 
   let openedMenu = null;
@@ -36,13 +35,13 @@
   (async () => {
     let uPath = '/data/gfs-u-wind.fp16';
     let vPath = '/data/gfs-v-wind.fp16';
-    let uBuffer = fetcher.fetch(uPath, 'particle');
-    let vBuffer = fetcher.fetch(vPath, 'particle', false);
+    let uArray = fetcher.fetch(uPath, 'particle');
+    let vArray = fetcher.fetch(vPath, 'particle', false);
 
     vectorData = await fetcher.fetch('/data/topology.json', 'vector');
     particleData = {
-      uVelocities: new Float16Array(await uBuffer),
-      vVelocities: new Float16Array(await vBuffer),
+      uVelocities: await uArray,
+      vVelocities: await vArray,
       width: 1440,
       height: 721,
     };
