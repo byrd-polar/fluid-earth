@@ -1,4 +1,4 @@
-import { download, exit, OUTPUT_DIR } from './index.js';
+import { download, exit, OUTPUT_DIR } from './helpers.js';
 import path from 'path';
 import mapshaper from 'mapshaper';
 

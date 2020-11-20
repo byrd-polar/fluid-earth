@@ -1,4 +1,4 @@
-import { download, OUTPUT_DIR, exit } from './index.js';
+import { download, OUTPUT_DIR, exit } from './helpers.js';
 import { spawnSync } from 'child_process';
 import path from 'path';
 import { readFile, writeFile } from 'fs/promises';
