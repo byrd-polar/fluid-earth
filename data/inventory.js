@@ -9,14 +9,14 @@ const gfsSharedValues = {
 }
 
 const inventoryJSON = {
-  topology: {
+  '/data/topology.json': {
     lastUpdated: '2018-05-21',
     bytes: '1207774',
   },
-  'gfs-0p25-temperature-surface': gfsSharedValues,
-  'gfs-0p25-u-wind-velocity-10m': gfsSharedValues,
-  'gfs-0p25-v-wind-velocity-10m': gfsSharedValues,
-  'gfs-0p25-wind-speed-10m': gfsSharedValues,
+  '/data/gfs-0p25-temperature-surface/': gfsSharedValues,
+  '/data/gfs-0p25-u-wind-velocity-10m/': gfsSharedValues,
+  '/data/gfs-0p25-v-wind-velocity-10m/': gfsSharedValues,
+  '/data/gfs-0p25-wind-speed-10m/': gfsSharedValues,
 }
 
 export async function inventory() {
