@@ -26,7 +26,7 @@ export async function gfs() {
     day = (day - 1).toString().padStart(2, '0');
   }
 
-  const dataURL = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/' +
+  const dataURL = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
     `gfs.${year}${month}${day}/${hour}/gfs.t${hour}z.pgrb2.0p25.f000`;
   const indexURL = dataURL + '.idx';
 
