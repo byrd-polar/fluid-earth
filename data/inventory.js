@@ -23,7 +23,7 @@ export async function inventory() {
   gfsSharedValues.end = '2020-11-14T12:00Z'; // hardcoded for now
 
   let outputFile = path.join(OUTPUT_DIR, 'inventory.json');
+
+  console.log(`Generating inventory...\n=> ${outputFile}\n`);
   await writeFile(outputFile, JSON.stringify(inventoryJSON));
 }
-
-inventory();
