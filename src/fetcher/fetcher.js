@@ -1,17 +1,10 @@
 import ky from 'ky';
 import { Float16Array } from '@petamoriken/float16';
 
-// TODO: generate this as a JSON file from the data scripts
-const fileSizeInBytes = {
-  '/data/gfs-temperature.fp16': 2076480,
-  '/data/gfs-u-wind.fp16': 2076480,
-  '/data/gfs-v-wind.fp16': 2076480,
-  '/data/gfs-wind-speed.fp16': 2076480,
-  '/data/topology.json': 1207774,
-};
-
 export default class Fetcher {
   constructor() {
+    this.inventoryPromise = ky('/data/inventory.json').json();
+
     this._downloadListeners = [];
 
     this._progressPerURL = {};
@@ -44,7 +37,7 @@ export default class Fetcher {
     this._progressPerURL[url] = {
       type,
       transferredBytes: 0,
-      totalBytes: fileSizeInBytes[url],
+      totalBytes: this._fileSizeInBytes(url),
     };
 
     let data;
@@ -110,6 +103,19 @@ export default class Fetcher {
 
     this._cache[url] = data;
     return data;
+  }
+
+  async _fileSizeInBytes(url) {
+    let inventory = await this.inventoryPromise();
+
+    let bytes;
+    if (inventory[url]) {
+      bytes = inventory[url].bytes;
+    } else {
+      let dir = url.split('/').slice(0, -1).join('/') + '/';
+      bytes = inventory[dir].bytesPerFile;
+    }
+    return bytes;
   }
 
   _updateProgresses(type) {
