@@ -10,7 +10,8 @@ import { createWriteStream } from 'fs';
 import { platform } from 'os';
 
 if (process.argv.length != 2 + 2) {
-  console.log('wrong number of arguments, expected 2');
+  console.log('wrong number of arguments, expected 2\n');
+  console.log('Usage: node gfs-to-fp16.js [inputFile] [outputFile]');
   process.exit(1);
 }
 
