@@ -24,7 +24,7 @@ const wgrib2 = spawn('wgrib2', [
   '-bin', '-',
   '-no_header',
   '-order', 'we:ns'
-]).stdout;
+]);
 
 const float16 = new Transform({
   transform(chunk, _encoding, callback) {
@@ -36,4 +36,4 @@ const float16 = new Transform({
 
 const output = createWriteStream(outputFile);
 
-wgrib2.pipe(float16).pipe(output);
+wgrib2.stdout.pipe(float16).pipe(output);

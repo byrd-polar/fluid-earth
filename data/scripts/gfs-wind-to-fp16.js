@@ -1,7 +1,7 @@
 #!/bin/env node
-// Convert a GFS file to fp16
+// Calculate wind speed from GFS files and convert to fp16
 //
-// Usage: node gfs-to-fp16.js [uWind] [vWind] [outputFile]
+// Usage: node gfs-wind-to-fp16.js [uWind] [vWind] [outputFile]
 
 import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';
@@ -15,18 +15,17 @@ if (process.argv.length != 2 + 3) {
   process.exit(1);
 }
 
-const uWind = createReadStream(process.argv[2]);
-const vWind = createReadStream(process.argv[3]);
+const uWind = process.argv[2];
+const vWind = process.argv[3];
 const outputFile = process.argv[4];
 
-const files = [uWind, vWind];
-const cat = Readable.from((async function*(files) {
-  for (const file of files) {
-    for await (const chunk of file) {
+const cat = Readable.from((async function*(streams) {
+  for (const stream of streams) {
+    for await (const chunk of stream) {
       yield chunk;
     }
   }
-})(files));
+})([uWind, vWind].map(f => createReadStream(f))));
 
 const wind = spawn('wgrib2', [
   '-',
