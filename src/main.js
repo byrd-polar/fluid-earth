@@ -1,7 +1,11 @@
+import ky from 'ky';
 import App from './App.svelte';
 
-const app = new App({
-  target: document.body
-});
-
-export default app;
+(async () => {
+  new App({
+    target: document.body,
+    props: {
+      inventory: await ky('/data/inventory.json').json(),
+    },
+  });
+})();

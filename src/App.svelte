@@ -17,8 +17,10 @@
 
   import { onMount } from 'svelte';
 
+  export let inventory;
+
   let openedMenu = null;
-  let fetcher = new Fetcher();
+  let fetcher = new Fetcher(inventory);
   let date = new Date('2020-08-08T18:00:00.000Z');
   $: date, (async () => {
     let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${date.toISOString()}.fp16`;

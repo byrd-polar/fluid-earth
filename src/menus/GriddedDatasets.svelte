@@ -37,10 +37,11 @@
   let dataset = datasets[3];
   $: date, dataset, updateData();
 
-  let canForward, canBack;
+  let canForward, canBack, interval;
   // should get these from inventory, temporary hardcode for now
-  $: canForward = date < new Date('2020-08-08T18:00:00.000Z');
-  $: canBack = date > new Date('2020-08-05T00:00:00.000Z');
+  $: canForward = date < new Date(fetcher.inventory[dataset.path].end);
+  $: canBack = date > new Date(fetcher.inventory[dataset.path].start);
+  $: interval = parseInt(fetcher.inventory[dataset.path].intervalInHours);
 
   async function updateData() {
     let path = dataset.path + date.toISOString() + '.fp16';
@@ -73,15 +74,15 @@
 <p>Step through time:</p>
 <button
   disabled={!canBack}
-  on:click={() => { date.setHours(date.getHours() - 6); date = date }}
+  on:click={() => { date.setHours(date.getHours() - interval); date = date }}
 >
-	Back 6 hours
+  Back {interval} hours
 </button>
 <button
   disabled={!canForward}
-  on:click={() => { date.setHours(date.getHours() + 6); date = date }}
+  on:click={() => { date.setHours(date.getHours() + interval); date = date }}
 >
-	Forward 6 hours
+  Forward {interval} hours
 </button>
 
 <h2>Note</h2>

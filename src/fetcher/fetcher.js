@@ -2,8 +2,8 @@ import ky from 'ky';
 import { Float16Array } from '@petamoriken/float16';
 
 export default class Fetcher {
-  constructor() {
-    this.inventoryPromise = ky('/data/inventory.json').json();
+  constructor(inventory) {
+    this.inventory = inventory;
 
     this._downloadListeners = [];
 
@@ -106,14 +106,12 @@ export default class Fetcher {
   }
 
   async _fileSizeInBytes(url) {
-    let inventory = await this.inventoryPromise;
-
     let bytes;
-    if (inventory[url]) {
-      bytes = inventory[url].bytes;
+    if (this.inventory[url]) {
+      bytes = this.inventory[url].bytes;
     } else {
       let dir = url.split('/').slice(0, -1).join('/') + '/';
-      bytes = inventory[dir].bytesPerFile;
+      bytes = this.inventory[dir].bytesPerFile;
     }
     return parseInt(bytes);
   }
