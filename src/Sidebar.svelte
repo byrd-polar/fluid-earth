@@ -25,6 +25,10 @@
   import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
   import EarthFilled32 from "carbon-icons-svelte/lib/EarthFilled32";
   import WatsonHealthFusionBlender32 from "carbon-icons-svelte/lib/WatsonHealthFusionBlender32";
+  import List24 from "carbon-icons-svelte/lib/List24";
+  import Earth24 from "carbon-icons-svelte/lib/Earth24";
+  import Location24 from "carbon-icons-svelte/lib/Location24";
+  import SettingsAdjust24 from "carbon-icons-svelte/lib/SettingsAdjust24";
 
   export let openedMenu;
 
@@ -32,7 +36,10 @@
     { name: 'Map Projections', icon: Globe32 },
     { name: 'Gridded Datasets', icon: Grid32 },
     { name: 'Colormaps', icon: ColorPalette32 },
-    { name: 'Map Options', icon: EarthFilled32 },
+    { name: 'Variables', icon: List24 },
+    { name: 'Markers', icon: Location24 },
+    { name: 'Projections', icon: Earth24 },
+    { name: 'Advanced', icon: SettingsAdjust24 },
     { name: 'Zoom Slider', icon: WatsonHealthFusionBlender32 }
   ];
 

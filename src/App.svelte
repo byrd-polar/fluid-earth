@@ -4,8 +4,12 @@
   import MapProjections from './menus/MapProjections.svelte';
   import GriddedDatasets from './menus/GriddedDatasets.svelte';
   import Colormaps from './menus/Colormaps.svelte';
-  import MapOptions from './menus/MapOptions.svelte';
+  import Variables from './menus/tabs/Variables.svelte';
+  import Markers from './menus/tabs/Markers.svelte';
+  import Projections from './menus/tabs/Projections.svelte';
+  import Advanced from './menus/tabs/Advanced.svelte';
   import ZoomSlider from './menus/ZoomSlider.svelte';
+
 
   import Map from './map/Map.svelte';
   import Legend from './Legend.svelte';
@@ -107,9 +111,21 @@
     bind:griddedColormap
   />
 </Menu>
-<Menu bind:openedMenu menuName="Map Options" darkBackground="true"
+<Menu bind:openedMenu menuName="Variables" darkBackground="true"
       on:resize={updateWebglSize}>
-  <MapOptions/>
+  <Variables/>
+</Menu>
+  <Menu bind:openedMenu menuName="Markers" darkBackground="true"
+      on:resize={updateWebglSize}>
+  <Markers/>
+  </Menu>
+  <Menu bind:openedMenu menuName="Projections" darkBackground="true"
+      on:resize={updateWebglSize}>
+  <Projections/>
+</Menu>
+<Menu bind:openedMenu menuName="Advanced" darkBackground="true"
+      on:resize={updateWebglSize}>
+  <Advanced/>
 </Menu>
 <Menu bind:openedMenu menuName="Zoom Slider"
       on:resize={updateWebglSize}>
