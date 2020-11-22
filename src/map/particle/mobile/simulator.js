@@ -52,7 +52,8 @@ export default class ParticleSimulatorMobile extends ParticleSimulator {
       u_particleLongitudes: this._textures.simA.longitudes,
       u_particleLatitudes: this._textures.simA.latitudes,
       u_particleLifetimes: this._textures.simA.lifetimes,
-      u_vectorField: this._textures.vectorField,
+      u_vectorFieldU: this._textures.vectorFieldU,
+      u_vectorFieldV: this._textures.vectorFieldV,
       u_random: this._textures.random,
       u_particleLifetime: this._lifetime,
       u_randLonLatOffsets: [Math.random(), Math.random()],
@@ -116,12 +117,15 @@ export default class ParticleSimulatorMobile extends ParticleSimulator {
     let simLatFrag2 = this._webgl2 ?
       simLatFrag.replace(/\)\.a;/g, ').r;') :
       simLatFrag;
+    let simSpeedFrag2 = this._webgl2 ?
+      simSpeedFrag.replace(/\)\.a;/g, ').r;') :
+      simSpeedFrag;
     return {
       sim: {
         longitudes: twgl.createProgramInfo(this._gl, [simVert, simLonFrag2]),
         latitudes: twgl.createProgramInfo(this._gl, [simVert, simLatFrag2]),
         lifetimes: twgl.createProgramInfo(this._gl, [simVert, simLifeFrag]),
-        speeds: twgl.createProgramInfo(this._gl, [simVert, simSpeedFrag]),
+        speeds: twgl.createProgramInfo(this._gl, [simVert, simSpeedFrag2]),
       },
       draw: twgl.createProgramInfo(this._gl, [drawVert, drawFrag]),
       texture: twgl.createProgramInfo(this._gl, [textureVert, textureFrag]),

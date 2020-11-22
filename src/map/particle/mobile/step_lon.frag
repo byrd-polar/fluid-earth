@@ -7,7 +7,7 @@ precision highp float;
 uniform sampler2D u_particleLongitudes;
 uniform sampler2D u_particleLatitudes;
 uniform sampler2D u_particleLifetimes;
-uniform sampler2D u_vectorField;
+uniform sampler2D u_vectorFieldU;
 uniform sampler2D u_random;
 
 uniform vec2 u_randLonLatOffsets;
@@ -50,7 +50,7 @@ void main() {
   texCoord.x = mod(texCoord.x + xOffset, 1.0);
   texCoord.y = yScale * (texCoord.y - 0.5) + 0.5;
 
-  vec2 velocity = texture2D(u_vectorField, texCoord).rg;
+  float velocity = texture2D(u_vectorFieldU, texCoord).a;
 
   if (lifetime > u_particleLifetime) {
     // "randomly" relocate particle to keep grid "full"
@@ -61,7 +61,7 @@ void main() {
   } else {
     // move particle according to vectorField
     float multiplier = u_rate * (u_timeDelta / 1000.0) / M_PER_DEG;
-    lonLat.x += multiplier * velocity.x / cos(radians(lonLat.y));
+    lonLat.x += multiplier * velocity / cos(radians(lonLat.y));
   }
 
   // keep lonLat values in range

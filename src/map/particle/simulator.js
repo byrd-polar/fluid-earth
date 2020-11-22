@@ -72,7 +72,10 @@ export default class ParticleSimulator {
   set data(d) {
     this._data = d;
     this._gl.deleteTexture(this._textures.vectorField);
-    this._textures.vectorField = this._createVectorFieldTexture();
+    this._textures.vectorFieldU =
+      this._createVectorFieldTexture(this._data.uVelocities);
+    this._textures.vectorFieldV =
+      this._createVectorFieldTexture(this._data.vVelocities);
   }
 
   // using data in this._textures.simA, simulate and render to
@@ -88,7 +91,8 @@ export default class ParticleSimulator {
     this._gl.disable(this._gl.BLEND);
     glDraw(this._gl, this._programs.sim, this._buffers.sim, {
       u_particleData: this._textures.simA,
-      u_vectorField: this._textures.vectorField,
+      u_vectorFieldU: this._textures.vectorFieldU,
+      u_vectorFieldV: this._textures.vectorFieldV,
       u_random: this._textures.random,
       u_particleLifetime: this._lifetime,
       u_randLonLatOffsets: [Math.random(), Math.random()],
@@ -248,7 +252,8 @@ export default class ParticleSimulator {
       }),
       simA: this._createSimATexture(),
       simB: this._createSimBTexture(),
-      vectorField: this._createVectorFieldTexture(),
+      vectorFieldU: this._createVectorFieldTexture(this._data.uVelocities),
+      vectorFieldV: this._createVectorFieldTexture(this._data.vVelocities),
       particleTrailsA: this._createParticleTrailsTexture(),
       particleTrailsB: this._createParticleTrailsTexture(),
     };
@@ -281,23 +286,24 @@ export default class ParticleSimulator {
     });
   }
 
-  _createVectorFieldTexture() {
-    let src, type, internalFormat;
+  _createVectorFieldTexture(src) {
+    let type, format, internalFormat;
 
     if (this._data.uVelocities.constructor.name !== 'Float32Array') {
-      src = interleave2(this._data.uVelocities, this._data.vVelocities);
+      src = new Uint16Array(src.buffer);
       type = this._webgl2 ? this._gl.HALF_FLOAT : this._ext.HALF_FLOAT_OES;
-      internalFormat = this._webgl2 ? this._gl.RGBA16F : this._gl.RGBA;
+      format = this._webgl2 ? this._gl.RED : this._gl.ALPHA;
+      internalFormat = this._webgl2 ? this._gl.R16F : this._gl.ALPHA;
     } else {
-      src = interleave4(this._data.uVelocities, this._data.vVelocities);
       type = this._gl.FLOAT;
-      internalFormat = this._webgl2 ? this._gl.RGBA32F : this._gl.RGBA;
+      format = this._webgl2 ? this._gl.RED : this._gl.ALPHA;
+      internalFormat = this._webgl2 ? this._gl.R32F : this._gl.ALPHA;
     }
 
     return twgl.createTexture(this._gl, {
       src,
       type,
-      format: this._gl.RGBA,
+      format,
       internalFormat,
       minMag: this._gl.LINEAR,
       width: this._data.width,
@@ -356,7 +362,6 @@ export default class ParticleSimulator {
   }
 }
 
-// for Float32Arrays
 function interleave4(arrayR, arrayG, arrayB, arrayA) {
   let interleaved = new Float32Array(4 * arrayR.length);
 
@@ -369,23 +374,6 @@ function interleave4(arrayR, arrayG, arrayB, arrayA) {
       interleaved[i] = arrayB[Math.floor(i/4)];
     } else if (arrayA) {
       interleaved[i] = arrayA[Math.floor(i/4)];
-    }
-  }
-
-  return interleaved;
-}
-
-// for Float16Arrays
-function interleave2(arrayR, arrayG) {
-  let interleaved = new Uint16Array(4 * arrayR.length);
-  arrayR = new Uint16Array(arrayR.buffer);
-  arrayG = new Uint16Array(arrayG.buffer);
-
-  for (let i = 0; i < interleaved.length; i++) {
-    if (i % 4 === 0) {
-      interleaved[i] = arrayR[i/4];
-    } else if (i % 4 === 1) {
-      interleaved[i] = arrayG[Math.floor(i/4)];
     }
   }
 

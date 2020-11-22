@@ -8,7 +8,8 @@ precision highp float;
 uniform sampler2D u_particleLongitudes;
 uniform sampler2D u_particleLatitudes;
 uniform sampler2D u_particleLifetimes;
-uniform sampler2D u_vectorField;
+uniform sampler2D u_vectorFieldU;
+uniform sampler2D u_vectorFieldV;
 
 uniform float u_gridWidth;
 uniform float u_gridHeight;
@@ -45,7 +46,9 @@ void main() {
   texCoord.x = mod(texCoord.x + xOffset, 1.0);
   texCoord.y = yScale * (texCoord.y - 0.5) + 0.5;
 
-  vec2 velocity = texture2D(u_vectorField, texCoord).rg;
+  vec2 velocity;
+  velocity.x = texture2D(u_vectorFieldU, texCoord).a;
+  velocity.y = texture2D(u_vectorFieldV, texCoord).a;
   float speed = length(velocity);
 
   if (lifetime > u_particleLifetime) {

@@ -1,4 +1,4 @@
-// Copied from ../step.frag, with parts not relating to longitude step removed
+// Copied from ../step.frag, with parts not relating to latitude step removed
 precision highp float;
 
 #pragma glslify: encode = require(./encode.glsl)
@@ -7,7 +7,7 @@ precision highp float;
 uniform sampler2D u_particleLongitudes;
 uniform sampler2D u_particleLatitudes;
 uniform sampler2D u_particleLifetimes;
-uniform sampler2D u_vectorField;
+uniform sampler2D u_vectorFieldV;
 uniform sampler2D u_random;
 
 uniform vec2 u_randLonLatOffsets;
@@ -50,7 +50,7 @@ void main() {
   texCoord.x = mod(texCoord.x + xOffset, 1.0);
   texCoord.y = yScale * (texCoord.y - 0.5) + 0.5;
 
-  vec2 velocity = texture2D(u_vectorField, texCoord).rg;
+  float velocity = texture2D(u_vectorFieldV, texCoord).a;
 
   if (lifetime > u_particleLifetime) {
     // "randomly" relocate particle to keep grid "full"
@@ -60,7 +60,7 @@ void main() {
   } else {
     // move particle according to vectorField
     float multiplier = u_rate * (u_timeDelta / 1000.0) / M_PER_DEG;
-    lonLat.y += multiplier * velocity.y;
+    lonLat.y += multiplier * velocity;
   }
 
   // keep lonLat values in range
