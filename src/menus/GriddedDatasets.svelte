@@ -1,11 +1,11 @@
 <script>
   import colormaps from '../map/colormaps/';
+  import date from '../date.js'
 
   export let griddedData;
   export let griddedDomain;
   export let griddedColormap;
   export let fetcher;
-  export let date;
 
   let datasets = [
     {
@@ -42,15 +42,15 @@
     },
   ];
   let dataset = datasets[3];
-  $: date, dataset, updateData();
+  $: $date, dataset, updateData();
 
   let canForward, canBack, interval;
-  $: canForward = date < fetcher.inventory[dataset.path].end;
-  $: canBack = date > fetcher.inventory[dataset.path].start;
+  $: canForward = $date < fetcher.inventory[dataset.path].end;
+  $: canBack = $date > fetcher.inventory[dataset.path].start;
   $: interval = fetcher.inventory[dataset.path].intervalInHours;
 
   async function updateData() {
-    let path = dataset.path + date.toISOString() + '.fp16';
+    let path = dataset.path + $date.toISOString() + '.fp16';
     let array = await fetcher.fetch(path, 'gridded');
     if (!array) return;
 
@@ -63,6 +63,13 @@
     }
     griddedDomain = dataset.domain;
     griddedColormap = dataset.colormap;
+  }
+
+  function adjustDate(hours) {
+    date.update(d => {
+      d.setHours(d.getHours() + hours);
+      return d;
+    });
   }
 </script>
 
@@ -81,13 +88,13 @@
 <p>Step through time:</p>
 <button
   disabled={!canBack}
-  on:click={() => { date.setHours(date.getHours() - interval); date = date }}
+  on:click={() => adjustDate(-interval)}
 >
   Back {interval} hours
 </button>
 <button
   disabled={!canForward}
-  on:click={() => { date.setHours(date.getHours() + interval); date = date }}
+  on:click={() => adjustDate(interval)}
 >
   Forward {interval} hours
 </button>

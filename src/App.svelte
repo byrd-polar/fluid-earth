@@ -14,6 +14,7 @@
   import Controls from './Controls.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
+  import date from './date.js'
 
   import { onMount } from 'svelte';
 
@@ -23,10 +24,9 @@
 
   let openedMenu = null;
   let fetcher = new Fetcher(inventory);
-  let date = new Date('2020-08-08T18:00:00.000Z');
-  $: date, (async () => {
-    let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${date.toISOString()}.fp16`;
-    let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${date.toISOString()}.fp16`;
+  $: $date, (async () => {
+    let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${$date.toISOString()}.fp16`;
+    let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${$date.toISOString()}.fp16`;
 
     let uArray = fetcher.fetch(uPath, 'particle');
     let vArray = await fetcher.fetch(vPath, 'particle', false);
@@ -96,7 +96,6 @@
       on:resize={updateWebglSize}>
   <GriddedDatasets
     {fetcher}
-    bind:date
     bind:griddedData
     bind:griddedDomain
     bind:griddedColormap
@@ -139,7 +138,6 @@
     />
     <Loading {fetcher} />
     <Legend
-      {date}
       {griddedData}
       {griddedColormap}
       {griddedDomain}
