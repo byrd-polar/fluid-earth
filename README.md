@@ -19,10 +19,14 @@ cd fev2r
 npm install
 ```
 
-...generate the data...
+...add the development data...
+
+Download the [starter
+packet](https://drive.google.com/file/d/1lgwKIJRu8Y8BKjF4ikIml6_oa8MV1K8p/view?usp=sharing),
+unzip it, and move the `data` directory into the `public` directory:
 
 ```bash
-npm run data
+unzip fev2r-development-data.zip -d public
 ```
 
 ...then start [Rollup](https://rollupjs.org):
