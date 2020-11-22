@@ -8,12 +8,8 @@
   export let griddedColormap;
   export let griddedDomain = [0, 0];
   export let particleDisplay;
-  export let date = new Date(Date.UTC(
-    2020,   // year
-    11 - 1, // month starts at 0
-    10,     // day
-    12,     // hour
-  ));
+  export let date;
+
   // see options parameter here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat
   let dateStringOptions = {
     weekday: 'long',
