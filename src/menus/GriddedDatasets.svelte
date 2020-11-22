@@ -1,6 +1,9 @@
 <script>
+  import colormaps from '../map/colormaps/';
+
   export let griddedData;
   export let griddedDomain;
+  export let griddedColormap;
   export let fetcher;
   export let date;
 
@@ -11,6 +14,7 @@
       units: 'K',
       path: '/data/gfs-0p25-temperature-surface/',
       domain: [273.15 - 70, 273.15 + 70],
+      colormap: colormaps.MAGMA,
     },
     {
       name: 'u-wind velocity',
@@ -18,6 +22,7 @@
       units: 'm/s',
       path: '/data/gfs-0p25-u-wind-velocity-10m/',
       domain: [-35, 35],
+      colormap: colormaps.BR_BG,
     },
     {
       name: 'v-wind velocity',
@@ -25,6 +30,7 @@
       units: 'm/s',
       path: '/data/gfs-0p25-v-wind-velocity-10m/',
       domain: [-35, 35],
+      colormap: colormaps.PR_GN,
     },
     {
       name: 'wind speed',
@@ -32,6 +38,7 @@
       units: 'm/s',
       path: '/data/gfs-0p25-wind-speed-10m/',
       domain: [0, 35],
+      colormap: colormaps.VIRIDIS,
     },
   ];
   let dataset = datasets[3];
@@ -56,6 +63,7 @@
       units: dataset.units,
     }
     griddedDomain = dataset.domain;
+    griddedColormap = dataset.colormap;
   }
 </script>
 

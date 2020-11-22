@@ -99,6 +99,7 @@
     bind:date
     bind:griddedData
     bind:griddedDomain
+    bind:griddedColormap
   />
 </Menu>
 <Menu bind:openedMenu menuName="Colormaps"
