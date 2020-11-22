@@ -19,6 +19,24 @@
 
   let openedMenu = null;
   let fetcher = new Fetcher();
+  let date = new Date('2020-08-08T18:00:00.000Z');
+  $: date, (async () => {
+    let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${date.toISOString()}.fp16`;
+    let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${date.toISOString()}.fp16`;
+
+    let uArray = fetcher.fetch(uPath, 'particle');
+    let vArray = await fetcher.fetch(vPath, 'particle', false);
+    uArray = await uArray;
+
+    if (!uArray || !vArray) return;
+
+    particleData = {
+      uVelocities: uArray,
+      vVelocities: vArray,
+      width: 1440,
+      height: 721,
+    };
+  })();
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let center = {
@@ -33,18 +51,7 @@
   let particleData;
   let vectorData;
   (async () => {
-    let uPath = '/data/gfs-u-wind.fp16';
-    let vPath = '/data/gfs-v-wind.fp16';
-    let uArray = fetcher.fetch(uPath, 'particle');
-    let vArray = fetcher.fetch(vPath, 'particle', false);
-
     vectorData = await fetcher.fetch('/data/topology.json', 'vector');
-    particleData = {
-      uVelocities: await uArray,
-      vVelocities: await vArray,
-      width: 1440,
-      height: 721,
-    };
   })();
 
   let particleLifetime = 1000;
@@ -85,6 +92,7 @@
       on:resize={updateWebglSize}>
   <GriddedDatasets
     {fetcher}
+    bind:date
     bind:griddedData
     bind:griddedDomain
   />
@@ -126,6 +134,7 @@
     />
     <Loading {fetcher} />
     <Legend
+      {date}
       {griddedData}
       {griddedColormap}
       {griddedDomain}

@@ -2,42 +2,48 @@
   export let griddedData;
   export let griddedDomain;
   export let fetcher;
+  export let date;
 
   let datasets = [
     {
       name: 'surface temperature',
       description: 'Temperature at ground level',
       units: 'K',
-      path: '/data/gfs-temperature.fp16',
+      path: '/data/gfs-0p25-temperature-surface/',
       domain: [273.15 - 70, 273.15 + 70],
     },
     {
       name: 'u-wind velocity',
       description: 'Wind velocity west to east at 10m above ground level',
       units: 'm/s',
-      path: '/data/gfs-u-wind.fp16',
+      path: '/data/gfs-0p25-u-wind-velocity-10m/',
       domain: [-35, 35],
     },
     {
       name: 'v-wind velocity',
       description: 'Wind velocity south to north at 10m above ground level',
       units: 'm/s',
-      path: '/data/gfs-v-wind.fp16',
+      path: '/data/gfs-0p25-v-wind-velocity-10m/',
       domain: [-35, 35],
     },
     {
       name: 'wind speed',
       description: 'Wind speed at 10m above ground level',
       units: 'm/s',
-      path: '/data/gfs-wind-speed.fp16',
+      path: '/data/gfs-0p25-wind-speed-10m/',
       domain: [0, 35],
     },
   ];
   let dataset = datasets[3];
-  $: dataset, updateData();
+  $: date, dataset, updateData();
+
+  let canForward, canBack;
+  // should get these from inventory, temporary hardcode for now
+  $: canForward = date < new Date('2020-08-08T18:00:00.000Z');
+  $: canBack = date > new Date('2020-08-05T00:00:00.000Z');
 
   async function updateData() {
-    let path = dataset.path;
+    let path = dataset.path + date.toISOString() + '.fp16';
     let array = await fetcher.fetch(path, 'gridded');
     if (!array) return;
 
@@ -63,6 +69,20 @@
   {d.name}
 </label>
 {/each}
+
+<p>Step through time:</p>
+<button
+  disabled={!canBack}
+  on:click={() => { date.setHours(date.getHours() - 6); date = date }}
+>
+	Back 6 hours
+</button>
+<button
+  disabled={!canForward}
+  on:click={() => { date.setHours(date.getHours() + 6); date = date }}
+>
+	Forward 6 hours
+</button>
 
 <h2>Note</h2>
 <p>These demo menus exist only to illustrate the process of binding

@@ -37,7 +37,7 @@ export default class Fetcher {
     this._progressPerURL[url] = {
       type,
       transferredBytes: 0,
-      totalBytes: this._fileSizeInBytes(url),
+      totalBytes: await this._fileSizeInBytes(url),
     };
 
     let data;
@@ -106,7 +106,7 @@ export default class Fetcher {
   }
 
   async _fileSizeInBytes(url) {
-    let inventory = await this.inventoryPromise();
+    let inventory = await this.inventoryPromise;
 
     let bytes;
     if (inventory[url]) {
@@ -115,7 +115,7 @@ export default class Fetcher {
       let dir = url.split('/').slice(0, -1).join('/') + '/';
       bytes = inventory[dir].bytesPerFile;
     }
-    return bytes;
+    return parseInt(bytes);
   }
 
   _updateProgresses(type) {
