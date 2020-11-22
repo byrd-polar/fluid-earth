@@ -11,7 +11,7 @@ const gfsSharedValues = {
 const inventoryJSON = {
   '/data/topology.json': {
     lastUpdated: '2018-05-21',
-    bytes: '1207774',
+    bytes: 1207774,
   },
   '/data/gfs-0p25-temperature-surface/': gfsSharedValues,
   '/data/gfs-0p25-u-wind-velocity-10m/': gfsSharedValues,

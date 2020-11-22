@@ -39,9 +39,9 @@
 
   let canForward, canBack, interval;
   // should get these from inventory, temporary hardcode for now
-  $: canForward = date < new Date(fetcher.inventory[dataset.path].end);
-  $: canBack = date > new Date(fetcher.inventory[dataset.path].start);
-  $: interval = parseInt(fetcher.inventory[dataset.path].intervalInHours);
+  $: canForward = date < fetcher.inventory[dataset.path].end;
+  $: canBack = date > fetcher.inventory[dataset.path].start;
+  $: interval = fetcher.inventory[dataset.path].intervalInHours;
 
   async function updateData() {
     let path = dataset.path + date.toISOString() + '.fp16';

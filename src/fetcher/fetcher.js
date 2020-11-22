@@ -5,6 +5,17 @@ export default class Fetcher {
   constructor(inventory) {
     this.inventory = inventory;
 
+    // replace ISO date strings (originally from JSON) with Date objects
+    //
+    // will need to update this if date strings are added in different sections
+    // of the inventory
+    for (const path in inventory) {
+      if (inventory[path].start && inventory[path].end) {
+        inventory[path].start = new Date(inventory[path].start);
+        inventory[path].end = new Date(inventory[path].end);
+      }
+    }
+
     this._downloadListeners = [];
 
     this._progressPerURL = {};
@@ -113,7 +124,7 @@ export default class Fetcher {
       let dir = url.split('/').slice(0, -1).join('/') + '/';
       bytes = this.inventory[dir].bytesPerFile;
     }
-    return parseInt(bytes);
+    return bytes;
   }
 
   _updateProgresses(type) {
