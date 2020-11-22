@@ -45,7 +45,6 @@
   $: date, dataset, updateData();
 
   let canForward, canBack, interval;
-  // should get these from inventory, temporary hardcode for now
   $: canForward = date < fetcher.inventory[dataset.path].end;
   $: canBack = date > fetcher.inventory[dataset.path].start;
   $: interval = fetcher.inventory[dataset.path].intervalInHours;
