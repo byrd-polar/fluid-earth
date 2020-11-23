@@ -9,6 +9,7 @@
   import Projections from './menus/Projections.svelte';
   import Advanced from './menus/Advanced.svelte';
   import ZoomSlider from './menus/ZoomSlider.svelte';
+  import SiteNav from './menus/OldTopBarItems.svelte';
 
 
   import Map from './map/Map.svelte';
@@ -131,6 +132,11 @@
       on:resize={updateWebglSize}>
   <ZoomSlider
     bind:zoom
+  />
+  </Menu>
+  <Menu bind:openedMenu menuName="Site Navigation" darkBackground="true"
+      on:resize={updateWebglSize}>
+  <SiteNav
   />
 </Menu>
 <main>

@@ -29,6 +29,7 @@
   import Earth24 from "carbon-icons-svelte/lib/Earth24";
   import Location24 from "carbon-icons-svelte/lib/Location24";
   import SettingsAdjust24 from "carbon-icons-svelte/lib/SettingsAdjust24";
+  import Information32 from "carbon-icons-svelte/lib/Information32";
 
   export let openedMenu;
 
@@ -40,7 +41,8 @@
     { name: 'Markers', icon: Location24 },
     { name: 'Projections', icon: Earth24 },
     { name: 'Advanced', icon: SettingsAdjust24 },
-    { name: 'Zoom Slider', icon: WatsonHealthFusionBlender32 }
+    { name: 'Zoom Slider', icon: WatsonHealthFusionBlender32 },
+    { name: 'Site Navigation', icon: Information32 }
   ];
 
   let drawerOpen = false;
