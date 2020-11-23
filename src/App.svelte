@@ -4,10 +4,10 @@
   import MapProjections from './menus/MapProjections.svelte';
   import GriddedDatasets from './menus/GriddedDatasets.svelte';
   import Colormaps from './menus/Colormaps.svelte';
-  import Variables from './menus/tabs/Variables.svelte';
-  import Markers from './menus/tabs/Markers.svelte';
-  import Projections from './menus/tabs/Projections.svelte';
-  import Advanced from './menus/tabs/Advanced.svelte';
+  import Variables from './menus/Variables.svelte';
+  import Markers from './menus/Markers.svelte';
+  import Projections from './menus/Projections.svelte';
+  import Advanced from './menus/Advanced.svelte';
   import ZoomSlider from './menus/ZoomSlider.svelte';
 
 
