@@ -39,12 +39,11 @@ export default class ParticleSimulator {
     this._textures = this._createTextures();
     this._framebuffers = this._createFramebuffers();
 
-    this._webkit = options.webkit;
-    // hack to get around premultipliedAlpha: false not working on iOS/Safari
-    if (this._webkit) {
-      this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    } else {
+    this._majorPerformanceCaveat = options.majorPerformanceCaveat;
+    if (this._majorPerformanceCaveat) {
       this._gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    } else {
+      this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     }
   }
 
@@ -142,12 +141,11 @@ export default class ParticleSimulator {
     // first, draw previous background (slightly faded) to empty texture
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);
 
-    // hack to get around premultipliedAlpha: false not working on iOS/Safari
-    if (this._webkit) {
-      this._gl.disable(this._gl.BLEND);
-      opacity *= 4;
-    } else {
+    if (this._majorPerformanceCaveat) {
       this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+      opacity /= 4;
+    } else {
+      this._gl.disable(this._gl.BLEND);
     }
 
     glDraw(this._gl, this._programs.texture, this._buffers.texture, {
@@ -155,7 +153,7 @@ export default class ParticleSimulator {
       u_fade: fade,
     });
 
-    if (this._webkit) {
+    if (!this._majorPerformanceCaveat) {
       this._gl.enable(this._gl.BLEND);
     }
 

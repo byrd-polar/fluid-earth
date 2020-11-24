@@ -38,7 +38,7 @@
   export let particleDisplay = {
     size: 0.8,
     rate: 5e4,
-    opacity: 0.1,
+    opacity: 0.4,
     fade: 0.96,
     enabled: true,
   };
@@ -58,6 +58,7 @@
     updateSizeVariables(particleGl, force);
   };
 
+  let mpcTestCanvas;
   let webgl2TestCanvas;
   let backgroundCanvas;
   let particleCanvas;
@@ -107,8 +108,13 @@
     trailsNeedsReset = true;
 
   onMount(() => {
-    // work around an issue with iOS / Safari
-    const webkit = navigator.userAgent.includes("WebKit");
+    // Work around an issue with software-based webgl not being able to do blend
+    // particles properly with `premultipledAlpha: true` (the default). This
+    // value for premultipledAlpha is needed as an additional workaround for
+    // Safari, which does not properly render `premultipledAlpha: false`.
+    const majorPerformanceCaveat = (mpcTestCanvas.getContext('webgl', {
+      failIfMajorPerformanceCaveat: true,
+    }) === null);
 
     // Upgrade to webgl2 if supported so that the particle simulator works on
     // devices that support webgl2 but not OES_texture_float. Using a separate
@@ -119,7 +125,7 @@
 
     backgroundGl = backgroundCanvas.getContext(webglVersion, { alpha: false });
     particleGl = particleCanvas.getContext(webglVersion, {
-      premultipliedAlpha: webkit,
+      premultipliedAlpha: !majorPerformanceCaveat,
     });
 
     mapBackground = new MapBackground(backgroundGl, {
@@ -134,7 +140,7 @@
       count: particleCount,
       lifetime: particleLifetime,
       data: particleData,
-      webkit: webkit,
+      majorPerformanceCaveat: majorPerformanceCaveat,
       webgl2: webgl2,
     }
 
@@ -219,6 +225,7 @@
 </script>
 
 <div class="layers">
+  <canvas bind:this={mpcTestCanvas} hidden/>
   <canvas bind:this={webgl2TestCanvas} hidden/>
   <canvas bind:this={backgroundCanvas}/>
   <canvas bind:this={particleCanvas}/>
