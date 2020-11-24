@@ -115,6 +115,7 @@
     const majorPerformanceCaveat = (mpcTestCanvas.getContext('webgl', {
       failIfMajorPerformanceCaveat: true,
     }) === null);
+    mpcTestCanvas.remove();
 
     // Upgrade to webgl2 if supported so that the particle simulator works on
     // devices that support webgl2 but not OES_texture_float. Using a separate
@@ -122,6 +123,7 @@
     // weird behavior across browsers.
     const webgl2 = (webgl2TestCanvas.getContext('webgl2') !== null);
     const webglVersion = webgl2 ? 'webgl2' : 'webgl';
+    webgl2TestCanvas.remove();
 
     backgroundGl = backgroundCanvas.getContext(webglVersion, { alpha: false });
     particleGl = particleCanvas.getContext(webglVersion, {
