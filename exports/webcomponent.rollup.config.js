@@ -25,4 +25,14 @@ export default {
     // in-line topology as part of bundle
     replace({ '_FEV2R_WC = false': '_FEV2R_WC = true'}),
   ],
+  onwarn(warning, warn) {
+    // Ignore circular dependency warnings from d3
+    // See: https://github.com/d3/d3-selection/issues/168
+    if (warning.code === 'CIRCULAR_DEPENDENCY' &&
+        warning.importer.includes('d3-')) {
+      return;
+    }
+
+    warn(warning);
+  },
 };
