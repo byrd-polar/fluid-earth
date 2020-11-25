@@ -182,8 +182,10 @@
 
    <div class = "logos" >
     <AddComment32 width = "35" height = "35"/>&nbsp;
-    <img src = "NSF-logo-white-small.png" width = "35" height = "35">&nbsp;
-    <img src = "OSU-logo-white-small.png" width = "30" height = "35">
+    <img src = "NSF-logo-white-small.png" width = "35" height = "35"
+         alt="National Science Foundation logo">&nbsp;
+    <img src = "OSU-logo-white-small.png" width = "30" height = "35"
+         alt="Ohio State University logo">
   </div>
 
 
