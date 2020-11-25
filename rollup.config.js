@@ -84,7 +84,31 @@ export default {
   ],
   watch: {
     clearScreen: false
-  }
+  },
+  onwarn(warning, warn) {
+    // Ignore circular dependency warnings from d3
+    // See: https://github.com/d3/d3-selection/issues/168
+    if (warning.code === 'CIRCULAR_DEPENDENCY' &&
+        warning.importer.includes('d3-')) {
+      return;
+    }
+
+    // Ignore custom element warning (we use a differnt rollup config for that)
+    if (warning.pluginCode === 'missing-custom-element-compile-options' &&
+        warning.filename.includes('Map.svelte')) {
+      return;
+    }
+
+    // Ignore unfixable A11y warning in dependency (not used in actual app)
+    if (warning.pluginCode === 'a11y-label-has-associated-control' &&
+        warning.filename.includes('node_modules') &&
+        warning.filename.includes('@smui') &&
+        warning.filename.includes('Label.svelte')) {
+      return;
+    }
+
+    warn(warning);
+  },
 };
 
 function serve() {
