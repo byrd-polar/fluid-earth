@@ -5,9 +5,9 @@
   import { onMount } from 'svelte';
   import date from './date.js'
 
-  export let griddedData = { description: 'Loading...' };
+  export let griddedData;
   export let griddedColormap;
-  export let griddedDomain = [0, 0];
+  export let griddedDomain;
   export let particleDisplay;
 
   // see options parameter here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat

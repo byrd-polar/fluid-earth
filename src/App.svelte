@@ -22,6 +22,7 @@
   import date from './date.js'
 
   import { onMount } from 'svelte';
+  import { Float16Array } from '@petamoriken/float16';
 
   // don't pass this as a prop to child components; pass fetcher instead as
   // fetcher.inventory will contain parsed dates instead of raw ISO strings
@@ -53,12 +54,22 @@
     latitude: 0,
   };
   let zoom = 1;
-  let griddedData;
+  let griddedData = {
+    floatArray: new Float16Array([0]),
+    width: 1,
+    height: 1,
+    description: 'Loading...',
+  };
   let griddedColormap = colormaps.VIRIDIS;
-  let griddedDomain;
+  let griddedDomain = [0, 0];
 
-  let particleData;
-  let vectorData;
+  let particleData = {
+    uVelocities: new Float16Array([0]),
+    vVelocities: new Float16Array([0]),
+    width: 1,
+    height: 1,
+  };
+  let vectorData = { objects: {} };
   (async () => {
     vectorData = await fetcher.fetch('/data/topology.json', 'vector');
   })();
@@ -73,7 +84,7 @@
     enabled: true,
   };
 
-  let updateWebglSize = () => {}; // to be bound from Map
+  let updateWebglSize; // to be bound from Map
   // workaround some race condition loading bugs
   onMount(() => setTimeout(updateWebglSize, 0.5));
 
