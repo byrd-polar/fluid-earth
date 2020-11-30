@@ -66,3 +66,13 @@ You can run the newly built app with `npm run start`. This uses
 [sirv](https://github.com/lukeed/sirv), which is included in your package.json's
 `dependencies` so that the app will work when you deploy to platforms like
 [Heroku](https://heroku.com).
+
+## Terms of Use
+
+[MIT License](LICENSE) +
+
+The laws of the State of Ohio shall govern these Terms of Use and any disputes
+relating to our site.
+
+IF YOU DO NOT AGREE TO AND ACCEPT THESE TERMS OF USE YOU SHOULD NOT USE THE
+SOFTWARE.
