@@ -3,6 +3,13 @@
 A potential successor to [FEVer](https://fever.byrd.osu.edu), making use of of
 [WebGL](https://en.wikipedia.org/wiki/WebGL).
 
+## Preview
+
+[https://loving-morse-6b791c.netlify.app/](https://loving-morse-6b791c.netlify.app/)
+
+Note: this site is built from the `preview` branch and may not reflect the
+latest changes on the `master` branch.
+
 ## Prerequisites
 
 - [git](https://git-scm.com/)
@@ -62,10 +69,7 @@ To create an optimised version of the app:
 npm run build
 ```
 
-You can run the newly built app with `npm run start`. This uses
-[sirv](https://github.com/lukeed/sirv), which is included in your package.json's
-`dependencies` so that the app will work when you deploy to platforms like
-[Heroku](https://heroku.com).
+You can run the newly built app with `npm run start`.
 
 ## Terms of Use
 
