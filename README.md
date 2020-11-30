@@ -10,13 +10,15 @@ A potential successor to [FEVer](https://fever.byrd.osu.edu), making use of of
 Note: this site is built from the `preview` branch and may not reflect the
 latest changes on the `master` branch.
 
-## Prerequisites
+## Developer Information
+
+### Prerequisites
 
 - [git](https://git-scm.com/)
 - [Node.js (version >= 13)](https://nodejs.org)
 - [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/)
 
-## Getting started
+### Getting started
 
 Install the dependencies...
 
@@ -46,7 +48,7 @@ Navigate to [localhost:5000](http://localhost:5000). You should see your app
 running. Edit a component file in `src`, save it, and the page should
 automatically reload with your changes.
 
-## Updating local development environment
+### Updating local development environment
 
 Pull from upstream (i.e. the repository at
 [https://code.osu.edu/zhan.153/fev2r.git](https://code.osu.edu/zhan.153/fev2r.git))...
@@ -61,7 +63,7 @@ git pull <URL or name of upstream remote> master
 npm install
 ```
 
-## Building and running in production mode
+### Building and running in production mode
 
 To create an optimised version of the app:
 
