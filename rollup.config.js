@@ -7,8 +7,10 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
 import replace from '@rollup/plugin-replace';
+import { platform } from 'os';
 
 const production = !process.env.ROLLUP_WATCH;
+const windows = (platform() === 'win32');
 
 export default {
   input: 'src/main.js',
@@ -57,6 +59,7 @@ export default {
       'process.env.NODE_ENV': JSON.stringify(
         production ? 'production' : 'development'
       ),
+      __windows__: JSON.stringify(windows),
     }),
 
     // If you have external dependencies installed from

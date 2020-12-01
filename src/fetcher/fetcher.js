@@ -33,6 +33,12 @@ export default class Fetcher {
   }
 
   async fetch(url, type='default', abortPreviousOfType=true) {
+    // workaround for ':' being an illegal character for filenames on Windows,
+    // __windows__ will be replaced by rollup
+    if (__windows__) {
+      url = url.replace(/:/g, '_');
+    }
+
     if (abortPreviousOfType) {
       if (this._abortControllers[type]) {
         this._abortControllers[type].abort();
