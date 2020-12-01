@@ -43,8 +43,7 @@
     enabled: true,
   };
 
-  const _FEV2R_WC = false; // set to true by webcomponent rollup config
-  export let vectorData = _FEV2R_WC ? topology : { objects: {} };
+  export let vectorData = __webcomponent__ ? topology : { objects: {} };
   export let vectorColors = {
     // update the following if sources for topology.json change
     ne_50m_coastline: [1, 1, 1, 1],

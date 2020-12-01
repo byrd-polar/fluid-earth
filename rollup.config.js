@@ -52,14 +52,15 @@ export default {
       ]
     }),
 
-    // For tippy.js, do find/replace for a reference to Node environment in code
-    // with actual value (since it will be running in the browser, not Node?).
-    // See: https://atomiks.github.io/tippyjs/v6/faq/#rollup
     replace({
+      // For tippy.js, do find/replace for a reference to Node environment in code
+      // with actual value (since it will be running in the browser, not Node?).
+      // See: https://atomiks.github.io/tippyjs/v6/faq/#rollup
       'process.env.NODE_ENV': JSON.stringify(
         production ? 'production' : 'development'
       ),
       __windows__: JSON.stringify(windows),
+      __webcomponent__: JSON.stringify(false),
     }),
 
     // If you have external dependencies installed from

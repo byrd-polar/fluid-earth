@@ -23,7 +23,7 @@ export default {
       dedupe: ['svelte']
     }),
     // in-line topology as part of bundle
-    replace({ '_FEV2R_WC = false': '_FEV2R_WC = true'}),
+    replace({ __webcomponent__: JSON.stringify(true) }),
   ],
   onwarn(warning, warn) {
     // Ignore circular dependency warnings from d3
