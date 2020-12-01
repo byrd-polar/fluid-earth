@@ -75,7 +75,7 @@ You can run the newly built app with `npm run start`.
 
 ## Terms of Use
 
-[MIT License](LICENSE) +
+The Terms of Use are specified [here](LICENSE) +
 
 The laws of the State of Ohio shall govern these Terms of Use and any disputes
 relating to our site.
