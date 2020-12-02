@@ -30,6 +30,7 @@
   import Location24 from "carbon-icons-svelte/lib/Location24";
   import SettingsAdjust24 from "carbon-icons-svelte/lib/SettingsAdjust24";
   import Information32 from "carbon-icons-svelte/lib/Information32";
+  import Time32 from "carbon-icons-svelte/lib/Time32";
 
   export let openedMenu;
 
@@ -42,7 +43,8 @@
     { name: 'Projections', icon: Earth24 },
     { name: 'Advanced', icon: SettingsAdjust24 },
     { name: 'Zoom Slider', icon: WatsonHealthFusionBlender32 },
-    { name: 'Site Navigation', icon: Information32 }
+    { name: 'Time Range Slider', icon: Time32 },
+    { name: 'Site Navigation', icon: Information32 },
   ];
 
   let drawerOpen = false;

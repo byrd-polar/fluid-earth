@@ -11,6 +11,7 @@
   import ZoomSlider from './menus/ZoomSlider.svelte';
   import SiteNav from './menus/OldTopBarItems.svelte';
   import AddComment32 from "carbon-icons-svelte/lib/AddComment32";
+  import TimeSlider from './menus/TimeSlider.svelte';
 
   import Map from './map/Map.svelte';
   import Legend from './Legend.svelte';
@@ -152,6 +153,10 @@
       on:resize={updateWebglSize}>
   <SiteNav
   />
+</Menu>
+<Menu bind:openedMenu menuName="Time Range Slider" darkBackground="true"
+      on:resize={updateWebglSize}>
+  <TimeSlider/>
 </Menu>
 <main>
   <Map
