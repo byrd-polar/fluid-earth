@@ -10,6 +10,29 @@ A potential successor to [FEVer](https://fever.byrd.osu.edu), making use of of
 Note: this site is built from the `preview` branch and may not reflect the
 latest changes on the `master` branch.
 
+## About
+
+Fluid Earth Viewer (FEVer) is an interactive web application that allows you to
+visualize current and past conditions of Earth’s atmosphere and oceans. FEVer is
+developed and maintained by The Ohio State University's Byrd Polar and Climate
+Research Center.
+
+You can use FEVer to learn about the atmosphere and oceans by exploring the
+daily conditions in places where you live, work, and play or examining whole
+regions of the planet over years. In particular, FEVer provides hands-on
+visualizations of conditions in polar regions, changes they are undergoing, and
+connections between polar regions and the rest of the planet. Built on an
+open-source application, FEVer is a vehicle for modern Earth science
+communication, making information used by the scientific community accessible
+and engaging to everyone. FEVer is explorable 24 hours a day, 7 days a week
+using your computer, tablet, and smartphone.
+
+You can see the current FEVer in action [here](https://fever.byrd.osu.edu).
+
+If you are interested in using FEVer for educational purposes or collaborating
+with us to develop FEVer for a specific application, please email
+[gravina.2@osu.edu](mailto:gravina.2@osu.edu).
+
 ## Developer Information
 
 ### Prerequisites
