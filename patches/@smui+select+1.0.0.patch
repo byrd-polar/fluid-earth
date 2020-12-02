@@ -1,0 +1,20 @@
+diff --git a/node_modules/@smui/select/Select.svelte b/node_modules/@smui/select/Select.svelte
+index a3a6843..70aeeac 100644
+--- a/node_modules/@smui/select/Select.svelte
++++ b/node_modules/@smui/select/Select.svelte
+@@ -25,7 +25,6 @@
+       {required}
+       id={inputId}
+       value={value}
+-      on:change
+       on:input
+       {...exclude(prefixFilter($$props, 'input$'), ['use'])}
+     />
+@@ -54,7 +53,6 @@
+       {disabled}
+       {required}
+       id={inputId}
+-      on:change
+       on:input
+       {...exclude(prefixFilter($$props, 'input$'), ['use', 'class'])}
+     ><slot></slot></select>
