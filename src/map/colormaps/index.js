@@ -6,11 +6,74 @@ import {
   ice,
 } from './cmocean.js';
 
+import {
+  precip_6h,
+  total_cloud_water,
+  total_precipitable_water,
+  mean_sea_level_pressure,
+  so2_mass,
+  carbon_monoxide_surface,
+  dust_mass,
+  total_column_ozone,
+  currents,
+} from './fever.js';
+
 // Enums for colormaps
 //
 // lut stands for LookUp Table, used to construct a texture
 
 let colormaps = {
+  /////////////////////////////////////////////////////////////////////////////
+  // FEVer original colormaps
+  /////////////////////////////////////////////////////////////////////////////
+  PERCIP_6H:{
+    name: 'precip_6h',
+    //lut: precip_6h,
+    get lut() { return convert(precip_6h) }
+  },
+
+  TOTAL_CLOUD:{
+    name: 'total_cloud_water',
+    get lut(){ return convert(total_cloud_water) }
+  },
+
+  TOTAL_PERCIP:{
+    name: 'total_precipitable_water',
+    get lut(){ return convert(total_precipitable_water) }
+  },
+
+  MEAN_SEA_LEVEL_PRESSURE:{
+    name: 'mean_sea_level_pressure',
+    get lut() { return convert(mean_sea_level_pressure) }
+  },
+
+  SO2_MASS:{
+    name: 'sulfur_dioxide_mass',
+    get lut() { return convert(so2_mass) }
+  },
+
+  CO2_SURFACE:{
+    name: 'carbon_monoxide_surface',
+    get lut() { return convert(carbon_monoxide_surface) }
+  },
+
+  DUST_MASS:{
+    name: 'dust_mass',
+    get lut() { return convert(dust_mass) }
+  },
+
+  COLUMN_OZONE:{
+    name:'total_column_ozone',
+    get lut() { return convert(total_column_ozone) }
+  },
+
+  CURRENTS:{
+    name: 'currents',
+    get lut() { return convert(currents) }
+  },
+  /////////////////////////////////////////////////////////////////////////////
+  // cmocean colormaps
+  /////////////////////////////////////////////////////////////////////////////
   THERMAL: {
     name: 'thermal',
     lut: thermal,
@@ -195,6 +258,10 @@ for (let prop in colormaps) {
 }
 
 export default Object.freeze(colormaps);
+
+function convert(oldArr) {
+  return oldArr.map(color => color.map(x => x / 255));
+}
 
 function lutFromD3(interpolationFunction) {
   return Array.from({ length: 256 }, (_, i) => {
