@@ -21,7 +21,6 @@
   import Menu32 from "carbon-icons-svelte/lib/Menu32";
   import ArrowLeft32 from "carbon-icons-svelte/lib/ArrowLeft32";
   import Globe32 from "carbon-icons-svelte/lib/Globe32";
-  import Grid32 from "carbon-icons-svelte/lib/Grid32";
   import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
   import EarthFilled32 from "carbon-icons-svelte/lib/EarthFilled32";
   import WatsonHealthFusionBlender32 from "carbon-icons-svelte/lib/WatsonHealthFusionBlender32";
@@ -36,7 +35,6 @@
 
   const menus = [
     { name: 'Map Projections', icon: Globe32 },
-    { name: 'Gridded Datasets', icon: Grid32 },
     { name: 'Colormaps', icon: ColorPalette32 },
     { name: 'Variables', icon: List24 },
     { name: 'Markers', icon: Location24 },

@@ -9,10 +9,76 @@
   import Draw24 from "carbon-icons-svelte/lib/Draw24";
   import PauseFilled24 from "carbon-icons-svelte/lib/PauseFilled24";
   import PlayFilledAlt24 from "carbon-icons-svelte/lib/PlayFilledAlt24";
+  import colormaps from '../map/colormaps/';
+  import date from '../date.js'
+
+  export let griddedData;
+  export let griddedDomain;
+  export let griddedColormap;
+  export let fetcher;
 
   let current = 'windSpeedAtSurface';
   let animationPaused = false;
   let iconStyle = "fill: #0ff !important;";
+
+  let datasets = {
+    'windSpeedAtSurface': {
+      name: 'wind speed',
+      description: 'Wind speed at 10m above ground level',
+      units: 'm/s',
+      path: '/data/gfs-0p25-wind-speed-10m/',
+      domain: [0, 35],
+      colormap: colormaps.VIRIDIS,
+    },
+    'windSpeedAtCloud': null,
+    'windSpeedAtCruise': null,
+    'tempAtSurface': {
+      name: 'surface temperature',
+      description: 'Temperature at ground level',
+      units: 'K',
+      path: '/data/gfs-0p25-temperature-surface/',
+      domain: [273.15 - 70, 273.15 + 70],
+      colormap: colormaps.MAGMA,
+    },
+    'tempAtCloud': null,
+    'tempAtCruise': null,
+    'airQuality': null,
+    'airQualityOzone': null,
+    'MSLP': null,
+    'precip': null,
+    'totalCloudWater': null,
+    'totalPrecipWater': null,
+    'airQuality': null,
+    'airQualityOzone': null,
+    'airQualitySO2': null,
+    'airQualityCO': null,
+    'airQualityDust': null,
+    'currents': null,
+    'seaTemp': null,
+    'WINDSPEED_U': {
+      name: 'u-wind velocity',
+      description: 'Wind velocity west to east at 10m above ground level',
+      units: 'm/s',
+      path: '/data/gfs-0p25-u-wind-velocity-10m/',
+      domain: [-35, 35],
+      colormap: colormaps.BR_BG,
+    },
+    'WINDSPEED_V':{
+      name: 'v-wind velocity',
+      description: 'Wind velocity south to north at 10m above ground level',
+      units: 'm/s',
+      path: '/data/gfs-0p25-v-wind-velocity-10m/',
+      domain: [-35, 35],
+      colormap: colormaps.PR_GN,
+    },
+  };
+  let dataset = datasets['windSpeedAtSurface'];
+  $: $date, dataset, updateData();
+
+  let canForward, canBack, interval;
+  $: canForward = $date < fetcher.inventory[dataset.path].end;
+  $: canBack = $date > fetcher.inventory[dataset.path].start;
+  $: interval = fetcher.inventory[dataset.path].intervalInHours;
 
   function selectMenuItem(currentItem) {
     if (currentItem === 'windSpeed') {
@@ -24,6 +90,30 @@
     }
 
     current = currentItem;
+    dataset = datasets[current];
+  }
+
+  async function updateData() {
+    let path = dataset.path + $date.toISOString() + '.fp16';
+    let array = await fetcher.fetch(path, 'gridded');
+    if (!array) return;
+
+    griddedData = {
+      floatArray: array,
+      width: 1440,
+      height: 721,
+      description: dataset.description,
+      units: dataset.units,
+    }
+    griddedDomain = dataset.domain;
+    griddedColormap = dataset.colormap;
+  }
+
+  function adjustDate(hours) {
+    date.update(d => {
+      d.setHours(d.getHours() + hours);
+      return d;
+    });
   }
 </script>
 
@@ -37,7 +127,7 @@
     <Windy24 style={iconStyle}/>
     Wind Speed
   </li>
-  {#if current.includes('windSpeed')}
+  <!--{#if current.includes('windSpeed')}
     <ul>
       <li
         class="{current === 'windSpeedAtSurface' ? 'selected' : ''}"
@@ -52,7 +142,7 @@
         on:click={() => selectMenuItem('windSpeedAtCruise')}
       >at cruise</li>
     </ul>
-  {/if}
+  {/if}-->
   <li
     class="{current.includes('temp') ? 'selected' : ''}"
     on:click={() => selectMenuItem('temp')}
@@ -60,7 +150,7 @@
     <TemperatureHot24 style={iconStyle}/>
     Temperature
   </li>
-  {#if current.includes('temp')}
+  <!--{#if current.includes('temp')}
     <ul>
       <li
         class="{current === 'tempAtSurface' ? 'selected' : ''}"
@@ -130,10 +220,10 @@
         on:click={() => selectMenuItem('airQualityDust')}
       >Dust</li>
     </ul>
-  {/if}
+  {/if}-->
 </ul>
 
-<h2>OCEAN</h2>
+<!--<h2>OCEAN</h2>
 <ul>
   <li
     class="{current === 'currents' ? 'selected' : ''}"
@@ -161,7 +251,22 @@
     {/if}
     {animationPaused ? 'Resume' : 'Stop'} animation
   </li>
-</ul>
+</ul>-->
+
+
+<h2>Step through time:</h2>
+<button
+  disabled={!canBack}
+  on:click={() => adjustDate(-interval)}
+>
+  Back {interval} hours
+</button>
+<button
+  disabled={!canForward}
+  on:click={() => adjustDate(interval)}
+>
+  Forward {interval} hours
+</button>
 
 
 <style>

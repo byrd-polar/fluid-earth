@@ -2,7 +2,6 @@
   import Sidebar from './Sidebar.svelte';
   import Menu from './menus/Menu.svelte';
   import MapProjections from './menus/MapProjections.svelte';
-  import GriddedDatasets from './menus/GriddedDatasets.svelte';
   import Colormaps from './menus/Colormaps.svelte';
   import Variables from './menus/Variables.svelte';
   import Markers from './menus/Markers.svelte';
@@ -112,15 +111,6 @@
     bind:projection
   />
 </Menu>
-<Menu bind:openedMenu menuName="Gridded Datasets"
-      on:resize={updateWebglSize}>
-  <GriddedDatasets
-    {fetcher}
-    bind:griddedData
-    bind:griddedDomain
-    bind:griddedColormap
-  />
-</Menu>
 <Menu bind:openedMenu menuName="Colormaps"
       on:resize={updateWebglSize}>
   <Colormaps
@@ -129,7 +119,12 @@
 </Menu>
 <Menu bind:openedMenu menuName="Variables" darkBackground="true"
       on:resize={updateWebglSize}>
-  <Variables/>
+  <Variables
+    {fetcher}
+    bind:griddedData
+    bind:griddedDomain
+    bind:griddedColormap
+  />
 </Menu>
   <Menu bind:openedMenu menuName="Markers" darkBackground="true"
       on:resize={updateWebglSize}>
