@@ -26,7 +26,7 @@ let colormaps = {
   /////////////////////////////////////////////////////////////////////////////
   // FEVer original colormaps
   /////////////////////////////////////////////////////////////////////////////
-  PERCIP_6H:{
+  PRECIP_6H:{
     name: 'precip_6h',
     //lut: precip_6h,
     get lut() { return convert(precip_6h) }
@@ -37,7 +37,7 @@ let colormaps = {
     get lut(){ return convert(total_cloud_water) }
   },
 
-  TOTAL_PERCIP:{
+  TOTAL_PRECIP:{
     name: 'total_precipitable_water',
     get lut(){ return convert(total_precipitable_water) }
   },
@@ -52,7 +52,7 @@ let colormaps = {
     get lut() { return convert(so2_mass) }
   },
 
-  CO2_SURFACE:{
+  CO_SURFACE:{
     name: 'carbon_monoxide_surface',
     get lut() { return convert(carbon_monoxide_surface) }
   },
