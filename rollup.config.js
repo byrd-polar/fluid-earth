@@ -22,10 +22,10 @@ export default {
   },
   plugins: [
     svelte({
-      // enable run-time checks when not in production
-      dev: !production,
-      // produce CSS for the postcss plugin to consume
-      emitCss: true,
+      compilerOptions: {
+        // enable run-time checks when not in production
+        dev: !production,
+      },
     }),
 
     // For GLSL .vert and .frag files
