@@ -116,18 +116,23 @@ export default {
 };
 
 function serve() {
-  let started = false;
+  let server;
+
+  function toExit() {
+    if (server) server.kill();
+  }
 
   return {
     writeBundle() {
-      if (!started) {
-        started = true;
+      if (server) return;
 
-        require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
-          stdio: ['ignore', 'inherit', 'inherit'],
-          shell: true
-        });
-      }
+      server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
+        stdio: ['ignore', 'inherit', 'inherit'],
+        shell: true
+      });
+
+      process.on('SIGTERM', toExit);
+      process.on('exit', toExit);
     }
   };
 }
