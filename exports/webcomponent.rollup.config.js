@@ -14,7 +14,9 @@ export default {
   },
   plugins: [
     svelte({
-      customElement: true
+      compilerOptions: {
+        customElement: true,
+      },
     }),
     glslify(),
     json(),
