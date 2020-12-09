@@ -12,7 +12,7 @@
   import SiteNav from './menus/OldTopBarItems.svelte';
   import TimeSlider from './menus/TimeSlider.svelte';
 
-  import Map from './map/Map.svelte';
+  import Map, { updateAllWebglSizes } from './map/Map.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
 
@@ -87,17 +87,15 @@
     enabled: true,
   };
 
-  let updateWebglSize; // to be bound from Map
-
   onMount(() => {
     // workaround some race condition loading bugs
-    setTimeout(updateWebglSize, 0.5);
+    setTimeout(updateAllWebglSizes, 0.5);
 
     // JS implementation of 100vh for mobile, see:
     // https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html
     window.addEventListener('resize', () => {
       document.body.style.height = `${window.innerHeight}px`;
-      updateWebglSize();
+      updateAllWebglSizes();
     });
   });
 </script>
@@ -108,20 +106,17 @@
   bind:variable={variable}
 -->
 <Sidebar bind:openedMenu/>
-<Menu bind:openedMenu menuName="Map Projections"
-      on:resize={updateWebglSize}>
+<Menu bind:openedMenu menuName="Map Projections">
   <MapProjections
     bind:projection
   />
 </Menu>
-<Menu bind:openedMenu menuName="Colormaps"
-      on:resize={updateWebglSize}>
+<Menu bind:openedMenu menuName="Colormaps">
   <Colormaps
     bind:griddedColormap
   />
 </Menu>
-<Menu bind:openedMenu menuName="Variables" darkBackground="true"
-      on:resize={updateWebglSize}>
+<Menu bind:openedMenu menuName="Variables" darkBackground="true">
   <Variables
     {fetcher}
     bind:griddedData
@@ -129,31 +124,25 @@
     bind:griddedColormap
   />
 </Menu>
-  <Menu bind:openedMenu menuName="Markers" darkBackground="true"
-      on:resize={updateWebglSize}>
+<Menu bind:openedMenu menuName="Markers" darkBackground="true">
   <Markers/>
-  </Menu>
-  <Menu bind:openedMenu menuName="Projections" darkBackground="true"
-      on:resize={updateWebglSize}>
+</Menu>
+<Menu bind:openedMenu menuName="Projections" darkBackground="true">
   <Projections/>
 </Menu>
-<Menu bind:openedMenu menuName="Advanced" darkBackground="true"
-      on:resize={updateWebglSize}>
+<Menu bind:openedMenu menuName="Advanced" darkBackground="true">
   <Advanced/>
 </Menu>
-<Menu bind:openedMenu menuName="Zoom Slider"
-      on:resize={updateWebglSize}>
+<Menu bind:openedMenu menuName="Zoom Slider">
   <ZoomSlider
     bind:zoom
   />
-  </Menu>
-  <Menu bind:openedMenu menuName="Site Navigation" darkBackground="true"
-      on:resize={updateWebglSize}>
+</Menu>
+<Menu bind:openedMenu menuName="Site Navigation" darkBackground="true">
   <SiteNav
   />
 </Menu>
-<Menu bind:openedMenu menuName="Time Range Slider" darkBackground="true"
-      on:resize={updateWebglSize}>
+<Menu bind:openedMenu menuName="Time Range Slider" darkBackground="true">
   <TimeSlider/>
 </Menu>
 <main>
@@ -169,7 +158,6 @@
     {particleCount}
     {particleDisplay}
     {vectorData}
-    bind:updateWebglSize
   >
     <Controls
       bind:center

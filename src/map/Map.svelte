@@ -1,3 +1,11 @@
+<script context="module">
+  const updateWebglSizeFunctions = new Set();
+
+  export function updateAllWebglSizes() {
+    updateWebglSizeFunctions.forEach(f => f());
+  }
+</script>
+
 <script>
   import { onMount } from 'svelte';
   import { resizeCanvasToDisplaySize } from 'twgl.js';
@@ -161,7 +169,11 @@
     }
 
     updateWebglSize(true);
+    updateWebglSizeFunctions.add(updateWebglSize);
+
     requestAnimationFrame(render);
+
+    return () => updateWebglSizeFunctions.delete(updateWebglSize);
   });
 
   // Main animation loop
