@@ -1,25 +1,35 @@
 <script>
   import AddComment32 from "carbon-icons-svelte/lib/AddComment32";
+  import tooltip from '../tooltip.js';
 </script>
 
 <div class = "title">
   <p>Fluid Earth Viewer<p>
 </div>
 
-<div class = "logos" >
-  <a class = "nav-link tooltip" href="https://fever.byrd.osu.edu/feedback.html" target="_blank" alt="Leave feedback">
+<div class="logos">
+  <a class="nav-link"
+     href="https://fever.byrd.osu.edu/feedback.html"
+     target="_blank"
+     use:tooltip={{content: 'Feedback', placement: 'bottom'}}
+  >
     <AddComment32 width = "35" height = "35"/>&nbsp;
-    <span class="tooltiptext">Feedback</span>
   </a>
-  <a class = "nav-link tooltip" href="https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=504793" target="_blank">
+  <a class="nav-link"
+     href="https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=504793"
+     target="_blank"
+     use:tooltip={{content: 'NSF AISL', placement: 'bottom'}}
+  >
     <img src = "NSF-logo-white-small.png" width = "35" height = "35"
          alt="National Science Foundation logo">&nbsp;
-    <span class="tooltiptext">NSF AISL</span>
   </a>
-  <a class = "nav-link tooltip" href="https://bpcrc.osu.edu/" target="_blank">
+  <a class="nav-link"
+     href="https://bpcrc.osu.edu/"
+     target="_blank"
+     use:tooltip={{content: 'OSU BPCRC', placement: 'bottom'}}
+  >
     <img src = "OSU-logo-white-small.png" width = "30" height = "35"
          alt="Ohio State University logo">
-    <span class="tooltiptext">OSU BPCRC</span>
   </a>
 </div>
 
@@ -61,31 +71,4 @@
     color: white;
     text-decoration: none;
   }
-  .tooltip {
-	  position: relative;
-	  display: inline-block;
-	  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-	}
-
-	/* Tooltip text */
-	.tooltip .tooltiptext {
-	  visibility: hidden;
-	  background-color: black;
-	  font-size: small;
-	  color: #fff;
-	  text-align: center;
-	  padding: 5px 0;
-	  border-radius: 6px;
-
-	  /* Position the tooltip text - see examples below! */
-	  position: absolute;
-	  z-index: 1;
-	  top: 105%;
-	  right: 50%;
-	}
-
-	/* Show the tooltip text when you mouse over the tooltip container */
-	.tooltip:hover .tooltiptext {
-	  visibility: visible;
-	}
 </style>
