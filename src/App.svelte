@@ -1,5 +1,6 @@
 <script>
   import Sidebar from './Sidebar.svelte';
+
   import Menu from './menus/Menu.svelte';
   import MapProjections from './menus/MapProjections.svelte';
   import Colormaps from './menus/Colormaps.svelte';
@@ -9,7 +10,6 @@
   import Advanced from './menus/Advanced.svelte';
   import ZoomSlider from './menus/ZoomSlider.svelte';
   import SiteNav from './menus/OldTopBarItems.svelte';
-  import AddComment32 from "carbon-icons-svelte/lib/AddComment32";
   import TimeSlider from './menus/TimeSlider.svelte';
 
   import Map from './map/Map.svelte';
@@ -19,6 +19,7 @@
   import Legend from './overlays/Legend.svelte';
   import Loading from './overlays/Loading.svelte';
   import Controls from './overlays/Controls.svelte';
+  import Branding from './overlays/Branding.svelte';
 
   import Fetcher from './fetcher.js';
   import date from './date.js'
@@ -181,28 +182,7 @@
       {griddedDomain}
       {particleDisplay}
     />
-    <div class = "title">
-      <p>Fluid Earth Viewer<p>
-    </div>
-
-   <div class = "logos" >
-    <a class = "nav-link tooltip" href="https://fever.byrd.osu.edu/feedback.html" target="_blank" alt="Leave feedback">
-      <AddComment32 width = "35" height = "35"/>&nbsp;
-      <span class="tooltiptext">Feedback</span>
-    </a>
-    <a class = "nav-link tooltip" href="https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=504793" target="_blank">
-      <img src = "NSF-logo-white-small.png" width = "35" height = "35"
-           alt="National Science Foundation logo">&nbsp;
-      <span class="tooltiptext">NSF AISL</span>
-    </a>
-    <a class = "nav-link tooltip" href="https://bpcrc.osu.edu/" target="_blank">
-      <img src = "OSU-logo-white-small.png" width = "30" height = "35"
-           alt="Ohio State University logo">
-      <span class="tooltiptext">OSU BPCRC</span>
-    </a>
-  </div>
-
-
+    <Branding/>
   </Map>
 </main>
 <aside></aside>
@@ -226,15 +206,6 @@
     }
   }
 
-  @media (max-width: 750px) {
-    .title {
-      display: none;
-    }
-    .logos{
-      display: none;
-    }
-  }
-
   /* Fix for SVGs not being vertically centered in icon button. Doesn't seem to
    * affect Chromium, which is probably why it was missed. Considered patching
    * it in the @material source but it is determined by a Sass mixin, so it's
@@ -247,67 +218,4 @@
     /* width: 500px; */
     margin-left: auto;
   }
-
-  .title {
-   color: #D3D3D3;
-    font-family: Quicksand-bold;
-    font-size: 1.2rem;
-    pointer-events: none;
-    font-weight: bolder;
-    margin-left: .75rem;
-  }
-  .logos{
-    text-align: end;
-    color: white;
-    pointer-events: none;
-    margin-right: 0rem;
-    margin-top: .50rem;
-  }
-  .nav-link{
-    pointer-events: auto;
-    color: white;
-    text-decoration: none;
-  }
-  .nav-link:link{
-    color: white;
-    text-decoration: none;
-  }
-  .nav-link:visited{
-    color: white;
-    text-decoration: none;
-  }
-
-
-
-  .tooltip {
-	  position: relative;
-	  display: inline-block;
-	  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-	}
-
-	/* Tooltip text */
-	.tooltip .tooltiptext {
-	  visibility: hidden;
-	  background-color: black;
-	  font-size: small;
-	  color: #fff;
-	  text-align: center;
-	  padding: 5px 0;
-	  border-radius: 6px;
-
-	  /* Position the tooltip text - see examples below! */
-	  position: absolute;
-	  z-index: 1;
-	  top: 105%;
-	  right: 50%;
-	}
-
-	/* Show the tooltip text when you mouse over the tooltip container */
-	.tooltip:hover .tooltiptext {
-	  visibility: visible;
-	}
-
-
-
-
 </style>
