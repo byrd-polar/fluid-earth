@@ -197,6 +197,14 @@
     user-select: none;
   }
 
+  /* Fix for SVGs not being vertically centered in icon button. Doesn't seem to
+   * affect Chromium, which is probably why it was missed. Considered patching
+   * it in the @material source but it is determined by a Sass mixin, so it's
+   * clearer to fix it here. */
+  :global(.mdc-icon-button) {
+    font-size: unset;
+  }
+
   @media (max-width: 36rem) {
     div.rail-overflow-wrapper {
       background: transparent;
