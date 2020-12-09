@@ -28,7 +28,7 @@
       units: 'm/s',
       path: '/data/gfs-0p25-wind-speed-10m/',
       domain: [0, 35],
-      colormap: colormaps.SINEBOW,
+      colormap: colormaps.VIRIDIS,
     },
     'windSpeedAtCloud': {
       name: null,
