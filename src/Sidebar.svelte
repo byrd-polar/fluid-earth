@@ -1,5 +1,5 @@
 <script>
-  import { tooltip, tips } from './tooltip.js';
+  import tooltip, { tips } from './tooltip.js';
   import { onMount, tick } from 'svelte';
   import IconButton from '@smui/icon-button';
   import Drawer, {
@@ -81,18 +81,6 @@
         tips.forEach(t => t.hide());
       }
     });
-
-    // hide tooltips on small screens / mobile
-    let mediaQuery = window.matchMedia('(max-width: 36rem)');
-    function handleResize() {
-      if (mediaQuery.matches) {
-        tips.forEach(t => t.disable());
-      } else {
-        tips.forEach(t => t.enable());
-      }
-    }
-    window.addEventListener('resize', handleResize);
-    handleResize();
   });
 
   // fix an issue with tabindex in list in drawer by setting all to -1 when
