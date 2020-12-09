@@ -6,9 +6,15 @@
   export let zoom;
 
   let interactionSurfaceElement;
+  let screenRatio; // ratio of element height to our reference height
   let baseScale;
 
-  const PAN_FACTOR = 0.25 * window.devicePixelRatio;
+  // For ensuring scale of gestures is properly relative to actual size of
+  // rendered map; see the screenRatio variable in Map.svelte for details
+  let elementHeight = 1080;
+  $: screenRatio = elementHeight / 1080;
+
+  const PAN_FACTOR = 0.25;
   const MIN_ZOOM = 0.5;
   const MAX_ZOOM = 15;
 
@@ -18,8 +24,8 @@
         inertia: true,
         listeners: {
           move (e) {
-            let lon = center.longitude - PAN_FACTOR * e.dx / zoom;
-            let lat = center.latitude + PAN_FACTOR * e.dy / zoom;
+            let lon = center.longitude - PAN_FACTOR * e.dx / zoom / screenRatio;
+            let lat = center.latitude + PAN_FACTOR * e.dy / zoom / screenRatio;
             center.longitude = ((lon + 180) % 360) - 180;
             center.latitude = clamp(lat, -90, 90);
           },
@@ -55,7 +61,10 @@
   }
 </script>
 
-<div bind:this={interactionSurfaceElement}></div>
+<div
+  bind:this={interactionSurfaceElement}
+  bind:clientHeight={elementHeight}
+></div>
 
 <style>
   div {
