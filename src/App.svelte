@@ -13,12 +13,14 @@
   import TimeSlider from './menus/TimeSlider.svelte';
 
   import Map from './map/Map.svelte';
-  import Legend from './Legend.svelte';
-  import Loading from './fetcher/Loading.svelte';
-  import Fetcher from './fetcher/fetcher.js';
-  import Controls from './Controls.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
+
+  import Legend from './overlays/Legend.svelte';
+  import Loading from './overlays/Loading.svelte';
+  import Controls from './overlays/Controls.svelte';
+
+  import Fetcher from './fetcher.js';
   import date from './date.js'
 
   import { onMount } from 'svelte';

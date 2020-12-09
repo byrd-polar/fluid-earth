@@ -3,7 +3,7 @@
   import { axisBottom } from 'd3-axis';
   import { scaleLinear } from 'd3-scale';
   import { onMount } from 'svelte';
-  import date from './date.js'
+  import date from '../date.js'
 
   export let griddedData;
   export let griddedColormap;
