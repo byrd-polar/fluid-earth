@@ -27,8 +27,6 @@
   import { onMount } from 'svelte';
   import { Float16Array } from '@petamoriken/float16';
 
-  // don't pass this as a prop to child components; pass fetcher instead as
-  // fetcher.inventory will contain parsed dates instead of raw ISO strings
   export let inventory;
 
   let openedMenu = null;
@@ -66,7 +64,7 @@
       units: datasetInfo.units,
     }
     griddedDomain = datasetInfo.domain;
-    griddedColormap = colormaps[datasetInfo.colormap];
+    griddedColormap = datasetInfo.colormap;
   })();
 
   let projection = projections.VERTICAL_PERSPECTIVE;
@@ -136,7 +134,7 @@
 </Menu>
 <Menu bind:openedMenu menuName="Variables">
   <Variables
-    {fetcher}
+    {inventory}
     bind:dataset
   />
 </Menu>

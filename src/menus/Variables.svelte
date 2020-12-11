@@ -13,15 +13,15 @@
   import date from '../date.js'
 
   export let dataset;
-  export let fetcher;
+  export let inventory;
 
   let animationPaused = false;
   let iconStyle = "fill: #0ff !important;";
 
   let canForward, canBack, interval;
-  $: canForward = $date < fetcher.inventory[dataset].end;
-  $: canBack = $date > fetcher.inventory[dataset].start;
-  $: interval = fetcher.inventory[dataset].intervalInHours;
+  $: canForward = $date < inventory[dataset].end;
+  $: canBack = $date > inventory[dataset].start;
+  $: interval = inventory[dataset].intervalInHours;
 
   function adjustDate(hours) {
     date.update(d => {
