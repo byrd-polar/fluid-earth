@@ -62,11 +62,14 @@
     width: 28em;
     margin-left: -28em;
     visibility: hidden;
-    transition: margin-left 0.3s ease 0s, visibility 0s linear 0.3s;
+    transition:
+      margin-left 0.3s ease 0s,
+      visibility 0s linear 0.3s,
+      z-index 0s linear 0.3s;
     background-color: white;
     display: flex;
     flex-direction: column;
-    z-index: 1;
+    z-index: 0;
     box-shadow:
       2px 0 1px -1px rgba(0,0,0,.2),
       1px 0 1px  0   rgba(0,0,0,.14),
@@ -76,7 +79,11 @@
   aside.open {
     visibility: visible;
     margin-left: 0;
-    transition: margin-left 0.3s ease 0s, visibility 0s linear 0s;
+    transition:
+      margin-left 0.3s ease 0s,
+      visibility 0s linear 0s,
+      z-index 0s linear 0s;
+    z-index: 1;
   }
 
   aside.no-animate {
