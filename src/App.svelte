@@ -33,7 +33,8 @@
 
   let openedMenu = null;
   let fetcher = new Fetcher(inventory);
-  $: $date, (async () => {
+  let dataset = '/data/gfs-0p25-wind-speed-10m/';
+  $: (async () => {
     let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${$date.toISOString()}.fp16`;
     let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${$date.toISOString()}.fp16`;
 
@@ -49,6 +50,23 @@
       width: 1440,
       height: 721,
     };
+  })();
+  $: (async () => {
+    let path = dataset + $date.toISOString() + '.fp16';
+    let array = await fetcher.fetch(path, 'gridded');
+    if (!array) return;
+
+    let datasetInfo = inventory[dataset];
+
+    griddedData = {
+      floatArray: array,
+      width: 1440,
+      height: 721,
+      description: datasetInfo.description,
+      units: datasetInfo.units,
+    }
+    griddedDomain = datasetInfo.domain;
+    griddedColormap = colormaps[datasetInfo.colormap];
   })();
 
   let projection = projections.VERTICAL_PERSPECTIVE;
@@ -119,9 +137,7 @@
 <Menu bind:openedMenu menuName="Variables">
   <Variables
     {fetcher}
-    bind:griddedData
-    bind:griddedDomain
-    bind:griddedColormap
+    bind:dataset
   />
 </Menu>
 <Menu bind:openedMenu menuName="Markers">

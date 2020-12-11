@@ -12,213 +12,16 @@
   import colormaps from '../map/colormaps/';
   import date from '../date.js'
 
-  export let griddedData;
-  export let griddedDomain;
-  export let griddedColormap;
+  export let dataset;
   export let fetcher;
 
-  let current = 'windSpeedAtSurface';
   let animationPaused = false;
   let iconStyle = "fill: #0ff !important;";
 
-  let datasets = {
-    'windSpeedAtSurface': {
-      name: 'wind speed',
-      description: 'Wind speed at 10m above ground level',
-      units: 'm/s',
-      path: '/data/gfs-0p25-wind-speed-10m/',
-      domain: [0, 35],
-      colormap: colormaps.VIRIDIS,
-    },
-    'windSpeedAtCloud': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.SINEBOW,
-    },
-    'windSpeedAtCruise': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.SINEBOW,
-    },
-    'tempAtSurface': {
-      name: 'surface temperature',
-      description: 'Temperature at ground level',
-      units: 'K',
-      path: '/data/gfs-0p25-temperature-surface/',
-      domain: [273.15 - 70, 273.15 + 70],
-      colormap: colormaps.MAGMA,
-    },
-    'tempAtCloud': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.TURBO,
-    },
-    'tempAtCruise': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.TURBO,
-    },
-    'airQuality': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.TURBO,
-    },
-    'airQualityOzone': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.TURBO,
-    },
-    'MSLP': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.MEAN_SEA_LEVEL_PRESSURE,
-    },
-    'precip': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.PRECIP_6H,
-    },
-    'totalCloudWater': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.TOTAL_CLOUD,
-    },
-    'totalPrecipWater': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.TOTAL_PRECIP,
-    },
-    'airQualityOzone': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.COLUMN_OZONE,
-    },
-    'airQualitySO2': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.SO2_MASS,
-    },
-    'airQualityCO': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.CO_SURFACE,
-    },
-    'airQualityDust': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.DUST_MASS,
-    },
-    'currents': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.CURRENTS,
-    },
-    'seaTemp': {
-      name: null,
-      description: null,
-      units: null,
-      path: null,
-      domain: null,
-      colormap: colormaps.VIRIDIS,
-    },
-    'WINDSPEED_U': {
-      name: 'u-wind velocity',
-      description: 'Wind velocity west to east at 10m above ground level',
-      units: 'm/s',
-      path: '/data/gfs-0p25-u-wind-velocity-10m/',
-      domain: [-35, 35],
-      colormap: colormaps.BR_BG,
-    },
-    'WINDSPEED_V':{
-      name: 'v-wind velocity',
-      description: 'Wind velocity south to north at 10m above ground level',
-      units: 'm/s',
-      path: '/data/gfs-0p25-v-wind-velocity-10m/',
-      domain: [-35, 35],
-      colormap: colormaps.PR_GN,
-    },
-  };
-  let dataset = datasets['windSpeedAtSurface'];
-  $: $date, dataset, updateData();
-
   let canForward, canBack, interval;
-  $: canForward = $date < fetcher.inventory[dataset.path].end;
-  $: canBack = $date > fetcher.inventory[dataset.path].start;
-  $: interval = fetcher.inventory[dataset.path].intervalInHours;
-
-  function selectMenuItem(currentItem) {
-    if (currentItem === 'windSpeed') {
-      currentItem = 'windSpeedAtSurface';
-    } else if (currentItem === 'temp') {
-      currentItem = 'tempAtSurface';
-    } else if (currentItem === 'airQuality') {
-      currentItem = 'airQualityOzone';
-    }
-
-    current = currentItem;
-    dataset = datasets[current];
-  }
-
-  async function updateData() {
-    let path = dataset.path + $date.toISOString() + '.fp16';
-    let array = await fetcher.fetch(path, 'gridded');
-    if (!array) return;
-
-    griddedData = {
-      floatArray: array,
-      width: 1440,
-      height: 721,
-      description: dataset.description,
-      units: dataset.units,
-    }
-    griddedDomain = dataset.domain;
-    griddedColormap = dataset.colormap;
-  }
+  $: canForward = $date < fetcher.inventory[dataset].end;
+  $: canBack = $date > fetcher.inventory[dataset].start;
+  $: interval = fetcher.inventory[dataset].intervalInHours;
 
   function adjustDate(hours) {
     date.update(d => {
@@ -232,8 +35,8 @@
 <h2>ATMOSPHERE</h2>
 <ul>
   <li
-    class="{current.includes('windSpeed') ? 'selected' : ''}"
-    on:click={() => selectMenuItem('windSpeed')}
+    class="{dataset === '/data/gfs-0p25-wind-speed-10m/' ? 'selected' : ''}"
+    on:click={() => dataset = '/data/gfs-0p25-wind-speed-10m/'}
   >
     <Windy24 style={iconStyle}/>
     Wind Speed
@@ -255,8 +58,8 @@
     </ul>
   {/if}-->
   <li
-    class="{current.includes('temp') ? 'selected' : ''}"
-    on:click={() => selectMenuItem('temp')}
+    class="{dataset === '/data/gfs-0p25-temperature-surface/' ? 'selected' : ''}"
+    on:click={() => dataset = '/data/gfs-0p25-temperature-surface/'}
   >
     <TemperatureHot24 style={iconStyle}/>
     Temperature
