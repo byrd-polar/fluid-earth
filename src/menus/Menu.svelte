@@ -8,7 +8,6 @@
 
   export let openedMenu;
   export let menuName;
-  export let darkBackground = false;
 
   // avoid animating menu open/close when there is already a menu open
   let previousOpenedMenu = null;
@@ -39,7 +38,6 @@
 <aside
   class:open={openedMenu === menuName}
   class:no-animate={noAnimate}
-  class:dark={darkBackground}
   bind:this={aside}
 >
   <TopAppBar variant="static" class="top-app-drawer">
@@ -59,6 +57,9 @@
 
 <style>
   aside {
+    background-color: #1d1d1d;
+    color: white;
+
     width: 28em;
     margin-left: -28em;
     visibility: hidden;
@@ -66,7 +67,6 @@
       margin-left 0.3s ease 0s,
       visibility 0s linear 0.3s,
       z-index 0s linear 0.3s;
-    background-color: white;
     display: flex;
     flex-direction: column;
     z-index: 0;
@@ -88,10 +88,6 @@
 
   aside.no-animate {
     transition: none;
-  }
-
-  aside.dark {
-    background-color: #1d1d1d;
   }
 
   div {

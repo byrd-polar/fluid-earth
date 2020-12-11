@@ -116,7 +116,7 @@
     bind:griddedColormap
   />
 </Menu>
-<Menu bind:openedMenu menuName="Variables" darkBackground="true">
+<Menu bind:openedMenu menuName="Variables">
   <Variables
     {fetcher}
     bind:griddedData
@@ -124,13 +124,13 @@
     bind:griddedColormap
   />
 </Menu>
-<Menu bind:openedMenu menuName="Markers" darkBackground="true">
+<Menu bind:openedMenu menuName="Markers">
   <Markers/>
 </Menu>
-<Menu bind:openedMenu menuName="Projections" darkBackground="true">
+<Menu bind:openedMenu menuName="Projections">
   <Projections/>
 </Menu>
-<Menu bind:openedMenu menuName="Advanced" darkBackground="true">
+<Menu bind:openedMenu menuName="Advanced">
   <Advanced/>
 </Menu>
 <Menu bind:openedMenu menuName="Zoom Slider">
@@ -138,11 +138,11 @@
     bind:zoom
   />
 </Menu>
-<Menu bind:openedMenu menuName="Site Navigation" darkBackground="true">
+<Menu bind:openedMenu menuName="Site Navigation">
   <SiteNav
   />
 </Menu>
-<Menu bind:openedMenu menuName="Time Range Slider" darkBackground="true">
+<Menu bind:openedMenu menuName="Time Range Slider">
   <TimeSlider/>
 </Menu>
 <main>
