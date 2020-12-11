@@ -49,7 +49,7 @@
       height: 721,
     };
   })();
-  $: (async () => {
+  async function updateGriddedData() {
     let path = dataset + $date.toISOString() + '.fp16';
     let array = await fetcher.fetch(path, 'gridded');
     if (!array) return;
@@ -65,7 +65,8 @@
     }
     griddedDomain = datasetInfo.domain;
     griddedColormap = datasetInfo.colormap;
-  })();
+  }
+  $: $date, dataset, updateGriddedData();
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let center = {
