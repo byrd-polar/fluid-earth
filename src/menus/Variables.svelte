@@ -394,7 +394,6 @@
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: hsla(0, 0%, 100%, .8);
     cursor: pointer;
     list-style-type: none;
   }
@@ -404,7 +403,6 @@
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: hsla(0, 0%, 100%, .8);
     border-bottom: 1px solid;
   }
 

@@ -146,7 +146,6 @@ let mid = date.update(d =>{d.setFullYear(selected,minVal);return d;});
     font-weight: 400;
     line-height: 1.5;
     margin-bottom: 0;
-    color: hsla(0, 0%, 100%, .8);
     cursor: pointer;
     list-style-type: none;
     padding: .5rem;
@@ -156,7 +155,6 @@ let mid = date.update(d =>{d.setFullYear(selected,minVal);return d;});
     font-size: 1.5rem;
     font-weight: 400;
     /* line-height: 1.5; */
-    color: hsla(0, 0%, 100%, .8);
     border-bottom: 1px solid;
   }
   p {
@@ -164,7 +162,6 @@ let mid = date.update(d =>{d.setFullYear(selected,minVal);return d;});
     font-size: 1rem;
     font-weight: 400;
     /* line-height: 1.5; */
-    color: hsla(0, 0%, 100%, .8);
     /* border-bottom: 1px solid; */
   }
 </style>

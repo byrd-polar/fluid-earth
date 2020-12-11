@@ -58,7 +58,7 @@
 <style>
   aside {
     background-color: #1d1d1d;
-    color: white;
+    color: hsla(0, 0%, 100%, .8);
 
     width: 28em;
     margin-left: -28em;
