@@ -179,6 +179,11 @@
 
   :global(#drawer) {
     z-index: 10000; /* place above tooltip (z-index: 9999) when opening */
+    background-color: #015B5B;
+  }
+
+  :global(#drawer *) {
+    color: white;
   }
 
   :global(#drawer > *) {
