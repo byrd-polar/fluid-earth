@@ -3,7 +3,7 @@ import { Float16Array } from '@petamoriken/float16';
 
 export default class Fetcher {
   constructor(inventory) {
-    this.inventory = inventory;
+    this._inventory = inventory;
 
     this._downloadListeners = [];
 
@@ -114,11 +114,11 @@ export default class Fetcher {
 
   async _fileSizeInBytes(url) {
     let bytes;
-    if (this.inventory[url]) {
-      bytes = this.inventory[url].bytes;
+    if (this._inventory[url]) {
+      bytes = this._inventory[url].bytes;
     } else {
       let dir = url.split('/').slice(0, -1).join('/') + '/';
-      bytes = this.inventory[dir].bytesPerFile;
+      bytes = this._inventory[dir].bytesPerFile;
     }
     return bytes;
   }

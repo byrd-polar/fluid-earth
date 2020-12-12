@@ -32,7 +32,7 @@
   let openedMenu = null;
   let drawerOpen = false;
 
-  let fetcher = new Fetcher(inventory);
+  const fetcher = new Fetcher(inventory);
   let date = new Date('2020-08-08T18:00:00.000Z');
   let dataset = '/data/gfs-0p25-wind-speed-10m/';
 
