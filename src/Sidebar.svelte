@@ -15,35 +15,11 @@
     Text,
     Separator,
   } from '@smui/list';
-
-  // not using { Icon } import syntax for significantly faster build times, as
-  // recommended in the carbon-icons-svelte README
   import Menu32 from "carbon-icons-svelte/lib/Menu32";
   import ArrowLeft32 from "carbon-icons-svelte/lib/ArrowLeft32";
-  import Globe32 from "carbon-icons-svelte/lib/Globe32";
-  import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
-  import EarthFilled32 from "carbon-icons-svelte/lib/EarthFilled32";
-  import WatsonHealthFusionBlender32 from "carbon-icons-svelte/lib/WatsonHealthFusionBlender32";
-  import List24 from "carbon-icons-svelte/lib/List24";
-  import Earth24 from "carbon-icons-svelte/lib/Earth24";
-  import Location24 from "carbon-icons-svelte/lib/Location24";
-  import SettingsAdjust24 from "carbon-icons-svelte/lib/SettingsAdjust24";
-  import Information32 from "carbon-icons-svelte/lib/Information32";
-  import Time32 from "carbon-icons-svelte/lib/Time32";
 
+  export let menus;
   export let openedMenu;
-
-  const menus = [
-    { name: 'Map Projections', icon: Globe32 },
-    { name: 'Colormaps', icon: ColorPalette32 },
-    { name: 'Variables', icon: List24 },
-    { name: 'Markers', icon: Location24 },
-    { name: 'Projections', icon: Earth24 },
-    { name: 'Advanced', icon: SettingsAdjust24 },
-    { name: 'Zoom Slider', icon: WatsonHealthFusionBlender32 },
-    { name: 'Time Range Slider', icon: Time32 },
-    { name: 'Site Navigation', icon: Information32 },
-  ];
 
   let drawerOpen = false;
 
