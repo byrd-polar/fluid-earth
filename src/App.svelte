@@ -32,41 +32,12 @@
   let fetcher = new Fetcher(inventory);
   let date = new Date('2020-08-08T18:00:00.000Z');
   let dataset = '/data/gfs-0p25-wind-speed-10m/';
-  $: (async () => {
-    let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${date.toISOString()}.fp16`;
-    let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${date.toISOString()}.fp16`;
 
-    let uArray = fetcher.fetch(uPath, 'particle');
-    let vArray = await fetcher.fetch(vPath, 'particle', false);
-    uArray = await uArray;
-
-    if (!uArray || !vArray) return;
-
-    particleData = {
-      uVelocities: uArray,
-      vVelocities: vArray,
-      width: 1440,
-      height: 721,
-    };
-  })();
-  async function updateGriddedData() {
-    let path = dataset + date.toISOString() + '.fp16';
-    let array = await fetcher.fetch(path, 'gridded');
-    if (!array) return;
-
-    let datasetInfo = inventory[dataset];
-
-    griddedData = {
-      floatArray: array,
-      width: 1440,
-      height: 721,
-      description: datasetInfo.description,
-      units: datasetInfo.units,
-    }
-    griddedDomain = datasetInfo.domain;
-    griddedColormap = datasetInfo.colormap;
-  }
+  // see comment in onMount
+  let updateGriddedData = () => {};
+  let updateParticleData = () => {};
   $: date, dataset, updateGriddedData();
+  $: date, updateParticleData();
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let center = {
@@ -114,6 +85,45 @@
       document.body.style.height = `${window.innerHeight}px`;
       updateAllWebglSizes();
     });
+
+    // Methods for updating gridded and particle data in response to
+    // date or dataset changes. Defined here so that they aren't triggered
+    // multiple times during the initial mount due a Svelte bug with bindings.
+    updateGriddedData = async () => {
+      let path = dataset + date.toISOString() + '.fp16';
+      let array = await fetcher.fetch(path, 'gridded');
+      if (!array) return;
+
+      let datasetInfo = inventory[dataset];
+
+      griddedData = {
+        floatArray: array,
+        width: 1440,
+        height: 721,
+        description: datasetInfo.description,
+        units: datasetInfo.units,
+      }
+      griddedDomain = datasetInfo.domain;
+      griddedColormap = datasetInfo.colormap;
+    };
+    updateParticleData = async () => {
+      let datestr = date.toISOString();
+      let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${datestr}.fp16`;
+      let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${datestr}.fp16`;
+
+      let uArray = fetcher.fetch(uPath, 'particle');
+      let vArray = await fetcher.fetch(vPath, 'particle', false);
+      uArray = await uArray;
+
+      if (!uArray || !vArray) return;
+
+      particleData = {
+        uVelocities: uArray,
+        vVelocities: vArray,
+        width: 1440,
+        height: 721,
+      };
+    };
   });
 </script>
 
