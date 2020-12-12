@@ -197,7 +197,6 @@
     <Branding/>
   </Map>
 </main>
-<aside></aside>
 
 <style>
   :global(body) {
@@ -216,10 +215,5 @@
     main {
       flex-direction: column;
     }
-  }
-
-  aside {
-    /* width: 500px; */
-    margin-left: auto;
   }
 </style>
