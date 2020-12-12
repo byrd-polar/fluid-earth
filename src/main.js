@@ -3,7 +3,7 @@ import App from './App.svelte';
 import colormaps from './map/colormaps/';
 
 (async () => {
-  let inventory = await ky('/data/inventory.json').json();
+  let inventory = await ky('/data/inventory.json', {timeout: false}).json();
 
   // replace some strings in inventory with objects
   for (const path in inventory) {

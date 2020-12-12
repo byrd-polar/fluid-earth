@@ -58,6 +58,7 @@ export default class Fetcher {
           this._triggerListeners();
           this._resetIfComplete();
         },
+        timeout: false,
       });
       if (url.split('.').pop() === 'json') {
         data = await res.json();
