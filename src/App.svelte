@@ -11,7 +11,7 @@
   import Advanced from './menus/Advanced.svelte';
   import ZoomSlider from './menus/ZoomSlider.svelte';
   import SiteNav from './menus/OldTopBarItems.svelte';
-  import TimeSlider from './menus/TimeSlider.svelte';
+  import TimeMachine from './menus/TimeMachine.svelte';
 
   import Map, { updateAllWebglSizes } from './map/Map.svelte';
   import colormaps from './map/colormaps/';
@@ -150,7 +150,7 @@
     { name: 'Projections', icon: Earth24 },
     { name: 'Advanced', icon: SettingsAdjust24 },
     { name: 'Zoom Slider', icon: WatsonHealthFusionBlender32 },
-    { name: 'Time Range Slider', icon: Time32 },
+    { name: 'Time Machine', icon: Time32 },
     { name: 'Site Navigation', icon: Information32 },
   ];
 </script>
@@ -205,7 +205,13 @@
   <SiteNav
   />
 </Menu>
-<Menu bind:openedMenu menuName="Time Range Slider">
+<Menu bind:openedMenu menuName="Time Machine">
+  <TimeMachine
+    {fetcher}
+    {inventory}
+    bind:date
+    {dataset}
+  />
 </Menu>
 <main>
   <Map
