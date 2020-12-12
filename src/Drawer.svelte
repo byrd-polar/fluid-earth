@@ -1,6 +1,6 @@
 <script>
   import { tips } from './tooltip.js';
-  import { onMount, tick } from 'svelte';
+  import { onMount } from 'svelte';
   import Drawer, {
     Content,
     Header,
