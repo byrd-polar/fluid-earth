@@ -1,7 +1,8 @@
 <script>
-  import Sidebar from './Sidebar.svelte';
+  import Navbar from './Navbar.svelte';
+  import Drawer from './Drawer.svelte';
+  import Menu from './Menu.svelte';
 
-  import Menu from './menus/Menu.svelte';
   import MapProjections from './menus/MapProjections.svelte';
   import Colormaps from './menus/Colormaps.svelte';
   import Variables from './menus/Variables.svelte';
@@ -29,6 +30,8 @@
   export let inventory;
 
   let openedMenu = null;
+  let drawerOpen = false;
+
   let fetcher = new Fetcher(inventory);
   let date = new Date('2020-08-08T18:00:00.000Z');
   let dataset = '/data/gfs-0p25-wind-speed-10m/';
@@ -154,9 +157,15 @@
   shorthand for variable={variable} and bind:variable is shorthand for
   bind:variable={variable}
 -->
-<Sidebar
+<Navbar
   {menus}
   bind:openedMenu
+  bind:drawerOpen
+/>
+<Drawer
+  {menus}
+  bind:openedMenu
+  bind:drawerOpen
 />
 <Menu bind:openedMenu menuName="Map Projections">
   <MapProjections

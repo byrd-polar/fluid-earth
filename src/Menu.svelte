@@ -1,10 +1,10 @@
 <script>
-  import { updateAllWebglSizes } from '../map/Map.svelte';
-  import { onMount } from 'svelte';
+  import { updateAllWebglSizes } from './map/Map.svelte';
+  import { onMount, tick } from 'svelte';
   import IconButton from '@smui/icon-button';
   import ArrowLeft32 from "carbon-icons-svelte/lib/ArrowLeft32";
   import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
-  import { tips } from '../tooltip.js';
+  import { tips } from './tooltip.js';
 
   export let openedMenu;
   export let menuName;
@@ -15,6 +15,17 @@
   $: {
     noAnimate = (previousOpenedMenu !== null && openedMenu !== null);
     previousOpenedMenu = openedMenu;
+  }
+
+  let menuOpen;
+  $: menuOpen = openedMenu === menuName;
+
+  // switch keyboard focus to the back-button of the just-opened menu
+  $: if (menuOpen) {
+    (async () => {
+      await tick();
+      document.querySelector('aside.open button').focus({preventScroll:true});
+    })();
   }
 
   function closeMenu() {
@@ -36,7 +47,7 @@
 </script>
 
 <aside
-  class:open={openedMenu === menuName}
+  class:open={menuOpen}
   class:no-animate={noAnimate}
   bind:this={aside}
 >
