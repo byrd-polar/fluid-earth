@@ -8,7 +8,7 @@
     import Button, {Label} from '@smui/button';
     import Select,{Option} from '@smui/select';
     import { fade } from 'svelte/transition';
-    import date from '../date.js'
+    export let date;
 	  let visible = false;
     const dates = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 

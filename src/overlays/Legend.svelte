@@ -3,8 +3,8 @@
   import { axisBottom } from 'd3-axis';
   import { scaleLinear } from 'd3-scale';
   import { onMount } from 'svelte';
-  import date from '../date.js'
 
+  export let date;
   export let griddedData;
   export let griddedColormap;
   export let griddedDomain;
@@ -42,7 +42,7 @@
 
 <div class="legend-wrapper">
   <span class="datetime">
-    {$date.toLocaleDateString(undefined, dateStringOptions)}
+    {date.toLocaleDateString(undefined, dateStringOptions)}
   </span>
   <span class="streamlines">
     Streamlines for wind at 10m above ground level, moving

@@ -10,8 +10,8 @@
   import PauseFilled24 from "carbon-icons-svelte/lib/PauseFilled24";
   import PlayFilledAlt24 from "carbon-icons-svelte/lib/PlayFilledAlt24";
   import colormaps from '../map/colormaps/';
-  import date from '../date.js'
 
+  export let date;
   export let dataset;
   export let inventory;
 
@@ -19,15 +19,13 @@
   let iconStyle = "fill: #0ff !important;";
 
   let canForward, canBack, interval;
-  $: canForward = $date < inventory[dataset].end;
-  $: canBack = $date > inventory[dataset].start;
+  $: canForward = date < inventory[dataset].end;
+  $: canBack = date > inventory[dataset].start;
   $: interval = inventory[dataset].intervalInHours;
 
   function adjustDate(hours) {
-    date.update(d => {
-      d.setHours(d.getHours() + hours);
-      return d;
-    });
+    date.setHours(date.getHours() + hours);
+    date = date;
   }
 </script>
 

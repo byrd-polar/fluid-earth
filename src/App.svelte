@@ -22,7 +22,6 @@
   import Branding from './overlays/Branding.svelte';
 
   import Fetcher from './fetcher.js';
-  import date from './date.js'
 
   import { onMount } from 'svelte';
   import { Float16Array } from '@petamoriken/float16';
@@ -31,10 +30,11 @@
 
   let openedMenu = null;
   let fetcher = new Fetcher(inventory);
+  let date = new Date('2020-08-08T18:00:00.000Z');
   let dataset = '/data/gfs-0p25-wind-speed-10m/';
   $: (async () => {
-    let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${$date.toISOString()}.fp16`;
-    let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${$date.toISOString()}.fp16`;
+    let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${date.toISOString()}.fp16`;
+    let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${date.toISOString()}.fp16`;
 
     let uArray = fetcher.fetch(uPath, 'particle');
     let vArray = await fetcher.fetch(vPath, 'particle', false);
@@ -50,7 +50,7 @@
     };
   })();
   async function updateGriddedData() {
-    let path = dataset + $date.toISOString() + '.fp16';
+    let path = dataset + date.toISOString() + '.fp16';
     let array = await fetcher.fetch(path, 'gridded');
     if (!array) return;
 
@@ -66,7 +66,7 @@
     griddedDomain = datasetInfo.domain;
     griddedColormap = datasetInfo.colormap;
   }
-  $: $date, dataset, updateGriddedData();
+  $: date, dataset, updateGriddedData();
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let center = {
@@ -136,6 +136,7 @@
 <Menu bind:openedMenu menuName="Variables">
   <Variables
     {inventory}
+    bind:date
     bind:dataset
   />
 </Menu>
@@ -158,7 +159,6 @@
   />
 </Menu>
 <Menu bind:openedMenu menuName="Time Range Slider">
-  <TimeSlider/>
 </Menu>
 <main>
   <Map
@@ -180,6 +180,7 @@
     />
     <Loading {fetcher} />
     <Legend
+      {date}
       {griddedData}
       {griddedColormap}
       {griddedDomain}
