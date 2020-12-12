@@ -5,7 +5,7 @@
   import { onMount } from 'svelte';
 
   export let date;
-  export let griddedData;
+  export let datasetInfo;
   export let griddedColormap;
   export let griddedDomain;
   export let particleDisplay;
@@ -49,8 +49,8 @@
     {particleDisplay.rate.toLocaleString()} times faster than actual
   </span>
   <span class="gridded">
-    {griddedData.description}
-    {#if griddedData.units}({griddedData.units}){/if}
+    {datasetInfo.description}
+    {#if datasetInfo.units}({datasetInfo.units}){/if}
   </span>
   <div
     class="legend"

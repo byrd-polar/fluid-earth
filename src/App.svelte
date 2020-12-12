@@ -49,7 +49,6 @@
     floatArray: new Float16Array([0]),
     width: 1,
     height: 1,
-    description: 'Loading...',
   };
   let griddedColormap = colormaps.VIRIDIS;
   let griddedDomain = [0, 0];
@@ -100,8 +99,6 @@
         floatArray: array,
         width: 1440,
         height: 721,
-        description: datasetInfo.description,
-        units: datasetInfo.units,
       }
       griddedDomain = datasetInfo.domain;
       griddedColormap = datasetInfo.colormap;
@@ -191,7 +188,7 @@
     <Loading {fetcher} />
     <Legend
       {date}
-      {griddedData}
+      datasetInfo={inventory[dataset]}
       {griddedColormap}
       {griddedDomain}
       {particleDisplay}
