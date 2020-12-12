@@ -36,8 +36,6 @@
   // see comment in onMount
   let updateGriddedData = () => {};
   let updateParticleData = () => {};
-  $: date, dataset, updateGriddedData();
-  $: date, updateParticleData();
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let center = {
@@ -122,6 +120,9 @@
       };
     };
   });
+
+  $: date, dataset, updateGriddedData();
+  $: date, updateParticleData();
 </script>
 
 <!--
