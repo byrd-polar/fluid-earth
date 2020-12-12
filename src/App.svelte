@@ -127,15 +127,18 @@
   $: date, dataset, updateGriddedData();
   $: date, updateParticleData();
 
-  // not using { Icon } import syntax for significantly faster build times, as
-  // recommended in the carbon-icons-svelte README
+  // Find new icons from: https://ibm.github.io/carbon-icons-svelte/
+  //
+  // Not using { Icon } import syntax for significantly faster build times, see
+  // https://github.com/IBM/carbon-icons-svelte#direct-import-recommended
   import Globe32 from "carbon-icons-svelte/lib/Globe32";
   import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
   import List24 from "carbon-icons-svelte/lib/List24";
   import Location24 from "carbon-icons-svelte/lib/Location24";
   import Earth24 from "carbon-icons-svelte/lib/Earth24";
   import SettingsAdjust24 from "carbon-icons-svelte/lib/SettingsAdjust24";
-  import WatsonHealthFusionBlender32 from "carbon-icons-svelte/lib/WatsonHealthFusionBlender32";
+  import WatsonHealthFusionBlender32 from
+    "carbon-icons-svelte/lib/WatsonHealthFusionBlender32";
   import Time32 from "carbon-icons-svelte/lib/Time32";
   import Information32 from "carbon-icons-svelte/lib/Information32";
 
