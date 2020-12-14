@@ -7,6 +7,7 @@ import {
 } from './cmocean.js';
 
 import {
+  temp,
   precip_6h,
   total_cloud_water,
   total_precipitable_water,
@@ -26,7 +27,12 @@ let colormaps = {
   /////////////////////////////////////////////////////////////////////////////
   // FEVer original colormaps
   /////////////////////////////////////////////////////////////////////////////
-  PRECIP_6H:{
+  TEMP:{
+    name: 'Temperature',
+    get lut() { return convert(temp) }
+  },
+
+  PERCIP_6H:{
     name: 'precip_6h',
     //lut: precip_6h,
     get lut() { return convert(precip_6h) }
