@@ -41,6 +41,7 @@
     width: 1,
     height: 1,
   };
+  export let particlesShown = true;
   export let particleLifetime = 1000; // milliseconds
   export let particleCount = 1e5;
   export let particleDisplay = {
@@ -48,7 +49,6 @@
     rate: 5e4,
     opacity: 0.4,
     fade: 0.96,
-    enabled: true,
   };
 
   export let vectorData = __webcomponent__ ? topology : { objects: {} };
@@ -113,6 +113,11 @@
       particleLifetime,
       particleDisplay,
     trailsNeedsReset = true;
+
+  let particlesNeedClearing = false;
+  $: if (!particlesShown) {
+    particlesNeedClearing = true;
+  }
 
   onMount(() => {
     // Work around an issue with software-based webgl not being able to do blend
@@ -203,7 +208,7 @@
       trailsNeedsReset = false;
     }
 
-    if (particleDisplay.enabled) {
+    if (particlesShown) {
       particleSimulator.drawWithTrails(
         sharedUniforms,
         particleDisplay.size,
@@ -214,6 +219,12 @@
         Math.min(timeDelta, 100),
         particleDisplay.rate
       );
+    }
+
+    if (particlesNeedClearing) {
+      particleGl.clear(particleGl.COLOR_BUFFER_BIT);
+      particlesNeedClearing = false;
+      console.log('hello');
     }
 
     requestAnimationFrame(render);

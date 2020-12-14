@@ -12,8 +12,8 @@
   import colormaps from '../map/colormaps/';
 
   export let dataset;
+  export let particlesShown;
 
-  let animationPaused = false;
   let iconStyle = "fill: #0ff !important;";
 </script>
 
@@ -139,19 +139,19 @@
     <TemperatureHot24 style={iconStyle}/>
     Sea Surface Temperature
   </li>
-</ul>
+</ul>-->
 
 <h2>ANIMATION</h2>
 <ul>
-  <li on:click={() => animationPaused = !animationPaused}>
-    {#if animationPaused}
-      <PlayFilledAlt24 />
-    {:else}
+  <li on:click={() => particlesShown = !particlesShown}>
+    {#if particlesShown}
       <PauseFilled24 />
+    {:else}
+      <PlayFilledAlt24 />
     {/if}
-    {animationPaused ? 'Resume' : 'Stop'} animation
+    {particlesShown ? 'Stop' : 'Resume'} animation
   </li>
-</ul>-->
+</ul>
 
 
 <style>

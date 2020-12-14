@@ -55,17 +55,23 @@
   let griddedColormap = colormaps.VIRIDIS;
   let griddedDomain = [0, 0];
 
-  let particleData = {
+  const emptyParticleData = {
     uVelocities: new Float16Array([0]),
     vVelocities: new Float16Array([0]),
     width: 1,
     height: 1,
   };
+  let particleData = emptyParticleData;
+
   let vectorData = { objects: {} };
   (async () => {
     vectorData = await fetcher.fetch('/data/topology.json', 'vector');
   })();
 
+  let particlesShown = true;
+  $: if (!particlesShown) {
+    particleData = emptyParticleData;
+  }
   let particleLifetime = 1000;
   let particleCount = 1e5;
   let particleDisplay = {
@@ -73,7 +79,6 @@
     rate: 5e4,
     opacity: 0.4,
     fade: 0.96,
-    enabled: true,
   };
 
   onMount(() => {
@@ -111,6 +116,8 @@
       }
     };
     updateParticleData = async () => {
+      if (!particlesShown) return;
+
       let datestr = date.toISOString();
       let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${datestr}.fp16`;
       let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${datestr}.fp16`;
@@ -131,7 +138,7 @@
   });
 
   $: date, dataset, updateGriddedData();
-  $: date, updateParticleData();
+  $: date, particlesShown, updateParticleData();
 
   // Find new icons from: https://ibm.github.io/carbon-icons-svelte/
   //
@@ -188,9 +195,8 @@
 </Menu>
 <Menu bind:openedMenu menuName="Datasets">
   <Variables
-    {inventory}
-    bind:date
     bind:dataset
+    bind:particlesShown
   />
 </Menu>
 <Menu bind:openedMenu menuName="Markers">
@@ -232,6 +238,7 @@
     {griddedColormap}
     {griddedDomain}
     {particleData}
+    {particlesShown}
     {particleLifetime}
     {particleCount}
     {particleDisplay}
