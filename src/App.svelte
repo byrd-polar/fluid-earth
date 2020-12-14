@@ -149,7 +149,7 @@
   import Information32 from "carbon-icons-svelte/lib/Information32";
 
   const menus = [
-    { name: 'Variables', icon: Grid32 },
+    { name: 'Datasets', icon: Grid32 },
     { name: 'Time Machine', icon: Time32 },
     { name: 'Colormaps', icon: ColorPalette32 },
     { name: 'Map Projections', icon: Globe32 },
@@ -186,7 +186,7 @@
     bind:griddedColormap
   />
 </Menu>
-<Menu bind:openedMenu menuName="Variables">
+<Menu bind:openedMenu menuName="Datasets">
   <Variables
     {inventory}
     bind:date

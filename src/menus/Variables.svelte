@@ -11,22 +11,10 @@
   import PlayFilledAlt24 from "carbon-icons-svelte/lib/PlayFilledAlt24";
   import colormaps from '../map/colormaps/';
 
-  export let date;
   export let dataset;
-  export let inventory;
 
   let animationPaused = false;
   let iconStyle = "fill: #0ff !important;";
-
-  let canForward, canBack, interval;
-  $: canForward = date < inventory[dataset].end;
-  $: canBack = date > inventory[dataset].start;
-  $: interval = inventory[dataset].intervalInHours;
-
-  function adjustDate(hours) {
-    date.setHours(date.getHours() + hours);
-    date = date;
-  }
 </script>
 
 
@@ -164,21 +152,6 @@
     {animationPaused ? 'Resume' : 'Stop'} animation
   </li>
 </ul>-->
-
-
-<h2>Step through time:</h2>
-<button
-  disabled={!canBack}
-  on:click={() => adjustDate(-interval)}
->
-  Back {interval} hours
-</button>
-<button
-  disabled={!canForward}
-  on:click={() => adjustDate(interval)}
->
-  Forward {interval} hours
-</button>
 
 
 <style>

@@ -1,5 +1,6 @@
 <script>
   import Datepicker from 'svelte-calendar';
+  import Button, { Group, Label } from '@smui/button';
 
   export let fetcher;
   export let inventory;
@@ -44,10 +45,77 @@
       date = datasetDateCeil(selected);
     }
   }
+
+  const dateStringOptions = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+
+  let canForward, canBack, interval;
+  $: canForward = date < end;
+  $: canBack = date > start;
+
+  function adjustDate(hours) {
+    date.setHours(date.getHours() + hours);
+    date = date;
+  }
 </script>
+
+<h2>About this menu</h2>
+
+<p>Use the following controls to explore the current dataset at various points
+in time.</p>
+
+
+<h2>Calendar</h2>
+
+<p>Use the button below to open a calendar. Select a date to see the earliest
+dataset from that date.</p>
 
 <Datepicker
   start={new Date(start)}
   end={new Date(end)}
   bind:selected
-/>
+  style="display: block; margin: 2em auto"
+  highlightColor="#015B5B"
+>
+  <Button variant="raised">
+    <Label>{date.toLocaleDateString(undefined, dateStringOptions)}</Label>
+  </Button>
+</Datepicker>
+
+
+<h2>Stepper</h2>
+
+<p>Use the buttons below to move one step backward or forwards in time.</p>
+
+<Group variant="raised" style="display: flex">
+  <Button
+    variant="raised"
+    color="secondary"
+    style="flex: 1"
+    on:click={() => adjustDate(-interval)}
+    disabled={!canBack}
+  >
+    <Label>-{interval} hours</Label>
+  </Button>
+  <Button
+    variant="raised"
+    color="secondary"
+    style="flex: 1; margin-left: 0.5em"
+    on:click={() => adjustDate(interval)}
+    disabled={!canForward}
+  >
+    <Label>+{interval} hours</Label>
+  </Button>
+</Group>
+
+<style>
+  /* Adjust disabled button style for dark background */
+  :global(.mdc-button--raised:disabled) {
+    background-color: rgba(0, 0, 0, 0.88);
+    color: rgba(255, 255, 255, 0.58);
+  }
+</style>
