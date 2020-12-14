@@ -35,6 +35,7 @@
   const fetcher = new Fetcher(inventory);
   let date = new Date('2020-08-08T18:00:00.000Z');
   let dataset = '/data/gfs-0p25-wind-speed-10m/';
+  let previousDataset = null;
 
   // see comment in onMount
   let updateGriddedData = () => {};
@@ -101,8 +102,13 @@
         width: 1440,
         height: 721,
       }
-      griddedDomain = datasetInfo.domain;
-      griddedColormap = datasetInfo.colormap;
+
+      if (previousDataset !== dataset) {
+        griddedDomain = datasetInfo.domain;
+        griddedColormap = datasetInfo.colormap;
+
+        previousDataset = dataset;
+      }
     };
     updateParticleData = async () => {
       let datestr = date.toISOString();
