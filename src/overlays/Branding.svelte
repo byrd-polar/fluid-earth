@@ -34,7 +34,7 @@
 </div>
 
 <style>
-  @media (max-width: 750px) {
+  @media (max-width: 1000px) {
     .title {
       display: none;
     }
