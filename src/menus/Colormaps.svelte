@@ -4,6 +4,8 @@
   export let griddedColormap;
 </script>
 
+<h2>Selector</h2>
+
 <p>Choose a colormap:</p>
 {#each Object.values(colormaps) as c}
 <label>
@@ -16,10 +18,14 @@
 </label>
 {/each}
 
-<h2>Note</h2>
-<p>These demo menus exist only to illustrate the process of binding
-configuration variables between various menus and the map.</p>
-<p>Their content and the variables they configure will change in the future.</p>
+
+<h2>About this menu</h2>
+
+<p>Colormaps define how numerical values are converted to colors to display on
+the map.</p>
+<p>Perceptions of data are heavily influenced by the choice of colormap, so it
+is important to select an appropriate colormap for each dataset.</p>
+
 
 <style>
   label {

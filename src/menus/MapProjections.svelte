@@ -4,6 +4,9 @@
   export let projection;
 </script>
 
+
+<h2>Selector</h2>
+
 <p>Choose a map projection:</p>
 {#each Object.values(projections) as p}
 <label>
@@ -16,10 +19,13 @@
 </label>
 {/each}
 
-<h2>Note</h2>
-<p>These demo menus exist only to illustrate the process of binding
-configuration variables between various menus and the map.</p>
-<p>Their content and the variables they configure will change in the future.</p>
+<h2>About this menu</h2>
+
+<p>Map projections are the various ways of taking a three-dimensional globe and
+projecting it to the two-dimensional surface of a map.</p>
+<p>This will always distort the globe in some way, so each projection has its
+tradeoffs.</p>
+
 
 <style>
   label {
