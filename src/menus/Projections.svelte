@@ -6,28 +6,29 @@
 
   function selectMenuItem(currentItem) {
     current = currentItem;
+    zoom = 1;
 
     if(current == 'equirectangular'){
+      center.longitude = 0;
+      center.latitude = 0;
       projection = {name: 'equirectangular',
       id: 0};
     }
     else if(current == 'polarStereoNorth'){
-      center.longitude = 90;
-      center.latitude = 135;
+      center.longitude = -60;
+      center.latitude = 90;
       projection = {name: 'equirectangular',
       id: 0};
-
-      zoom = 1;
     }
     else if(current == 'polarStereoSouth'){
-      center.longitude = 90;
-      center.latitude = 45;
+      center.longitude = 0;
+      center.latitude = -90;
       projection = {name: 'equirectangular',
       id: 0};
-
-      zoom = 1;
     }
     else if(current == 'orthographic'){
+      center.longitude = -60;
+      center.latitude = 30;
        projection = {name: 'orthographic',
       id: 3};
     }
