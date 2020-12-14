@@ -4,7 +4,7 @@
 </script>
 
 
-<h1>GEOGRAPHIC FEATURES</h1>
+<h2>GEOGRAPHIC FEATURES</h2>
 
 <ul class="list-group">
   <li>
@@ -42,13 +42,5 @@
     cursor: pointer;
     list-style-type: none;
     padding: .5rem;
-  }
-
-  h1 {
-    font-family: Quicksand-regular;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    border-bottom: 1px solid;
   }
 </style>

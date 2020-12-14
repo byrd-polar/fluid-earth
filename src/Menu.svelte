@@ -107,6 +107,14 @@
     overflow: auto;
   }
 
+  :global(div h2) {
+    font-family: Quicksand-regular;
+    font-size: 1rem;
+    font-weight: 400;
+    border-bottom: 1px solid;
+    text-transform: uppercase;
+  }
+
   :global(.top-app-drawer) {
     box-shadow:
       0 2px  4px -1px rgba(0,0,0,.2),

@@ -199,14 +199,6 @@
     list-style-type: none;
   }
 
-  h2 {
-    font-family: Quicksand-regular;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    border-bottom: 1px solid;
-  }
-
   .selected {
     color: gold;
   }

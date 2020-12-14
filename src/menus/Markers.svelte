@@ -4,7 +4,7 @@
 </script>
 
 
-<h1>MARKER OPTIONS</h1>
+<h2>MARKER OPTIONS</h2>
 
 <ul class="list-group">
   <li>
@@ -16,7 +16,7 @@
 </ul>
 
 <div id="marker-header" class="border">
-  <h2>SAVED LOCATIONS</h2>
+  <h3>SAVED LOCATIONS</h3>
   <div class="button-group">
     <button id="shareMenuMarkers" type="button">
       <span>Share  Locations</span>
@@ -44,15 +44,7 @@
     list-style-type: none;
   }
 
-  h1 {
-    font-family: Quicksand-regular;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    border-bottom: 1px solid;
-  }
-
-  h2 {
+  h3 {
     font-family: Quicksand-regular;
     font-size: 1rem;
     font-weight: 400;
