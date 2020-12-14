@@ -197,7 +197,11 @@
   <Markers/>
 </Menu>
 <Menu bind:openedMenu menuName="Projections">
-  <Projections/>
+  <Projections
+    bind:projection
+    bind:center
+    bind:zoom
+  />
 </Menu>
 <Menu bind:openedMenu menuName="Advanced">
   <Advanced/>

@@ -1,9 +1,38 @@
 <script>
   let current = 'orthographic';
+  export let projection;
+  export let center;
+  export let zoom;
 
   function selectMenuItem(currentItem) {
     current = currentItem;
+
+    if(current == 'equirectangular'){
+      projection = {name: 'equirectangular',
+      id: 0};
+    }
+    else if(current == 'polarStereoNorth'){
+      center.longitude = 90;
+      center.latitude = 135;
+      projection = {name: 'equirectangular',
+      id: 0};
+
+      zoom = 1;
+    }
+    else if(current == 'polarStereoSouth'){
+      center.longitude = 90;
+      center.latitude = 45;
+      projection = {name: 'equirectangular',
+      id: 0};
+
+      zoom = 1;
+    }
+    else if(current == 'orthographic'){
+       projection = {name: 'orthographic',
+      id: 3};
+    }
   }
+
 </script>
 
 
