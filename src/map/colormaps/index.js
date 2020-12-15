@@ -17,6 +17,7 @@ import {
   dust_mass,
   total_column_ozone,
   currents,
+  sea_surface_temp,
 } from './fever.js';
 
 // Enums for colormaps
@@ -30,6 +31,11 @@ let colormaps = {
   TEMP:{
     name: 'Temperature',
     get lut() { return convert(temp) }
+  },
+
+  SEA_SURFACE_TEMP:{
+    name: 'sea_surface_temp',
+    get lut() { return convert(sea_surface_temp) }
   },
 
   PERCIP_6H:{
