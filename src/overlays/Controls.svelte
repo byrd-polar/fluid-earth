@@ -2,6 +2,9 @@
   import { onMount } from 'svelte';
   import interact from 'interactjs';
 
+  export let minZoom;
+  export let maxZoom;
+
   export let center;
   export let zoom;
 
@@ -15,8 +18,6 @@
   $: screenRatio = elementHeight / 1080;
 
   const PAN_FACTOR = 0.25;
-  const MIN_ZOOM = 0.5;
-  const MAX_ZOOM = 15;
 
   onMount(() => {
     interact(interactionSurfaceElement)
@@ -37,7 +38,7 @@
             baseScale = zoom;
           },
           move (e) {
-            zoom = clamp(baseScale * e.scale, MIN_ZOOM, MAX_ZOOM);
+            zoom = clamp(baseScale * e.scale, minZoom, maxZoom);
           },
         }
       });
@@ -53,7 +54,7 @@
 
   function handleWheel(e) {
     let z = zoom - 0.25 * Math.sign(e.deltaY);
-    zoom = clamp(z, MIN_ZOOM, MAX_ZOOM);
+    zoom = clamp(z, minZoom, maxZoom);
   }
 
   function clamp(x, min, max) {

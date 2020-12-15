@@ -29,6 +29,9 @@
 
   export let inventory;
 
+  const minZoom = 0.5;
+  const maxZoom = 15;
+
   let openedMenu = null;
   let drawerOpen = false;
 
@@ -214,6 +217,8 @@
 </Menu>
 <Menu bind:openedMenu menuName="Zoom Slider">
   <ZoomSlider
+    {minZoom}
+    {maxZoom}
     bind:zoom
   />
 </Menu>
@@ -245,6 +250,8 @@
     {vectorData}
   >
     <Controls
+      {minZoom}
+      {maxZoom}
       bind:center
       bind:zoom
     />
