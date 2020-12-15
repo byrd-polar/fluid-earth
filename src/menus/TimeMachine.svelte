@@ -12,6 +12,15 @@
   $: end = inventory[dataset].end;
   $: interval = inventory[dataset].intervalInHours;
 
+  let canForward, canBack, interval;
+  $: canForward = date < end;
+  $: canBack = date > start;
+
+  function adjustDate(hours) {
+    date.setHours(date.getHours() + hours);
+    date = date;
+  }
+
   function localDateFloor(d) {
     return new Date(
       d.getFullYear(),
@@ -52,39 +61,7 @@
     month: 'long',
     day: 'numeric',
   };
-
-  let canForward, canBack, interval;
-  $: canForward = date < end;
-  $: canBack = date > start;
-
-  function adjustDate(hours) {
-    date.setHours(date.getHours() + hours);
-    date = date;
-  }
 </script>
-
-<h2>About this menu</h2>
-
-<p>Use the following controls to explore the current dataset at various points
-in time.</p>
-
-
-<h2>Calendar</h2>
-
-<p>Use the button below to open a calendar. Select a date to see the earliest
-dataset from that date.</p>
-
-<Datepicker
-  start={new Date(start)}
-  end={new Date(end)}
-  bind:selected
-  style="display: block; margin: 2em auto"
-  highlightColor="#015B5B"
->
-  <Button variant="raised">
-    <Label>{date.toLocaleDateString(undefined, dateStringOptions)}</Label>
-  </Button>
-</Datepicker>
 
 
 <h2>Stepper</h2>
@@ -111,6 +88,31 @@ dataset from that date.</p>
     <Label>+{interval} hours</Label>
   </Button>
 </Group>
+
+
+<h2>Calendar</h2>
+
+<p>Use the button below to open a calendar. Select a date to see the earliest
+dataset from that date.</p>
+
+<Datepicker
+  start={new Date(start)}
+  end={new Date(end)}
+  bind:selected
+  style="display: block; margin: 2em auto"
+  highlightColor="#015B5B"
+>
+  <Button variant="raised">
+    <Label>{date.toLocaleDateString(undefined, dateStringOptions)}</Label>
+  </Button>
+</Datepicker>
+
+
+<h2>About this menu</h2>
+
+<p>Use the above controls to explore the current dataset at various points in
+time.</p>
+
 
 <style>
   /* Adjust disabled button style for dark background */
