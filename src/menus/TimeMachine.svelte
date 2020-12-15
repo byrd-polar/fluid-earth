@@ -60,6 +60,7 @@
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    hour: 'numeric',
   };
 </script>
 
