@@ -100,7 +100,7 @@ dataset from that date.</p>
   start={new Date(start)}
   end={new Date(end)}
   bind:selected
-  style="display: block; margin: 2em auto"
+  style="display: block; width: max-content; margin: 2em auto"
   highlightColor="#015B5B"
 >
   <Button variant="raised">
