@@ -1,6 +1,7 @@
 <script>
   import Datepicker from 'svelte-calendar';
   import Button, { Group, Label } from '@smui/button';
+  import RangeSlider from 'svelte-range-slider-pips';
 
   export let fetcher;
   export let inventory;
@@ -60,8 +61,26 @@
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+  };
+
+  const dateStringOptionsMore = {
+    ...dateStringOptions,
     hour: 'numeric',
   };
+
+  function localDateCeil(d) {
+    return new Date(
+      d.getFullYear(),
+      d.getMonth(),
+      d.getDate() + 1,
+    );
+  }
+
+  let rangeStart = localDateFloor(date);
+  let rangeEnd = localDateCeil(date);
+
+  $: rangeStartPlusOne = new Date(rangeStart.getTime() + 24 * 60 * 60 * 1000);
+  $: rangeEndMinusOne = new Date(rangeEnd.getTime() - 24 * 60 * 60 * 1000);
 </script>
 
 
@@ -73,16 +92,17 @@
   <Button
     variant="raised"
     color="secondary"
-    style="flex: 1"
+    class="stepper-btn"
     on:click={() => adjustDate(-interval)}
     disabled={!canBack}
+    ripple
   >
     <Label>-{interval} hours</Label>
   </Button>
   <Button
     variant="raised"
     color="secondary"
-    style="flex: 1; margin-left: 0.5em"
+    class="stepper-btn right"
     on:click={() => adjustDate(interval)}
     disabled={!canForward}
   >
@@ -104,21 +124,65 @@ dataset from that date.</p>
   highlightColor="#015B5B"
 >
   <Button variant="raised">
-    <Label>{date.toLocaleDateString(undefined, dateStringOptions)}</Label>
+    <Label>{date.toLocaleDateString(undefined, dateStringOptionsMore)}</Label>
   </Button>
 </Datepicker>
 
 
-<h2>About this menu</h2>
+<h2>Range Loader</h2>
 
-<p>Use the above controls to explore the current dataset at various points in
-time.</p>
+<p>Select a range of dates to load data between.</p>
+<Datepicker
+  start={new Date(start)}
+  end={rangeEndMinusOne}
+  bind:selected={rangeStart}
+  style="display: block; width: max-content; margin: 1em auto 0"
+  highlightColor="#676778"
+>
+  <Button variant="raised" color="secondary">
+    <Label>{rangeStart.toLocaleDateString(undefined, dateStringOptions)}</Label>
+  </Button>
+</Datepicker>
 
+<p style="text-align: center; margin: 0.1em">to</p>
+<Datepicker
+  start={rangeStartPlusOne}
+  end={localDateCeil(end)}
+  bind:selected={rangeEnd}
+  style="display: block; width: max-content; margin: 0 auto 1em"
+  highlightColor="#676778"
+>
+  <Button variant="raised" color="secondary">
+    <Label>{rangeEnd.toLocaleDateString(undefined, dateStringOptions)}</Label>
+  </Button>
+</Datepicker>
+
+<p>Confirm loading of the data, after which a slider will appear. Turning off
+streamlines will reduce size of the download.</p>
+<Button variant="raised" class="load-btn">
+  <Label>Load Range (x MBs)</Label>
+</Button>
+
+<p>Use the slider to scroll smoothly through time.</p>
+
+<RangeSlider />
 
 <style>
   /* Adjust disabled button style for dark background */
   :global(.mdc-button--raised:disabled) {
     background-color: rgba(0, 0, 0, 0.88);
     color: rgba(255, 255, 255, 0.58);
+  }
+
+  :global(.stepper-btn) {
+    flex: 1;
+  }
+
+  :global(.stepper-btn.right) {
+    margin-left: 0.5em;
+  }
+
+  :global(.load-btn) {
+    width: 100%;
   }
 </style>
