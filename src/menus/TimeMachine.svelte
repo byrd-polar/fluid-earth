@@ -118,12 +118,13 @@
 
   let rangeValue = date.getTime();
   function updateRangeValue() {
-    if (rangeValue !== date.getTime()) {
-      rangeValue = date.getTime();
+    let time = clamp(date, rangeDatasetStart, rangeDatasetEnd).getTime();
+    if (rangeValue !== time) {
+      rangeValue = time;
     }
   }
   $: date = new Date(rangeValue);
-  $: date, updateRangeValue();
+  $: date, rangeDatasetStart, rangeDatasetEnd, updateRangeValue();
 </script>
 
 
