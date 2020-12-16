@@ -22,6 +22,10 @@
     date = date;
   }
 
+  function clamp(x, min, max) {
+    return x > max ? max : (x < min ? min : x);
+  }
+
   function localDateFloor(d) {
     return new Date(
       d.getFullYear(),
@@ -32,10 +36,9 @@
 
   function datasetDateCeil(d) {
     let intervalInMilliseconds = interval * 60 * 60 * 1000;
-    let intervalCount = Math.max(
-      Math.ceil((d - start) / intervalInMilliseconds), 0
-    );
-    return new Date(start.getTime() + intervalInMilliseconds * intervalCount);
+    let intervalCount = Math.ceil((d - start) / intervalInMilliseconds);
+    d = new Date(start.getTime() + intervalInMilliseconds * intervalCount);
+    return clamp(d, start, end);
   }
 
   let selected;
