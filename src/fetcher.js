@@ -28,10 +28,11 @@ export default class Fetcher {
       url = url.replace(/:/g, '_');
     }
 
-    if (abortPreviousOfType) {
-      if (this._abortControllers[type]) {
-        this._abortControllers[type].abort();
-      }
+    if (abortPreviousOfType && this._abortControllers[type]) {
+      this._abortControllers[type].abort();
+    }
+
+    if (abortPreviousOfType || this._abortControllers[type] === undefined) {
       this._abortControllers[type] = new AbortController();
     }
 
