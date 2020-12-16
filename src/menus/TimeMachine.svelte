@@ -206,8 +206,9 @@ streamlines will reduce size of the download.</p>
   <Label>Load Range ({prettyBytes(rangeBytes)})</Label>
 </Button>
 
-<p>Use the slider to scroll smoothly through time.</p>
+<h2>Range Slider</h2>
 
+<p>Use the slider to scroll smoothly through time.</p>
 <RangeSlider
   min={rangeDatasetStart.getTime()}
   max={rangeDatasetEnd.getTime()}
