@@ -224,7 +224,6 @@
     if (particlesNeedClearing) {
       particleGl.clear(particleGl.COLOR_BUFFER_BIT);
       particlesNeedClearing = false;
-      console.log('hello');
     }
 
     requestAnimationFrame(render);
