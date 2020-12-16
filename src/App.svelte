@@ -232,6 +232,7 @@
     {inventory}
     bind:date
     {dataset}
+    bind:particlesShown
   />
 </Menu>
 <main>

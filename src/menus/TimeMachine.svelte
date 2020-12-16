@@ -2,18 +2,22 @@
   import Datepicker from 'svelte-calendar';
   import Button, { Group, Label } from '@smui/button';
   import RangeSlider from 'svelte-range-slider-pips';
+  import prettyBytes from 'pretty-bytes';
 
   export let fetcher;
   export let inventory;
   export let date;
   export let dataset;
+  export let particlesShown;
 
-  let start, end;
+  const dayInMilliseconds = 24 * 60 * 60 * 1000;
+
   $: start = inventory[dataset].start;
   $: end = inventory[dataset].end;
-  $: interval = inventory[dataset].intervalInHours;
 
-  let canForward, canBack, interval;
+  $: interval = inventory[dataset].intervalInHours;
+  $: intervalInMilliseconds = interval * 60 * 60 * 1000;
+
   $: canForward = date < end;
   $: canBack = date > start;
 
@@ -35,7 +39,6 @@
   }
 
   function datasetDateCeil(d) {
-    let intervalInMilliseconds = interval * 60 * 60 * 1000;
     let intervalCount = Math.ceil((d - start) / intervalInMilliseconds);
     d = new Date(start.getTime() + intervalInMilliseconds * intervalCount);
     return clamp(d, start, end);
@@ -82,8 +85,45 @@
   let rangeStart = localDateFloor(date);
   let rangeEnd = localDateCeil(date);
 
-  $: rangeStartPlusOne = new Date(rangeStart.getTime() + 24 * 60 * 60 * 1000);
-  $: rangeEndMinusOne = new Date(rangeEnd.getTime() - 24 * 60 * 60 * 1000);
+  $: rangeStartPlusOne = new Date(rangeStart.getTime() + dayInMilliseconds);
+  $: rangeEndMinusOne = new Date(rangeEnd.getTime() - dayInMilliseconds);
+
+  $: rangeDatasetStart = datasetDateCeil(rangeStart);
+  $: rangeDatasetEnd = datasetDateCeil(rangeEnd);
+  $: rangeCount = (rangeDatasetEnd - rangeDatasetStart) / intervalInMilliseconds;
+  $: rangeGriddedBytes = rangeCount * inventory[dataset].bytesPerFile;
+  $: rangeParticleBytes = rangeCount *
+    (inventory['/data/gfs-0p25-u-wind-velocity-10m/'].bytesPerFile +
+     inventory['/data/gfs-0p25-v-wind-velocity-10m/'].bytesPerFile);
+  $: rangeBytes = rangeGriddedBytes + (particlesShown ? rangeParticleBytes : 0);
+
+  function handleLoadButtonPress() {
+    let d = datasetDateCeil(rangeStart);
+    while (d <= datasetDateCeil(rangeEnd)) {
+      let dstr = d.toISOString();
+
+      let path = dataset + dstr + '.fp16';
+      fetcher.fetch(path, 'range-loader', false);
+
+      if (particlesShown) {
+        let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${dstr}.fp16`;
+        let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${dstr}.fp16`;
+        fetcher.fetch(uPath, 'range-loader', false);
+        fetcher.fetch(vPath, 'range-loader', false);
+      }
+
+      d = new Date(d.getTime() + intervalInMilliseconds);
+    }
+  }
+
+  let rangeValue = date.getTime();
+  function updateRangeValue() {
+    if (rangeValue !== date.getTime()) {
+      rangeValue = date.getTime();
+    }
+  }
+  $: date = new Date(rangeValue);
+  $: date, updateRangeValue();
 </script>
 
 
@@ -162,13 +202,19 @@ dataset from that date.</p>
 
 <p>Confirm loading of the data, after which a slider will appear. Turning off
 streamlines will reduce size of the download.</p>
-<Button variant="raised" class="load-btn">
-  <Label>Load Range (x MBs)</Label>
+<Button variant="raised" class="load-btn" on:click={handleLoadButtonPress}>
+  <Label>Load Range ({prettyBytes(rangeBytes)})</Label>
 </Button>
 
 <p>Use the slider to scroll smoothly through time.</p>
 
-<RangeSlider />
+<RangeSlider
+  min={rangeDatasetStart.getTime()}
+  max={rangeDatasetEnd.getTime()}
+  step={intervalInMilliseconds}
+  springValues={{ stiffness: 0.15, damping: 1 }}
+  bind:value={rangeValue}
+/>
 
 <style>
   /* Adjust disabled button style for dark background */
