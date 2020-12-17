@@ -33,7 +33,7 @@
     <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" checked >
     <label class="onoffswitch-label" for="myonoffswitch">
         <span class="onoffswitch-inner" on:click={() => selectMode('on')}></span>
-        <span class="onoffswitch-switch" on:click={() => selectMenuItem('off')}>  </span>
+        <span class="onoffswitch-switch" on:click={() => selectMode('off')}>  </span>
     </label>
 </div>
 <!-- end of mode toggle -->
