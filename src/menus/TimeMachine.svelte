@@ -244,6 +244,7 @@ dataset from that date.</p>
     step={intervalInMilliseconds}
     springValues={{ stiffness: 0.15, damping: 1 }}
     bind:value={rangeValue}
+    pips
   />
 
 {/if}
