@@ -267,4 +267,8 @@ dataset from that date.</p>
   :global(.load-btn) {
     width: 100%;
   }
+
+  :global(div.sc-popover div.contents-wrapper) {
+    z-index: 4 !important;
+  }
 </style>
