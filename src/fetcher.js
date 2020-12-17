@@ -28,12 +28,8 @@ export default class Fetcher {
       url = url.replace(/:/g, '_');
     }
 
-    if (abortPreviousOfType && this._abortControllers[type]) {
-      this._abortControllers[type].abort();
-    }
-
-    if (abortPreviousOfType || this._abortControllers[type] === undefined) {
-      this._abortControllers[type] = new AbortController();
+    if (abortPreviousOfType) {
+      this.abort(type);
     }
 
     let cachedResponse = this._cache[url];
@@ -46,6 +42,10 @@ export default class Fetcher {
       transferredBytes: 0,
       totalBytes: await this._fileSizeInBytes(url),
     };
+
+    if (this._abortControllers[type] === undefined) {
+      this._abortControllers[type] = new AbortController();
+    }
 
     let data;
     try {
@@ -111,6 +111,15 @@ export default class Fetcher {
 
     this._cache[url] = data;
     return data;
+  }
+
+  abort(type='default') {
+    let controller = this._abortControllers[type];
+    if (controller) {
+      controller.abort();
+      this._abortControllers[type] = new AbortController();
+    }
+    return controller !== undefined;
   }
 
   async _fileSizeInBytes(url) {
