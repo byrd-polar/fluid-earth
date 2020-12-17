@@ -57,7 +57,7 @@
     width: min-content;
   }
 
-  :global(div.horizontal :nth-child(2), div.vertical :nth-child(2)) {
+  div :global(:nth-child(2)) {
     flex: 1;
   }
 </style>
