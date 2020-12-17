@@ -97,24 +97,46 @@
      inventory['/data/gfs-0p25-v-wind-velocity-10m/'].bytesPerFile);
   $: rangeBytes = rangeGriddedBytes + (particlesShown ? rangeParticleBytes : 0);
 
-  function handleLoadButtonPress() {
+
+  let loaded = false;
+  let loading = false;
+
+  async function handleLoadButtonPress() {
+    if (loading) {
+      fetcher.abort('range-loader');
+      return;
+    }
+
+    loading = true;
+
+    let fetches = [];
     let d = datasetDateCeil(rangeStart);
+
     while (d <= datasetDateCeil(rangeEnd)) {
       let dstr = d.toISOString();
 
       let path = dataset + dstr + '.fp16';
-      fetcher.fetch(path, 'range-loader', false);
+      fetches.push(fetcher.fetch(path, 'range-loader', false));
 
       if (particlesShown) {
         let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${dstr}.fp16`;
         let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${dstr}.fp16`;
-        fetcher.fetch(uPath, 'range-loader', false);
-        fetcher.fetch(vPath, 'range-loader', false);
+        fetches.push(fetcher.fetch(uPath, 'range-loader', false));
+        fetches.push(fetcher.fetch(vPath, 'range-loader', false));
       }
 
       d = new Date(d.getTime() + intervalInMilliseconds);
     }
+    let results = await Promise.all(fetches);
+    loading = false;
+
+    if (results.every(r => r)) {
+      loaded = true;
+      date = datasetDateCeil(rangeStart);
+    }
   }
+
+  $: rangeStart, rangeEnd, dataset, particlesShown, loaded = false;
 
   let rangeValue = date.getTime();
   function updateRangeValue() {
@@ -201,22 +223,30 @@ dataset from that date.</p>
   </Button>
 </Datepicker>
 
-<p>Confirm loading of the data, after which a slider will appear. Turning off
-streamlines will reduce size of the download.</p>
-<Button variant="raised" class="load-btn" on:click={handleLoadButtonPress}>
-  <Label>Load Range ({prettyBytes(rangeBytes)})</Label>
-</Button>
+{#if !loaded }
 
-<h2>Range Slider</h2>
+  <p>Confirm loading of the data, after which a slider will appear. Turning off
+  streamlines will reduce size of the download.</p>
+  <Button variant="raised" class="load-btn" on:click={handleLoadButtonPress}>
+    <Label>
+      {loading ? 'Cancel' : `Load Range (${prettyBytes(rangeBytes)})`}
+    </Label>
+  </Button>
 
-<p>Use the slider to scroll smoothly through time.</p>
-<RangeSlider
-  min={rangeDatasetStart.getTime()}
-  max={rangeDatasetEnd.getTime()}
-  step={intervalInMilliseconds}
-  springValues={{ stiffness: 0.15, damping: 1 }}
-  bind:value={rangeValue}
-/>
+{:else}
+
+  <h2>Range Slider</h2>
+
+  <p>Use the slider to scroll smoothly through time.</p>
+  <RangeSlider
+    min={rangeDatasetStart.getTime()}
+    max={rangeDatasetEnd.getTime()}
+    step={intervalInMilliseconds}
+    springValues={{ stiffness: 0.15, damping: 1 }}
+    bind:value={rangeValue}
+  />
+
+{/if}
 
 <style>
   /* Adjust disabled button style for dark background */
