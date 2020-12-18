@@ -45,11 +45,10 @@
   let updateParticleData = () => {};
 
   let projection = projections.VERTICAL_PERSPECTIVE;
-  let center = {
-    longitude: 0,
-    latitude: 0,
-  };
+  let centerLongitude = 0;
+  let centerLatitude = 0;
   let zoom = 1;
+
   let griddedData = {
     floatArray: new Float16Array([0]),
     width: 1,
@@ -208,7 +207,8 @@
 <Menu bind:openedMenu menuName="Projections">
   <Projections
     bind:projection
-    bind:center
+    bind:centerLongitude
+    bind:centerLatitude
     bind:zoom
   />
 </Menu>
@@ -238,7 +238,8 @@
 <main>
   <Map
     {projection}
-    {center}
+    {centerLongitude}
+    {centerLatitude}
     {zoom}
     {griddedData}
     {griddedColormap}
@@ -253,7 +254,8 @@
     <Controls
       {minZoom}
       {maxZoom}
-      bind:center
+      bind:centerLongitude
+      bind:centerLatitude
       bind:zoom
     />
     <Loading {fetcher} />

@@ -5,7 +5,8 @@
   export let minZoom;
   export let maxZoom;
 
-  export let center;
+  export let centerLongitude;
+  export let centerLatitude;
   export let zoom;
 
   let interactionSurfaceElement;
@@ -25,10 +26,10 @@
         inertia: true,
         listeners: {
           move (e) {
-            let lon = center.longitude - PAN_FACTOR * e.dx / zoom / screenRatio;
-            let lat = center.latitude + PAN_FACTOR * e.dy / zoom / screenRatio;
-            center.longitude = ((lon + 180) % 360) - 180;
-            center.latitude = clamp(lat, -90, 90);
+            let lon = centerLongitude - PAN_FACTOR * e.dx / zoom / screenRatio;
+            let lat = centerLatitude + PAN_FACTOR * e.dy / zoom / screenRatio;
+            centerLongitude = ((lon + 180) % 360) - 180;
+            centerLatitude = clamp(lat, -90, 90);
           },
         },
       })
