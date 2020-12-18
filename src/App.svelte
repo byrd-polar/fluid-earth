@@ -9,7 +9,7 @@
   import Markers from './menus/Markers.svelte';
   import Projections from './menus/Projections.svelte';
   import Advanced from './menus/Advanced.svelte';
-  import ZoomSlider from './menus/ZoomSlider.svelte';
+  import Perspective from './menus/Perspective.svelte';
   import SiteNav from './menus/OldTopBarItems.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
 
@@ -31,6 +31,11 @@
 
   const minZoom = 0.5;
   const maxZoom = 15;
+
+  const minLat = -90;
+  const maxLat = 90;
+  const minLong = -360;
+  const maxLong = 360;
 
   let openedMenu = null;
   let drawerOpen = false;
@@ -150,8 +155,7 @@
   import Time32 from "carbon-icons-svelte/lib/Time32";
   import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
   import Globe32 from "carbon-icons-svelte/lib/Globe32";
-  import WatsonHealthFusionBlender32 from
-    "carbon-icons-svelte/lib/WatsonHealthFusionBlender32";
+  import View24 from "carbon-icons-svelte/lib/View24";
   import Location24 from "carbon-icons-svelte/lib/Location24";
   import Earth24 from "carbon-icons-svelte/lib/Earth24";
   import SettingsAdjust24 from "carbon-icons-svelte/lib/SettingsAdjust24";
@@ -162,7 +166,7 @@
     { name: 'Time Machine', icon: Time32 },
     { name: 'Colormaps', icon: ColorPalette32 },
     { name: 'Map Projections', icon: Globe32 },
-    { name: 'Zoom Slider', icon: WatsonHealthFusionBlender32 },
+    { name: 'Perspective', icon: View24},
     { name: 'Markers', icon: Location24 },
     { name: 'Projections', icon: Earth24 },
     { name: 'Advanced', icon: SettingsAdjust24 },
@@ -215,11 +219,17 @@
 <Menu bind:openedMenu menuName="Advanced">
   <Advanced/>
 </Menu>
-<Menu bind:openedMenu menuName="Zoom Slider">
-  <ZoomSlider
+<Menu bind:openedMenu menuName="Perspective">
+  <Perspective
     {minZoom}
     {maxZoom}
     bind:zoom
+    {minLat}
+    {maxLat}
+    {minLong}
+    {maxLong}
+    bind:centerLatitude
+    bind:centerLongitude
   />
 </Menu>
 <Menu bind:openedMenu menuName="Site Navigation">
