@@ -26,7 +26,7 @@
 </script>
 
 <div bind:clientWidth bind:clientHeight>
-  {#each [...pins] as pin}
+  {#each [...pins] as pin (pin)}
     <Pin
       bind:pins
       {pin}
