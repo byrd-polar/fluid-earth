@@ -1,9 +1,12 @@
 <script>
+  import projections from '../map/projections/';
+
   let current = 'orthographic';
   export let projection;
   export let centerLongitude;
   export let centerLatitude;
   export let zoom;
+
 
   function selectMenuItem(currentItem) {
     current = currentItem;
@@ -12,26 +15,22 @@
     if(current == 'equirectangular'){
       centerLongitude = 0;
       centerLatitude = 0;
-      projection = {name: 'equirectangular',
-      id: 0};
+      projection = projections.EQUIRECTANGULAR;
     }
     else if(current == 'polarStereoNorth'){
       centerLongitude = -60;
       centerLatitude = 90;
-      projection = {name: 'equirectangular',
-      id: 0};
+      projection = projections.EQUIRECTANGULAR;
     }
     else if(current == 'polarStereoSouth'){
       centerLongitude = 0;
       centerLatitude = -90;
-      projection = {name: 'equirectangular',
-      id: 0};
+      projection = projections.EQUIRECTANGULAR;
     }
     else if(current == 'orthographic'){
       centerLongitude = -60;
       centerLatitude = 30;
-       projection = {name: 'orthographic',
-      id: 3};
+      projection = projections.ORTHOGRAPHIC;
     }
   }
 
