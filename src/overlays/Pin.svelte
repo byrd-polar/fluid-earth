@@ -1,5 +1,5 @@
 <script>
-  import { proj } from '../map/projections/';
+  import { proj, clipped } from '../map/projections/';
   export let pins;
   export let pin;
   export let projection;
@@ -9,17 +9,18 @@
   export let clientHeight;
   export let zoom;
 
-  let x, y;
-  let clip = false;
+  let lonLat = [pin.longitude, pin.latitude];
 
-  $: [x, y] = proj(
+  $: f = proj(
     projection,
     centerLongitude,
     centerLatitude,
     clientWidth,
     clientHeight,
     zoom,
-  )([pin.longitude, pin.latitude]);
+  );
+  $: [x, y] = f(lonLat);
+  $: clip = clipped(f, lonLat);
 </script>
 
 {#if !clip}

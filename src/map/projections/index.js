@@ -61,3 +61,14 @@ export function proj(
 
   return f;
 }
+
+
+// Determine if a point should be clipped (i.e. not shown because it is behind
+// the globe) from the map
+
+export function clipped(
+  proj, // a d3 projection function returned by proj
+  lonLat, // a [longitude, latitude] array
+) {
+  return !d3.geoPath(proj)({ type: 'Point', coordinates: lonLat });
+}
