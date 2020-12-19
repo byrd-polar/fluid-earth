@@ -1,10 +1,7 @@
 <script>
   import Pin from './Pin.svelte';
 
-  export let projection;
-  export let centerLongitude;
-  export let centerLatitude;
-  export let zoom;
+  export let d3geoProjection;
 
   let pins = new Set([
     {
@@ -20,22 +17,14 @@
       latitude: -90,
     },
   ]);
-
-  let clientWidth;
-  let clientHeight;
 </script>
 
-<div bind:clientWidth bind:clientHeight>
+<div>
   {#each [...pins] as pin (pin)}
     <Pin
       bind:pins
       {pin}
-      {projection}
-      {centerLongitude}
-      {centerLatitude}
-      {clientWidth}
-      {clientHeight}
-      {zoom}
+      {d3geoProjection}
     />
   {/each}
 </div>

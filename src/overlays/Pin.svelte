@@ -1,26 +1,12 @@
 <script>
-  import { proj, clipped } from '../map/projections/';
+  import { clipped } from '../map/projections/';
   export let pins;
   export let pin;
-  export let projection;
-  export let centerLongitude;
-  export let centerLatitude;
-  export let clientWidth;
-  export let clientHeight;
-  export let zoom;
+  export let d3geoProjection;
 
   let lonLat = [pin.longitude, pin.latitude];
-
-  $: f = proj(
-    projection,
-    centerLongitude,
-    centerLatitude,
-    clientWidth,
-    clientHeight,
-    zoom,
-  );
-  $: [x, y] = f(lonLat);
-  $: clip = clipped(f, lonLat);
+  $: [x, y] = d3geoProjection ? d3geoProjection(lonLat) : [null, null];
+  $: clip = d3geoProjection ? clipped(d3geoProjection, lonLat) : true;
 </script>
 
 {#if !clip}

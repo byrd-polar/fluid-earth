@@ -51,6 +51,7 @@
   let updateParticleData = () => {};
 
   let projection = projections.VERTICAL_PERSPECTIVE;
+  let d3geoProjection;
   let centerLongitude = 0;
   let centerLatitude = 0;
   let zoom = 1;
@@ -261,6 +262,7 @@
     {particleCount}
     {particleDisplay}
     {vectorData}
+    bind:d3geoProjection
   >
     <Controls
       {minZoom}
@@ -270,10 +272,7 @@
       bind:zoom
     />
     <Pins
-      {projection}
-      {centerLongitude}
-      {centerLatitude}
-      {zoom}
+      {d3geoProjection}
     />
     <Loading {fetcher} />
     <Legend

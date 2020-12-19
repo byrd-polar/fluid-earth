@@ -15,7 +15,7 @@
   import ParticleSimulatorMobile from './particle/mobile/simulator.js';
 
   import colormaps from './colormaps/';
-  import projections from './projections/';
+  import projections, { proj } from './projections/';
   import topology from '../../public/data/topology.json';
 
   import { Float16Array } from '@petamoriken/float16';
@@ -62,6 +62,18 @@
     updateResolution(backgroundGl, force);
     updateResolution(particleGl, force);
   };
+
+  let clientWidth, clientHeight;
+
+  export let d3geoProjection;
+  $: d3geoProjection = proj(
+    projection,
+    centerLongitude,
+    centerLatitude,
+    clientWidth,
+    clientHeight,
+    zoom
+  );
 
   let mpcTestCanvas;
   let webgl2TestCanvas;
@@ -196,10 +208,10 @@
     // draw.vert files). A height of 1080 pixels is chosen as reference for
     // developer convenience, but this only really changes the units of the
     // particleDisplay.size variable.
-    let w = backgroundCanvas.clientWidth;
-    let h = backgroundCanvas.clientHeight;
-    let canvasRatio = w / h;
-    let screenRatio = window.devicePixelRatio * h / 1080;
+    clientWidth = backgroundCanvas.clientWidth;
+    clientHeight = backgroundCanvas.clientHeight;
+    let canvasRatio = clientWidth / clientHeight;
+    let screenRatio = window.devicePixelRatio * clientHeight / 1080;
 
     let sharedUniforms = {
       u_canvasRatio: canvasRatio,
