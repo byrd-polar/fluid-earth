@@ -17,8 +17,7 @@
     let fever = document.querySelector("fever-map");
 
     function spinnn(x) {
-      fever.center.longitude = x / -42;
-      fever.center = fever.center;
+      fever.centerLongitude = x / -42;
       requestAnimationFrame(spinnn);
     }
     requestAnimationFrame(spinnn);
