@@ -1,5 +1,5 @@
 <script>
-  import { updateAllWebglSizes } from './map/Map.svelte';
+  import { updateAllWebglResolutions } from './map/Map.svelte';
   import { onMount, tick } from 'svelte';
   import IconButton from '@smui/icon-button';
   import ArrowLeft32 from "carbon-icons-svelte/lib/ArrowLeft32";
@@ -40,7 +40,7 @@
   onMount(() => {
     aside.addEventListener('transitionend', e => {
       if (e.propertyName === 'margin-left') {
-        updateAllWebglSizes();
+        updateAllWebglResolutions();
       }
     });
   });

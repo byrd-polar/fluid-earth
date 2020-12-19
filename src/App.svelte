@@ -13,7 +13,7 @@
   import SiteNav from './menus/OldTopBarItems.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
 
-  import Map, { updateAllWebglSizes } from './map/Map.svelte';
+  import Map, { updateAllWebglResolutions } from './map/Map.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
 
@@ -85,13 +85,13 @@
 
   onMount(() => {
     // workaround some race condition loading bugs
-    setTimeout(updateAllWebglSizes, 0.5);
+    setTimeout(updateAllWebglResolutions, 0.5);
 
     // JS implementation of 100vh for mobile, see:
     // https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html
     window.addEventListener('resize', () => {
       document.body.style.height = `${window.innerHeight}px`;
-      updateAllWebglSizes();
+      updateAllWebglResolutions();
     });
 
     // Methods for updating gridded and particle data in response to

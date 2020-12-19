@@ -1,8 +1,8 @@
 <script context="module">
-  const updateWebglSizeFunctions = new Set();
+  const updateWebglResolutionFunctions = new Set();
 
-  export function updateAllWebglSizes() {
-    updateWebglSizeFunctions.forEach(f => f());
+  export function updateAllWebglResolutions() {
+    updateWebglResolutionFunctions.forEach(f => f());
   }
 </script>
 
@@ -58,22 +58,18 @@
     ne_50m_graticules_10: [1, 1, 1, 0.1],
   };
 
-  export const updateWebglSize = force => {
-    updateSizeVariables(backgroundGl, force);
-    updateSizeVariables(particleGl, force);
+  export const updateWebglResolution = force => {
+    updateResolution(backgroundGl, force);
+    updateResolution(particleGl, force);
   };
 
   let mpcTestCanvas;
   let webgl2TestCanvas;
   let backgroundCanvas;
   let particleCanvas;
-  let canvasRatio; // aspect ratio (width / height) of the canvas
-  let screenRatio; // ratio of canvas height to our reference height
 
-  let sharedUniforms;
-  $: sharedUniforms = {
-    u_canvasRatio: canvasRatio,
-    u_screenRatio: screenRatio,
+  let projectionUniforms;
+  $: projectionUniforms = {
     u_lon0: centerLongitude,
     u_lat0: centerLatitude,
     u_zoom: zoom,
@@ -96,7 +92,7 @@
 
   let backgroundNeedsRedraw;
   // when following variables are updated, redraw
-  $: sharedUniforms,
+  $: projectionUniforms,
       griddedData,
       griddedColormap,
       griddedDomain,
@@ -105,7 +101,7 @@
 
   let trailsNeedsReset;
   // when following variables are updated, reset
-  $: sharedUniforms,
+  $: projectionUniforms,
       particleData,
       particleCount,
       particleLifetime,
@@ -171,28 +167,52 @@
         new ParticleSimulator(particleGl, particleSimulatorOptions);
     }
 
-    updateWebglSize(true);
-    updateWebglSizeFunctions.add(updateWebglSize);
+    updateWebglResolution(true);
+    updateWebglResolutionFunctions.add(updateWebglResolution);
 
     requestAnimationFrame(render);
 
-    return () => updateWebglSizeFunctions.delete(updateWebglSize);
+    return () => updateWebglResolutionFunctions.delete(updateWebglResolution);
   });
 
   // Main animation loop
   let previousTime;
+  let previousCanvasRatio;
+  let previousScreenRatio;
   function render(time) {
     let timeDelta = previousTime ? (time - previousTime) : 0;
     previousTime = time;
 
-    // partial update of size variables for vastly improved performance when
-    // opening side menus, but causes particle width to be slightly incorrect
+    // Update canvas and screen ratios every frame without updating resolution
+    // for vastly improved performance (compared to also updating resolution
+    // every frame) when opening side menus, but causes particle width to be
+    // slightly incorrect until updateWebglResolution is called.
     //
-    // manually updating here instead of relying on $: notation to ensure
-    // frame-by-frame accuracy
-    canvasRatio = backgroundCanvas.clientWidth / backgroundCanvas.clientHeight;
-    if (sharedUniforms.u_canvasRatio !== canvasRatio) {
-      sharedUniforms.u_canvasRatio = canvasRatio;
+    // canvasRatio is aspect ratio (width / height) of the canvas
+    // screenRatio is ratio of canvas height to our reference height
+    //
+    // We want our particles to be sized relative to the scale of the map, which
+    // by our design shrinks when we decrease the canvas height (see the
+    // draw.vert files). A height of 1080 pixels is chosen as reference for
+    // developer convenience, but this only really changes the units of the
+    // particleDisplay.size variable.
+    let w = backgroundCanvas.clientWidth;
+    let h = backgroundCanvas.clientHeight;
+    let canvasRatio = w / h;
+    let screenRatio = h / 1080;
+
+    let sharedUniforms = {
+      u_canvasRatio: canvasRatio,
+      u_screenRatio: screenRatio,
+      ...projectionUniforms,
+    };
+
+    if (canvasRatio !== previousCanvasRatio ||
+        screenRatio !== previousScreenRatio) {
+      previousCanvasRatio = canvasRatio;
+      previousScreenRatio = screenRatio;
+      backgroundNeedsRedraw = true;
+      trailsNeedsReset = true;
     }
 
     if (backgroundNeedsRedraw) {
@@ -227,20 +247,12 @@
     requestAnimationFrame(render);
   }
 
-  function updateSizeVariables(gl, force) {
+  function updateResolution(gl, force) {
     const ratio = window.devicePixelRatio;
     if (resizeCanvasToDisplaySize(gl.canvas, ratio) || force) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-      canvasRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
-
-      // We want our particles to be sized relative to the scale of the map,
-      // which by our design shrinks when we decrease the canvas height (see the
-      // draw.vert files). A height of 1080 pixels is chosen as reference for
-      // developer convenience, but this only really changes the units of the
-      // particleDisplay.size variable.
-      screenRatio = gl.canvas.height / 1080;
-
       backgroundNeedsRedraw = true;
+      trailsNeedsReset = true;
     }
   }
 </script>
