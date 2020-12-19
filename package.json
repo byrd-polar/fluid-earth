@@ -41,6 +41,8 @@
     "@smui/top-app-bar": "^1.0.0",
     "carbon-icons-svelte": "^10.21.0",
     "d3-axis": "^2.0.0",
+    "d3-geo": "^2.0.1",
+    "d3-geo-projection": "^3.0.0",
     "d3-scale": "^3.2.3",
     "d3-scale-chromatic": "^2.0.0",
     "d3-selection": "^2.0.0",

@@ -17,6 +17,7 @@
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
 
+  import Pins from './overlays/Pins.svelte';
   import Legend from './overlays/Legend.svelte';
   import Loading from './overlays/Loading.svelte';
   import Controls from './overlays/Controls.svelte';
@@ -267,6 +268,12 @@
       bind:centerLongitude
       bind:centerLatitude
       bind:zoom
+    />
+    <Pins
+      {projection}
+      {centerLongitude}
+      {centerLatitude}
+      {zoom}
     />
     <Loading {fetcher} />
     <Legend
