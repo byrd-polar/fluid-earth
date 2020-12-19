@@ -28,7 +28,7 @@
           move (e) {
             let lon = centerLongitude - PAN_FACTOR * e.dx / zoom / screenRatio;
             let lat = centerLatitude + PAN_FACTOR * e.dy / zoom / screenRatio;
-            centerLongitude = ((lon + 180) % 360) - 180;
+            centerLongitude = ((lon + 540) % 360) - 180;
             centerLatitude = clamp(lat, -90, 90);
           },
         },
