@@ -51,7 +51,7 @@
   let updateParticleData = () => {};
 
   let projection = projections.VERTICAL_PERSPECTIVE;
-  let d3geoProjection;
+  let d3geoProjection = projection.function;
   let centerLongitude = 0;
   let centerLatitude = 0;
   let zoom = 1;

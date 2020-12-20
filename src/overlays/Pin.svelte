@@ -5,8 +5,8 @@
   export let d3geoProjection;
 
   let lonLat = [pin.longitude, pin.latitude];
-  $: [x, y] = d3geoProjection ? d3geoProjection(lonLat) : [null, null];
-  $: clip = d3geoProjection ? clipped(d3geoProjection, lonLat) : true;
+  $: [x, y] = d3geoProjection(lonLat);
+  $: clip = clipped(d3geoProjection, lonLat);
 </script>
 
 {#if !clip}
