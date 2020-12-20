@@ -9,13 +9,11 @@
   $: clip = clipped(d3geoProjection, lonLat);
 </script>
 
-{#if !clip}
-  <div
-    style="top: {y - 5}px; left: {x - 5}px"
-    on:click={() => { pins.delete(pin); pins = pins}}
-  >
-  </div>
-{/if}
+<div
+  style="top: {y - 5}px; left: {x - 5}px"
+  class:clip
+  on:click={() => { pins.delete(pin); pins = pins}}
+/>
 
 <style>
   div {
@@ -24,5 +22,9 @@
     width: 10px;
     position: absolute;
     background-color: red;
+  }
+
+  div.clip {
+    display: none;
   }
 </style>
