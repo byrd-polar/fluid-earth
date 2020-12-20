@@ -21,6 +21,9 @@
   let elementHeight = 1080;
   $: screenRatio = elementHeight / 1080;
 
+  // make performing the 'hold' gesture on high ppi devices possible
+  interact.pointerMoveTolerance(5);
+
   const PAN_FACTOR = 0.25;
 
   onMount(() => {
