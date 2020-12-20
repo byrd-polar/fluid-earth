@@ -67,10 +67,10 @@ export function proj(
 // the globe) from the map
 
 export function clipped(
-  proj, // a d3 projection function returned by proj
+  d3geoProjection, // a d3 projection function returned by proj
   lonLat, // a [longitude, latitude] array
 ) {
-  return !d3.geoPath(proj)({ type: 'Point', coordinates: lonLat });
+  return !d3.geoPath(d3geoProjection)({ type: 'Point', coordinates: lonLat });
 }
 
 
