@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import interact from 'interactjs';
+  import { reproj } from '../map/projections/';
 
   export let minZoom;
   export let maxZoom;
@@ -53,8 +54,11 @@
         let rect = interactionSurfaceElement.getBoundingClientRect();
         let point = [e.clientX - rect.left, e.clientY - rect.top];
         let [longitude, latitude] = d3geoProjection.invert(point);
-        pins.add({ longitude, latitude });
-        pins = pins;
+
+        if (reproj(d3geoProjection, point, [longitude, latitude])) {
+          pins.add({ longitude, latitude });
+          pins = pins;
+        }
       });
     interactionSurfaceElement.addEventListener('wheel', handleWheel);
 

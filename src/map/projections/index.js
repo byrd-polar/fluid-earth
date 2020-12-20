@@ -72,3 +72,17 @@ export function clipped(
 ) {
   return !d3.geoPath(proj)({ type: 'Point', coordinates: lonLat });
 }
+
+
+// Check if a re-projected point matches the original coordinates
+
+export function reproj(
+  d3geoProjection, // a d3 projection function returned by proj
+  point, // the original [x, y] screen coordinates
+  lonLat, // the [longitude, latitude] array to which they were projected
+) {
+  let reprojPoint = d3geoProjection(lonLat);
+
+  return Math.round(point[0]) === Math.round(reprojPoint[0]) &&
+         Math.round(point[1]) === Math.round(reprojPoint[1]);
+}
