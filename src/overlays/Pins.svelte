@@ -2,21 +2,7 @@
   import Pin from './Pin.svelte';
 
   export let d3geoProjection;
-
-  let pins = new Set([
-    {
-      longitude: 0,
-      latitude: 0,
-    },
-    {
-      longitude: -50,
-      latitude: 40,
-    },
-    {
-      longitude: 720,
-      latitude: -90,
-    },
-  ]);
+  export let pins;
 </script>
 
 <div>

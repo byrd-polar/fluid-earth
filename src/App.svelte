@@ -90,6 +90,8 @@
     fade: 0.96,
   };
 
+  let pins = new Set();
+
   onMount(() => {
     // workaround some race condition loading bugs
     setTimeout(updateAllWebglResolutions, 0.5);
@@ -270,8 +272,11 @@
       bind:centerLongitude
       bind:centerLatitude
       bind:zoom
+      {d3geoProjection}
+      bind:pins
     />
     <Pins
+      {pins}
       {d3geoProjection}
     />
     <Loading {fetcher} />
