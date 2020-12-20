@@ -199,7 +199,7 @@
     let w = backgroundCanvas.clientWidth;
     let h = backgroundCanvas.clientHeight;
     let canvasRatio = w / h;
-    let screenRatio = h / 1080;
+    let screenRatio = window.devicePixelRatio * h / 1080;
 
     let sharedUniforms = {
       u_canvasRatio: canvasRatio,
