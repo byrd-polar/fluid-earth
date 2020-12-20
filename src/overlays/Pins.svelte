@@ -18,5 +18,6 @@
 <style>
   div {
     pointer-events: none;
+    overflow: hidden;
   }
 </style>
