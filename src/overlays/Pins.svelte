@@ -3,6 +3,7 @@
 
   export let d3geoProjection;
   export let pins;
+  export let griddedData;
 </script>
 
 <div>
@@ -11,6 +12,7 @@
       bind:pins
       {pin}
       {d3geoProjection}
+      {griddedData}
     />
   {/each}
 </div>

@@ -278,6 +278,7 @@
     <Pins
       {pins}
       {d3geoProjection}
+      {griddedData}
     />
     <Loading {fetcher} />
     <Legend
