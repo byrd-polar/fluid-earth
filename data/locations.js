@@ -33,16 +33,16 @@ export async function locations() {
   let latitude = header.indexOf('lat');
   let longitude = header.indexOf('lng');
 
-  let locations = {};
+  let locations = [];
 
   for (let row of csv) {
-    let searchArray = [row[city], row[admin], row[country]];
-    let search = searchArray.filter(Boolean).join(', ');
+    let arr = [row[city], row[admin], row[country]];
 
-    locations[search] = {
+    locations.push({
+      label: arr.filter(Boolean).join(', '),
       longitude: parseFloat(row[longitude]),
       latitude: parseFloat(row[latitude]),
-    };
+    });
   }
 
   await writeFile(outputFile, JSON.stringify(locations));
