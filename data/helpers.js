@@ -50,10 +50,3 @@ export async function download(url, prefix=false, suffix='', headers={}) {
   }
   return filepath;
 }
-
-// Stops the script and asks for it to be fixed -- most likely just need to
-// update an URL
-export function exit() {
-  console.log('\nPlease fix this script.\n\nExiting...');
-  process.exit(1);
-}

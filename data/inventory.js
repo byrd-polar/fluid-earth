@@ -48,7 +48,7 @@ const inventoryJSON = {
   },
 }
 
-export async function inventory() {
+export default async function() {
   let outputFile = path.join(OUTPUT_DIR, 'inventory.json');
 
   console.log(`Generating inventory...\n=> ${outputFile}\n`);

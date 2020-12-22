@@ -1,15 +1,16 @@
-import { download, exit, OUTPUT_DIR } from './helpers.js';
+import { download, OUTPUT_DIR } from './helpers.js';
 import path from 'path';
 import mapshaper from 'mapshaper';
 
+const base = 'https://github.com/nvkelso/natural-earth-vector/raw/master';
 const urls = [
-  'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_graticules_all/ne_50m_graticules_10.shp',
-  'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_rivers_lake_centerlines.shp',
-  'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_lakes.shp',
-  'https://github.com/nvkelso/natural-earth-vector/raw/master/50m_physical/ne_50m_coastline.shp',
+  base + '/50m_physical/ne_50m_graticules_all/ne_50m_graticules_10.shp',
+  base + '/50m_physical/ne_50m_rivers_lake_centerlines.shp',
+  base + '/50m_physical/ne_50m_lakes.shp',
+  base + '/50m_physical/ne_50m_coastline.shp',
 ];
 
-export async function topology() {
+export default async function() {
   let files = await Promise.all(urls.map(async (url) => await download(url)));
 
   let outputFile = path.join(OUTPUT_DIR, 'topology.json');
@@ -19,9 +20,5 @@ export async function topology() {
   let inputs = files.map((file) => `<= ${file}`).join('\n');
   console.log(`Generating topology...\n${inputs}\n=> ${outputFile}\n`);
 
-  mapshaper.runCommands(cmds)
-    .catch(err => {
-      console.log(`Failed to generate topology...\n=> ${err}`);
-      exit();
-    });
+  await mapshaper.runCommands(cmds);
 }

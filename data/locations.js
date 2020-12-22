@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
 import { promisify } from 'util';
 
-import { download, exit, OUTPUT_DIR, CACHE_DIR } from './helpers.js';
+import { download, OUTPUT_DIR, CACHE_DIR } from './helpers.js';
 
 import extract from 'extract-zip';
 import _parse from 'csv-parse';
@@ -15,7 +15,7 @@ const name = 'simplemaps_worldcities_basicv1.73';
 const url = `https://simplemaps.com/static/data/world-cities/basic/${name}.zip`;
 const file = 'worldcities.csv';
 
-export async function locations() {
+export default async function() {
   let zipFile = await download(url);
   let outputFile = path.join(OUTPUT_DIR, 'locations.json');
 

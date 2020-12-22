@@ -1,17 +1,22 @@
-import { topology } from './topology.js';
-import { inventory } from './inventory.js';
-import { locations } from './locations.js';
+import topology from './topology.js';
+import inventory from './inventory.js';
+import locations from './locations.js';
 import { mkdir, CACHE_DIR, OUTPUT_DIR } from './helpers.js';
 
-function main() {
+(async function() {
   mkdir(OUTPUT_DIR);
   mkdir(CACHE_DIR);
 
-  Promise.all([
-    topology(),
-    inventory(),
-    locations(),
-  ]).then(() => console.log('Data processing complete.'));
-}
+  try {
+    await Promise.all([
+      topology(),
+      inventory(),
+      locations(),
+    ]);
+    console.log('Data processing complete.');
 
-main();
+  } catch (e) {
+    console.log('\nPlease fix this script.\n\nExiting...');
+    process.exit(1);
+  }
+})();
