@@ -18,6 +18,7 @@
     "@smui/button": "^1.0.0",
     "@smui/select": "^1.0.0",
     "csv-parse": "^4.14.1",
+    "extract-zip": "^2.0.1",
     "fx": "^20.0.2",
     "got": "^11.8.0",
     "mapshaper": "^0.5.26",

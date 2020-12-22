@@ -1,0 +1,49 @@
+import { readFile, writeFile } from 'fs/promises';
+import path from 'path';
+import { promisify } from 'util';
+
+import { download, exit, OUTPUT_DIR, CACHE_DIR } from './helpers.js';
+
+import extract from 'extract-zip';
+import _parse from 'csv-parse';
+const parse = promisify(_parse);
+
+// Source + documentation: https://simplemaps.com/data/world-cities
+// Creative Commons Attribution 4.0
+
+const name = 'simplemaps_worldcities_basicv1.73';
+const url = `https://simplemaps.com/static/data/world-cities/basic/${name}.zip`;
+const file = 'worldcities.csv';
+
+export async function locations() {
+  let zipFile = await download(url);
+  let outputFile = path.join(OUTPUT_DIR, 'locations.json');
+
+  console.log(`Generating locations...\n<= ${zipFile}\n=> ${outputFile}\n`);
+  await extract(zipFile, { dir: path.resolve(CACHE_DIR, name) });
+
+  let csvString = await readFile(path.join(CACHE_DIR, name, file), 'utf8');
+  let csv = await parse(csvString);
+
+  let header = csv.shift();
+
+  let city = header.indexOf('city');
+  let admin = header.indexOf('admin_name');
+  let country = header.indexOf('country');
+  let latitude = header.indexOf('lat');
+  let longitude = header.indexOf('lng');
+
+  let locations = {};
+
+  for (let row of csv) {
+    let searchArray = [row[city], row[admin], row[country]];
+    let search = searchArray.filter(Boolean).join(', ');
+
+    locations[search] = {
+      longitude: parseFloat(row[longitude]),
+      latitude: parseFloat(row[latitude]),
+    };
+  }
+
+  await writeFile(outputFile, JSON.stringify(locations));
+}
