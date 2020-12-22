@@ -45,7 +45,7 @@ export async function download(url, prefix=false, suffix='', headers={}) {
       await writeFile(filepath, res.rawBody);
     } catch(err) {
       console.log(`Failed to download... ${url}\n=> ${err}`);
-      exit();
+      throw err;
     }
   }
   return filepath;
