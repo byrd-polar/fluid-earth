@@ -48,8 +48,6 @@
 </Hoverable>
 
 
->>>>>>> 0f84e79 (Changed pin format to reflect FEVer 1 styling)
-
 <style>
   #pin {
     pointer-events: auto;
