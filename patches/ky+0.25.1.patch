@@ -1,5 +1,5 @@
 diff --git a/node_modules/ky/index.js b/node_modules/ky/index.js
-index 3733917..83f5ca9 100644
+index 897c9f0..38580fd 100644
 --- a/node_modules/ky/index.js
 +++ b/node_modules/ky/index.js
 @@ -468,7 +468,7 @@ class Ky {
