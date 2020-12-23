@@ -38,7 +38,7 @@ with us to develop FEVer for a specific application, please email
 ### Prerequisites
 
 - [git](https://git-scm.com/)
-- [Node.js (version >= 13)](https://nodejs.org)
+- [Node.js (version >= 14)](https://nodejs.org)
 <!-- - [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/) -->
 
 ### Getting started
