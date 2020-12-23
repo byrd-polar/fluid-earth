@@ -31,7 +31,7 @@
       class="caption"
     >
       <span class="plain">
-        Name
+        Location {pin.id}
         <br>
       </span>
       <strong class="bold">
