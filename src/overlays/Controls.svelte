@@ -54,17 +54,9 @@
         let rect = interactionSurfaceElement.getBoundingClientRect();
         let point = [e.clientX - rect.left, e.clientY - rect.top];
         let [longitude, latitude] = d3geoProjection.invert(point);
+
         if (reproj(d3geoProjection, point, [longitude, latitude])) {
-          let id;
-          if (pins.size) {
-            let ids = [];
-            for (const p of pins) {
-                ids.push(p.id);
-            }
-            id = Math.max(...ids) + 1;
-          } else {
-            id = 1;
-          }
+          let id = Math.max(0, ...[...pins].map(pin => pin.id)) + 1;
           pins.add({ id, longitude, latitude });
           pins = pins;
         }
