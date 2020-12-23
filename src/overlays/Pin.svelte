@@ -3,10 +3,12 @@
   import { dataPoint } from '../map/gridded.js';
   import { clipped } from '../map/projections/';
   import Hoverable from './Hoverable.svelte';
+
   export let pins;
   export let pin;
   export let d3geoProjection;
   export let griddedData;
+  export let datasetInfo;
 
   let lonLat = [pin.longitude, pin.latitude];
   $: [x, y] = d3geoProjection(lonLat);
@@ -35,10 +37,10 @@
         <br>
       </span>
       <strong class="bold">
-        999
+        {value.toPrecision(3)}
       </strong>
       <strong class="bold">
-        mph
+        {datasetInfo.units}
       </strong><br>
       <small class="plain">
         {Math.abs(pin.longitude).toFixed(2)}° {lonDirection}, {Math.abs(pin.latitude).toFixed(2)}° {latDirection}

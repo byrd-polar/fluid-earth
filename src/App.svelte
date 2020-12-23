@@ -279,6 +279,7 @@
       {pins}
       {d3geoProjection}
       {griddedData}
+      datasetInfo={inventory[dataset]}
     />
     <Loading {fetcher} />
     <Legend
