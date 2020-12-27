@@ -37,7 +37,6 @@
     "@smui/button": "^1.0.0",
     "@smui/drawer": "^1.0.0",
     "@smui/list": "^1.0.0",
-    "@smui/top-app-bar": "^1.0.0",
     "carbon-icons-svelte": "^10.21.0",
     "d3-axis": "^2.0.0",
     "d3-geo": "^2.0.1",

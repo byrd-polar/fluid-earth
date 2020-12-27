@@ -3,7 +3,6 @@
   import { onMount, tick } from 'svelte';
   import IconButton from './components/IconButton.svelte';
   import ArrowLeft24 from "carbon-icons-svelte/lib/ArrowLeft24";
-  import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
   import { tips } from './tooltip.js';
 
   export let openedMenu;
@@ -51,16 +50,12 @@
   class:no-animate={noAnimate}
   bind:this={aside}
 >
-  <TopAppBar variant="static" class="top-app-drawer">
-    <Row>
-      <Section>
-        <IconButton action={closeMenu}>
-          <ArrowLeft24 />
-        </IconButton>
-        <Title>{menuName}</Title>
-      </Section>
-    </Row>
-  </TopAppBar>
+  <header>
+    <IconButton action={closeMenu}>
+      <ArrowLeft24 />
+    </IconButton>
+    <h1>{menuName}</h1>
+  </header>
   <div>
     <slot></slot>
   </div>
@@ -101,25 +96,40 @@
     transition: none;
   }
 
+  header {
+    background-color: #015B5B;
+    height: 64px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    box-shadow:
+      0 2px  4px -1px rgba(0,0,0,.2),
+      0 4px  5px  0   rgba(0,0,0,.14),
+      0 1px 10px  0   rgba(0,0,0,.12);
+  }
+
+  header :global(button) {
+    margin-right: 12px;
+  }
+
+  header h1 {
+    color: white;
+    font-weight: 500;
+    font-size: 1.25rem;
+  }
+
   div {
     padding: 1em;
     flex: 1;
     overflow: auto;
   }
 
-  :global(div h2) {
+  div :global(h2) {
     font-family: Quicksand-regular;
     font-size: 1rem;
     font-weight: 400;
     border-bottom: 1px solid;
     text-transform: uppercase;
-  }
-
-  :global(.top-app-drawer) {
-    box-shadow:
-      0 2px  4px -1px rgba(0,0,0,.2),
-      0 4px  5px  0   rgba(0,0,0,.14),
-      0 1px 10px  0   rgba(0,0,0,.12);
   }
 
   @media (max-width: 36rem) {
@@ -157,6 +167,14 @@
         visibility 0s linear 0s,
         z-index 0s linear 0s;
       z-index: 2;
+    }
+
+    header {
+      padding: 4px;
+    }
+
+    header :global(button) {
+      margin-right: 4px;
     }
   }
 </style>
