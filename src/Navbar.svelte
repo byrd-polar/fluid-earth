@@ -1,7 +1,6 @@
 <script>
-  import tooltip from './tooltip.js';
-  import IconButton from '@smui/icon-button';
-  import Menu32 from "carbon-icons-svelte/lib/Menu32";
+  import IconButton from './components/IconButton.svelte';
+  import Menu24 from "carbon-icons-svelte/lib/Menu24";
 
   export let menus;
   export let openedMenu;
@@ -21,23 +20,19 @@
   }
 </script>
 
-<div class="rail-overflow-wrapper">
-<nav id="rail">
+<div class="rail">
+<nav>
   <IconButton
-    class="rail-btn"
-    aria-label="Menus"
-    on:click={openDrawer}
-    use={[[tooltip, {content: 'Menus'}]]}
+    name="Menus"
+    action={openDrawer}
   >
-    <Menu32 />
+    <Menu24 />
   </IconButton>
   {#each menus as menu}
     <IconButton
-      class="rail-btn"
-      aria-label={menu.name}
-      data-selected={openedMenu === menu.name}
-      on:click={() => toggleMenu(menu.name)}
-      use={[[tooltip, {content: menu.name}]]}
+      name={menu.name}
+      action={() => toggleMenu(menu.name)}
+      selected={openedMenu === menu.name}
     >
       <svelte:component this={menu.icon}/>
     </IconButton>
@@ -46,7 +41,7 @@
 </div>
 
 <style>
-  div.rail-overflow-wrapper {
+  div.rail {
     z-index: 2;
     background: #202124;
     overflow: auto;
@@ -62,32 +57,12 @@
     padding: 0.5em;
   }
 
-  :global(nav .mdc-icon-button::before, nav .mdc-icon-button::after) {
-    background-color: white /* use light ripple color */
-  }
-
-  :global(nav#rail svg) {
-    fill: white;
-  }
-
-  :global(.rail-btn) {
+  nav :global(button) {
     margin: 0.75em 0;
   }
 
-  :global(nav#rail .rail-btn[data-selected=true] svg) {
-    fill: #00BFA5; /* color for selected rail button, should match theme */
-  }
-
-  /* Fix for SVGs not being vertically centered in icon button. Doesn't seem to
-   * affect Chromium, which is probably why it was missed. Considered patching
-   * it in the @material source but it is determined by a Sass mixin, so it's
-   * clearer to fix it here. */
-  :global(.mdc-icon-button) {
-    font-size: unset;
-  }
-
   @media (max-width: 36rem) {
-    div.rail-overflow-wrapper {
+    div.rail {
       background: transparent;
       position: absolute;
       width: 100%;
@@ -99,7 +74,7 @@
       width: min-content;
     }
 
-    :global(.rail-btn) {
+    nav :global(button) {
       margin: 0 0.5em;
       /* multiple shadows used to increase intensity */
       filter:

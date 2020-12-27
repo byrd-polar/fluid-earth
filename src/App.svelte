@@ -155,26 +155,26 @@
   //
   // Not using { Icon } import syntax for significantly faster build times, see
   // https://github.com/IBM/carbon-icons-svelte#direct-import-recommended
-  import Grid32 from "carbon-icons-svelte/lib/Grid32";
-  import Time32 from "carbon-icons-svelte/lib/Time32";
-  import ColorPalette32 from "carbon-icons-svelte/lib/ColorPalette32";
-  import Globe32 from "carbon-icons-svelte/lib/Globe32";
+  import Grid24 from "carbon-icons-svelte/lib/Grid24";
+  import Time24 from "carbon-icons-svelte/lib/Time24";
+  import ColorPalette24 from "carbon-icons-svelte/lib/ColorPalette24";
+  import Globe24 from "carbon-icons-svelte/lib/Globe24";
   import View24 from "carbon-icons-svelte/lib/View24";
   import Location24 from "carbon-icons-svelte/lib/Location24";
   import Earth24 from "carbon-icons-svelte/lib/Earth24";
   import SettingsAdjust24 from "carbon-icons-svelte/lib/SettingsAdjust24";
-  import Information32 from "carbon-icons-svelte/lib/Information32";
+  import Information24 from "carbon-icons-svelte/lib/Information24";
 
   const menus = [
-    { name: 'Datasets', icon: Grid32 },
-    { name: 'Time Machine', icon: Time32 },
-    { name: 'Colormaps', icon: ColorPalette32 },
-    { name: 'Map Projections', icon: Globe32 },
-    { name: 'Perspective', icon: View24},
+    { name: 'Datasets', icon: Grid24 },
+    { name: 'Time Machine', icon: Time24 },
+    { name: 'Colormaps', icon: ColorPalette24 },
+    { name: 'Map Projections', icon: Globe24 },
+    { name: 'Perspective', icon: View24 },
     { name: 'Markers', icon: Location24 },
     { name: 'Projections', icon: Earth24 },
     { name: 'Advanced', icon: SettingsAdjust24 },
-    { name: 'Site Navigation', icon: Information32 },
+    { name: 'Site Navigation', icon: Information24 },
   ];
 </script>
 

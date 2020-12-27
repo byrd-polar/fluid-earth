@@ -10,6 +10,8 @@ tippy.setDefaultProps({
 export let tips = new Set();
 
 export default function tooltip(node, options) {
+  if (!options.content) return;
+
   let tip;
 
   function addTip() {

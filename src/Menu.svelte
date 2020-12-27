@@ -1,8 +1,8 @@
 <script>
   import { updateAllWebglResolutions } from './map/Map.svelte';
   import { onMount, tick } from 'svelte';
-  import IconButton from '@smui/icon-button';
-  import ArrowLeft32 from "carbon-icons-svelte/lib/ArrowLeft32";
+  import IconButton from './components/IconButton.svelte';
+  import ArrowLeft24 from "carbon-icons-svelte/lib/ArrowLeft24";
   import TopAppBar, { Row, Section, Title } from '@smui/top-app-bar';
   import { tips } from './tooltip.js';
 
@@ -30,7 +30,7 @@
 
   function closeMenu() {
     // foucs on the rail button that corresonds to this menu
-    document.querySelector('.rail-btn[data-selected=true]').focus()
+    document.querySelector('div.rail button.selected').focus()
     openedMenu = null;
     // hide the tooltip for the just-closed menu
     tips.forEach(t => t.hide());
@@ -54,8 +54,8 @@
   <TopAppBar variant="static" class="top-app-drawer">
     <Row>
       <Section>
-        <IconButton on:click={closeMenu} class="back-button">
-          <ArrowLeft32 />
+        <IconButton action={closeMenu}>
+          <ArrowLeft24 />
         </IconButton>
         <Title>{menuName}</Title>
       </Section>
@@ -120,12 +120,6 @@
       0 2px  4px -1px rgba(0,0,0,.2),
       0 4px  5px  0   rgba(0,0,0,.14),
       0 1px 10px  0   rgba(0,0,0,.12);
-  }
-
-  :global(.back-button) {
-    height: 42px;
-    width: 42px;
-    padding: 9px;
   }
 
   @media (max-width: 36rem) {
