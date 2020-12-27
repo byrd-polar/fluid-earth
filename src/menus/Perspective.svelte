@@ -1,12 +1,12 @@
 <script>
-  import Add32 from "carbon-icons-svelte/lib/Add32";
-  import Subtract32 from "carbon-icons-svelte/lib/Subtract32";
+  import Add24 from "carbon-icons-svelte/lib/Add24";
+  import Subtract24 from "carbon-icons-svelte/lib/Subtract24";
   import CaretLeftGlyph from "carbon-icons-svelte/lib/CaretLeftGlyph";
   import CaretRightGlyph from "carbon-icons-svelte/lib/CaretRightGlyph";
   import CaretUpGlyph from "carbon-icons-svelte/lib/CaretUpGlyph";
   import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph";
   import RangeSlider from 'svelte-range-slider-pips';
-  import Button, { Group, Label } from '@smui/button';
+  import Button from '../components/Button.svelte';
 
   export let minZoom;
   export let maxZoom;
@@ -49,45 +49,13 @@
 <h1>Perspective</h1>
 <h2>Zoom</h2>
 <p>Zoom in and out by moving the slider up and down or left and right.</p>
-<!-- <h2>Vertical</h2>
-<div class="vertical">
-  <div class = "up">
-    <Button
-    variant="raised"
-    color="secondary"
-    class="stepper-btn right"
-    on:click={zoomOutStep}>
-    <Subtract32 />
-    </Button> </div>
-  <RangeSlider
-    bind:value={zoom}
-    min={minZoom}
-    max={maxZoom}
-    {step}
-    {springValues}
-    vertical
-    float
-  />
-  <div class = "down">
-    <Button
-    variant="raised"
-    color="secondary"
-    class="stepper-btn right"
-    on:click={zoomInStep}>
-    <Add32 />
-    </Button> </div>
-</div> -->
 
 <div class="horizontal">
   <div class = "left">
-    <Button
-    variant="raised"
-    color="secondary"
-    class="stepper-btn right"
-    on:click={zoomOutStep}>
-    <Subtract32 />
-    </Button></div>
-
+    <Button action={zoomOutStep} secondary>
+      <Subtract24 />
+    </Button>
+  </div>
   <RangeSlider
     bind:value={zoom}
     min={minZoom}
@@ -98,13 +66,10 @@
   />
 
   <div class = "right">
-    <Button
-    variant="raised"
-    color="secondary"
-    class="stepper-btn right"
-    on:click={zoomInStep}>
-    <Add32 />
-    </Button></div>
+    <Button action={zoomInStep} secondary>
+      <Add24 />
+    </Button>
+  </div>
 </div>
 
 
@@ -112,13 +77,6 @@
 <!-- Pan buttons -->
 <p>Pan up and down, left or right by either using the buttons or the sliders</p>
 
-<!--
-<div class = "wrapper">
-  <div class = "box box-outer1"></div>
-  <div class = "box box-outer2"></div>
-  <div class = "box box-outer3"></div>
-  <div class = "box box-outer4"></div>
-</div> -->
 <div>
 <div class="vertical">
   <CaretUpGlyph />
@@ -137,42 +95,26 @@
 <div class="container">
   <div class="cell cell-1"></div>
   <div class="cell cell-2">
-    <Button
-    variant="raised"
-    color="secondary"
-    class="stepper-btn right"
-    on:click={panUp}>
-    <CaretUpGlyph />
+    <Button action={panUp} secondary>
+      <CaretUpGlyph />
     </Button>
   </div>
   <div class="cell cell-3"></div>
   <div class="cell cell-4">
-    <Button
-    variant="raised"
-    color="secondary"
-    class="stepper-btn right"
-    on:click={panLeft}>
-    <CaretLeftGlyph />
+    <Button action={panLeft} secondary>
+      <CaretLeftGlyph />
     </Button>
   </div>
   <div class="cell cell-5"></div>
   <div class="cell cell-6">
-    <Button
-    variant="raised"
-    color="secondary"
-    class="stepper-btn right"
-    on:click={panRight}>
-    <CaretRightGlyph />
+    <Button action={panRight} secondary>
+      <CaretRightGlyph />
     </Button>
   </div>
   <div class="cell cell-7"></div>
   <div class="cell cell-8">
-    <Button
-    variant="raised"
-    color="secondary"
-    class="stepper-btn right"
-    on:click={panDown}>
-    <CaretDownGlyph />
+    <Button action={panDown} secondary>
+      <CaretDownGlyph />
     </Button>
   </div>
   <div class="cell cell-9"></div>

@@ -1,6 +1,6 @@
 <script>
   import Datepicker from 'svelte-calendar';
-  import Button, { Group, Label } from '@smui/button';
+  import Button from '../components/Button.svelte';
   import RangeSlider from 'svelte-range-slider-pips';
   import prettyBytes from 'pretty-bytes';
 
@@ -154,27 +154,22 @@
 
 <p>Use the buttons below to move one step backward or forwards in time.</p>
 
-<Group variant="raised" style="display: flex">
+<div style="display: flex">
   <Button
-    variant="raised"
-    color="secondary"
-    class="stepper-btn"
-    on:click={() => adjustDate(-interval)}
+    action={() => adjustDate(-interval)}
     disabled={!canBack}
-    ripple
+    secondary flex
   >
-    <Label>-{interval} hours</Label>
+    -{interval} hours
   </Button>
   <Button
-    variant="raised"
-    color="secondary"
-    class="stepper-btn right"
-    on:click={() => adjustDate(interval)}
+    action={() => adjustDate(interval)}
     disabled={!canForward}
+    secondary flex
   >
-    <Label>+{interval} hours</Label>
+    +{interval} hours
   </Button>
-</Group>
+</div>
 
 
 <h2>Calendar</h2>
@@ -189,8 +184,8 @@ dataset from that date.</p>
   style="display: block; width: max-content; margin: 2em auto"
   highlightColor="#015B5B"
 >
-  <Button variant="raised">
-    <Label>{date.toLocaleDateString(undefined, dateStringOptionsMore)}</Label>
+  <Button>
+    {date.toLocaleDateString(undefined, dateStringOptionsMore)}
   </Button>
 </Datepicker>
 
@@ -205,8 +200,8 @@ dataset from that date.</p>
   style="display: block; width: max-content; margin: 1em auto 0"
   highlightColor="#676778"
 >
-  <Button variant="raised" color="secondary">
-    <Label>{rangeStart.toLocaleDateString(undefined, dateStringOptions)}</Label>
+  <Button secondary>
+    {rangeStart.toLocaleDateString(undefined, dateStringOptions)}
   </Button>
 </Datepicker>
 
@@ -218,8 +213,8 @@ dataset from that date.</p>
   style="display: block; width: max-content; margin: 0 auto 1em"
   highlightColor="#676778"
 >
-  <Button variant="raised" color="secondary">
-    <Label>{rangeEnd.toLocaleDateString(undefined, dateStringOptions)}</Label>
+  <Button secondary>
+    {rangeEnd.toLocaleDateString(undefined, dateStringOptions)}
   </Button>
 </Datepicker>
 
@@ -227,10 +222,8 @@ dataset from that date.</p>
 
   <p>Confirm loading of the data, after which a slider will appear. Turning off
   streamlines will reduce size of the download.</p>
-  <Button variant="raised" class="load-btn" on:click={handleLoadButtonPress}>
-    <Label>
-      {loading ? 'Cancel' : `Load Range (${prettyBytes(rangeBytes)})`}
-    </Label>
+  <Button action={handleLoadButtonPress} full>
+    {loading ? 'Cancel' : `Load Range (${prettyBytes(rangeBytes)})`}
   </Button>
 
 {:else}
@@ -250,24 +243,6 @@ dataset from that date.</p>
 {/if}
 
 <style>
-  /* Adjust disabled button style for dark background */
-  :global(.mdc-button--raised:disabled) {
-    background-color: rgba(0, 0, 0, 0.88);
-    color: rgba(255, 255, 255, 0.58);
-  }
-
-  :global(.stepper-btn) {
-    flex: 1;
-  }
-
-  :global(.stepper-btn.right) {
-    margin-left: 0.5em;
-  }
-
-  :global(.load-btn) {
-    width: 100%;
-  }
-
   :global(div.sc-popover div.contents-wrapper) {
     z-index: 4 !important;
   }

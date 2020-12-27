@@ -34,7 +34,6 @@
   "dependencies": {
     "@okrad/svelte-progressbar": "^1.9.4",
     "@petamoriken/float16": "^2.0.0",
-    "@smui/button": "^1.0.0",
     "@smui/drawer": "^1.0.0",
     "@smui/list": "^1.0.0",
     "carbon-icons-svelte": "^10.21.0",
