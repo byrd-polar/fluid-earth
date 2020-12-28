@@ -36,20 +36,10 @@ export default {
     // For in-lining topojson (for web component)
     json(),
 
-    // For Svelte Material UI, from:
-    // https://github.com/hperrin/smui-example-rollup/blob/master/rollup.config.js
     postcss({
       extract: true,
-      minimize: true,
+      minimize: production,
       sourceMap: true,
-      use: [
-        ['sass', {
-          includePaths: [
-            './theme',
-            './node_modules'
-          ]
-        }]
-      ]
     }),
 
     replace({
