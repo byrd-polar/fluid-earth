@@ -18,6 +18,7 @@
 <style>
   button {
     all: unset;
+    -webkit-tap-highlight-color: transparent;
     width: 48px;
     height: 48px;
     display: flex;

@@ -19,6 +19,7 @@
 <style>
   button {
     all: unset;
+    -webkit-tap-highlight-color: transparent;
     box-sizing: border-box;
     color: white;
     padding: 0.5em 1em;
