@@ -93,14 +93,6 @@ export default {
       return;
     }
 
-    // Ignore unfixable A11y warning in dependency (not used in actual app)
-    if (warning.pluginCode === 'a11y-label-has-associated-control' &&
-        warning.filename.includes('node_modules') &&
-        warning.filename.includes('@smui') &&
-        warning.filename.includes('Label.svelte')) {
-      return;
-    }
-
     warn(warning);
   },
 };
