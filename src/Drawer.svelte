@@ -27,7 +27,7 @@
     // focus on the button that opened the drawer when the drawer is dismissed
     // (and no other menu is opened)
     if (openedMenu === null) {
-      document.querySelector('div.rail button').focus();
+      drawer.parentNode.querySelector('div.rail button').focus();
     }
     tips.forEach(t => t.hide());
   }

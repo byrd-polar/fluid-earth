@@ -20,14 +20,15 @@
     }
   }
 
+  let rail;
   // focus on the first button of the just-opened menu
   $: if (openedMenu !== null) { (async () => {
     await tick();
-    document.querySelector('aside.open button').focus();
+    rail.parentNode.querySelector('aside.open button').focus();
   })() }
 </script>
 
-<div class="rail">
+<div class="rail" bind:this={rail}>
 <nav>
   <IconButton
     name="Menus"

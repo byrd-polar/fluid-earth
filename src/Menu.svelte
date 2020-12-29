@@ -21,7 +21,7 @@
 
   function closeMenu() {
     // foucs on the rail button that corresonds to this menu
-    document.querySelector('div.rail button.selected').focus()
+    aside.parentNode.querySelector('div.rail button.selected').focus();
     openedMenu = null;
     // hide the tooltip for the just-closed menu
     tips.forEach(t => t.hide());
