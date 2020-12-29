@@ -2,7 +2,8 @@
   import { tips } from './tooltip.js';
   import { onMount, tick } from 'svelte';
   import List from './components/List.svelte';
-  import ArrowLeft24 from "carbon-icons-svelte/lib/ArrowLeft24";
+  import Button from './components/Button.svelte';
+  import ArrowLeft20 from "carbon-icons-svelte/lib/ArrowLeft20";
   import { createFocusTrap } from 'focus-trap';
 
   export let menus;
@@ -45,12 +46,15 @@
 </script>
 
 <aside class:open={drawerOpen} bind:this={drawer} on:keydown={handleKeydown}>
-  <h1>Fluid Earth Viewer 2</h1>
-  <p>From the FEVer Team at Byrd</p>
-  <button on:click={closeDrawer}>
-    <ArrowLeft24 />
-    Return to map
-  </button>
+  <header>
+    <h1>Fluid Earth Viewer 2</h1>
+    <p>From the FEVer Team at Byrd</p>
+    <Button action={closeDrawer} full>
+      <ArrowLeft20 style="margin-right: 8px" />
+      Return to map
+    </Button>
+    <hr>
+  </header>
   <List
     items={menus}
     action={openMenu}
@@ -66,7 +70,6 @@
     z-index: 10000; /* place above tooltip (z-index: 9999) when opening */
     position: absolute;
 
-    padding: 1em;
     height: 100%;
     width: 256px;
 
@@ -85,8 +88,8 @@
       visibility 0s linear 0s;
   }
 
-  button {
-    width: 100%;
+  header {
+    padding: 1em;
   }
 
   div {
