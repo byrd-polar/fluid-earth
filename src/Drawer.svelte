@@ -34,21 +34,29 @@
 
 <style>
   aside {
-    z-index: 10000; /* place above tooltip (z-index: 9999) when opening */
     background-color: #015B5B;
     color: white;
-    position: absolute;
-    height: 100%;
-    padding: 1em;
 
-    visibility: hidden;
+    z-index: 10000; /* place above tooltip (z-index: 9999) when opening */
+    position: absolute;
+
+    padding: 1em;
+    height: 100%;
     width: 256px;
+
     margin-left: -256px;
+    visibility: hidden;
+    transition:
+      margin-left 0.25s ease 0s,
+      visibility 0s linear 0.25s;
   }
 
   aside.open {
     margin-left: 0;
     visibility: visible;
+    transition:
+      margin-left 0.25s ease 0s,
+      visibility 0s linear 0s;
   }
 
   button {
@@ -57,16 +65,27 @@
 
   div {
     z-index: 9999;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: black;
     width: 100%;
     height: 100%;
     position: fixed;
+
+    cursor: auto;
+    opacity: 0;
     visibility: hidden;
-    cursor: pointer;
+    transition:
+      opacity 0.25s ease 0s,
+      cursor 0s linear 0.25s,
+      visibility 0s linear 0.25s;
   }
 
   div.open {
+    cursor: pointer;
+    opacity: 0.5;
     visibility: visible;
-    background-color: rgba(0, 0, 0, 0.5);
+    transition:
+      opacity 0.25s ease 0s,
+      cursor 0s linear 0s,
+      visibility 0s linear 0s;
   }
 </style>
