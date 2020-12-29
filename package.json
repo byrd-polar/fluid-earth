@@ -40,6 +40,7 @@
     "d3-scale": "^3.2.3",
     "d3-scale-chromatic": "^2.0.0",
     "d3-selection": "^2.0.0",
+    "focus-trap": "^6.2.3",
     "interactjs": "^1.10.1",
     "ky": "^0.25.1",
     "pretty-bytes": "^5.4.1",

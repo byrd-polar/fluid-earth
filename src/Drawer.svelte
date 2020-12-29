@@ -1,29 +1,50 @@
 <script>
   import { tips } from './tooltip.js';
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import List from './components/List.svelte';
   import ArrowLeft24 from "carbon-icons-svelte/lib/ArrowLeft24";
+  import { createFocusTrap } from 'focus-trap';
 
   export let menus;
   export let openedMenu;
   export let drawerOpen;
 
-  function openMenu(menu) {
-    closeDrawer();
-    openedMenu = menu;
-  }
+  let drawer, scrim, focusTrap;
+  onMount(() => focusTrap = createFocusTrap([drawer, scrim], {
+    // we'll handle the following cases manually
+    escapeDeactivates: false,
+    returnFocusOnDeactivate: false,
+  }));
+
+  $: if (drawerOpen) { (async () => {
+    await tick();
+    focusTrap.activate();
+  })() }
 
   function closeDrawer() {
     drawerOpen = false;
-
+    focusTrap.deactivate();
     // focus on the button that opened the drawer when the drawer is dismissed
     // (and no other menu is opened)
-    document.querySelector('div.rail button').focus();
+    if (openedMenu === null) {
+      document.querySelector('div.rail button').focus();
+    }
     tips.forEach(t => t.hide());
+  }
+
+  function openMenu(menu) {
+    openedMenu = menu;
+    closeDrawer();
+  }
+
+  function handleKeydown(e) {
+    if (e.key === 'Escape') {
+      closeDrawer();
+    }
   }
 </script>
 
-<aside class:open={drawerOpen}>
+<aside class:open={drawerOpen} bind:this={drawer} on:keydown={handleKeydown}>
   <h1>Fluid Earth Viewer 2</h1>
   <p>From the FEVer Team at Byrd</p>
   <button on:click={closeDrawer}>
@@ -35,7 +56,7 @@
     action={openMenu}
   />
 </aside>
-<div class:open={drawerOpen} on:click={closeDrawer}></div>
+<div class:open={drawerOpen} on:click={closeDrawer} bind:this={scrim}></div>
 
 <style>
   aside {

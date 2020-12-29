@@ -20,8 +20,8 @@
     }
   }
 
-  // focus on the first button of the just-opened menu or drawer
-  $: if (openedMenu !== null || drawerOpen) { (async () => {
+  // focus on the first button of the just-opened menu
+  $: if (openedMenu !== null) { (async () => {
     await tick();
     document.querySelector('aside.open button').focus();
   })() }
