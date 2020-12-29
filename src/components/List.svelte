@@ -4,7 +4,7 @@
 </script>
 
 {#each items as item}
-  <button on:click={() => action(item.name)}>
+  <button on:click={() => action(item)}>
     <svelte:component this={item.icon}/>
     {item.name}
   </button>

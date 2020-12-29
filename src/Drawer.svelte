@@ -33,7 +33,7 @@
   }
 
   function openMenu(menu) {
-    openedMenu = menu;
+    openedMenu = menu.name;
     closeDrawer();
   }
 
