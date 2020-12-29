@@ -94,7 +94,7 @@
     background-color: black;
     width: 100%;
     height: 100%;
-    position: fixed;
+    position: absolute;
 
     cursor: auto;
     opacity: 0;
