@@ -1,6 +1,7 @@
 <script>
   import IconButton from './components/IconButton.svelte';
   import Menu24 from "carbon-icons-svelte/lib/Menu24";
+  import { tick } from 'svelte';
 
   export let menus;
   export let openedMenu;
@@ -18,6 +19,12 @@
       openedMenu = menu;
     }
   }
+
+  // focus on the first button of the just-opened menu or drawer
+  $: if (openedMenu !== null || drawerOpen) { (async () => {
+    await tick();
+    document.querySelector('aside.open button').focus();
+  })() }
 </script>
 
 <div class="rail">

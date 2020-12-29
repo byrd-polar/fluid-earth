@@ -1,6 +1,6 @@
 <script>
   import { updateAllWebglResolutions } from './map/Map.svelte';
-  import { onMount, tick } from 'svelte';
+  import { onMount } from 'svelte';
   import IconButton from './components/IconButton.svelte';
   import ArrowLeft24 from "carbon-icons-svelte/lib/ArrowLeft24";
   import { tips } from './tooltip.js';
@@ -18,14 +18,6 @@
 
   let menuOpen;
   $: menuOpen = openedMenu === menuName;
-
-  // switch keyboard focus to the back-button of the just-opened menu
-  $: if (menuOpen) {
-    (async () => {
-      await tick();
-      document.querySelector('aside.open button').focus({preventScroll:true});
-    })();
-  }
 
   function closeMenu() {
     // foucs on the rail button that corresonds to this menu

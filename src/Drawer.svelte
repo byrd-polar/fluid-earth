@@ -15,6 +15,11 @@
 
   function closeDrawer() {
     drawerOpen = false;
+
+    // focus on the button that opened the drawer when the drawer is dismissed
+    // (and no other menu is opened)
+    document.querySelector('div.rail button').focus();
+    tips.forEach(t => t.hide());
   }
 </script>
 
