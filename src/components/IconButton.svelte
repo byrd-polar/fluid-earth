@@ -25,6 +25,17 @@
     justify-content: center;
     cursor: pointer;
     color: white;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0);
+    transition: background-color 0.25s ease 0s;
+  }
+
+  button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  button:focus {
+    background-color: rgba(255, 255, 255, 0.15);
   }
 
   button.selected {
