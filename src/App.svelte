@@ -265,6 +265,7 @@
     {vectorData}
     bind:d3geoProjection
   >
+    <div slot="background"></div>
     <Controls
       {minZoom}
       {maxZoom}
@@ -308,5 +309,9 @@
     main {
       flex-direction: column;
     }
+  }
+
+  div {
+    /* background: grey; */
   }
 </style>

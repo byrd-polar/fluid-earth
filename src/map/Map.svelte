@@ -143,7 +143,7 @@
     const webglVersion = webgl2 ? 'webgl2' : 'webgl';
     webgl2TestCanvas.remove();
 
-    backgroundGl = backgroundCanvas.getContext(webglVersion, { alpha: false });
+    backgroundGl = backgroundCanvas.getContext(webglVersion, { alpha: true });
     particleGl = particleCanvas.getContext(webglVersion, {
       premultipliedAlpha: !majorPerformanceCaveat,
     });
@@ -272,6 +272,7 @@
 <div class="layers">
   <canvas bind:this={mpcTestCanvas} hidden/>
   <canvas bind:this={webgl2TestCanvas} hidden/>
+  <slot name="background"></slot>
   <canvas bind:this={backgroundCanvas}/>
   <canvas bind:this={particleCanvas}/>
   <slot></slot>
