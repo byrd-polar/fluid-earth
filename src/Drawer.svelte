@@ -3,8 +3,13 @@
   import { onMount, tick } from 'svelte';
   import List from './components/List.svelte';
   import Button from './components/Button.svelte';
-  import ArrowLeft20 from "carbon-icons-svelte/lib/ArrowLeft20";
   import { createFocusTrap } from 'focus-trap';
+
+
+  import AddComment32 from "carbon-icons-svelte/lib/AddComment32";
+  import LogoFacebook32 from "carbon-icons-svelte/lib/LogoFacebook32";
+  import LogoTwitter32 from "carbon-icons-svelte/lib/LogoTwitter32";
+  import LogoGithub32 from "carbon-icons-svelte/lib/LogoGithub32";
 
   export let menus;
   export let openedMenu;
@@ -60,6 +65,34 @@
       action={openMenu}
     />
   </section>
+  <footer>
+    <a href="https://bpcrc.osu.edu/">
+      <img
+        width="224"
+        alt="The Ohio State University"
+        src="/images/TheOhioStateUniversity-REV-Horiz-RGBHEX.png"
+      >
+    </a>
+    <a href="https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=504793">
+      <img
+        height="48"
+        alt="National Science Foundation"
+        src="/images/NSF_4-Color_bitmap_Logo.png"
+      >
+    </a>
+    <a href="https://fever.byrd.osu.edu/feedback.html">
+      <AddComment32 aria-label="Feedback" />
+    </a>
+    <a href="https://www.facebook.com/byrdpolar">
+      <LogoFacebook32 aria-label="Facebook" />
+    </a>
+    <a href="https://twitter.com/ByrdPolar">
+      <LogoTwitter32 aria-label="Twitter" />
+    </a>
+    <a href="https://github.com/zqianem/fev2r">
+      <LogoGithub32 aria-albel="Github" />
+    </a>
+  </footer>
 </aside>
 <div class:open={drawerOpen} on:click={closeDrawer} bind:this={scrim}></div>
 
@@ -103,9 +136,36 @@
     margin-top: 0.25em;
   }
 
+  hr {
+    color: white;
+  }
+
   section {
     flex: 1;
     overflow: auto;
+  }
+
+  footer {
+    padding: 2em 1em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  footer a {
+    color: inherit;
+    margin-right: 0.5em;
+    margin-top: 1em;
+    flex: 1;
+  }
+
+  footer a:first-child, footer a:last-child {
+    margin-right: 0;
+  }
+
+  footer a > :global(*) {
+    display: block;
+    margin: 0 auto;
   }
 
   div {
