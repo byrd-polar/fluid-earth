@@ -313,5 +313,6 @@
 
   div {
     /* background: grey; */
+    background-image: url("/starfield.png");
   }
 </style>
