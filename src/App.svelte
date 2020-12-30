@@ -312,7 +312,8 @@
   }
 
   div {
-    /* background: grey; */
-    background-image: url("/starfield.png");
+    background-image: url("/images/starfield.png");
+    background-position: center;
+    background-size: auto 100%;
   }
 </style>
