@@ -50,7 +50,6 @@
     <h1>Fluid Earth Viewer 2</h1>
     <p>From the FEVer Team at Byrd</p>
     <Button action={closeDrawer} full>
-      <ArrowLeft20 style="margin-right: 8px" />
       Return to map
     </Button>
     <hr>
@@ -93,7 +92,15 @@
   }
 
   header {
-    padding: 1em;
+    padding: 0 1em;
+  }
+
+  h1 {
+    margin-bottom: 0.25em;
+  }
+
+  p {
+    margin-top: 0.25em;
   }
 
   section {
