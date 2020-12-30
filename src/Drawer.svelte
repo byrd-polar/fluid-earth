@@ -55,10 +55,12 @@
     </Button>
     <hr>
   </header>
-  <List
-    items={menus}
-    action={openMenu}
-  />
+  <section>
+    <List
+      items={menus}
+      action={openMenu}
+    />
+  </section>
 </aside>
 <div class:open={drawerOpen} on:click={closeDrawer} bind:this={scrim}></div>
 
@@ -69,6 +71,8 @@
 
     z-index: 10000; /* place above tooltip (z-index: 9999) when opening */
     position: absolute;
+    display: flex;
+    flex-direction: column;
 
     height: 100%;
     width: 256px;
@@ -90,6 +94,11 @@
 
   header {
     padding: 1em;
+  }
+
+  section {
+    flex: 1;
+    overflow: auto;
   }
 
   div {
