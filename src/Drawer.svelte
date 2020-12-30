@@ -114,6 +114,11 @@
     transition:
       margin-left 0.25s ease 0s,
       visibility 0s linear 0.25s;
+
+    box-shadow:
+      2px 0 1px -1px rgba(0,0,0,.2),
+      1px 0 1px  0   rgba(0,0,0,.14),
+      1px 0 3px  0   rgba(0,0,0,.12);
   }
 
   aside.open {
