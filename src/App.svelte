@@ -21,7 +21,6 @@
   import Legend from './overlays/Legend.svelte';
   import Loading from './overlays/Loading.svelte';
   import Controls from './overlays/Controls.svelte';
-  import Branding from './overlays/Branding.svelte';
 
   import Fetcher from './fetcher.js';
 
@@ -289,7 +288,6 @@
       {griddedDomain}
       {particleDisplay}
     />
-    <Branding/>
   </Map>
 </main>
 
