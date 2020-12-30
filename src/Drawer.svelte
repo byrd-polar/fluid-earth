@@ -130,11 +130,11 @@
   }
 
   header {
-    padding: 0 1em;
+    padding: 1.5em 1em 0;
   }
 
   h1 {
-    margin-bottom: 0.25em;
+    margin: 0 0 0.25em;
   }
 
   p {
@@ -151,7 +151,7 @@
   }
 
   footer {
-    padding: 2em 1em;
+    padding: 1em 1em 1.5em;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
