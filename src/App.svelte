@@ -6,11 +6,8 @@
   import MapProjections from './menus/MapProjections.svelte';
   import Colormaps from './menus/Colormaps.svelte';
   import Variables from './menus/Variables.svelte';
-  import Markers from './menus/Markers.svelte';
   import Projections from './menus/Projections.svelte';
-  import Advanced from './menus/Advanced.svelte';
   import Perspective from './menus/Perspective.svelte';
-  import SiteNav from './menus/OldTopBarItems.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
 
   import Map, { updateAllWebglResolutions } from './map/Map.svelte';
@@ -159,10 +156,7 @@
   import ColorPalette24 from "carbon-icons-svelte/lib/ColorPalette24";
   import Globe24 from "carbon-icons-svelte/lib/Globe24";
   import View24 from "carbon-icons-svelte/lib/View24";
-  import Location24 from "carbon-icons-svelte/lib/Location24";
   import Earth24 from "carbon-icons-svelte/lib/Earth24";
-  import SettingsAdjust24 from "carbon-icons-svelte/lib/SettingsAdjust24";
-  import Information24 from "carbon-icons-svelte/lib/Information24";
 
   const menus = [
     { name: 'Datasets', icon: Grid24 },
@@ -170,10 +164,7 @@
     { name: 'Colormaps', icon: ColorPalette24 },
     { name: 'Map Projections', icon: Globe24 },
     { name: 'Perspective', icon: View24 },
-    { name: 'Markers', icon: Location24 },
     { name: 'Projections', icon: Earth24 },
-    { name: 'Advanced', icon: SettingsAdjust24 },
-    { name: 'Site Navigation', icon: Information24 },
   ];
 </script>
 
@@ -208,9 +199,6 @@
     bind:particlesShown
   />
 </Menu>
-<Menu bind:openedMenu menuName="Markers">
-  <Markers/>
-</Menu>
 <Menu bind:openedMenu menuName="Projections">
   <Projections
     bind:projection
@@ -218,9 +206,6 @@
     bind:centerLatitude
     bind:zoom
   />
-</Menu>
-<Menu bind:openedMenu menuName="Advanced">
-  <Advanced/>
 </Menu>
 <Menu bind:openedMenu menuName="Perspective">
   <Perspective
@@ -233,10 +218,6 @@
     {maxLong}
     bind:centerLatitude
     bind:centerLongitude
-  />
-</Menu>
-<Menu bind:openedMenu menuName="Site Navigation">
-  <SiteNav
   />
 </Menu>
 <Menu bind:openedMenu menuName="Time Machine">
