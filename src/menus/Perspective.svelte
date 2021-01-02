@@ -20,7 +20,6 @@
   export let minLong;
 
 
-  const step = 0.1;
   const springValues = { stiffness: 0.15, damping: 1 };
   function zoomInStep() {
 	  zoom += 0.1;
@@ -59,7 +58,7 @@
     bind:value={zoom}
     min={minZoom}
     max={maxZoom}
-    {step}
+    step={0.1}
     {springValues}
     float
   />
@@ -83,7 +82,6 @@
     bind:value={centerLatitude}
     min={minLat}
     max={maxLat}
-    {step}
     {springValues}
     vertical
     float
@@ -130,7 +128,6 @@
         bind:value={centerLongitude}
         min={minLong}
         max={maxLong}
-        {step}
         {springValues}
         float
       />
