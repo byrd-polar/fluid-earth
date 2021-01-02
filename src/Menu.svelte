@@ -49,7 +49,9 @@
     <h1>{menuName}</h1>
   </header>
   <div>
-    <slot></slot>
+    <section>
+      <slot></slot>
+    </section>
   </div>
 </aside>
 
@@ -111,17 +113,24 @@
   }
 
   div {
-    padding: 1em;
-    flex: 1;
     overflow: auto;
+    flex: 1;
   }
 
-  div :global(h2) {
+  section {
+    padding: 1em;
+  }
+
+  section :global(h2) {
     font-family: Quicksand-regular;
     font-size: 1rem;
     font-weight: 400;
     border-bottom: 1px solid;
     text-transform: uppercase;
+  }
+
+  section :global(:first-child) {
+    margin-top: 0;
   }
 
   @media (max-width: 36rem) {

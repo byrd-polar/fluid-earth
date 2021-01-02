@@ -46,7 +46,6 @@
   }
 </script>
 
-<h1>Perspective</h1>
 <h2>Zoom</h2>
 <p>Zoom in and out by moving the slider up and down or left and right.</p>
 
