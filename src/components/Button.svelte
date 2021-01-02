@@ -4,6 +4,7 @@
   export let flex = false;
   export let full = false;
   export let secondary = false;
+  export let type = 'button';
 </script>
 
 <button
@@ -12,6 +13,7 @@
   class:flex
   class:full
   class:secondary
+  type={type}
 >
   <slot></slot>
 </button>

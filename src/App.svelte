@@ -9,6 +9,7 @@
   import Projections from './menus/Projections.svelte';
   import Perspective from './menus/Perspective.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
+  import Feedback from './menus/Feedback.svelte';
 
   import Map, { updateAllWebglResolutions } from './map/Map.svelte';
   import colormaps from './map/colormaps/';
@@ -157,6 +158,7 @@
   import Globe24 from "carbon-icons-svelte/lib/Globe24";
   import View24 from "carbon-icons-svelte/lib/View24";
   import Earth24 from "carbon-icons-svelte/lib/Earth24";
+  import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
 
   const menus = [
     { name: 'Datasets', icon: Grid24 },
@@ -165,6 +167,7 @@
     { name: 'Map Projections', icon: Globe24 },
     { name: 'Perspective', icon: View24 },
     { name: 'Projections', icon: Earth24 },
+    { name: 'Feedback', icon: RequestQuote24 },
   ];
 </script>
 
@@ -227,6 +230,10 @@
     bind:date
     {dataset}
     bind:particlesShown
+  />
+</Menu>
+<Menu bind:openedMenu menuName="Feedback">
+  <Feedback
   />
 </Menu>
 <main>

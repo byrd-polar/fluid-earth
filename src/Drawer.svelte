@@ -6,7 +6,7 @@
   import { createFocusTrap } from 'focus-trap';
 
 
-  import AddComment32 from "carbon-icons-svelte/lib/AddComment32";
+  import Blog32 from "carbon-icons-svelte/lib/Blog32";
   import LogoFacebook32 from "carbon-icons-svelte/lib/LogoFacebook32";
   import LogoTwitter32 from "carbon-icons-svelte/lib/LogoTwitter32";
   import LogoGithub32 from "carbon-icons-svelte/lib/LogoGithub32";
@@ -80,8 +80,8 @@
         src="/images/NSF_4-Color_bitmap_Logo.png"
       >
     </a>
-    <a href="https://fever.byrd.osu.edu/feedback.html">
-      <AddComment32 aria-label="Feedback" />
+    <a href="https://u.osu.edu/fever/">
+      <Blog32 aria-label="Blog" />
     </a>
     <a href="https://www.facebook.com/byrdpolar">
       <LogoFacebook32 aria-label="Facebook" />
