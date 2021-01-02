@@ -19,9 +19,15 @@
 
 <h2>Feedback Form</h2>
 
-<!-- See https://docs.netlify.com/forms/setup/ -->
+<!--
+  See https://docs.netlify.com/forms/setup/
+
+  If changing the number or type of inputs, be sure to modify the corresponding
+  hidden form in public/index.html
+-->
 
 <form name="feedback" method="POST" data-netlify="true">
+  <input type="hidden" name="form-name" value="feedback" />
   <label>
     Name: <input type="text" name="name" autocomplete="off"/>
   </label>
