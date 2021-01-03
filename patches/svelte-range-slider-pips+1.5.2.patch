@@ -1,8 +1,8 @@
 diff --git a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
-index 0307932..b484b58 100755
+index 0307932..cd74f97 100755
 --- a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
 +++ b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
-@@ -12,6 +12,13 @@
+@@ -12,6 +12,15 @@
    export let vertical = false;
    export let float = false;
    export let hover = true;
@@ -10,7 +10,9 @@ index 0307932..b484b58 100755
 +
 +  // keep value and values in sync with each other
 +  const updateValues = () => { if (value !== values[0]) values = [value] };
-+  const updateValue = () => { if (value !== values[0]) value = values[0] };
++  const updateValue = () => {
++    if (alignValueToStep(value) !== values[0]) value = values[0];
++  };
 +  $: value, updateValues();
 +  $: values, updateValue();
  
