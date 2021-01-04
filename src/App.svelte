@@ -6,7 +6,6 @@
   import MapProjections from './menus/MapProjections.svelte';
   import Colormaps from './menus/Colormaps.svelte';
   import Variables from './menus/Variables.svelte';
-  import Projections from './menus/Projections.svelte';
   import Perspective from './menus/Perspective.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
   import Feedback from './menus/Feedback.svelte';
@@ -168,7 +167,6 @@
     { name: 'Colormaps', icon: ColorPalette24 },
     { name: 'Map Projections', icon: Globe24 },
     { name: 'Perspective', icon: View24 },
-    { name: 'Projections', icon: Earth24 },
     { name: 'About FEVer', icon: Information24 },
     { name: 'Feedback', icon: RequestQuote24 },
   ];
@@ -192,6 +190,9 @@
 <Menu bind:openedMenu menuName="Map Projections">
   <MapProjections
     bind:projection
+    bind:centerLongitude
+    bind:centerLatitude
+    bind:zoom
     bind:particleDisplay
   />
 </Menu>
@@ -204,14 +205,6 @@
   <Variables
     bind:dataset
     bind:particlesShown
-  />
-</Menu>
-<Menu bind:openedMenu menuName="Projections">
-  <Projections
-    bind:projection
-    bind:centerLongitude
-    bind:centerLatitude
-    bind:zoom
   />
 </Menu>
 <Menu bind:openedMenu menuName="Perspective">
