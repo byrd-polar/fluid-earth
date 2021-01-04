@@ -2,6 +2,13 @@
   import projections from '../map/projections/';
 
   export let projection;
+  export let particleDisplay;
+
+  $: if (projection === projections.STEREOGRAPHIC) {
+    particleDisplay.size = 0.4;
+  } else {
+    particleDisplay.size = 0.8;
+  }
 </script>
 
 

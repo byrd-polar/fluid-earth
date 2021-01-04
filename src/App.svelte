@@ -192,6 +192,7 @@
 <Menu bind:openedMenu menuName="Map Projections">
   <MapProjections
     bind:projection
+    bind:particleDisplay
   />
 </Menu>
 <Menu bind:openedMenu menuName="Colormaps">
