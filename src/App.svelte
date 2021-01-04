@@ -276,6 +276,7 @@
       datasetInfo={inventory[dataset]}
       {griddedColormap}
       {griddedDomain}
+      {particlesShown}
       {particleDisplay}
     />
   </Map>

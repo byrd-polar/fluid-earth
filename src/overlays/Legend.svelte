@@ -8,6 +8,7 @@
   export let datasetInfo;
   export let griddedColormap;
   export let griddedDomain;
+  export let particlesShown;
   export let particleDisplay;
 
   // see options parameter here: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat
@@ -44,10 +45,12 @@
   <span class="datetime">
     {date.toLocaleDateString(undefined, dateStringOptions)}
   </span>
-  <span class="streamlines">
-    Streamlines for wind at 10m above ground level, moving
-    {particleDisplay.rate.toLocaleString()} times faster than actual
-  </span>
+  {#if particlesShown}
+    <span class="streamlines">
+      Streamlines representing wind at 10m above ground level, moving
+      {particleDisplay.rate.toLocaleString()} times faster than actual
+    </span>
+  {/if}
   <span class="gridded">
     {datasetInfo.description}
     {#if datasetInfo.units}({datasetInfo.units}){/if}
@@ -64,7 +67,7 @@
   div.legend-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: center;
     user-select: none;
     pointer-events: none;
@@ -100,11 +103,10 @@
     font-weight: normal;
     font-size: 0.75em;
     text-align: center;
-    margin-bottom: auto;
   }
 
   span.gridded {
-    margin: 0;
+    margin-top: auto;
     padding-bottom: 0.125em;
   }
 
