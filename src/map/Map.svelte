@@ -66,14 +66,15 @@
   let clientWidth, clientHeight;
 
   export let d3geoProjection;
-  $: d3geoProjection = proj(
-    projection,
-    centerLongitude,
-    centerLatitude,
-    clientWidth,
-    clientHeight,
-    zoom
-  );
+  let d3geoProjectionNeedsUpdate;
+  // when following variables are updated, update
+  $: projection,
+      centerLongitude,
+      centerLatitude,
+      clientWidth,
+      clientHeight,
+      zoom,
+    d3geoProjectionNeedsUpdate = true;
 
   let mpcTestCanvas;
   let webgl2TestCanvas;
@@ -254,6 +255,20 @@
     if (particlesNeedClearing) {
       particleGl.clear(particleGl.COLOR_BUFFER_BIT);
       particlesNeedClearing = false;
+    }
+
+    // limit update of d3geoProjection to the rate of the animation loop to keep
+    // pins in better sync with underlying webgl map
+    if (d3geoProjectionNeedsUpdate) {
+      d3geoProjection = proj(
+        projection,
+        centerLongitude,
+        centerLatitude,
+        clientWidth,
+        clientHeight,
+        zoom
+      );
+      d3geoProjectionNeedsUpdate = false;
     }
 
     requestAnimationFrame(render);
