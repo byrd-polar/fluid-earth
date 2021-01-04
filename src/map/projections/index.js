@@ -37,7 +37,7 @@ export default Object.freeze({
   STEREOGRAPHIC: {
     name: 'stereographic',
     id: 5,
-    function: d3.geoStereographic(),
+    function: d3.geoStereographic().clipAngle(null),
   },
 });
 
@@ -62,11 +62,6 @@ export function proj(
   // ./vertical-perspective/forward.glsl
   if (projection.id === 4) {
     f = f.distance(1 + 7 / zoom);
-  }
-
-  // don't clip steregraphic projection
-  if (projection.id === 5) {
-    f = f.clipAngle(null);
   }
 
   return f;
