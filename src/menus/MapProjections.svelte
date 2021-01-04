@@ -107,6 +107,10 @@
     flex-direction: column;
   }
 
+  img {
+    filter: invert(0.88);
+  }
+
   span {
     margin-bottom: 0.5em;
   }
