@@ -5,6 +5,7 @@
 #pragma glslify: p2 = require(./projections/equal-earth/forward.glsl)
 #pragma glslify: p3 = require(./projections/orthographic/forward.glsl)
 #pragma glslify: p4 = require(./projections/vertical-perspective/forward.glsl)
+#pragma glslify: p5 = require(./projections/stereographic/forward.glsl)
 
 attribute vec2 a_lonLat;
 
@@ -35,6 +36,8 @@ void main() {
     p3(displayCoord, lonLat0, lonLat, clip);
   } else if (u_projection == 4) {
     p4(displayCoord, lonLat0, lonLat, clip, u_zoom);
+  } else if (u_projection == 5) {
+    p5(displayCoord, lonLat0, lonLat, clip);
   }
 
   // determines if fragment shader should not render line to avoid lines

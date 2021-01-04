@@ -34,6 +34,11 @@ export default Object.freeze({
     id: 4,
     function: d4.geoSatellite(),
   },
+  STEREOGRAPHIC: {
+    name: 'stereographic',
+    id: 5,
+    function: d3.geoStereographic(),
+  },
 });
 
 

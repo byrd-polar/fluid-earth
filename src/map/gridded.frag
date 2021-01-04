@@ -7,6 +7,7 @@ precision highp float;
 #pragma glslify: p2 = require(./projections/equal-earth/invert.glsl)
 #pragma glslify: p3 = require(./projections/orthographic/invert.glsl)
 #pragma glslify: p4 = require(./projections/vertical-perspective/invert.glsl)
+#pragma glslify: p5 = require(./projections/stereographic/invert.glsl)
 
 uniform float u_canvasRatio;
 uniform float u_lon0;
@@ -50,6 +51,8 @@ void main() {
     p3(displayCoord, lonLat0, lonLat);
   } else if (u_projection == 4) {
     p4(displayCoord, lonLat0, lonLat, u_zoom);
+  } else if (u_projection == 5) {
+    p5(displayCoord, lonLat0, lonLat);
   }
 
   // don't render points with lonLat out of range
