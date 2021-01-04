@@ -64,6 +64,11 @@ export function proj(
     f = f.distance(1 + 7 / zoom);
   }
 
+  // don't clip steregraphic projection
+  if (projection.id === 5) {
+    f = f.clipAngle(null);
+  }
+
   return f;
 }
 
