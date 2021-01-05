@@ -112,8 +112,8 @@
 
       griddedData = {
         floatArray: array,
-        width: 1440,
-        height: 721,
+        width: datasetInfo.width,
+        height: datasetInfo.height,
       }
 
       if (previousDataset !== dataset) {
