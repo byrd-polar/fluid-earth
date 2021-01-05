@@ -38,9 +38,10 @@ presented with different colors.
   label {
     padding: 0.25em 0;
     display: block;
+    cursor: pointer;
   }
 
   label:hover {
-    background-color: rgba(1, 1, 1, 0.04);
+    background-color: rgba(255, 255, 255, 0.05);
   }
 </style>
