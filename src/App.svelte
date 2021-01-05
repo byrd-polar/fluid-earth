@@ -3,13 +3,13 @@
   import Drawer from './Drawer.svelte';
   import Menu from './Menu.svelte';
 
+  import Variables from './menus/Variables.svelte';
+  import TimeMachine from './menus/TimeMachine.svelte';
   import MapProjections from './menus/MapProjections.svelte';
   import Colormaps from './menus/Colormaps.svelte';
-  import Variables from './menus/Variables.svelte';
   import Perspective from './menus/Perspective.svelte';
-  import TimeMachine from './menus/TimeMachine.svelte';
-  import Feedback from './menus/Feedback.svelte';
   import About from './menus/About.svelte';
+  import Feedback from './menus/Feedback.svelte';
 
   import Map, { updateAllWebglResolutions } from './map/Map.svelte';
   import colormaps from './map/colormaps/';
@@ -154,18 +154,17 @@
   // https://github.com/IBM/carbon-icons-svelte#direct-import-recommended
   import Grid24 from "carbon-icons-svelte/lib/Grid24";
   import Time24 from "carbon-icons-svelte/lib/Time24";
-  import ColorPalette24 from "carbon-icons-svelte/lib/ColorPalette24";
   import Globe24 from "carbon-icons-svelte/lib/Globe24";
+  import ColorPalette24 from "carbon-icons-svelte/lib/ColorPalette24";
   import View24 from "carbon-icons-svelte/lib/View24";
-  import Earth24 from "carbon-icons-svelte/lib/Earth24";
   import Information24 from "carbon-icons-svelte/lib/Information24";
   import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
 
   const menus = [
     { name: 'Datasets', icon: Grid24 },
     { name: 'Time Machine', icon: Time24 },
-    { name: 'Colormaps', icon: ColorPalette24 },
     { name: 'Map Projections', icon: Globe24 },
+    { name: 'Colormaps', icon: ColorPalette24 },
     { name: 'Perspective', icon: View24 },
     { name: 'About FEVer', icon: Information24 },
     { name: 'Feedback', icon: RequestQuote24 },
@@ -187,6 +186,21 @@
   bind:openedMenu
   bind:drawerOpen
 />
+<Menu bind:openedMenu menuName="Datasets">
+  <Variables
+    bind:dataset
+    bind:particlesShown
+  />
+</Menu>
+<Menu bind:openedMenu menuName="Time Machine">
+  <TimeMachine
+    {fetcher}
+    {inventory}
+    bind:date
+    {dataset}
+    bind:particlesShown
+  />
+</Menu>
 <Menu bind:openedMenu menuName="Map Projections">
   <MapProjections
     bind:projection
@@ -201,12 +215,6 @@
     bind:griddedColormap
   />
 </Menu>
-<Menu bind:openedMenu menuName="Datasets">
-  <Variables
-    bind:dataset
-    bind:particlesShown
-  />
-</Menu>
 <Menu bind:openedMenu menuName="Perspective">
   <Perspective
     {minZoom}
@@ -218,15 +226,6 @@
     {maxLong}
     bind:centerLatitude
     bind:centerLongitude
-  />
-</Menu>
-<Menu bind:openedMenu menuName="Time Machine">
-  <TimeMachine
-    {fetcher}
-    {inventory}
-    bind:date
-    {dataset}
-    bind:particlesShown
   />
 </Menu>
 <Menu bind:openedMenu menuName="About FEVer">
