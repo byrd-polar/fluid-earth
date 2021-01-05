@@ -11,7 +11,7 @@
   import PlayFilledAlt24 from "carbon-icons-svelte/lib/PlayFilledAlt24";
   import colormaps from '../map/colormaps/';
 
-  export let dataset;
+  export let griddedDataset;
   export let particlesShown;
 
   let iconStyle = "fill: #0ff !important;";
@@ -41,8 +41,8 @@
 <h2>ATMOSPHERE</h2>
 <ul>
   <li
-    class="{dataset === '/data/gfs-0p25-wind-speed-10m/' ? 'selected' : ''}"
-    on:click={() => dataset = '/data/gfs-0p25-wind-speed-10m/'}
+    class="{griddedDataset === '/data/gfs-0p25-wind-speed-10m/' ? 'selected' : ''}"
+    on:click={() => griddedDataset = '/data/gfs-0p25-wind-speed-10m/'}
   >
     <Windy24 style={iconStyle}/>
     Wind Speed
@@ -64,8 +64,8 @@
     </ul>
   {/if}-->
   <li
-    class="{dataset === '/data/gfs-0p25-temperature-surface/' ? 'selected' : ''}"
-    on:click={() => dataset = '/data/gfs-0p25-temperature-surface/'}
+    class="{griddedDataset === '/data/gfs-0p25-temperature-surface/' ? 'selected' : ''}"
+    on:click={() => griddedDataset = '/data/gfs-0p25-temperature-surface/'}
   >
     <TemperatureHot24 style={iconStyle}/>
     Temperature

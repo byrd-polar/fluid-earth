@@ -7,15 +7,16 @@
   export let fetcher;
   export let inventory;
   export let date;
-  export let dataset;
+  export let griddedDataset;
+  export let particleDataset;
   export let particlesShown;
 
   const dayInMilliseconds = 24 * 60 * 60 * 1000;
 
-  $: start = inventory[dataset].start;
-  $: end = inventory[dataset].end;
+  $: start = inventory[griddedDataset].start;
+  $: end = inventory[griddedDataset].end;
 
-  $: interval = inventory[dataset].intervalInHours;
+  $: interval = inventory[griddedDataset].intervalInHours;
   $: intervalInMilliseconds = interval * 60 * 60 * 1000;
 
   $: canForward = date < end;
@@ -91,10 +92,9 @@
   $: rangeDatasetStart = datasetDateCeil(rangeStart);
   $: rangeDatasetEnd = datasetDateCeil(rangeEnd);
   $: rangeCount = (rangeDatasetEnd - rangeDatasetStart) / intervalInMilliseconds;
-  $: rangeGriddedBytes = rangeCount * inventory[dataset].bytesPerFile;
+  $: rangeGriddedBytes = rangeCount * inventory[griddedDataset].bytesPerFile;
   $: rangeParticleBytes = rangeCount *
-    (inventory['/data/gfs-0p25-u-wind-velocity-10m/'].bytesPerFile +
-     inventory['/data/gfs-0p25-v-wind-velocity-10m/'].bytesPerFile);
+    (2 * inventory[particleDataset].bytesPerFile);
   $: rangeBytes = rangeGriddedBytes + (particlesShown ? rangeParticleBytes : 0);
 
 
@@ -113,14 +113,17 @@
     let d = datasetDateCeil(rangeStart);
 
     while (d <= datasetDateCeil(rangeEnd)) {
-      let dstr = d.toISOString();
+      let datestr = d.toISOString();
 
-      let path = dataset + dstr + '.fp16';
+      let path = griddedDataset + datestr + '.fp16';
       fetches.push(fetcher.fetch(path, 'range-loader', false));
 
       if (particlesShown) {
-        let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${dstr}.fp16`;
-        let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${dstr}.fp16`;
+        let particleDatasetInfo = inventory[particleDataset];
+
+        let uPath = particleDatasetInfo.uPath + datestr + '.fp16';
+        let vPath = particleDatasetInfo.vPath + datestr + '.fp16';
+
         fetches.push(fetcher.fetch(uPath, 'range-loader', false));
         fetches.push(fetcher.fetch(vPath, 'range-loader', false));
       }
@@ -136,7 +139,8 @@
     }
   }
 
-  $: rangeStart, rangeEnd, dataset, particlesShown, loaded = false;
+  $: rangeStart, rangeEnd, griddedDataset, particleDataset, particlesShown,
+    loaded = false;
 
   let rangeValue = date.getTime();
   function updateRangeValue() {

@@ -8,7 +8,7 @@
   export let pin;
   export let d3geoProjection;
   export let griddedData;
-  export let datasetInfo;
+  export let griddedDatasetInfo;
 
   let lonLat = [pin.longitude, pin.latitude];
   $: [x, y] = d3geoProjection(lonLat);
@@ -40,7 +40,7 @@
         {value.toPrecision(3)}
       </strong>
       <strong class="bold">
-        {datasetInfo.units}
+        {griddedDatasetInfo.units}
       </strong><br>
       <small class="plain">
         {Math.abs(pin.longitude).toFixed(2)}° {lonDirection}, {Math.abs(pin.latitude).toFixed(2)}° {latDirection}

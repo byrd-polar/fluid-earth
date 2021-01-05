@@ -123,14 +123,25 @@ export default class Fetcher {
   }
 
   async _fileSizeInBytes(url) {
-    let bytes;
     if (this._inventory[url]) {
-      bytes = this._inventory[url].bytes;
-    } else {
-      let dir = url.split('/').slice(0, -1).join('/') + '/';
-      bytes = this._inventory[dir].bytesPerFile;
+      return this._inventory[url].bytes;
     }
-    return bytes;
+
+    // remove filename and look for the containing directory
+    let dir = url.split('/').slice(0, -1).join('/') + '/';
+    if (this._inventory[dir]) {
+      return this._inventory[dir].bytesPerFile;
+    }
+
+    // look for dataset with matching uPath or vPath, slightly inefficient as we
+    // don't have a mapping from uPath and vPath to parent dataset, but doubt
+    // this inefficiancy will be noticed unless the inventory is huge: will
+    // refactor then
+    for (const dataset of Object.values(this._inventory)) {
+      if (dir === dataset.uPath || dir === dataset.vPath) {
+        return dataset.bytesPerFile;
+      }
+    }
   }
 
   _updateProgresses(type) {

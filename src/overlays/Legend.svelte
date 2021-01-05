@@ -5,7 +5,8 @@
   import { onMount } from 'svelte';
 
   export let date;
-  export let datasetInfo;
+  export let griddedDatasetInfo;
+  export let particleDatasetInfo;
   export let griddedColormap;
   export let griddedDomain;
   export let particlesShown;
@@ -47,13 +48,13 @@
   </span>
   {#if particlesShown}
     <span class="streamlines">
-      Streamlines representing wind at 10m above ground level, moving
+      Streamlines representing {particleDatasetInfo.description}, moving
       {particleDisplay.rate.toLocaleString()} times faster than actual
     </span>
   {/if}
   <span class="gridded">
-    {datasetInfo.description}
-    {#if datasetInfo.units}({datasetInfo.units}){/if}
+    {griddedDatasetInfo.description}
+    {#if griddedDatasetInfo.units}({griddedDatasetInfo.units}){/if}
   </span>
   <div
     class="legend"
@@ -108,6 +109,10 @@
   span.gridded {
     margin-top: auto;
     padding-bottom: 0.125em;
+  }
+
+  span.gridded::first-letter {
+    text-transform: uppercase;
   }
 
   div.legend {

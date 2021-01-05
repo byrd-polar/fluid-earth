@@ -40,8 +40,8 @@
 
   const fetcher = new Fetcher(inventory);
   let date = new Date('2020-08-08T18:00:00.000Z');
-  let dataset = '/data/gfs-0p25-wind-speed-10m/';
-  let previousDataset = null;
+  let griddedDataset = '/data/gfs-0p25-wind-speed-10m/';
+  let particleDataset = '/data/gfs-0p25-wind-speed-10m/';
 
   // see comment in onMount
   let updateGriddedData = () => {};
@@ -103,32 +103,35 @@
     // Methods for updating gridded and particle data in response to
     // date or dataset changes. Defined here so that they aren't triggered
     // multiple times during the initial mount due a Svelte bug with bindings.
+    let previousGriddedDataset = null;
     updateGriddedData = async () => {
-      let path = dataset + date.toISOString() + '.fp16';
+      let path = griddedDataset + date.toISOString() + '.fp16';
       let array = await fetcher.fetch(path, 'gridded');
       if (!array) return;
 
-      let datasetInfo = inventory[dataset];
+      let griddedDatasetInfo = inventory[griddedDataset];
 
       griddedData = {
         floatArray: array,
-        width: datasetInfo.width,
-        height: datasetInfo.height,
+        width: griddedDatasetInfo.width,
+        height: griddedDatasetInfo.height,
       }
 
-      if (previousDataset !== dataset) {
-        griddedDomain = datasetInfo.domain;
-        griddedColormap = datasetInfo.colormap;
+      if (previousGriddedDataset !== griddedDataset) {
+        griddedDomain = griddedDatasetInfo.domain;
+        griddedColormap = griddedDatasetInfo.colormap;
 
-        previousDataset = dataset;
+        previousGriddedDataset = griddedDataset;
       }
     };
     updateParticleData = async () => {
       if (!particlesShown) return;
 
       let datestr = date.toISOString();
-      let uPath = `/data/gfs-0p25-u-wind-velocity-10m/${datestr}.fp16`;
-      let vPath = `/data/gfs-0p25-v-wind-velocity-10m/${datestr}.fp16`;
+      let particleDatasetInfo = inventory[particleDataset];
+
+      let uPath = particleDatasetInfo.uPath + datestr + '.fp16';
+      let vPath = particleDatasetInfo.vPath + datestr + '.fp16';
 
       let uArray = fetcher.fetch(uPath, 'particle');
       let vArray = await fetcher.fetch(vPath, 'particle', false);
@@ -139,14 +142,14 @@
       particleData = {
         uVelocities: uArray,
         vVelocities: vArray,
-        width: 1440,
-        height: 721,
+        width: particleDatasetInfo.width,
+        height: particleDatasetInfo.height,
       };
     };
   });
 
-  $: date, dataset, updateGriddedData();
-  $: date, particlesShown, updateParticleData();
+  $: date, griddedDataset, updateGriddedData();
+  $: date, particleDataset, particlesShown, updateParticleData();
 
   // Find new icons from: https://ibm.github.io/carbon-icons-svelte/
   //
@@ -188,7 +191,7 @@
 />
 <Menu bind:openedMenu menuName="Datasets">
   <Variables
-    bind:dataset
+    bind:griddedDataset
     bind:particlesShown
   />
 </Menu>
@@ -197,7 +200,8 @@
     {fetcher}
     {inventory}
     bind:date
-    {dataset}
+    {griddedDataset}
+    {particleDataset}
     bind:particlesShown
   />
 </Menu>
@@ -267,12 +271,13 @@
       {pins}
       {d3geoProjection}
       {griddedData}
-      datasetInfo={inventory[dataset]}
+      griddedDatasetInfo={inventory[griddedDataset]}
     />
     <Loading {fetcher} />
     <Legend
       {date}
-      datasetInfo={inventory[dataset]}
+      griddedDatasetInfo={inventory[griddedDataset]}
+      particleDatasetInfo={inventory[particleDataset]}
       {griddedColormap}
       {griddedDomain}
       {particlesShown}
