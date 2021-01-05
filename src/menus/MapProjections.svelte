@@ -70,6 +70,17 @@
   {/each}
 </div>
 
+<h2>About this menu</h2>
+
+<p>
+  Map projections are the various ways of taking a three-dimensional globe and
+  projecting it to the two-dimensional surface of a map.
+</p>
+<p>
+  This will always distort the globe in some way, so each projection has its
+  tradeoffs and use cases.
+</p>
+
 <h2>All Projections</h2>
 
 {#each Object.values(projections) as p}
@@ -82,17 +93,6 @@
   {p.name}
 </label>
 {/each}
-
-<h2>About this menu</h2>
-
-<p>
-  Map projections are the various ways of taking a three-dimensional globe and
-  projecting it to the two-dimensional surface of a map.
-</p>
-<p>
-  This will always distort the globe in some way, so each projection has its
-  tradeoffs and use cases.
-</p>
 
 
 <style>
