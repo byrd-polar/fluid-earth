@@ -1,22 +1,8 @@
 <script>
-  import colormaps from '../map/colormaps/';
+  import colormaps, { types } from '../map/colormaps/';
 
   export let griddedColormap;
 </script>
-
-<h2>Selector</h2>
-
-<p>Choose a colormap:</p>
-{#each Object.values(colormaps) as c}
-<label>
-  <input
-    type="radio"
-    bind:group={griddedColormap}
-    value={c}
-  >
-  {c.name}
-</label>
-{/each}
 
 
 <h2>About this menu</h2>
@@ -25,6 +11,21 @@
 the map.</p>
 <p>Perceptions of data are heavily influenced by the choice of colormap, so it
 is important to select an appropriate colormap for each dataset.</p>
+
+{#each [...types] as type}
+  <h2>{type}</h2>
+
+  {#each Object.values(colormaps).filter(map => map.type === type) as map}
+    <label>
+      <input
+        type="radio"
+        bind:group={griddedColormap}
+        value={map}
+      >
+      {map.name}
+    </label>
+  {/each}
+{/each}
 
 
 <style>
