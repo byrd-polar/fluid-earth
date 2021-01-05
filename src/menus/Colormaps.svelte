@@ -7,10 +7,16 @@
 
 <h2>About this menu</h2>
 
-<p>Colormaps define how numerical values are converted to colors to display on
-the map.</p>
-<p>Perceptions of data are heavily influenced by the choice of colormap, so it
-is important to select an appropriate colormap for each dataset.</p>
+<p>
+Colormaps define how numerical values are converted to colors to display on the
+map.
+</p>
+<p>
+Perceptions of data are heavily influenced by the choice of colormap, so it is
+important for science communicators to select an appropriate colormap for their
+data. Toggle between the colormaps below to see how the same data looks when
+presented with different colors.
+</p>
 
 {#each [...types] as type}
   <h2>{type}</h2>
