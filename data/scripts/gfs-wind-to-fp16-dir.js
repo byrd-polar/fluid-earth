@@ -17,7 +17,7 @@ const __dirname = dirname(__filename);
 
 if (process.argv.length < 2 + 3) {
   console.log('wrong number of arguments, expected 3\n');
-  console.log('Usage node gfs-wind-to-fp16-dir.js [uDir] [vDir]');
+  console.log('Usage node gfs-wind-to-fp16-dir.js [uDir] [vDir] [outputDir]');
   process.exit(1);
 }
 

@@ -22,7 +22,7 @@ if (process.argv.length < 2 + 1) {
 
 const dir = process.argv[2];
 
-for (const inputFile of readdirSync(dir).filter(f => !f.includes('.fp16')) {
+for (const inputFile of readdirSync(dir).filter(f => !f.includes('.fp16'))) {
   const year = inputFile.slice(9, 13);
   const month = inputFile.slice(13, 15);
   const day = inputFile.slice(15, 17);
