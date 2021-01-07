@@ -5,8 +5,8 @@
   import { onMount } from 'svelte';
 
   export let date;
-  export let griddedDatasetInfo;
-  export let particleDatasetInfo;
+  export let griddedDataset;
+  export let particleDataset;
   export let griddedColormap;
   export let griddedDomain;
   export let particlesShown;
@@ -48,13 +48,13 @@
   </span>
   {#if particlesShown}
     <span class="streamlines">
-      Streamlines representing {particleDatasetInfo.description}, moving
+      Streamlines representing {particleDataset.description}, moving
       {particleDisplay.rate.toLocaleString()} times faster than actual
     </span>
   {/if}
   <span class="gridded">
-    {griddedDatasetInfo.description}
-    {#if griddedDatasetInfo.units}({griddedDatasetInfo.units}){/if}
+    {griddedDataset.description}
+    {#if griddedDataset.units}({griddedDataset.units}){/if}
   </span>
   <div
     class="legend"

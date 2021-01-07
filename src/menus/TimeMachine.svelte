@@ -5,7 +5,6 @@
   import prettyBytes from 'pretty-bytes';
 
   export let fetcher;
-  export let inventory;
   export let date;
   export let griddedDataset;
   export let particleDataset;
@@ -13,10 +12,10 @@
 
   const dayInMilliseconds = 24 * 60 * 60 * 1000;
 
-  $: start = inventory[griddedDataset].start;
-  $: end = inventory[griddedDataset].end;
+  $: start = griddedDataset.start;
+  $: end = griddedDataset.end;
 
-  $: interval = inventory[griddedDataset].intervalInHours;
+  $: interval = griddedDataset.intervalInHours;
   $: intervalInMilliseconds = interval * 60 * 60 * 1000;
 
   $: canForward = date < end;
@@ -92,9 +91,8 @@
   $: rangeDatasetStart = datasetDateCeil(rangeStart);
   $: rangeDatasetEnd = datasetDateCeil(rangeEnd);
   $: rangeCount = (rangeDatasetEnd - rangeDatasetStart) / intervalInMilliseconds;
-  $: rangeGriddedBytes = rangeCount * inventory[griddedDataset].bytesPerFile;
-  $: rangeParticleBytes = rangeCount *
-    (2 * inventory[particleDataset].bytesPerFile);
+  $: rangeGriddedBytes = rangeCount * griddedDataset.bytesPerFile;
+  $: rangeParticleBytes = rangeCount * (2 * particleDataset.bytesPerFile);
   $: rangeBytes = rangeGriddedBytes + (particlesShown ? rangeParticleBytes : 0);
 
 
@@ -113,19 +111,10 @@
     let d = datasetDateCeil(rangeStart);
 
     while (d <= datasetDateCeil(rangeEnd)) {
-      let datestr = d.toISOString();
-
-      let path = griddedDataset + datestr + '.fp16';
-      fetches.push(fetcher.fetch(path, 'range-loader', false));
+      fetches.push(fetcher.fetch(griddedDataset, d, 'range-loader', false));
 
       if (particlesShown) {
-        let particleDatasetInfo = inventory[particleDataset];
-
-        let uPath = particleDatasetInfo.uPath + datestr + '.fp16';
-        let vPath = particleDatasetInfo.vPath + datestr + '.fp16';
-
-        fetches.push(fetcher.fetch(uPath, 'range-loader', false));
-        fetches.push(fetcher.fetch(vPath, 'range-loader', false));
+        fetches.push(fetcher.fetch(particleDataset, d, 'range-loader', false));
       }
 
       d = new Date(d.getTime() + intervalInMilliseconds);

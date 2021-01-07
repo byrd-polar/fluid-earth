@@ -2,9 +2,7 @@ import ky from 'ky';
 import { Float16Array } from '@petamoriken/float16';
 
 export default class Fetcher {
-  constructor(inventory) {
-    this._inventory = inventory;
-
+  constructor() {
     this._downloadListeners = [];
 
     this._progressPerURL = {};
@@ -21,7 +19,24 @@ export default class Fetcher {
     this._downloadListeners.push(func);
   }
 
-  async fetch(url, type='default', abortPreviousOfType=true) {
+  async fetch(dataset, date=null, type='default', abortPreviousOfType=true) {
+    // perform and return two fetches when there is a uPath and vPath instead of
+    // just a single path
+    if (dataset.path === undefined) {
+      let uDataset = {...dataset, path: dataset.uPath };
+      let vDataset = {...dataset, path: dataset.vPath };
+
+      let uData = this.fetch(uDataset, date, type, abortPreviousOfType);
+      let vData = this.fetch(vDataset, date, type, false);
+
+      return [await uData, await vData];
+    }
+
+    let url = dataset.path;
+    if (date) {
+      url += date.toISOString() + '.fp16';
+    }
+
     // workaround for ':' being an illegal character for filenames on Windows,
     // __windows__ will be replaced by rollup
     if (__windows__) {
@@ -40,7 +55,7 @@ export default class Fetcher {
     this._progressPerURL[url] = {
       type,
       transferredBytes: 0,
-      totalBytes: await this._fileSizeInBytes(url),
+      totalBytes: dataset.bytes || dataset.bytesPerFile,
     };
 
     if (this._abortControllers[type] === undefined) {
@@ -120,28 +135,6 @@ export default class Fetcher {
       this._abortControllers[type] = new AbortController();
     }
     return controller !== undefined;
-  }
-
-  async _fileSizeInBytes(url) {
-    if (this._inventory[url]) {
-      return this._inventory[url].bytes;
-    }
-
-    // remove filename and look for the containing directory
-    let dir = url.split('/').slice(0, -1).join('/') + '/';
-    if (this._inventory[dir]) {
-      return this._inventory[dir].bytesPerFile;
-    }
-
-    // look for dataset with matching uPath or vPath, slightly inefficient as we
-    // don't have a mapping from uPath and vPath to parent dataset, but doubt
-    // this inefficiancy will be noticed unless the inventory is huge: will
-    // refactor then
-    for (const dataset of Object.values(this._inventory)) {
-      if (dir === dataset.uPath || dir === dataset.vPath) {
-        return dataset.bytesPerFile;
-      }
-    }
   }
 
   _updateProgresses(type) {

@@ -6,18 +6,18 @@ import colormaps from './map/colormaps/';
   let inventory = await ky('/data/inventory.json', {timeout: false}).json();
 
   // replace some strings in inventory with objects
-  for (const path in inventory) {
+  for (const dataset of inventory) {
     // replace ISO date strings (originally from JSON) with Date objects
     //
     // will need to update this if date strings are added in different sections
     // of the inventory
-    if (inventory[path].start && inventory[path].end) {
-      inventory[path].start = new Date(inventory[path].start);
-      inventory[path].end = new Date(inventory[path].end);
+    if (dataset.start && dataset.end) {
+      dataset.start = new Date(dataset.start);
+      dataset.end = new Date(dataset.end);
     }
     // replace colormap strings with colormap objects
-    if (inventory[path].colormap) {
-      inventory[path].colormap = colormaps[inventory[path].colormap];
+    if (dataset.colormap) {
+      dataset.colormap = colormaps[dataset.colormap];
     }
   }
 

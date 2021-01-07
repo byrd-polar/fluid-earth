@@ -4,7 +4,7 @@
   export let d3geoProjection;
   export let pins;
   export let griddedData;
-  export let griddedDatasetInfo;
+  export let griddedDataset;
 </script>
 
 <div>
@@ -14,7 +14,7 @@
       {pin}
       {d3geoProjection}
       {griddedData}
-      {griddedDatasetInfo}
+      {griddedDataset}
     />
   {/each}
 </div>

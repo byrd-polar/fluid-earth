@@ -11,6 +11,7 @@
   import PlayFilledAlt24 from "carbon-icons-svelte/lib/PlayFilledAlt24";
   import colormaps from '../map/colormaps/';
 
+  export let inventory;
   export let griddedDataset;
   export let particlesShown;
 
@@ -24,6 +25,11 @@
       mode = 'climate'
     }
   }
+
+  let icons = [
+    Windy24,
+    TemperatureHot24,
+  ];
 </script>
 
 
@@ -39,127 +45,18 @@
 <!-- end of mode toggle -->
 
 <h2>ATMOSPHERE</h2>
-<ul>
-  <li
-    class="{griddedDataset === '/data/gfs-0p25-wind-speed-10m/' ? 'selected' : ''}"
-    on:click={() => griddedDataset = '/data/gfs-0p25-wind-speed-10m/'}
-  >
-    <Windy24 style={iconStyle}/>
-    Wind Speed
-  </li>
-  <!--{#if current.includes('windSpeed')}
-    <ul>
-      <li
-        class="{current === 'windSpeedAtSurface' ? 'selected' : ''}"
-        on:click={() => selectMenuItem('windSpeedAtSurface')}
-      >at surface</li>
-      <li
-        class="{current === 'windSpeedAtCloud' ? 'selected' : ''}"
-        on:click={() => selectMenuItem('windSpeedAtCloud')}
-      >at cloud</li>
-      <li
-        class="{current === 'windSpeedAtCruise' ? 'selected' : ''}"
-        on:click={() => selectMenuItem('windSpeedAtCruise')}
-      >at cruise</li>
-    </ul>
-  {/if}-->
-  <li
-    class="{griddedDataset === '/data/gfs-0p25-temperature-surface/' ? 'selected' : ''}"
-    on:click={() => griddedDataset = '/data/gfs-0p25-temperature-surface/'}
-  >
-    <TemperatureHot24 style={iconStyle}/>
-    Temperature
-  </li>
-  <!--{#if current.includes('temp')}
-    <ul>
-      <li
-        class="{current === 'tempAtSurface' ? 'selected' : ''}"
-        on:click={() => selectMenuItem('tempAtSurface')}
-      >at surface</li>
-      <li
-        class="{current === 'tempAtCloud' ? 'selected' : ''}"
-        on:click={() => selectMenuItem('tempAtCloud')}
-      >at cloud</li>
-      <li
-        class="{current === 'tempAtCruise' ? 'selected' : ''}"
-        on:click={() => selectMenuItem('tempAtCruise')}
-      >at cruise</li>
-    </ul>
-  {/if}
-  <li
-    class="{current === 'MSLP' ? 'selected' : ''}"
-    on:click={() => selectMenuItem('MSLP')}
-  >
-    <QOperationGauge24 style={iconStyle}/>
-    Mean Sea Level Pressure
-  </li>
-  <li
-    class="{current === 'precip' ? 'selected' : ''}"
-    on:click={() => selectMenuItem('precip')}
-  >
-    <Rain24 style={iconStyle}/>
-    Precipitation
-  </li>
-  <li
-    class="{current === 'totalCloudWater' ? 'selected' : ''}"
-    on:click={() => selectMenuItem('totalCloudWater')}
-  >
-    <Cloudy24 style={iconStyle}/>
-    Total Cloud Water
-  </li>
-  <li
-    class="{current === 'totalPrecipWater' ? 'selected' : ''}"
-    on:click={() => selectMenuItem('totalPrecipWater')}
-  >
-    <RainDrop24 style={iconStyle}/>
-    Total Precipitable Water
-  </li>
-  <li
-    class="{current.includes('airQuality') ? 'selected' : ''}"
-    on:click={() => selectMenuItem('airQuality')}
-  >
-    <Smoke24 style={iconStyle}/>
-    Air Quality
-  </li>
-  {#if current.includes('airQuality')}
-    <ul>
-      <li
-        class="{current === 'airQualityOzone' ? 'selected' : ''}"
-        on:click={() => selectMenuItem('airQualityOzone')}
-      >Ozone</li>
-      <li
-        class="{current === 'airQualitySO2' ? 'selected' : ''}"
-        on:click={() => selectMenuItem('airQualitySO2')}
-      >Sulfur Dioxide</li>
-      <li
-        class="{current === 'airQualityCO' ? 'selected' : ''}"
-        on:click={() => selectMenuItem('airQualityCO')}
-      >Carbon Monoxide</li>
-      <li
-        class="{current === 'airQualityDust' ? 'selected' : ''}"
-        on:click={() => selectMenuItem('airQualityDust')}
-      >Dust</li>
-    </ul>
-  {/if}-->
-</ul>
 
-<!--<h2>OCEAN</h2>
 <ul>
-  <li
-    class="{current === 'currents' ? 'selected' : ''}"
-    on:click={() => selectMenuItem('currents')}
-  >
-    <Draw24 style={iconStyle}/>
-    Surface Currents
-  </li>
-  <li
-    class="{current === 'seaTemp' ? 'selected' : ''}"
-    on:click={() => selectMenuItem('seaTemp')}
-  >
-    <TemperatureHot24 style={iconStyle}/>
-    Sea Surface Temperature
-  </li>
-</ul>-->
+  {#each inventory.filter(d => d.colormap) as dataset, i}
+    <li
+      class:selected={griddedDataset.name === dataset.name}
+      on:click={() => griddedDataset = dataset}
+    >
+      <svelte:component this={icons[i]} style={iconStyle} />
+      {dataset.name}
+    </li>
+  {/each}
+</ul>
 
 <h2>ANIMATION</h2>
 <ul>

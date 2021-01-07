@@ -38,10 +38,10 @@
   let openedMenu = null;
   let drawerOpen = false;
 
-  const fetcher = new Fetcher(inventory);
+  const fetcher = new Fetcher();
   let date = new Date('2020-08-08T18:00:00.000Z');
-  let griddedDataset = '/data/gfs-0p25-wind-speed-10m/';
-  let particleDataset = '/data/gfs-0p25-wind-speed-10m/';
+  let griddedDataset = inventory.find(d => d.name === 'wind speed');
+  let particleDataset = inventory.find(d => d.name === 'wind velocities');
 
   // see comment in onMount
   let updateGriddedData = () => {};
@@ -71,7 +71,8 @@
 
   let vectorData = { objects: {} };
   (async () => {
-    vectorData = await fetcher.fetch('/data/topology.json', 'vector');
+    let topologyDataset = inventory.find(d => d.name === 'topology')
+    vectorData = await fetcher.fetch(topologyDataset);
   })();
 
   let particlesShown = true;
@@ -105,46 +106,46 @@
     // multiple times during the initial mount due a Svelte bug with bindings.
     let previousGriddedDataset = null;
     updateGriddedData = async () => {
-      let path = griddedDataset + date.toISOString() + '.fp16';
-      let array = await fetcher.fetch(path, 'gridded');
-      if (!array) return;
+      let array = await fetcher.fetch(griddedDataset, date, 'gridded');
 
-      let griddedDatasetInfo = inventory[griddedDataset];
+      if (!array) return;
 
       griddedData = {
         floatArray: array,
-        width: griddedDatasetInfo.width,
-        height: griddedDatasetInfo.height,
+        width: griddedDataset.width,
+        height: griddedDataset.height,
       }
 
       if (previousGriddedDataset !== griddedDataset) {
-        griddedDomain = griddedDatasetInfo.domain;
-        griddedColormap = griddedDatasetInfo.colormap;
+        griddedDomain = griddedDataset.domain;
+        griddedColormap = griddedDataset.colormap;
 
         previousGriddedDataset = griddedDataset;
       }
     };
+    let previousParticleDataset = null;
     updateParticleData = async () => {
       if (!particlesShown) return;
 
-      let datestr = date.toISOString();
-      let particleDatasetInfo = inventory[particleDataset];
-
-      let uPath = particleDatasetInfo.uPath + datestr + '.fp16';
-      let vPath = particleDatasetInfo.vPath + datestr + '.fp16';
-
-      let uArray = fetcher.fetch(uPath, 'particle');
-      let vArray = await fetcher.fetch(vPath, 'particle', false);
-      uArray = await uArray;
+      let [uArray, vArray] =
+        await fetcher.fetch(particleDataset, date, 'particle');
 
       if (!uArray || !vArray) return;
 
       particleData = {
         uVelocities: uArray,
         vVelocities: vArray,
-        width: particleDatasetInfo.width,
-        height: particleDatasetInfo.height,
+        width: particleDataset.width,
+        height: particleDataset.height,
       };
+
+      if (previousParticleDataset !== particleDataset) {
+        particleLifetime = particleDataset.particleLifetime;
+        particleCount = particleDataset.particleCount;
+        particleDisplay = particleDataset.particleDisplay;
+
+        previousParticleDataset = particleDataset;
+      }
     };
   });
 
@@ -191,6 +192,7 @@
 />
 <Menu bind:openedMenu menuName="Datasets">
   <Variables
+    {inventory}
     bind:griddedDataset
     bind:particlesShown
   />
@@ -198,7 +200,6 @@
 <Menu bind:openedMenu menuName="Time Machine">
   <TimeMachine
     {fetcher}
-    {inventory}
     bind:date
     {griddedDataset}
     {particleDataset}
@@ -271,13 +272,13 @@
       {pins}
       {d3geoProjection}
       {griddedData}
-      griddedDatasetInfo={inventory[griddedDataset]}
+      {griddedDataset}
     />
     <Loading {fetcher} />
     <Legend
       {date}
-      griddedDatasetInfo={inventory[griddedDataset]}
-      particleDatasetInfo={inventory[particleDataset]}
+      {griddedDataset}
+      {particleDataset}
       {griddedColormap}
       {griddedDomain}
       {particlesShown}
