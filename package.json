@@ -1,6 +1,11 @@
 {
   "name": "FEV2r",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zqianem/fev2r.git"
+  },
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "build": "rollup -c",
