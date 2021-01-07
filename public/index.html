@@ -14,25 +14,6 @@
 
   <script defer src='/build/bundle.js'></script>
 </head>
-
 <body class="spinner">
-  <!--
-    Workaround for client-rendered Netlify Forms, see:
-    https://docs.netlify.com/forms/setup/#work-with-javascript-rendered-forms
-  -->
-  <form name="feedback" method="POST" data-netlify="true" hidden>
-    <label>
-      Name: <input type="text" name="name" autocomplete="off"/>
-    </label>
-    <label class="email">
-      Email: <input type="email" name="email" />
-    </label>
-    <label class="sbj">
-      Subject: <input type="text" name="subject" autocomplete="off"/>
-    </label>
-    <label class="msg">
-      Message: <textarea name="message"></textarea>
-    </label>
-  </form>
 </body>
 </html>

@@ -23,7 +23,7 @@
   See https://docs.netlify.com/forms/setup/
 
   If changing the number or type of inputs, be sure to modify the corresponding
-  hidden form in public/index.html
+  form in public/form.html
 -->
 
 <form name="feedback" method="POST" data-netlify="true">

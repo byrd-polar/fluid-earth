@@ -147,6 +147,9 @@
         previousParticleDataset = particleDataset;
       }
     };
+
+    // remove loading spinner from public/index.html
+    document.body.removeAttribute('class');
   });
 
   $: date, griddedDataset, updateGriddedData();
