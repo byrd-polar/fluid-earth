@@ -39,9 +39,9 @@
   let drawerOpen = false;
 
   const fetcher = new Fetcher();
-  let date = new Date('2020-08-08T18:00:00.000Z');
   let griddedDataset = inventory.find(d => d.name === 'wind speed');
   let particleDataset = inventory.find(d => d.name === 'wind velocities');
+  let date = griddedDataset.end;
 
   // see comment in onMount
   let updateGriddedData = () => {};
