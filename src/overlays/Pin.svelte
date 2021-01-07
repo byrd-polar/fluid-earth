@@ -67,7 +67,7 @@
     src: url(../fonts/fontello.woff2) format("woff2"), url(../fonts/fontello.woff) format("woff"), url(../fonts/fontello.ttf) format("truetype")
   }
 
-  [class*=" icon-"]:before, [class^=icon-]:before {
+  [class^=icon-]:before {
       -moz-osx-font-smoothing: grayscale;
       -webkit-font-feature-settings: normal;
       -webkit-font-smoothing: antialiased;

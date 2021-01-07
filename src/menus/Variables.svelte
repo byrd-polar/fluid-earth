@@ -76,10 +76,6 @@ end of mode toggle -->
     padding-left: 0.0rem;
   }
 
-  ul ul {
-    padding-left: 3.0rem;
-  }
-
   li {
     font-family: Quicksand-regular;
     font-size: 1rem;
