@@ -1,5 +1,5 @@
 diff --git a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
-index 1960e0a..3800b0b 100755
+index 68bd398..84a4182 100755
 --- a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
 +++ b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
 @@ -12,6 +12,15 @@
