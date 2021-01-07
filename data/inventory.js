@@ -44,7 +44,7 @@ const inventoryJSON = [
   },
   {
     path: '/data/gfs-0p25-temperature-surface/',
-    name: 'surface temperature',
+    name: 'temperature',
     description: 'temperature at ground level',
     units: 'K',
     domain: [273.15 - 70, 273.15 + 70],
