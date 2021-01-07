@@ -34,7 +34,7 @@
 
 
 
-<!-- Mode Toggle -->
+<!-- Mode Toggle
 <div class="onoffswitch" darkBackground = "true">
     <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" tabindex="0" checked >
     <label class="onoffswitch-label" for="myonoffswitch">
@@ -42,7 +42,7 @@
         <span class="onoffswitch-switch" on:click={() => selectMode('off')}>  </span>
     </label>
 </div>
-<!-- end of mode toggle -->
+end of mode toggle -->
 
 <h2>ATMOSPHERE</h2>
 
@@ -92,6 +92,8 @@
   .selected {
     color: gold;
   }
+
+  /*
   .onoffswitch {
     position: relative;
     width: 150px;
@@ -167,6 +169,5 @@
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px;
 }
-
-
+  */
 </style>
