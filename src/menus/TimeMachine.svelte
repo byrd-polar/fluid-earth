@@ -2,6 +2,7 @@
   import Datepicker from 'svelte-calendar';
   import Button from '../components/Button.svelte';
   import RangeSlider from 'svelte-range-slider-pips';
+  import Toggle from "svelte-toggle";
   import prettyBytes from 'pretty-bytes';
 
   export let fetcher;
@@ -211,10 +212,11 @@ dataset from that date.</p>
   </Button>
 </Datepicker>
 
+
 {#if !loaded }
 
-  <p>Confirm loading of the data, after which a slider will appear. Turning off
-  streamlines will reduce size of the download.</p>
+  <p>Confirm loading of the data, after which a slider will appear. Download
+    size can be reduced in settings below.</p>
   <Button action={handleLoadButtonPress} full>
     {loading ? 'Cancel' : `Load Range (${prettyBytes(rangeBytes)})`}
   </Button>
@@ -234,6 +236,18 @@ dataset from that date.</p>
   />
 
 {/if}
+
+<h2>Settings</h2>
+
+<Toggle
+  bind:toggled={particlesShown}
+  label="streamlines"
+  toggledColor="#676778"
+  on="enabled (larger download size)"
+  off="disabled (smaller download size)"
+  style="order: 2; margin-left: auto"
+/>
+
 
 <style>
   :global(div.sc-popover div.contents-wrapper) {

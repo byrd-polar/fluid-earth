@@ -52,6 +52,7 @@
     "sirv-cli": "^1.0.10",
     "svelte-calendar": "^2.0.4",
     "svelte-range-slider-pips": "1.5.0",
+    "svelte-toggle": "^3.0.0",
     "tippy.js": "^6.2.7",
     "topojson-client": "^3.1.0",
     "twgl.js": "^4.17.0"
