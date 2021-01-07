@@ -6,8 +6,8 @@ const gfsSharedValues = {
   bytesPerFile: 2076480,
   width: 1440,
   height: 721,
-  start: '2020-08-05T00:00:00.000Z',
-  end: '2020-08-08T18:00:00.000Z', // hardcoded for now
+  start: '2020-01-01T00:00:00.000Z',
+  end: '2021-01-06T12:00:00.000Z', // hardcoded for now
   intervalInHours: 6,
 }
 
