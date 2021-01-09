@@ -10,7 +10,7 @@ import postcss from 'rollup-plugin-postcss';
 import replace from '@rollup/plugin-replace';
 
 import dedent from 'dedent';
-import { execSync } from 'child_process';
+import { execSync, spawn } from 'child_process';
 import { platform } from 'os';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -165,7 +165,7 @@ function serve() {
     writeBundle() {
       if (server) return;
 
-      server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
+      server = spawn('npm', ['run', 'start', '--', '--dev'], {
         stdio: ['ignore', 'inherit', 'inherit'],
         shell: true
       });
