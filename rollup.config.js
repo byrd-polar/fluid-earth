@@ -5,12 +5,28 @@ import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+import license from 'rollup-plugin-license';
 import postcss from 'rollup-plugin-postcss';
 import replace from '@rollup/plugin-replace';
+
+import dedent from 'dedent';
+import { execSync } from 'child_process';
 import { platform } from 'os';
 
 const production = !process.env.ROLLUP_WATCH;
+const commit = execSync('git rev-parse --short HEAD').toString().trim();
 const windows = (platform() === 'win32');
+const preamble = dedent`
+  /**
+   * Fluid Earth Viewer 2 (FEV2r) minified bundle
+   * =====================================================================
+   * Commit:                                  ${commit}
+   * Generated:                               ${(new Date).toISOString()}
+   * License:                                 /build/LICENSE
+   * Licenses of third-party libraries:       /build/THIRD_PARTY
+   * Modifications to third-party libraries:  /build/MODIFICATIONS
+   */
+`;
 
 export default {
   input: 'src/main.js',
@@ -35,6 +51,16 @@ export default {
 
     // For in-lining topojson (for web component)
     json(),
+
+    // For generating required license text for third-party libraries
+    license({
+      thirdParty: {
+        output: {
+          file: 'public/build/THIRD_PARTY'
+        },
+      },
+    }),
+    copyLicenseAndPatches(),
 
     postcss({
       extract: true,
@@ -74,7 +100,12 @@ export default {
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
-    production && terser()
+    production && terser({
+      format: {
+        comments: false,
+        preamble,
+      },
+    }),
   ],
   watch: {
     clearScreen: false
@@ -96,6 +127,32 @@ export default {
     warn(warning);
   },
 };
+
+import {
+  appendFile, copyFile, readdir, readFile, writeFile
+} from 'fs/promises';
+
+function copyLicenseAndPatches() {
+  return {
+    async generateBundle() {
+      await copyFile('LICENSE', 'public/build/LICENSE');
+
+      let patchDir = 'patches/';
+      let modFile = 'public/build/MODIFICATIONS';
+
+      let patches = await readdir(patchDir);
+
+      if (patches.length === 0) {
+        await writeFile(modFile, 'none');
+      } else {
+        await writeFile(modFile, '');
+        for (const patch of patches) {
+          await appendFile(modFile, await readFile(patchDir + patch));
+        }
+      }
+    }
+  };
+}
 
 function serve() {
   let server;
