@@ -171,7 +171,7 @@
     { name: 'Datasets', icon: Grid24 },
     { name: 'Time Machine', icon: Time24 },
     { name: 'Map Projections', icon: Globe24 },
-    { name: 'Colormaps', icon: ColorPalette24 },
+    //  { name: 'Colormaps', icon: ColorPalette24 },
     { name: 'Perspective', icon: View24 },
     { name: 'About FEVer', icon: Information24 },
     { name: 'Feedback', icon: RequestQuote24 },
