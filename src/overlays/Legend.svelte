@@ -126,6 +126,10 @@
     height: 1.25rem;
   }
 
+  svg:last-child {
+    margin-bottom: 3.9vh;
+  }
+
   @media (max-width: 36rem) {
     span.datetime {
       /* height of nav rail (top plus bottom padding plus mdc-icon-button
@@ -137,7 +141,7 @@
       height: 5vh;
     }
 
-    svg {
+    svg:last-child {
       margin-bottom: 0.25rem;
     }
   }
