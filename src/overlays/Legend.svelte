@@ -46,12 +46,6 @@
   <span class="datetime">
     {date.toLocaleDateString(undefined, dateStringOptions)}
   </span>
-  {#if particlesShown}
-    <span class="streamlines">
-      Streamlines representing {particleDataset.description}, moving
-      {particleDisplay.rate.toLocaleString()} times faster than actual
-    </span>
-  {/if}
   <span class="gridded">
     {griddedDataset.description}
     {#if griddedDataset.units}({griddedDataset.units}){/if}
@@ -62,6 +56,11 @@
     bind:clientWidth={svgScaleWidth}
   ></div>
   <svg bind:this={svgScale}></svg>
+  {#if particlesShown}
+    <span class="streamlines">
+      Streamlines: {particleDataset.description}
+    </span>
+  {/if}
 </div>
 
 <style>
@@ -104,6 +103,8 @@
     font-weight: normal;
     font-size: 0.75em;
     text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 2vh;
   }
 
   span.gridded {
@@ -123,7 +124,6 @@
     font-size: 0.75rem;
     overflow: visible;
     height: 1.25rem;
-    margin-bottom: 3.9vh;
   }
 
   @media (max-width: 36rem) {
