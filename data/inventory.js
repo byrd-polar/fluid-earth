@@ -48,7 +48,7 @@ const inventoryJSON = [
     description: 'temperature at ground level',
     units: 'K',
     domain: [273.15 - 70, 273.15 + 70],
-    colormap: 'MAGMA',
+    colormap: 'TEMP',
     ...gfsSharedValues,
   },
 ];
