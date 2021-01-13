@@ -139,6 +139,6 @@ SOFTWARE.
     float: right;
     height: 100px;
     border-radius: 50%;
-    margin: 1em;
+    margin: 0 1em 1em 1em;
   }
 </style>

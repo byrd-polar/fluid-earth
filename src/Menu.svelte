@@ -129,7 +129,7 @@
     text-transform: uppercase;
   }
 
-  section :global(:first-child) {
+  section > :global(:first-child) {
     margin-top: 0;
   }
 
