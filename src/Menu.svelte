@@ -157,6 +157,8 @@
 
       position: absolute;
       z-index: 0; /* ensure hidden menus are below Controls.svelte */
+
+      background-color: rgba(29, 29, 29, 0.75);
     }
 
     aside.open {
