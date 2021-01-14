@@ -4,3 +4,9 @@
 
 [build.environment]
   NODE_VERSION = "14"
+
+[[redirects]]
+  from = "/data/*"
+  to = "https://fever.byrd.osu.edu/fev2r-data/:splat"
+  status = 200
+  force = true
