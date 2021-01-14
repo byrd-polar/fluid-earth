@@ -2,7 +2,6 @@ import svelte from 'rollup-plugin-svelte';
 import glslify from 'rollup-plugin-glslify';
 import json from '@rollup/plugin-json';
 import resolve from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
 
 export default {
   input: 'exports/webcomponent.js',
@@ -24,8 +23,6 @@ export default {
       browser: true,
       dedupe: ['svelte']
     }),
-    // in-line topology as part of bundle
-    replace({ __webcomponent__: JSON.stringify(true) }),
   ],
   onwarn(warning, warn) {
     // Ignore circular dependency warnings from d3

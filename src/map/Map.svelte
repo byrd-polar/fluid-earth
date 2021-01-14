@@ -16,7 +16,6 @@
 
   import colormaps from './colormaps/';
   import projections, { proj } from './projections/';
-  import topology from '../../public/data/topology.json';
 
   import { Float16Array } from '@petamoriken/float16';
 
@@ -49,7 +48,7 @@
     fade: 0.96,
   };
 
-  export let vectorData = __webcomponent__ ? topology : { objects: {} };
+  export let vectorData = { objects: {} };
   export let vectorColors = {
     // update the following if sources for topology.json change
     ne_50m_coastline: [1, 1, 1, 1],

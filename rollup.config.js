@@ -76,7 +76,6 @@ export default {
         production ? 'production' : 'development'
       ),
       __windows__: JSON.stringify(windows),
-      __webcomponent__: JSON.stringify(false),
     }),
 
     // If you have external dependencies installed from
