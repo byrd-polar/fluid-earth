@@ -37,6 +37,13 @@
 
   let openedMenu = null;
   let drawerOpen = false;
+  let localStorage = window.localStorage;
+  let detailedMenus = localStorage.getItem('feverDetailedMenus') || false;
+  if (typeof detailedMenus === 'string') { // Firefox localStorage auto-converts to string.
+    detailedMenus = (detailedMenus === 'true') ? true : false;
+  }
+  $: detailedMenus, localStorage.setItem('feverDetailedMenus', detailedMenus);
+
 
   const fetcher = new Fetcher();
   let griddedDataset = inventory.find(d => d.name === 'wind speed');
@@ -49,9 +56,9 @@
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let d3geoProjection = projection.function;
-  let centerLongitude = 0;
-  let centerLatitude = 0;
-  let zoom = 1;
+  let centerLongitude = -40;
+  let centerLatitude = 40;
+  let zoom = 1.25;
 
   let griddedData = {
     floatArray: new Float16Array([0]),
@@ -198,6 +205,7 @@
     {inventory}
     bind:griddedDataset
     bind:particlesShown
+    bind:detailedMenus
   />
 </Menu>
 <Menu bind:openedMenu menuName="Time Machine">
@@ -207,6 +215,7 @@
     {griddedDataset}
     {particleDataset}
     bind:particlesShown
+    bind:detailedMenus
   />
 </Menu>
 <Menu bind:openedMenu menuName="Map Projections">
@@ -216,6 +225,7 @@
     bind:centerLatitude
     bind:zoom
     bind:particleDisplay
+    bind:detailedMenus
   />
 </Menu>
 <Menu bind:openedMenu menuName="Colormaps">
@@ -234,6 +244,7 @@
     {maxLong}
     bind:centerLatitude
     bind:centerLongitude
+    bind:detailedMenus
   />
 </Menu>
 <Menu bind:openedMenu menuName="About FEVer">

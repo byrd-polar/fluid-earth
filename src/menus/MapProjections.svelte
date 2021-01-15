@@ -1,17 +1,24 @@
 <script>
   import projections from '../map/projections/';
   import Button from '../components/Button.svelte';
+  import Toggle from "svelte-toggle";
+  import tooltip from '../tooltip.js';
 
   export let projection;
   export let centerLongitude;
   export let centerLatitude;
   export let zoom;
   export let particleDisplay;
+  export let detailedMenus;
 
   $: if (projection === projections.STEREOGRAPHIC) {
     particleDisplay.size = 0.4;
   } else {
     particleDisplay.size = 0.8;
+  }
+
+  function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   let selectedViews = [
@@ -58,10 +65,18 @@
   ];
 </script>
 
+<Toggle
+  bind:toggled={detailedMenus}
+  label=""
+  toggledColor="#676778"
+  on="Detailed"
+  off="Simple"
+  style="margin-left: auto"
+/>
 
-<h2>Selected Views</h2>
+<h2>Projections</h2>
 
-<div>
+<div class="grid" use:tooltip={{content: "\"Projections\" are different ways of fitting the three-dimensional globe to a flat screen. Each projection distorts the globe in a different way."}}>
   {#each selectedViews as view}
     <Button action={view.function} secondary>
       <span>{view.name}</span>
@@ -69,40 +84,37 @@
     </Button>
   {/each}
 </div>
+<br>
 
-<h2>About this menu</h2>
+{#if detailedMenus}
+  <h2>More projections</h2>
 
-<p>
-  Map projections are the various ways of taking a three-dimensional globe and
-  projecting it to the two-dimensional surface of a map.
-</p>
-<p>
-  This will always distort the globe in some way, so each projection has its
-  tradeoffs and use cases.
-</p>
+  <div use:tooltip={{content: "Some more advanced projections to try out."}}>
+    {#each Object.values(projections).filter(x => !([projections.VERTICAL_PERSPECTIVE, projections.EQUIRECTANGULAR].includes(x))) as p}
+      <label>
+        <input
+          type="radio"
+          bind:group={projection}
+          value={p}
+        >
+        {capitalize(p.name)}
+      </label>
+    {/each}
+  </div>
+{/if}
 
-<h2>All Projections</h2>
 
-{#each Object.values(projections) as p}
-<label>
-  <input
-    type="radio"
-    bind:group={projection}
-    value={p}
-  >
-  {p.name}
-</label>
-{/each}
+
 
 
 <style>
-  div {
+  .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1em;
   }
 
-  div :global(button) {
+  .grid :global(button) {
     display: flex;
     flex-direction: column;
   }

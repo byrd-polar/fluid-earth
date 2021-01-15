@@ -3,6 +3,7 @@
   import Button from '../components/Button.svelte';
   import RangeSlider from 'svelte-range-slider-pips';
   import Toggle from "svelte-toggle";
+  import tooltip from '../tooltip.js';
   import prettyBytes from 'pretty-bytes';
 
   export let fetcher;
@@ -10,6 +11,7 @@
   export let griddedDataset;
   export let particleDataset;
   export let particlesShown;
+  export let detailedMenus;
 
   const dayInMilliseconds = 24 * 60 * 60 * 1000;
 
@@ -143,110 +145,120 @@
   $: date, rangeDatasetStart, rangeDatasetEnd, updateRangeValue();
 </script>
 
+<Toggle
+  bind:toggled={detailedMenus}
+  label=""
+  toggledColor="#676778"
+  on="Detailed"
+  off="Simple"
+  style="margin-left: auto"
+/>
 
-<h2>Stepper</h2>
+<h2>Change the date/time</h2>
 
-<p>Use the buttons below to move one step backward or forwards in time.</p>
-
-<div style="display: flex">
-  <Button
-    action={() => adjustDate(-interval)}
-    disabled={!canBack}
-    secondary flex
+<div use:tooltip={{content: "Select a date, or go back and forward a few hours at a time."}}>
+  <Datepicker
+    start={new Date(start)}
+    end={new Date(end)}
+    bind:selected
+    style="display: block; width: max-content; margin: 1em auto"
+    highlightColor="#015B5B"
   >
-    -{interval} hours
-  </Button>
-  <Button
-    action={() => adjustDate(interval)}
-    disabled={!canForward}
-    secondary flex
-  >
-    +{interval} hours
-  </Button>
+    <Button full>
+      {date.toLocaleDateString(undefined, dateStringOptionsMore)}
+    </Button>
+  </Datepicker>
+
+  <div style="display: flex">
+    <Button
+      action={() => adjustDate(-interval)}
+      disabled={!canBack}
+      secondary flex
+    >
+      - {interval} hours
+    </Button>
+    <Button
+      action={() => adjustDate(interval)}
+      disabled={!canForward}
+      secondary flex
+    >
+      + {interval} hours
+    </Button>
+  </div>
 </div>
-
-
-<h2>Calendar</h2>
-
-<p>Use the button below to open a calendar. Select a date to see the earliest
-dataset from that date.</p>
-
-<Datepicker
-  start={new Date(start)}
-  end={new Date(end)}
-  bind:selected
-  style="display: block; width: max-content; margin: 2em auto"
-  highlightColor="#015B5B"
->
-  <Button>
-    {date.toLocaleDateString(undefined, dateStringOptionsMore)}
-  </Button>
-</Datepicker>
-
-
-<h2>Range Loader</h2>
-
-<p>Select a range of dates to load data between.</p>
-<Datepicker
-  start={new Date(start)}
-  end={rangeEndMinusOne}
-  bind:selected={rangeStart}
-  style="display: block; width: max-content; margin: 1em auto 0"
-  highlightColor="#676778"
->
-  <Button secondary>
-    {rangeStart.toLocaleDateString(undefined, dateStringOptions)}
-  </Button>
-</Datepicker>
-
-<p style="text-align: center; margin: 0.1em">to</p>
-<Datepicker
-  start={rangeStartPlusOne}
-  end={localDateCeil(end)}
-  bind:selected={rangeEnd}
-  style="display: block; width: max-content; margin: 0 auto 1em"
-  highlightColor="#676778"
->
-  <Button secondary>
-    {rangeEnd.toLocaleDateString(undefined, dateStringOptions)}
-  </Button>
-</Datepicker>
+<br>
 
 
 {#if !loaded }
-
-  <p>Confirm loading of the data, after which a slider will appear. Download
-    size can be reduced in settings below.</p>
-  <Button action={handleLoadButtonPress} full>
-    {loading ? 'Cancel' : `Load Range (${prettyBytes(rangeBytes)})`}
-  </Button>
-
+  <h2>Pre-load dates</h2>
 {:else}
-
-  <h2>Range Slider</h2>
-
-  <p>Use the slider to scroll smoothly through time.</p>
-  <RangeSlider
-    min={rangeDatasetStart.getTime()}
-    max={rangeDatasetEnd.getTime()}
-    step={intervalInMilliseconds}
-    springValues={{ stiffness: 0.15, damping: 1 }}
-    bind:value={rangeValue}
-    pips
-  />
-
+  <h2>Scroll dates</h2>
 {/if}
 
-<h2>Settings</h2>
+<div use:tooltip={{content: "Pick a start and end date, then click \"Load Range\". A slider will appear, allowing you to smooth-scroll across those dates."}}>
+  <Datepicker
+    start={new Date(start)}
+    end={rangeEndMinusOne}
+    bind:selected={rangeStart}
+    style="display: block; width: max-content; margin: 1em auto 0"
+    highlightColor="#676778"
+  >
+    <Button secondary>
+      {rangeStart.toLocaleDateString(undefined, dateStringOptions)}
+    </Button>
+  </Datepicker>
 
-<Toggle
-  bind:toggled={particlesShown}
-  label="streamlines"
-  toggledColor="#676778"
-  on="enabled (larger download size)"
-  off="disabled (smaller download size)"
-  style="order: 2; margin-left: auto"
-/>
+  <p style="text-align: center; margin: 0.1em">to</p>
+
+  <Datepicker
+    start={rangeStartPlusOne}
+    end={localDateCeil(end)}
+    bind:selected={rangeEnd}
+    style="display: block; width: max-content; margin: 0 auto 1em"
+    highlightColor="#676778"
+  >
+    <Button secondary>
+      {rangeEnd.toLocaleDateString(undefined, dateStringOptions)}
+    </Button>
+  </Datepicker>
+
+
+  {#if !loaded }
+
+    <Button action={handleLoadButtonPress} full>
+      {loading ? 'Cancel' : `Load Range (${prettyBytes(rangeBytes)})`}
+    </Button>
+
+  {:else}
+
+    <RangeSlider
+      min={rangeDatasetStart.getTime()}
+      max={rangeDatasetEnd.getTime()}
+      step={intervalInMilliseconds}
+      springValues={{ stiffness: 0.15, damping: 1 }}
+      bind:value={rangeValue}
+      pips
+    />
+
+  {/if}
+</div>
+<br>
+
+{#if detailedMenus}
+  <h2>Settings</h2>
+
+  <div use:tooltip={{content: "Disable animated streamlines to reduce download size."}}>
+    <Toggle
+      bind:toggled={particlesShown}
+      label="Streamlines"
+      toggledColor="#676778"
+      on="Enabled (larger download size)"
+      off="Disabled (smaller download size)"
+      style="order: 2; margin-left: auto"
+    />
+  </div>
+{/if}
+
 
 
 <style>

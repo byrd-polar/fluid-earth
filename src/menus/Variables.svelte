@@ -9,11 +9,14 @@
   import Draw24 from "carbon-icons-svelte/lib/Draw24";
   import PauseFilled24 from "carbon-icons-svelte/lib/PauseFilled24";
   import PlayFilledAlt24 from "carbon-icons-svelte/lib/PlayFilledAlt24";
+  import Toggle from "svelte-toggle";
+  import tooltip from '../tooltip.js';
   import colormaps from '../map/colormaps/';
 
   export let inventory;
   export let griddedDataset;
   export let particlesShown;
+  export let detailedMenus;
 
   let iconStyle = "fill: #0ff !important;";
 
@@ -26,6 +29,10 @@
     }
   }
 
+  function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   let icons = [
     Windy24,
     TemperatureHot24,
@@ -33,6 +40,14 @@
 </script>
 
 
+<!--<Toggle
+  bind:toggled={detailedMenus}
+  label=""
+  toggledColor="#676778"
+  on="Detailed"
+  off="Simple"
+  style="margin-left: auto"
+/>-->
 
 <!-- Mode Toggle
 <div class="onoffswitch" darkBackground = "true">
@@ -50,17 +65,22 @@ end of mode toggle -->
   {#each inventory.filter(d => d.colormap) as dataset, i}
     <li
       class:selected={griddedDataset.name === dataset.name}
+      use:tooltip={{content: capitalize(dataset.description)}}
       on:click={() => griddedDataset = dataset}
     >
       <svelte:component this={icons[i]} style={iconStyle} />
-      {dataset.name}
+      {capitalize(dataset.name)}
     </li>
   {/each}
 </ul>
+<br>
 
 <h2>ANIMATION</h2>
 <ul>
-  <li on:click={() => particlesShown = !particlesShown}>
+  <li
+    use:tooltip={{content: "Turn animated streamlines on/off"}}
+    on:click={() => particlesShown = !particlesShown}
+  >
     {#if particlesShown}
       <PauseFilled24 />
     {:else}

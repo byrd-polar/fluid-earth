@@ -7,6 +7,8 @@
   import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph";
   import RangeSlider from 'svelte-range-slider-pips';
   import Button from '../components/Button.svelte';
+  import Toggle from "svelte-toggle";
+  import tooltip from '../tooltip.js';
 
   export let minZoom;
   export let maxZoom;
@@ -18,6 +20,8 @@
   export let minLat;
   export let maxLong;
   export let minLong;
+
+  export let detailedMenus;
 
 
   const springValues = { stiffness: 0.15, damping: 1 };
@@ -45,10 +49,18 @@
   }
 </script>
 
-<h2>Zoom</h2>
-<p>Zoom in and out by moving the slider up and down or left and right.</p>
+<!--<Toggle
+  bind:toggled={detailedMenus}
+  label=""
+  toggledColor="#676778"
+  on="Detailed"
+  off="Simple"
+  style="margin-left: auto"
+/>-->
 
-<div class="horizontal">
+<h2>Zoom</h2>
+
+<div class="horizontal" use:tooltip={{content: "Zoom in and out by moving the slider left and right."}}>
   <div class = "left">
     <Button action={zoomOutStep} secondary>
       <Subtract24 />
@@ -69,13 +81,12 @@
     </Button>
   </div>
 </div>
+<br>
 
 
 <h2>Pan</h2>
-<!-- Pan buttons -->
-<p>Pan up and down, left or right by either using the buttons or the sliders</p>
 
-<div>
+<div use:tooltip={{content: "Pan up and down, left or right by using the buttons and sliders."}}>
 <div class="vertical">
   <CaretUpGlyph />
   <RangeSlider

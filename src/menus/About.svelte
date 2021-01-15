@@ -18,12 +18,14 @@ using your computer, tablet, and smartphone.
 <p>
 Our project team is working to remove obstacles to learning about our dynamic
 planet, Earth!
+<br><br>
 
 <h2>Our Sponsor</h2>
 <p>
 This project is sponsored by the U.S. National Science Foundation as an
 Exploratory Pathways project under the Advancing Informal STEM Learning (AISL)
 Program.
+<br><br>
 
 <h2>The Team</h2>
 <p>
@@ -75,6 +77,7 @@ user-testing, and organization of data: Bingyu (Sophia) Li, Dingyu Hu, Ruiyang
 Chang, Joey Wong, Craig Bossley, Michael (Em) Zhan, Mimi Cai, and Adelyn Arens.
 Em Zhan is spearheading the reimplementation of FEVer in a WebGL-based
 framework.
+<br><br>
 
 <h2>Data Sources</h2>
 <p>
@@ -96,6 +99,7 @@ Data sets include:
   <dt>Aerosols and Chemistry
   <dd>GEOS-5 (Goddard Earth Observing System, Version 5)
 </dl>
+<br>
 
 <h2>Terms of Use</h2>
 <p>
