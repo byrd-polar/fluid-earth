@@ -3,10 +3,12 @@
   import { onMount } from 'svelte';
   import IconButton from './components/IconButton.svelte';
   import ArrowLeft24 from "carbon-icons-svelte/lib/ArrowLeft24";
+  import HeaderToggle from './components/HeaderToggle.svelte';
   import { tips } from './tooltip.js';
 
   export let openedMenu;
   export let menuName;
+  export let menusDetailed = undefined;
 
   // avoid animating menu open/close when there is already a menu open
   let previousOpenedMenu = null;
@@ -47,6 +49,9 @@
       <ArrowLeft24 />
     </IconButton>
     <h1>{menuName}</h1>
+    {#if menusDetailed !== undefined}
+      <HeaderToggle bind:menusDetailed />
+    {/if}
   </header>
   <div>
     <section>
@@ -93,7 +98,7 @@
   header {
     background-color: #015B5B;
     height: 64px;
-    padding: 8px 12px;
+    padding: 0 1em 0 0.75em;
     display: flex;
     align-items: center;
     box-shadow:
@@ -102,7 +107,7 @@
       0 1px 10px  0   rgba(0,0,0,.12);
   }
 
-  header :global(button) {
+  header > :global(button:first-child) {
     margin-right: 12px;
   }
 
@@ -173,7 +178,7 @@
     }
 
     header {
-      padding: 4px;
+      padding: 0 1em 0 0.25em;
     }
 
     header :global(button) {

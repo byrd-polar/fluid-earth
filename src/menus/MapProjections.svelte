@@ -7,6 +7,7 @@
   export let centerLatitude;
   export let zoom;
   export let particleDisplay;
+  export let menusDetailed;
 
   $: if (projection === projections.STEREOGRAPHIC) {
     particleDisplay.size = 0.4;
@@ -81,6 +82,8 @@
   tradeoffs and use cases.
 </p>
 
+{#if menusDetailed}
+
 <h2>All Projections</h2>
 
 {#each Object.values(projections) as p}
@@ -93,6 +96,8 @@
   {p.name}
 </label>
 {/each}
+
+{/if}
 
 
 <style>

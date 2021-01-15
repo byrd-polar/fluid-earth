@@ -10,6 +10,7 @@
   export let griddedDataset;
   export let particleDataset;
   export let particlesShown;
+  export let menusDetailed;
 
   const dayInMilliseconds = 24 * 60 * 60 * 1000;
 
@@ -184,6 +185,8 @@ dataset from that date.</p>
 </Datepicker>
 
 
+{#if menusDetailed }
+
 <h2>Range Loader</h2>
 
 <p>Select a range of dates to load data between.</p>
@@ -247,6 +250,8 @@ dataset from that date.</p>
   off="disabled (smaller download size)"
   style="order: 2; margin-left: auto"
 />
+
+{/if}
 
 
 <style>

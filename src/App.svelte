@@ -38,6 +38,10 @@
   let openedMenu = null;
   let drawerOpen = false;
 
+  const storage = window.localStorage;
+  let menusDetailed = JSON.parse(storage.getItem('menusDetailed')) || false;
+  $: storage.setItem('menusDetailed', JSON.stringify(menusDetailed));
+
   const fetcher = new Fetcher();
   let griddedDataset = inventory.find(d => d.name === 'wind speed');
   let particleDataset = inventory.find(d => d.name === 'wind velocities');
@@ -200,22 +204,24 @@
     bind:particlesShown
   />
 </Menu>
-<Menu bind:openedMenu menuName="Time Machine">
+<Menu bind:openedMenu menuName="Time Machine" bind:menusDetailed>
   <TimeMachine
     {fetcher}
     bind:date
     {griddedDataset}
     {particleDataset}
     bind:particlesShown
+    {menusDetailed}
   />
 </Menu>
-<Menu bind:openedMenu menuName="Map Projections">
+<Menu bind:openedMenu menuName="Map Projections" bind:menusDetailed>
   <MapProjections
     bind:projection
     bind:centerLongitude
     bind:centerLatitude
     bind:zoom
     bind:particleDisplay
+    {menusDetailed}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Colormaps">
