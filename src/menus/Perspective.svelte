@@ -45,12 +45,11 @@
   }
 </script>
 
-<h2>Zoom</h2>
-<p>Zoom in and out by moving the slider up and down or left and right.</p>
+<h2>Zoom Controls</h2>
 
 <div class="horizontal">
   <div class = "left">
-    <Button action={zoomOutStep} secondary>
+    <Button action={zoomOutStep} secondary tip="Zoom out">
       <Subtract24 />
     </Button>
   </div>
@@ -61,19 +60,19 @@
     step={0.1}
     {springValues}
     float
+    formatter={v => `Zoom: ${v}`}
   />
 
   <div class = "right">
-    <Button action={zoomInStep} secondary>
+    <Button action={zoomInStep} secondary tip="Zoom in">
       <Add24 />
     </Button>
   </div>
 </div>
 
 
-<h2>Pan</h2>
+<h2>Pan Controls</h2>
 <!-- Pan buttons -->
-<p>Pan up and down, left or right by either using the buttons or the sliders</p>
 
 <div>
 <div class="vertical">
@@ -85,6 +84,7 @@
     {springValues}
     vertical
     float
+    formatter={v => `Lat: ${v}`}
   />
   <CaretDownGlyph />
 </div>
@@ -92,25 +92,25 @@
 <div class="container">
   <div class="cell cell-1"></div>
   <div class="cell cell-2">
-    <Button action={panUp} secondary>
+    <Button action={panUp} secondary tip="Pan up">
       <CaretUpGlyph />
     </Button>
   </div>
   <div class="cell cell-3"></div>
   <div class="cell cell-4">
-    <Button action={panLeft} secondary>
+    <Button action={panLeft} secondary tip="Pan left" tipPlacement="left">
       <CaretLeftGlyph />
     </Button>
   </div>
   <div class="cell cell-5"></div>
   <div class="cell cell-6">
-    <Button action={panRight} secondary>
+    <Button action={panRight} secondary tip="Pan right" tipPlacement="right">
       <CaretRightGlyph />
     </Button>
   </div>
   <div class="cell cell-7"></div>
   <div class="cell cell-8">
-    <Button action={panDown} secondary>
+    <Button action={panDown} secondary tip="Pan down" tipPlacement="bottom">
       <CaretDownGlyph />
     </Button>
   </div>
@@ -130,6 +130,7 @@
         max={maxLong}
         {springValues}
         float
+        formatter={v => `Lon: ${v}`}
       />
       <CaretRightGlyph />
 </div>

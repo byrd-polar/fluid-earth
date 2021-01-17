@@ -1,10 +1,13 @@
 <script>
+  import tooltip from '../tooltip.js';
   export let disabled = false;
   export let action = () => {};
   export let flex = false;
   export let full = false;
   export let secondary = false;
   export let type = 'button';
+  export let tip = '';
+  export let tipPlacement = 'top';
 </script>
 
 <button
@@ -14,6 +17,7 @@
   class:full
   class:secondary
   type={type}
+  use:tooltip={{content: tip, placement: tipPlacement}}
 >
   <slot></slot>
 </button>
