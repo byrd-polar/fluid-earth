@@ -22,10 +22,23 @@
       minDate: start,
       maxDate: end,
       onChange: dates => {
-        dates[0].setHours(date.getHours());
+        // set hour to same hour as original date, accounting for daylight
+        // savings time and potentially different UTC date
+        let dayOfMonth = dates[0].getDate();
+        let month = dates[0].getMonth();
+        let year = dates[0].getFullYear();
+
+        dates[0].setUTCHours(date.getUTCHours());
+
+        dates[0].setDate(dayOfMonth);
+        dates[0].setMonth(month);
+        dates[0].setYear(year);
+
+        // don't cause a reactive update if new date is the same
         if (date - dates[0] !== 0) {
           date = clamp(dates[0], start, end);
         }
+
         // keep focus in calendar after selection
         setTimeout(() => {
           document.querySelector('span.flatpickr-day.selected').focus();
