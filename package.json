@@ -46,6 +46,7 @@
     "d3-scale": "^3.2.3",
     "d3-scale-chromatic": "^2.0.0",
     "d3-selection": "^2.0.0",
+    "flatpickr": "^4.6.9",
     "focus-trap": "^6.2.3",
     "interactjs": "^1.10.2",
     "ky": "^0.26.0",
