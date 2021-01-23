@@ -24,10 +24,10 @@
 </script>
 
 <div class="wrapper">
-  <h3>
-    {date.toLocaleDateString(undefined, dateStringOptions)}
-  </h3>
-  <div>
+  <div class="top">
+    <h3>{date.toLocaleDateString(undefined, dateStringOptions)}</h3>
+  </div>
+  <div class="bottom">
     {#if particlesShown}
       <StreamlinesLegend
         {particleDataset}
@@ -53,41 +53,40 @@
       0 0 1em black;
   }
 
-  div.wrapper {
+  div {
     display: flex;
+  }
+
+  div.wrapper {
     flex-direction: column;
     color: white;
     pointer-events: none;
-  }
-
-  div.wrapper > * {
-    pointer-events: auto;
     user-select: none;
   }
 
   h3 {
-    text-align: right;
+    width: max-content;
+    align-self: end;
     font-size: 1.2em;
-    margin: 0.25rem 0.75rem;
+    padding: 0.25rem 0.75rem;
+    margin: 0 0 0 auto;
+    pointer-events: auto;
   }
 
-  div.wrapper > div {
+  div.bottom {
     margin-top: auto;
-    display: flex;
     flex-wrap: wrap;
   }
 
   @media (max-width: 36rem) {
-    div :global(h3) {
+    div.bottom :global(h3) {
       font-size: 0.875em;
     }
 
     h3 {
-      /* height of nav rail (top plus bottom padding plus icon height) plus
-       * original margin */
-      margin-top: calc(48px + 1.25rem);
+      /* height of nav rail (top plus bottom padding plus icon height) */
+      margin: calc(48px + 1rem) auto 0;
       font-size: 1em;
-      text-align: center;
     }
   }
 </style>

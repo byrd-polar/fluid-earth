@@ -15,6 +15,7 @@
     padding: 0 0.75rem 0.25rem;
     max-width: 32em;
     flex-basis: 24em;
+    pointer-events: auto;
 
     margin-right: auto;
   }
@@ -36,7 +37,7 @@
 
   span {
     font-size: 0.75rem;
-    height: 1.25rem;
+    min-height: 1.25rem;
 
     display: block;
     text-align: center;

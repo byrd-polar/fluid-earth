@@ -45,6 +45,7 @@
     padding: 0 0.75rem 0.25rem;
     max-width: 32em;
     flex-basis: 24em;
+    pointer-events: auto;
 
     margin-left: auto;
   }
