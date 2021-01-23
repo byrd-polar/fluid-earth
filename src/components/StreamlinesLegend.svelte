@@ -29,10 +29,20 @@
     text-transform: uppercase;
   }
 
+  @keyframes slide {
+    from { background-position-x: 0; }
+    to   { background-position-x: 0.8em; }
+  }
+
   div {
     height: 0.8em;
 
-    background-color: blue;
+    background-image:
+      radial-gradient(0.35em at center, #ffffff88 0.35em, transparent);
+    background-position: 0 -0.05em;
+    background-size: 0.8em 0.8em;
+    animation: slide 0.3s linear;
+    animation-iteration-count: infinite;
   }
 
   span {
