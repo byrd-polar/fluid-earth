@@ -47,12 +47,10 @@
 
 <h2>Zoom Controls</h2>
 
-<div class="horizontal">
-  <div class = "left">
-    <Button action={zoomOutStep} secondary tip="Zoom out">
-      <Subtract24 />
-    </Button>
-  </div>
+<div class="slider">
+  <Button action={zoomOutStep} secondary tip="Zoom out">
+    <Subtract24 />
+  </Button>
   <RangeSlider
     bind:value={zoom}
     min={minZoom}
@@ -62,111 +60,91 @@
     float
     formatter={v => `Zoom: ${v}`}
   />
-
-  <div class = "right">
-    <Button action={zoomInStep} secondary tip="Zoom in">
-      <Add24 />
-    </Button>
-  </div>
+  <Button action={zoomInStep} secondary tip="Zoom in">
+    <Add24 />
+  </Button>
 </div>
 
 
 <h2>Pan Controls</h2>
-<!-- Pan buttons -->
 
-<div>
-<div class="vertical">
-  <CaretUpGlyph />
-  <RangeSlider
-    bind:value={centerLatitude}
-    min={minLat}
-    max={maxLat}
-    {springValues}
-    vertical
-    float
-    formatter={v => `Lat: ${v}`}
-  />
-  <CaretDownGlyph />
-</div>
+<div class="pan-controls">
+  <Button action={panUp} secondary tip="Pan up">
+    <CaretUpGlyph />
+  </Button>
 
-<div class="container">
-  <div class="cell cell-1"></div>
-  <div class="cell cell-2">
-    <Button action={panUp} secondary tip="Pan up">
-      <CaretUpGlyph />
-    </Button>
+  <Button action={panDown} secondary tip="Pan down" tipPlacement="bottom">
+    <CaretDownGlyph />
+  </Button>
+
+  <Button action={panLeft} secondary tip="Pan left" tipPlacement="left">
+    <CaretLeftGlyph />
+  </Button>
+
+  <Button action={panRight} secondary tip="Pan right" tipPlacement="right">
+    <CaretRightGlyph />
+  </Button>
+
+  <div class="slider vertical">
+    <CaretUpGlyph />
+    <RangeSlider
+      bind:value={centerLatitude}
+      min={minLat}
+      max={maxLat}
+      {springValues}
+      vertical
+      float
+      formatter={v => `Lat: ${v}`}
+    />
+    <CaretDownGlyph />
   </div>
-  <div class="cell cell-3"></div>
-  <div class="cell cell-4">
-    <Button action={panLeft} secondary tip="Pan left" tipPlacement="left">
-      <CaretLeftGlyph />
-    </Button>
+
+  <div class="slider">
+    <CaretLeftGlyph />
+    <RangeSlider
+      bind:value={centerLongitude}
+      min={minLong}
+      max={maxLong}
+      {springValues}
+      float
+      formatter={v => `Lon: ${v}`}
+    />
+    <CaretRightGlyph />
   </div>
-  <div class="cell cell-5"></div>
-  <div class="cell cell-6">
-    <Button action={panRight} secondary tip="Pan right" tipPlacement="right">
-      <CaretRightGlyph />
-    </Button>
-  </div>
-  <div class="cell cell-7"></div>
-  <div class="cell cell-8">
-    <Button action={panDown} secondary tip="Pan down" tipPlacement="bottom">
-      <CaretDownGlyph />
-    </Button>
-  </div>
-  <div class="cell cell-9"></div>
 </div>
-</div>
-
-
-
-
-
-<div class="horizontal">
-      <CaretLeftGlyph />
-      <RangeSlider
-        bind:value={centerLongitude}
-        min={minLong}
-        max={maxLong}
-        {springValues}
-        float
-        formatter={v => `Lon: ${v}`}
-      />
-      <CaretRightGlyph />
-</div>
-
-
 
 <style>
-  div {
+  div.slider {
     display: flex;
     align-items: center;
+    width: 100%;
   }
 
-  div.horizontal {
-    flex-direction: row;
-  }
-
-  div.vertical {
-    flex-direction: column;
-    width: min-content;
-  }
-
-  :global(div.horizontal :nth-child(2), div.vertical :nth-child(2)) {
+  div.slider > :global(:nth-child(2)) {
     flex: 1;
   }
-  .container {
-  height: 20vh;
-  margin: 2rem;
-  display: grid;
-  grid-template-columns: 50px 50px 50px;
-  grid-template-rows: 50px 50px 50px;
-}
-.cell {
-  color: white;
-  text-align: center;
-  padding: 4rem;
-  height:50px;
-  width:50px;
-}
+
+  div.slider.vertical {
+    flex-direction: column;
+  }
+
+  div.pan-controls {
+    display: grid;
+    grid-template-areas:
+      "e . . . . ."
+      "e . . a . ."
+      "e . c . d ."
+      "e . . b . ."
+      "e . . . . ."
+      ". f f f f f";
+    grid-template-columns: min-content 1fr repeat(3, min-content) 1fr;
+    grid-template-rows: 1fr repeat(3, min-content) 1fr min-content;
+  }
+
+  div.pan-controls > :global(:nth-child(1)) { grid-area: a; }
+  div.pan-controls > :global(:nth-child(2)) { grid-area: b; }
+  div.pan-controls > :global(:nth-child(3)) { grid-area: c; }
+  div.pan-controls > :global(:nth-child(4)) { grid-area: d; }
+  div.pan-controls > :global(:nth-child(5)) { grid-area: e; }
+  div.pan-controls > :global(:nth-child(6)) { grid-area: f; }
 </style>
