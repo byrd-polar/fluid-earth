@@ -16,7 +16,7 @@
   import projections from './map/projections/';
 
   import Pins from './overlays/Pins.svelte';
-  import Legend from './overlays/Legend.svelte';
+  import Legends from './overlays/Legends.svelte';
   import Loading from './overlays/Loading.svelte';
   import Controls from './overlays/Controls.svelte';
 
@@ -284,7 +284,7 @@
       {griddedDataset}
     />
     <Loading {fetcher} />
-    <Legend
+    <Legends
       {date}
       {griddedDataset}
       {particleDataset}
