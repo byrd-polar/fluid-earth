@@ -19,36 +19,30 @@
   export let maxLong;
   export let minLong;
 
-
   const springValues = { stiffness: 0.15, damping: 1 };
-  function zoomInStep() {
-	  zoom += 0.1;
-  }
-  function zoomOutStep() {
-	  zoom -= 0.1;
+
+  function zom(change) {
+    zoom = clamp(zoom + change, minZoom, maxZoom);
   }
 
-  function panRight(){
-    centerLongitude += 5;
+  function pan({ up=0, down=0, left=0, right=0 }) {
+    centerLatitude = clamp(centerLatitude + up - down, minLat, maxLat);
+    centerLongitude = clamp(centerLongitude + right - left, minLong, maxLong);
   }
 
-  function panLeft(){
-    centerLongitude -= 5;
-  }
-
-  function panUp(){
-    centerLatitude += 5;
-  }
-
-  function panDown(){
-    centerLatitude -= 5;
+  function clamp(x, min, max) {
+    return x > max ? max : (x < min ? min : x);
   }
 </script>
 
 <h2>Zoom Controls</h2>
 
 <div class="slider">
-  <Button action={zoomOutStep} secondary tip="Zoom out">
+  <Button secondary
+    action={() => zom(-0.1)}
+    disabled={zoom === minZoom}
+    tip="Zoom out"
+  >
     <Subtract24 />
   </Button>
   <RangeSlider
@@ -60,7 +54,11 @@
     float
     formatter={v => `Zoom: ${v}`}
   />
-  <Button action={zoomInStep} secondary tip="Zoom in">
+  <Button secondary
+    action={() => zom(+0.1)}
+    disabled={zoom === maxZoom}
+    tip="Zoom in"
+  >
     <Add24 />
   </Button>
 </div>
@@ -69,19 +67,38 @@
 <h2>Pan Controls</h2>
 
 <div class="pan-controls">
-  <Button action={panUp} secondary tip="Pan up">
+  <Button secondary
+    action={() => pan({ up: 5 })}
+    disabled={centerLatitude === maxLat}
+    tip="Pan up"
+  >
     <CaretUpGlyph />
   </Button>
 
-  <Button action={panDown} secondary tip="Pan down" tipPlacement="bottom">
+  <Button secondary
+    action={() => pan({ down: 5 })}
+    disabled={centerLatitude === minLat}
+    tip="Pan down"
+    tipPlacement="bottom"
+  >
     <CaretDownGlyph />
   </Button>
 
-  <Button action={panLeft} secondary tip="Pan left" tipPlacement="left">
+  <Button secondary
+    action={() => pan({ left: 5 })}
+    disabled={centerLongitude === minLong}
+    tip="Pan left"
+    tipPlacement="left"
+  >
     <CaretLeftGlyph />
   </Button>
 
-  <Button action={panRight} secondary tip="Pan right" tipPlacement="right">
+  <Button secondary
+    action={() => pan({ right: 5 })}
+    disabled={centerLongitude === maxLong}
+    tip="Pan right"
+    tipPlacement="right"k
+  >
     <CaretRightGlyph />
   </Button>
 
