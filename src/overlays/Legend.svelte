@@ -42,103 +42,125 @@
   }).join();
 </script>
 
-<div class="legend-wrapper">
-  <span class="datetime">
+<div class="wrapper">
+  <span>
     {date.toLocaleDateString(undefined, dateStringOptions)}
   </span>
-  {#if particlesShown}
-    <span class="streamlines">
-      Streamlines representing {particleDataset.description}, moving
-      {particleDisplay.rate.toLocaleString()} times faster than actual
-    </span>
-  {/if}
-  <span class="gridded">
-    {griddedDataset.description}
-    {#if griddedDataset.units}({griddedDataset.units}){/if}
-  </span>
-  <div
-    class="legend"
-    style="background: linear-gradient(to right, {cssLut});"
-    bind:clientWidth={svgScaleWidth}
-  ></div>
-  <svg bind:this={svgScale}></svg>
+  <div>
+    {#if particlesShown}
+    <div class="streamlines">
+      <span class="label">
+        {particleDataset.description}
+      </span>
+      <div></div>
+      <span>
+        {particleDisplay.rate.toLocaleString()} times faster than actual
+      </span>
+    </div>
+    {/if}
+    <div class="gridded">
+      <span class="label">
+        {griddedDataset.description}
+        {#if griddedDataset.units}({griddedDataset.units}){/if}
+      </span>
+      <div
+        style="background: linear-gradient(to right, {cssLut});"
+        bind:clientWidth={svgScaleWidth}
+      ></div>
+      <svg bind:this={svgScale}></svg>
+    </div>
+  </div>
 </div>
 
 <style>
-  div.legend-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    user-select: none;
-    pointer-events: none;
-  }
-
-  div.legend-wrapper > * {
-    max-width: 90%;
-    width: 36rem;
-    pointer-events: auto;
-  }
-
   span, svg {
-    font-size: 1rem;
-    color: white;
     /* multiple comma-separated shadows used to increase intensity */
     text-shadow:
       0 0 0.25em black,
       0 0 0.5em black,
       0 0 1em black;
+    display: block; /* needed for ::first-letter capitalization */
   }
 
-  span {
-    font-weight: bold;
-    font-size: 0.875em;
+  div.wrapper {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    pointer-events: none;
   }
 
-  span.datetime {
-    text-align: center;
-    margin-top: 3.9vh;
+  div.wrapper > * {
+    pointer-events: auto;
+    user-select: none;
   }
 
-  span.streamlines {
-    font-weight: normal;
-    font-size: 0.75em;
-    text-align: center;
+  div.wrapper > span {
+    text-align: right;
+    font-size: 1.2em;
+    padding: 0.25rem 0.75rem;
   }
 
-  span.gridded {
+  div.wrapper > div {
     margin-top: auto;
-    padding-bottom: 0.125em;
+    display: flex;
+    flex-wrap: wrap;
   }
 
-  span.gridded::first-letter {
+  div.wrapper > div > div {
+    flex: 1;
+    padding: 0 0.75rem 0.25rem;
+    max-width: 32em;
+    flex-basis: 24em;
+  }
+
+  div.streamlines {
+    margin-right: auto;
+  }
+
+  div.streamlines > div {
+    background-color: blue;
+  }
+
+  div.gridded {
+    margin-left: auto;
+  }
+
+  div.streamlines > div,
+  div.gridded > div {
+    height: 0.8em;
+  }
+
+  span.label::first-letter {
     text-transform: uppercase;
   }
 
-  div.legend {
-    height: 3.5vh;
+  div.streamlines > span:last-child {
+    display: block;
+    text-align: center;
+    border-top: 1px solid white;
   }
 
-  svg {
+  div.streamlines > span:last-child,
+  div.gridded > svg {
     font-size: 0.75rem;
-    overflow: visible;
     height: 1.25rem;
-    margin-bottom: 3.9vh;
+  }
+
+  div.gridded > svg {
+    overflow: visible;
+    width: 100%;
   }
 
   @media (max-width: 36rem) {
-    span.datetime {
-      /* height of nav rail (top plus bottom padding plus mdc-icon-button
-       * height) plus the margin-bottom in the svg rule */
-      margin-top: calc(1em + 48px + 0.25rem);
+    span {
+      font-size: 0.875em;
     }
 
-    div.legend {
-      height: 5vh;
-    }
-
-    svg {
-      margin-bottom: 0.25rem;
+    div.wrapper > span {
+      /* height of nav rail (top plus bottom padding plus icon height) */
+      margin-top: calc(48px + 1rem);
+      font-size: 1em;
+      text-align: center;
     }
   }
 </style>
