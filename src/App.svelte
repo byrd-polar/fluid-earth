@@ -105,9 +105,9 @@
       updateAllWebglResolutions();
     });
 
-    // Methods for updating gridded and particle data in response to
-    // date or dataset changes. Defined here so that they aren't triggered
-    // multiple times during the initial mount due a Svelte bug with bindings.
+    // Methods for updating gridded and particle data in response to date or
+    // dataset changes. Defined here so that they aren't triggered multiple
+    // times during the initial mount due to a Svelte bug with bindings.
     let previousGriddedDataset = null;
     updateGriddedData = async () => {
       let array = await fetcher.fetch(griddedDataset, date, 'gridded');
