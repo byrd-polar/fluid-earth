@@ -2,7 +2,6 @@
   import * as d3 from 'd3-selection';
   import { axisBottom } from 'd3-axis';
   import { scaleLinear } from 'd3-scale';
-  import { onMount } from 'svelte';
 
   export let griddedDataset;
   export let griddedColormap;
@@ -10,21 +9,35 @@
 
   let svgScale;
   let svgScaleWidth;
-  function createAxis() {
+
+  // updates when changing domain independently of dataset (or after dataset
+  // download completes
+  $: createAxis(svgScale, svgScaleWidth, griddedDomain);
+  // updates immediately after selecting dataset instead of after download
+  $: createAxis(svgScale, svgScaleWidth, griddedDataset.domain);
+
+  function createAxis(elem, width, domain) {
+    if (!elem) return;
+
     let axis = axisBottom(
       scaleLinear()
-        .domain(griddedDomain)
-        .range([-0.5, svgScaleWidth - 0.5])
+        .domain(domain)
+        .range([-0.5, width - 0.5])
     );
-    d3.select(svgScale).call(axis);
+    d3.select(elem).call(axis);
   }
-  onMount(createAxis);
-  $: svgScaleWidth, griddedDomain, createAxis();
 
-  let cssLut;
-  $: cssLut = griddedColormap.lut.map(colorArray => {
-    return `rgb(${colorArray.map(c => Math.round(255 * c)).join()})`;
-  }).join();
+  // updates when changing colormap independently of dataset (or after dataset
+  // download completes)
+  $: cssLut = generateLut(griddedColormap);
+  // updates immediately after selecting dataset instead of after download
+  $: cssLut = generateLut(griddedDataset.colormap);
+
+  function generateLut(colormap) {
+    return colormap.lut.map(colorArray => {
+      return `rgb(${colorArray.map(c => Math.round(255 * c)).join()})`;
+    }).join();
+  }
 </script>
 
 <section>

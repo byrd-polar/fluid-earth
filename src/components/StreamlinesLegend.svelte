@@ -1,12 +1,18 @@
 <script>
   export let particleDataset;
   export let particleDisplay;
+
+  // updates when changing display independently of dataset (or after dataset
+  // download completes)
+  $: info = particleDisplay;
+  // updates immediately after selecting dataset instead of after download
+  $: info = particleDataset.particleDisplay;
 </script>
 
 <section>
   <h3>{particleDataset.description}</h3>
   <div></div>
-  <span>{particleDisplay.rate.toLocaleString()} times faster than actual</span>
+  <span>{info.rate.toLocaleString()} times faster than actual</span>
 </section>
 
 <style>
