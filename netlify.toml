@@ -1,6 +1,7 @@
 [build]
   publish = "public/"
   command = "npm run build"
+  ignore = "[[ $HEAD == master ]]"
 
 [build.environment]
   NODE_VERSION = "14"
