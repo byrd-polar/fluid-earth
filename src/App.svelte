@@ -58,12 +58,12 @@
   let zoom = 1.5;
 
   let griddedData = {
-    floatArray: new Float16Array([0]),
+    floatArray: new Float16Array([0.88]),
     width: 1,
     height: 1,
   };
-  let griddedColormap = colormaps.VIRIDIS;
-  let griddedDomain = [0, 0];
+  let griddedColormap = colormaps.GREYS;
+  let griddedDomain = [0, 1];
 
   const emptyParticleData = {
     uVelocities: new Float16Array([0]),
