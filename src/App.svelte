@@ -43,7 +43,7 @@
   $: storage.setItem('menusDetailed', JSON.stringify(menusDetailed));
 
   const fetcher = new Fetcher();
-  let griddedDataset = inventory.find(d => d.name === 'wind speed');
+  let griddedDataset = inventory.find(d => d.name === 'temperature');
   let particleDataset = inventory.find(d => d.name === 'wind velocities');
   let date = griddedDataset.end;
 
@@ -53,9 +53,9 @@
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let d3geoProjection = projection.function;
-  let centerLongitude = 0;
-  let centerLatitude = 0;
-  let zoom = 1;
+  let centerLongitude = -60;
+  let centerLatitude = 30;
+  let zoom = 1.5;
 
   let griddedData = {
     floatArray: new Float16Array([0]),

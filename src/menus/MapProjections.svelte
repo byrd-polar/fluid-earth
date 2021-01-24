@@ -22,7 +22,7 @@
         projection = projections.VERTICAL_PERSPECTIVE;
         centerLongitude = -60;
         centerLatitude = 30;
-        zoom = 1;
+        zoom = 1.5;
       },
       image: '/images/ortho-white-bg.svg',
     },
