@@ -1,4 +1,5 @@
-// Fragment shader for colormaps
+// Fragment shader for "coloring data": converting data to gridded texture using
+// colormap texture
 
 precision mediump float;
 
@@ -11,6 +12,13 @@ varying vec2 v_position;
 
 void main() {
   float value = texture2D(u_data, (v_position + 1.0) / 2.0).a;
+
+  // Check for NaNs and use a consistent color for them
+  if (value != value) {
+    gl_FragColor = vec4(0.15, 0.15, 0.15, 1); // greyish color
+    return;
+  }
+
   float t = clamp((value - u_domain.x) / (u_domain.y - u_domain.x), 0.0, 1.0);
   float tOffset = (u_colormapN - 1.0) / u_colormapN * (t - 0.5) + 0.5;
 
