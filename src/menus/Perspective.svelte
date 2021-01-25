@@ -97,7 +97,7 @@
     action={() => pan({ right: 5 })}
     disabled={centerLongitude === maxLong}
     tip="Pan right"
-    tipPlacement="right"k
+    tipPlacement="right"
   >
     <CaretRightGlyph />
   </Button>
