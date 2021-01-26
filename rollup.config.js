@@ -7,6 +7,7 @@ import { terser } from 'rollup-plugin-terser';
 import license from 'rollup-plugin-license';
 import postcss from 'rollup-plugin-postcss';
 import replace from '@rollup/plugin-replace';
+import json from "@rollup/plugin-json";
 
 import dedent from 'dedent';
 import { execSync, spawn } from 'child_process';
@@ -101,6 +102,10 @@ export default {
         preamble,
       },
     }),
+	
+	json({
+	  compact: true,
+	})
   ],
   watch: {
     clearScreen: false

@@ -10,6 +10,8 @@
   export let griddedData;
   export let griddedDataset;
 
+  
+  let name = pin.name;
   let lonLat = [pin.longitude, pin.latitude];
   $: [x, y] = d3geoProjection(lonLat);
   $: clip = clipped(d3geoProjection, lonLat);
@@ -33,7 +35,11 @@
       class="caption"
     >
       <span class="plain">
-        Location {pin.id}
+        {#if name}
+          {name}
+        {:else}
+          Location {pin.id}
+        {/if}
         <br>
       </span>
       <strong class="bold">

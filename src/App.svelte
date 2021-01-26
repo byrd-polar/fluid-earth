@@ -8,6 +8,7 @@
   import MapProjections from './menus/MapProjections.svelte';
   import Colormaps from './menus/Colormaps.svelte';
   import Perspective from './menus/Perspective.svelte';
+  import Search from './menus/Search.svelte';
   import About from './menus/About.svelte';
   import Feedback from './menus/Feedback.svelte';
 
@@ -93,6 +94,11 @@
   };
 
   let pins = new Set();
+  function addPin(name, longitude, latitude) {
+  	let id = Math.max(0, ...[...pins].map(pin => pin.id)) + 1;
+    pins.add({ id, name, longitude, latitude });
+    pins = pins;
+  }
 
   onMount(() => {
     // workaround some race condition loading bugs
@@ -168,8 +174,10 @@
   import Globe24 from "carbon-icons-svelte/lib/Globe24";
   import ColorPalette24 from "carbon-icons-svelte/lib/ColorPalette24";
   import View24 from "carbon-icons-svelte/lib/View24";
+  import Search24 from "carbon-icons-svelte/lib/Search24";
   import Information24 from "carbon-icons-svelte/lib/Information24";
   import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
+
 
   const menus = [
     { name: 'Datasets', icon: Grid24 },
@@ -177,6 +185,7 @@
     { name: 'Map Projections', icon: Globe24 },
     { name: 'Colormaps', icon: ColorPalette24 },
     { name: 'Perspective', icon: View24 },
+    { name: 'Search Cities', icon: Search24 },
     { name: 'About FEVer', icon: Information24 },
     { name: 'Feedback', icon: RequestQuote24 },
   ];
@@ -242,6 +251,11 @@
     bind:centerLongitude
   />
 </Menu>
+<Menu bind:openedMenu menuName="Search Cities">
+  <Search
+    {addPin}
+  />
+</Menu>
 <Menu bind:openedMenu menuName="About FEVer">
   <About
   />
@@ -275,7 +289,7 @@
       bind:centerLatitude
       bind:zoom
       {d3geoProjection}
-      bind:pins
+      {addPin}
     />
     <Pins
       {pins}
