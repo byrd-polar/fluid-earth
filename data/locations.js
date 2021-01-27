@@ -36,7 +36,11 @@ export default async function() {
   let locations = [];
 
   for (let row of csv) {
-    let arr = [row[city], row[admin], row[country]];
+    let arr = [
+      row[city].replace(/,/g, ' '),
+      reverseComma(row[admin]),
+      reverseComma(row[country]),
+    ];
 
     locations.push({
       label: arr.filter(Boolean).join(', '),
@@ -46,4 +50,10 @@ export default async function() {
   }
 
   await writeFile(outputFile, JSON.stringify(locations));
+}
+
+function reverseComma(text) {
+  text = text.split(', ');
+  text.reverse();
+  return text.join(' ');
 }
