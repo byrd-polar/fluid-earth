@@ -95,7 +95,7 @@
 
   let pins = new Set();
   function addPin(name, longitude, latitude) {
-  	let id = Math.max(0, ...[...pins].map(pin => pin.id)) + 1;
+    let id = Math.max(0, ...[...pins].map(pin => pin.id)) + 1;
     pins.add({ id, name, longitude, latitude });
     pins = pins;
   }

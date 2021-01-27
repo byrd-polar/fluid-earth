@@ -10,7 +10,7 @@
   export let griddedData;
   export let griddedDataset;
 
-  
+
   let name = pin.name;
   let lonLat = [pin.longitude, pin.latitude];
   $: [x, y] = d3geoProjection(lonLat);

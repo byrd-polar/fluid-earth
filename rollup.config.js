@@ -102,10 +102,10 @@ export default {
         preamble,
       },
     }),
-	
-	json({
-	  compact: true,
-	})
+
+    json({
+      compact: true,
+    }),
   ],
   watch: {
     clearScreen: false

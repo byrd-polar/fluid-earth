@@ -41,7 +41,7 @@
     return 0;
   });
 
-  function pinLocation(locationName) { 
+  function pinLocation(locationName) {
     [ name, lat, lon, country, admin1 ] = locationInfos[locationName];
     let longitude = lon/100;
     let latitude = lat/100;

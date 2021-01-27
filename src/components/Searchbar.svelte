@@ -1,21 +1,21 @@
 <script>
-  
+
   export let arr;
   export let onValueSelected;
-  
+
   let imin = 0;
   let imax = arr.length - 1;
   let arrLower = arr.map(x => x.toLowerCase());
   let oldInputLength = 0;
   let currentFocus;
-  
+
   let inputField;
   let width;
   let val;
   let autocompleteList = [];
   let searching = false;
 
-  
+
   function autocomplete() {
     endSearch()
     searching = true;
@@ -36,14 +36,14 @@
       imax = arr.length - 1;
       ilist = [];
     }
-    currentFocus = -1; 
+    currentFocus = -1;
     for (i = imin; i <= imax; i++) { // For each item in the array
       // If item starts w/ same letters as text field value,
       if (valLower === arrLower[i].substr(0, inputLength)) {
         // Note that this index has been processed.
         ilist.push(i);
         // Create new html fragment, bolding the matching letters.
-        innerHtml = "<strong>" + arr[i].substr(0, val.length) + "</strong>"; 
+        innerHtml = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
         innerHtml += arr[i].substr(val.length);
         // Add as a new item to the autocomplete list.
         let newItem = { id: i+1, name: arr[i], innerHtml: innerHtml, active: false };
@@ -56,8 +56,8 @@
     imax = ilist[ilist.length - 1];
     oldInputLength = inputLength;
   }
-  
-  
+
+
   function changeCurrentFocus(direction) {
     if (direction === 'down') {
       currentFocus++;
@@ -70,13 +70,13 @@
     if (currentFocus < 0) {
       currentFocus = (autocompleteList.length - 1);
     }
-    autocompleteList.map(function(x) { 
-      x.active = false; 
+    autocompleteList.map(function(x) {
+      x.active = false;
       return x
     });
     autocompleteList[currentFocus].active = true;
   }
-  
+
   function handleKey(event) {
     let keyCode = event.keyCode;
     if (keyCode == 40) { // DOWN key
@@ -86,26 +86,26 @@
     } else if (keyCode == 13 && currentFocus > -1) { // ENTER key
       selectValue(autocompleteList[currentFocus].name);
     }
-    
+
   }
-  
+
   function selectValue(valueName) {
     val = valueName;
     endSearch();
     onValueSelected(val);
   }
-  
+
   function endSearch() {
     autocompleteList = [];
     searching = false;
   }
-  
+
 </script>
 
 
 
 <div on:click={endSearch}>
-  
+
   <input
     type="text"
     class={searching ? "searching": ""}
@@ -159,7 +159,7 @@
       padding: 10px;
       text-align: left;
   }
-    
+
   .autocomplete-items:last-child {
     border-radius: 0 0 .25rem .25rem
   }
@@ -170,5 +170,5 @@
 
   .active {
     background-color: #9dceff !important;
-  }  
+  }
 </style>
