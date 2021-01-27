@@ -9,9 +9,16 @@
   let options = [];
   let data = undefined;
   let focused = false;
+  let loading = false;
 
   async function filterOptions() {
-    if (!data) data = await loadData();
+    if (loading) return;
+
+    if (!data) {
+      loading = true;
+      data = await loadData();
+      loading = false;
+    }
 
     let newOptions = [];
     for (let i = 0; i < data.length && newOptions.length < maxShown; i++) {
