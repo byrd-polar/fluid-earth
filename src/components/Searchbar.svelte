@@ -140,7 +140,8 @@
       line-height: 1rem;
       padding: 10px;
       text-align: left;
-      border-radius: .25rem .25rem .25rem .25rem
+      border-radius: .25rem .25rem .25rem .25rem;
+      width: 100%;
   }
 
   input.searching {
