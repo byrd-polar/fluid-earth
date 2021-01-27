@@ -90,7 +90,7 @@
       <LogoTwitter32 aria-label="Twitter" />
     </a>
     <a href="https://github.com/zqianem/fev2r">
-      <LogoGithub32 aria-albel="Github" />
+      <LogoGithub32 aria-label="Github" />
     </a>
   </footer>
 </aside>
