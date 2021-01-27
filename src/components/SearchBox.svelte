@@ -34,6 +34,37 @@
     value = option.label;
     onSelect(option);
   }
+
+  $: selectedOption = options.length > 0 ? options[0] : null;
+
+  function handleKeydown(e) {
+    switch(e.key) {
+      case "ArrowDown":
+        arrow(+1);
+        break;
+      case "ArrowUp":
+        arrow(-1);
+        break;
+      case "Escape":
+        value = '';
+        filterOptions();
+        break;
+      case "Enter":
+        select(selectedOption);
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+  }
+
+  function arrow(step) {
+    let index = options.indexOf(selectedOption);
+    if (index === -1) return;
+
+    index = (index + step + options.length) % options.length;
+    selectedOption = options[index];
+  }
 </script>
 
 <div
@@ -49,6 +80,7 @@
       bind:value
       on:focus={filterOptions}
       on:input={filterOptions}
+      on:keydown={handleKeydown}
     >
   </label>
   {#if focused}
@@ -56,6 +88,7 @@
       {#each options as option}
         <li
           class="option"
+          class:selected={selectedOption === option}
           on:mousedown|preventDefault
           on:click={() => { select(option) }}
         >
@@ -112,5 +145,9 @@
 
   li.option:hover {
     background-color: rgba(69, 161, 255, 0.2);
+  }
+
+  li.selected.selected {
+    background-color: rgba(69, 161, 255, 0.15);
   }
 </style>
