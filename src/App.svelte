@@ -5,6 +5,7 @@
 
   import Variables from './menus/Variables.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
+  import Locations from './menus/Locations.svelte';
   import MapProjections from './menus/MapProjections.svelte';
   import Colormaps from './menus/Colormaps.svelte';
   import Perspective from './menus/Perspective.svelte';
@@ -163,6 +164,7 @@
   //
   // Not using { Icon } import syntax for significantly faster build times, see
   // https://github.com/IBM/carbon-icons-svelte#direct-import-recommended
+  import Location24 from "carbon-icons-svelte/lib/Location24";
   import Grid24 from "carbon-icons-svelte/lib/Grid24";
   import Time24 from "carbon-icons-svelte/lib/Time24";
   import Globe24 from "carbon-icons-svelte/lib/Globe24";
@@ -174,6 +176,7 @@
   const menus = [
     { name: 'Datasets', icon: Grid24 },
     { name: 'Time Machine', icon: Time24 },
+    { name: 'Locations', icon: Location24 },
     { name: 'Map Projections', icon: Globe24 },
     { name: 'Colormaps', icon: ColorPalette24 },
     { name: 'Perspective', icon: View24 },
@@ -212,6 +215,13 @@
     {particleDataset}
     bind:particlesShown
     {menusDetailed}
+  />
+</Menu>
+<Menu bind:openedMenu menuName="Locations">
+  <Locations
+    bind:centerLongitude
+    bind:centerLatitude
+    bind:zoom
   />
 </Menu>
 <Menu bind:openedMenu menuName="Map Projections" bind:menusDetailed>
