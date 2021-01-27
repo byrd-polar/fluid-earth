@@ -84,7 +84,7 @@
     >
   </label>
   {#if focused}
-    <ul>
+    <ul style="width: {inputElement.clientWidth}px">
       {#each options as option}
         <li
           class="option"
@@ -126,6 +126,7 @@
   ul {
     margin-top: 0.25em;
     padding: 0;
+    position: absolute;
   }
 
   li {
