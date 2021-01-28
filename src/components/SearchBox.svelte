@@ -68,10 +68,7 @@
   }
 </script>
 
-<div
-  on:focusin={() => focused = true}
-  on:focusout={() => focused = false}
->
+<div>
   <label>
     {label}
     <input
@@ -79,39 +76,45 @@
       type="text"
       spellcheck="false"
       bind:value
+      on:focus={() => focused = true}
+      on:blur={() => focused = false}
       on:focus={filterOptions}
       on:input={filterOptions}
       on:keydown={handleKeydown}
     >
   </label>
   {#if dropdownShown}
-    <ul style="width: {inputElement.clientWidth}px">
-      {#each options as option}
-        <li
-          class="option"
-          class:considered={candidateOption === option}
-          on:mousedown|preventDefault
-          on:click={() => { select(option) }}
-        >
-          {option.label}
-        </li>
+    <div
+      class="dropdown"
+      style="width: {inputElement.clientWidth}px"
+      on:mousedown|preventDefault
+    >
+      {#if options.length > 0}
+        <ul>
+          {#each options as option}
+            <li
+              class:considered={candidateOption === option}
+              on:click={() => { select(option) }}
+            >
+              {option.label}
+            </li>
+          {/each}
+        </ul>
+      {:else if loading}
+        <div class="info">
+          Searching...
+        </div>
       {:else}
-        {#if loading}
-          <li on:mousedown|preventDefault>
-            Searching...
-          </li>
-        {:else}
-          <li on:mousedown|preventDefault>
-            No matches found
-          </li>
-        {/if}
-      {/each}
-    </ul>
+        <div class="info">
+          No matches found
+        </div>
+      {/if}
+    </div>
   {/if}
 </div>
 
 <style>
-  input, ul {
+  input, div.dropdown {
     color: white;
     background-color: #464646;
   }
@@ -124,32 +127,34 @@
     padding: 0.5em;
   }
 
-  ul {
+  div.dropdown {
     margin-top: 0.25em;
-    padding: 0;
     position: absolute;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
   }
 
   li {
     list-style: none;
     padding: 0.5em;
-    cursor: default;
-  }
-
-  li.option {
-    user-select: none;
     cursor: pointer;
+    user-select: none;
   }
 
-  li:not(.option) {
+  div.info {
+    cursor: default;
+    padding: 0.5em;
     opacity: 0.8;
   }
 
-  li.option:hover {
-    background-color: rgba(69, 161, 255, 0.2);
+  li:hover {
+    background-color: rgba(69, 161, 255, 0.15);
   }
 
-  li.considered.considered {
-    background-color: rgba(69, 161, 255, 0.15);
+  li.considered {
+    background-color: rgba(69, 161, 255, 0.2);
   }
 </style>
