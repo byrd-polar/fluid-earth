@@ -217,7 +217,7 @@
     {menusDetailed}
   />
 </Menu>
-<Menu bind:openedMenu menuName="Locations">
+<Menu bind:openedMenu menuName="Locations" flexbox>
   <Locations
     bind:centerLongitude
     bind:centerLatitude

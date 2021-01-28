@@ -58,3 +58,25 @@
 </script>
 
 <SearchBox {label} {loadData} {onSelect} maxShown={10} />
+
+<footer>
+  Data from
+  "<a href="https://simplemaps.com/data/world-cities">
+  Basic World Cities Database v1.73</a>" by
+  <a href="https://simplemaps.com">Pareto Software, LLC</a>, used under
+  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+  / Text reformatted from original
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid white;
+    margin-top: auto;
+    font-size: 0.825em;
+    padding: 0.5em;
+  }
+
+  a {
+    color: #00BFA5;
+  }
+</style>
