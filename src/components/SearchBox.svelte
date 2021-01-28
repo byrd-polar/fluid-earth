@@ -95,13 +95,13 @@
           {option.label}
         </li>
       {:else}
-        {#if data}
+        {#if loading && value.length > 0}
+          <li on:mousedown|preventDefault>
+            Searching...
+          </li>
+        {:else if !loading}
           <li on:mousedown|preventDefault>
             No matches found
-          </li>
-        {:else}
-          <li on:mousedown|preventDefault>
-            Loading...
           </li>
         {/if}
       {/each}
