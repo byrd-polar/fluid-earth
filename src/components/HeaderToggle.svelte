@@ -25,18 +25,18 @@
   }
 
   div :global(button::after) {
-	  position: absolute;
-	  content: "";
-	  top: 0;
-	  bottom: 0;
-	  left: -0.75rem;
-	  margin: auto;
-	  height: 2.5rem;
-	  width: 2.5rem;
-	  text-align: center;
-	  border-radius: 50%;
-	  background-color: transparent;
-	  transition: transform 150ms ease-out;
+    position: absolute;
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: -0.75rem;
+    margin: auto;
+    height: 2.5rem;
+    width: 2.5rem;
+    text-align: center;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: transform 150ms ease-out;
   }
 
   div :global(button[aria-checked="true"]::after) {
