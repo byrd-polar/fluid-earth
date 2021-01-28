@@ -10,6 +10,7 @@
   let data = undefined;
   let focused = false;
   let loading = false;
+  $: dropdownShown = focused && (value.length > 0 || !loading);
 
   async function filterOptions() {
     if (loading) return;
@@ -83,7 +84,7 @@
       on:keydown={handleKeydown}
     >
   </label>
-  {#if focused}
+  {#if dropdownShown}
     <ul style="width: {inputElement.clientWidth}px">
       {#each options as option}
         <li
@@ -95,11 +96,11 @@
           {option.label}
         </li>
       {:else}
-        {#if loading && value.length > 0}
+        {#if loading}
           <li on:mousedown|preventDefault>
             Searching...
           </li>
-        {:else if !loading}
+        {:else}
           <li on:mousedown|preventDefault>
             No matches found
           </li>
