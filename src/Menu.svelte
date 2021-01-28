@@ -9,6 +9,7 @@
   export let openedMenu;
   export let menuName;
   export let menusDetailed = undefined;
+  export let flexbox = false;
 
   // avoid animating menu open/close when there is already a menu open
   let previousOpenedMenu = null;
@@ -54,7 +55,7 @@
     {/if}
   </header>
   <div>
-    <section>
+    <section class:flexbox>
       <slot></slot>
     </section>
   </div>
@@ -124,6 +125,12 @@
 
   section {
     padding: 1em;
+  }
+
+  section.flexbox {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   section :global(h2) {
