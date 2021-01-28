@@ -35,7 +35,7 @@
     onSelect(option);
   }
 
-  $: selectedOption = options.length > 0 ? options[0] : null;
+  $: candidateOption = options.length > 0 ? options[0] : null;
 
   function handleKeydown(e) {
     switch(e.key) {
@@ -50,7 +50,7 @@
         filterOptions();
         break;
       case "Enter":
-        select(selectedOption);
+        if (candidateOption != null) select(candidateOption);
         break;
       default:
         return;
@@ -59,11 +59,11 @@
   }
 
   function arrow(step) {
-    let index = options.indexOf(selectedOption);
+    let index = options.indexOf(candidateOption);
     if (index === -1) return;
 
     index = (index + step + options.length) % options.length;
-    selectedOption = options[index];
+    candidateOption = options[index];
   }
 </script>
 
@@ -88,7 +88,7 @@
       {#each options as option}
         <li
           class="option"
-          class:selected={selectedOption === option}
+          class:considered={candidateOption === option}
           on:mousedown|preventDefault
           on:click={() => { select(option) }}
         >
@@ -148,7 +148,7 @@
     background-color: rgba(69, 161, 255, 0.2);
   }
 
-  li.selected.selected {
+  li.considered.considered {
     background-color: rgba(69, 161, 255, 0.15);
   }
 </style>
