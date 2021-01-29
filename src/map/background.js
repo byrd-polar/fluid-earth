@@ -2,10 +2,12 @@ import * as twgl from 'twgl.js';
 import * as topojson from 'topojson-client';
 
 import griddedVert from './gridded.vert';
+import griddedVert2 from './gridded2.vert';
 import griddedFrag from './gridded.frag';
 import vectorVert from './vector.vert';
 import vectorFrag from './vector.frag';
 import colormapFrag from './colormap.frag';
+import colormapFrag2 from './colormap2.frag';
 
 import { glDraw, griddedArrays } from './webgl.js';
 
@@ -87,16 +89,13 @@ export default class MapBackground {
   }
 
   _createPrograms() {
-    // switch from using the ALPHA channel to the RED channel if using webgl2,
-    // as those are the only single-channel float textures supported by webgl
-    // and webgl2 respectively
-    let colormapFrag2 = this._webgl2 ?
-      colormapFrag.replace(/\)\.a;/g, ').r;') :
-      colormapFrag;
+    let colormapProg = this._webgl2 ?
+      [griddedVert2, colormapFrag2] :
+      [griddedVert, colormapFrag];
     return {
       gridded: twgl.createProgramInfo(this._gl, [griddedVert, griddedFrag]),
       vector: twgl.createProgramInfo(this._gl, [vectorVert, vectorFrag]),
-      colormap: twgl.createProgramInfo(this._gl, [griddedVert, colormapFrag2]),
+      colormap: twgl.createProgramInfo(this._gl, colormapProg),
     };
   }
 
