@@ -22,7 +22,6 @@
 
 
 <Hoverable let:hovering={hovering}>
-
   <div
     id="pin"
     style="left: {x - 16}px; top: {y - 21}px"
