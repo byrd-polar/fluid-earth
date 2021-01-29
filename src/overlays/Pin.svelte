@@ -1,6 +1,6 @@
 <script>
   import { fly } from 'svelte/transition';
-  import LocationStarFilled24 from "carbon-icons-svelte/lib/LocationStarFilled24";
+  import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled32';
   import tooltip from '../tooltip.js';
   import { dataPoint } from '../map/gridded.js';
   import { clipped } from '../map/projections/';
@@ -25,12 +25,12 @@
 <Hoverable let:hovering={hovering}>
   <div
     class="pin"
-    style="left: {x - 12.5}px; top: {y - 21}px"
+    style="left: {x - 16}px; top: {y - 30}px"
     class:clip
     in:fly="{{ y: -150, duration: 250 }}"
     on:click={() => { pins.delete(pin); pins = pins}}
   >
-    <LocationStarFilled24 class="marker"/>
+    <PinIcon class="marker"/>
   </div>
   {#if hovering}
     <div
@@ -69,6 +69,7 @@
     color: red;
     cursor: pointer;
     filter: drop-shadow(0 0 0.25em black);
+    display: block;
   }
 
   div.pin.clip {
