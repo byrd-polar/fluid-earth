@@ -1,5 +1,6 @@
 <script>
   import { fly } from 'svelte/transition';
+  import LocationStarFilled24 from "carbon-icons-svelte/lib/LocationStarFilled24";
   import tooltip from '../tooltip.js';
   import { dataPoint } from '../map/gridded.js';
   import { clipped } from '../map/projections/';
@@ -23,13 +24,13 @@
 
 <Hoverable let:hovering={hovering}>
   <div
-    id="pin"
-    style="left: {x - 16}px; top: {y - 21}px"
+    class="pin"
+    style="left: {x - 12.5}px; top: {y - 21}px"
     class:clip
     in:fly="{{ y: -150, duration: 250 }}"
     on:click={() => { pins.delete(pin); pins = pins}}
   >
-      <i class="icon-location"></i>
+    <LocationStarFilled24 class="marker"/>
   </div>
   {#if hovering}
     <div
@@ -59,48 +60,19 @@
 
 
 <style>
-  #pin {
+  div.pin {
     pointer-events: auto;
     position: absolute;
   }
 
-  #pin.clip {
+  div.pin :global(.marker) {
+    color: red;
+    cursor: pointer;
+    filter: drop-shadow(0 0 0.25em black);
+  }
+
+  div.pin.clip {
     display: none;
-  }
-
-  @font-face {
-    font-family: fontello;
-    font-style: normal;
-    font-weight: 400;
-    src: url(../fonts/fontello.woff2) format("woff2"), url(../fonts/fontello.woff) format("woff"), url(../fonts/fontello.ttf) format("truetype")
-  }
-
-  [class^=icon-]:before {
-      -moz-osx-font-smoothing: grayscale;
-      -webkit-font-feature-settings: normal;
-      -webkit-font-smoothing: antialiased;
-      display: inline-block;
-      font-family: fontello;
-      font-feature-settings: normal;
-      font-style: normal;
-      font-variant: normal;
-      font-size: 1.5rem;
-      font-weight: 400;
-      line-height: 1.5rem;
-      margin-left: .2em;
-      margin-right: .2em;
-      speak: none;
-      text-align: center;
-      text-decoration: inherit;
-      text-transform: none;
-      width: 1em;
-      cursor: pointer;
-      color: rgba(255, 0, 0, .9);
-      text-shadow: 0 -2px 5px #000
-  }
-
-  .icon-location:before {
-      content: "\E809";
   }
 
   .caption {
