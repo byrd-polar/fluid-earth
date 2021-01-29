@@ -77,7 +77,6 @@ end of mode toggle -->
   }
 
   li {
-    font-family: Quicksand-regular;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
@@ -128,7 +127,6 @@ end of mode toggle -->
 }
 .onoffswitch-inner:before {
     content: "Weather Mode";
-    font-family: Quicksand-regular;
     padding-left: 10px;
     color: #FFFFFF;
     font-size: 1rem;
@@ -137,7 +135,6 @@ end of mode toggle -->
 }
 .onoffswitch-inner:after {
     content: "Climate Mode";
-    font-family: Quicksand-regular;
     padding-right: 10px;
     color: #FFFFFF;
     text-align: right;

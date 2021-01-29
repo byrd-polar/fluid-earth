@@ -134,7 +134,6 @@
   }
 
   section :global(h2) {
-    font-family: Quicksand-regular;
     font-size: 1rem;
     font-weight: 400;
     border-bottom: 1px solid;

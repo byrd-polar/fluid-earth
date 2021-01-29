@@ -88,12 +88,10 @@
   }
 
   .plain {
-    font-family: Quicksand-regular;
     color: #6c757d;
   }
 
   .bold {
-    font-family: Quicksand-bold;
     color: #000;
     font-weight: bolder;
   }
