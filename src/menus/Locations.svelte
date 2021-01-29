@@ -66,6 +66,8 @@
   }
 </script>
 
+<div>
+
 <h2>PIN A LOCATION</h2>
 
 <p>
@@ -74,11 +76,12 @@
 </p>
 
 <p>
-  Hold down the <b>left mouse button</b> at that location, or...<br><br>
+  Hold down the <b>left mouse button</b> at that location, or...
 </p>
 
 <SearchBox {label} {loadData} {onSelect} maxShown={10} />
 
+</div>
 <footer>
   Data from
   "<a href="https://simplemaps.com/data/world-cities">
@@ -89,6 +92,10 @@
 </footer>
 
 <style>
+  h2 {
+    margin-top: 0;
+  }
+
   footer {
     border-top: 1px solid white;
     margin-top: auto;
