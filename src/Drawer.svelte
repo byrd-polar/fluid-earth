@@ -134,10 +134,12 @@
   }
 
   h1 {
+    font-size: 1.4em;
     margin: 0 0 0.25em;
   }
 
   p {
+    font-size: 0.9em;
     margin-top: 0.25em;
   }
 
