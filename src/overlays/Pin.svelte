@@ -1,4 +1,5 @@
 <script>
+  import { fly } from 'svelte/transition';
   import tooltip from '../tooltip.js';
   import { dataPoint } from '../map/gridded.js';
   import { clipped } from '../map/projections/';
@@ -10,6 +11,7 @@
   export let griddedData;
   export let griddedDataset;
 
+  let label = pin.label;
   let lonLat = [pin.longitude, pin.latitude];
   $: [x, y] = d3geoProjection(lonLat);
   $: clip = clipped(d3geoProjection, lonLat);
@@ -20,9 +22,12 @@
 
 
 <Hoverable let:hovering={hovering}>
-  <div id="pin"
+
+  <div
+    id="pin"
     style="left: {x - 16}px; top: {y - 21}px"
     class:clip
+    in:fly="{{ y: -150, duration: 250 }}"
     on:click={() => { pins.delete(pin); pins = pins}}
   >
       <i class="icon-location"></i>
@@ -33,7 +38,11 @@
       class="caption"
     >
       <span class="plain">
-        Location {pin.id}
+        {#if label}
+          {label}
+        {:else}
+          Location {pin.id}
+        {/if}
         <br>
       </span>
       <strong class="bold">
@@ -117,10 +126,4 @@
     color: #000;
     font-weight: bolder;
   }
-
-
-
-
-
-
 </style>

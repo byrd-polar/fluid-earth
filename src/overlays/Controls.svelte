@@ -11,7 +11,7 @@
   export let zoom;
 
   export let d3geoProjection;
-  export let pins;
+  export let addPin;
 
   let interactionSurfaceElement;
   let screenRatio; // ratio of element height to our reference height
@@ -56,9 +56,7 @@
         let [longitude, latitude] = d3geoProjection.invert(point);
 
         if (reproj(d3geoProjection, point, [longitude, latitude])) {
-          let id = Math.max(0, ...[...pins].map(pin => pin.id)) + 1;
-          pins.add({ id, longitude, latitude });
-          pins = pins;
+          addPin(null, longitude, latitude);
         }
       });
     interactionSurfaceElement.addEventListener('wheel', handleWheel);

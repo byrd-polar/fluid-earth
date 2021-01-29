@@ -7,8 +7,9 @@
   export let centerLongitude;
   export let centerLatitude;
   export let zoom;
+  export let addPin;
 
-  let label = 'Search for country, city, or region:';
+  let label = 'Search by country, city, or region:';
 
   async function loadData() {
     return await ky('/data/locations.json', {timeout: false}).json();
@@ -16,6 +17,7 @@
 
   async function onSelect(city) {
     await moveTo(city);
+    dropPin(city);
   }
 
   let opts = {
@@ -55,7 +57,25 @@
 
     if (zoomOutIn) await zoomTweened.set(originalZoom);
   }
+
+  function dropPin(city) {
+    console.log(city);
+    let labelParts = city.label.split(",");
+    let shortLabel = labelParts[0] + ", " + labelParts[1];
+    addPin(shortLabel, city.longitude, city.latitude);
+  }
 </script>
+
+<h2>PIN A LOCATION</h2>
+
+<p>
+  Locations on the map can be marked with a pin. Hover over the pin to see information about that location.<br>
+  To mark a location with a pin:
+</p>
+
+<p>
+  Hold down the <b>left mouse button</b> at that location, or...<br><br>
+</p>
 
 <SearchBox {label} {loadData} {onSelect} maxShown={10} />
 

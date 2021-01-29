@@ -94,6 +94,11 @@
   };
 
   let pins = new Set();
+  function addPin(label, longitude, latitude) {
+  	let id = Math.max(0, ...[...pins].map(pin => pin.id)) + 1;
+    pins.add({ id, label, longitude, latitude });
+    pins = pins;
+  }
 
   onMount(() => {
     // workaround some race condition loading bugs
@@ -222,6 +227,7 @@
     bind:centerLongitude
     bind:centerLatitude
     bind:zoom
+    {addPin}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Map Projections" bind:menusDetailed>
@@ -285,7 +291,7 @@
       bind:centerLatitude
       bind:zoom
       {d3geoProjection}
-      bind:pins
+      {addPin}
     />
     <Pins
       {pins}
