@@ -14,6 +14,8 @@
 
   let label = pin.label;
   let lonLat = [pin.longitude, pin.latitude];
+  let zIndex = 1e8 - Math.round(pin.latitude * 1e6);
+
   $: [x, y] = d3geoProjection(lonLat);
   $: clip = clipped(d3geoProjection, lonLat);
   $: value = dataPoint(griddedData, lonLat);
@@ -25,7 +27,7 @@
 <Hoverable let:hovering={hovering}>
   <div
     class="pin"
-    style="left: {x - 16}px; top: {y - 30}px"
+    style="left: {x - 16}px; top: {y - 30}px; z-index: {zIndex}"
     class:clip
     in:fly="{{ y: -150, duration: 250 }}"
     on:click={() => { pins.delete(pin); pins = pins}}
