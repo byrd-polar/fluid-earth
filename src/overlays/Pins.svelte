@@ -1,5 +1,5 @@
 <script>
-  import Pin from './Pin.svelte';
+  import Pin from '../components/Pin.svelte';
 
   export let d3geoProjection;
   export let pins;
