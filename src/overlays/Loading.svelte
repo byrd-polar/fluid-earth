@@ -17,7 +17,7 @@
 </script>
 
 <div class:closed>
-  <ProgressBar rx="0" width="200" {series} />
+  <ProgressBar rx="0" width="200" height="20" {series} />
 </div>
 
 <style>
@@ -26,9 +26,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Hack to get svg mask to display properly on Chromium */
+    z-index: 0;
   }
 
   div.closed {
-    display: none;
+    visibility: hidden;
   }
 </style>
