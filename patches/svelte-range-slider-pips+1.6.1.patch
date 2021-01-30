@@ -1,8 +1,8 @@
 diff --git a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
-index 68bd398..84a4182 100755
+index b4867f0..18b9aec 100755
 --- a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
 +++ b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
-@@ -12,6 +12,15 @@
+@@ -13,6 +13,15 @@
    export let vertical = false;
    export let float = false;
    export let hover = true;
