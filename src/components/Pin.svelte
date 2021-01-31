@@ -28,11 +28,14 @@
   class:clip
   style="left: {x}px; top: {y}px;"
   in:fly="{{ y: -150, duration: 250 }}"
-  on:click={() => { pins.delete(pin); pins = pins}}
   on:mouseenter={() => hovering = true}
   on:mouseleave={() => hovering = false}
 >
-  <PinIcon class="marker" style="z-index: {-1e8 + Math.round(y * 8)}"/>
+  <PinIcon
+    class="marker"
+    style="z-index: {-1e8 + Math.round(y * 8)}"
+    on:click={() => { pins.delete(pin); pins = pins}}
+  />
   {#if hovering}
     <div class="caption">
       <span class="plain">
