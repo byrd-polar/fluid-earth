@@ -26,6 +26,8 @@ export default function tooltip(node, options) {
 
   addTip();
 
+  if (mediaQuery.matches) tip.disable();
+
   return {
     update(newOptions) {
       removeTip();
@@ -40,12 +42,11 @@ export default function tooltip(node, options) {
 
 // hide tooltips on small screens / mobile
 let mediaQuery = window.matchMedia('(max-width: 36rem)');
-function handleResize() {
+
+window.addEventListener('resize', () => {
   if (mediaQuery.matches) {
     tips.forEach(t => t.disable());
   } else {
     tips.forEach(t => t.enable());
   }
-}
-window.addEventListener('resize', handleResize);
-handleResize();
+});
