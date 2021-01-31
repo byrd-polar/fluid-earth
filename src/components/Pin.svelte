@@ -4,7 +4,6 @@
   import tooltip from '../tooltip.js';
   import { dataPoint } from '../map/gridded.js';
   import { clipped } from '../map/projections/';
-  import Hoverable from './Hoverable.svelte';
 
   export let pins;
   export let pin;
@@ -14,7 +13,7 @@
 
   let label = pin.label;
   let lonLat = [pin.longitude, pin.latitude];
-  let zIndex = 1e8 - Math.round(pin.latitude * 1e6);
+  let hovering = false;
 
   $: [x, y] = d3geoProjection(lonLat);
   $: clip = clipped(d3geoProjection, lonLat);
@@ -24,21 +23,18 @@
 </script>
 
 
-<Hoverable let:hovering={hovering}>
-  <div
-    class="pin"
-    style="left: {x - 16}px; top: {y - 30}px; z-index: {zIndex}"
-    class:clip
-    in:fly="{{ y: -150, duration: 250 }}"
-    on:click={() => { pins.delete(pin); pins = pins}}
-  >
-    <PinIcon class="marker"/>
-  </div>
+<div
+  class="pin"
+  class:clip
+  style="left: {x}px; top: {y}px;"
+  in:fly="{{ y: -150, duration: 250 }}"
+  on:click={() => { pins.delete(pin); pins = pins}}
+  on:mouseenter={() => hovering = true}
+  on:mouseleave={() => hovering = false}
+>
+  <PinIcon class="marker" style="z-index: {-1e8 + Math.round(y * 8)}"/>
   {#if hovering}
-    <div
-      style="left:{x-10}px;top:{y+5}px;"
-      class="caption"
-    >
+    <div class="caption">
       <span class="plain">
         {#if label}
           {label}
@@ -58,36 +54,42 @@
       </small><br>
     </div>
   {/if}
-</Hoverable>
+</div>
 
 
 <style>
   div.pin {
-    pointer-events: auto;
     position: absolute;
-  }
-
-  div.pin :global(.marker) {
-    color: red;
-    cursor: pointer;
-    filter: drop-shadow(0 0 0.25em black);
-    display: block;
+    pointer-events: auto;
   }
 
   div.pin.clip {
     display: none;
   }
 
-  .caption {
+  div.pin > :global(*) {
     position: absolute;
+  }
+
+  div.pin > :global(.marker) {
+    top: -30px;
+    left: -16px;
+    color: red;
+    cursor: pointer;
+    filter: drop-shadow(0 0 0.25em black);
+    display: block;
+  }
+
+  .caption {
+    width: max-content;
     background-color: beige;
     border-radius: .5rem;
     box-shadow: 0 0 10px #000;
     font-size: .8rem;
     line-height: 1.2;
     padding: .25rem .5rem;
-    transform: translate(1.2rem);
-    z-index: 2;
+    top: 0.25rem;
+    left: 0.25rem;
   }
 
   .plain {

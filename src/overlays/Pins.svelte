@@ -23,5 +23,6 @@
   div {
     pointer-events: none;
     overflow: hidden;
+    z-index: 0; /* create separate stacking context for pins */
   }
 </style>
