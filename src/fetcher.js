@@ -57,6 +57,8 @@ export default class Fetcher {
       transferredBytes: 0,
       totalBytes: dataset.bytes || dataset.bytesPerFile,
     };
+    this._updateProgresses(type);
+    this._triggerListeners();
 
     if (this._abortControllers[type] === undefined) {
       this._abortControllers[type] = new AbortController();
