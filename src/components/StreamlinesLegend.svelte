@@ -44,7 +44,7 @@
     height: 0.8em;
 
     background-image:
-      radial-gradient(0.35em at center, #ffffff88 0.35em, transparent);
+      radial-gradient(#ffffff88 0%, #ffffff88 60%, transparent 60%);
     background-position: 0 -0.05em;
     background-size: 0.8em 0.8em;
     animation: slide 0.3s linear;
