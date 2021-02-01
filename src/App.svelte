@@ -114,49 +114,86 @@
     // Methods for updating gridded and particle data in response to date or
     // dataset changes. Defined here so that they aren't triggered multiple
     // times during the initial mount due to a Svelte bug with bindings.
+
     let previousGriddedDataset = null;
+    let previousParticleDataset = null;
+    let griddedLoading = false;
+    let particleLoading = false;
+    let griddedAssignments = () => {};
+    let particleAssignments = () => {};
+    let initialLoad = true;
+
     updateGriddedData = async () => {
+      griddedLoading = true;
+
       let array = await fetcher.fetch(griddedDataset, date, 'gridded');
 
       if (!array) return;
 
-      griddedData = {
-        floatArray: array,
-        width: griddedDataset.width,
-        height: griddedDataset.height,
-      }
+      griddedLoading = false;
 
-      if (previousGriddedDataset !== griddedDataset) {
-        griddedDomain = griddedDataset.domain;
-        griddedColormap = griddedDataset.colormap;
+      griddedAssignments = () => {
+        griddedData = {
+          floatArray: array,
+          width: griddedDataset.width,
+          height: griddedDataset.height,
+        }
 
-        previousGriddedDataset = griddedDataset;
-      }
+        if (previousGriddedDataset !== griddedDataset) {
+          griddedDomain = griddedDataset.domain;
+          griddedColormap = griddedDataset.colormap;
+
+          previousGriddedDataset = griddedDataset;
+        }
+      };
+
+      // wait until complementary particle dataset is finished loading before
+      // updating the map (avoids partial updates), except on initial load
+      if (!particleLoading || initialLoad) assignVariables();
     };
-    let previousParticleDataset = null;
+
     updateParticleData = async () => {
       if (!particlesShown) return;
+
+      particleLoading = true;
 
       let [uArray, vArray] =
         await fetcher.fetch(particleDataset, date, 'particle');
 
       if (!uArray || !vArray) return;
 
-      particleData = {
-        uVelocities: uArray,
-        vVelocities: vArray,
-        width: particleDataset.width,
-        height: particleDataset.height,
+      particleLoading = false;
+
+      particleAssignments = () => {
+        particleData = {
+          uVelocities: uArray,
+          vVelocities: vArray,
+          width: particleDataset.width,
+          height: particleDataset.height,
+        };
+
+        if (previousParticleDataset !== particleDataset) {
+          particleLifetime = particleDataset.particleLifetime;
+          particleCount = particleDataset.particleCount;
+          particleDisplay = particleDataset.particleDisplay;
+
+          previousParticleDataset = particleDataset;
+        }
       };
 
-      if (previousParticleDataset !== particleDataset) {
-        particleLifetime = particleDataset.particleLifetime;
-        particleCount = particleDataset.particleCount;
-        particleDisplay = particleDataset.particleDisplay;
-
-        previousParticleDataset = particleDataset;
-      }
+      // wait until complementary gridded dataset is finished loading before
+      // updating the map (avoids partial updates), except on initial load
+      if (!griddedLoading || initialLoad) assignVariables();
     };
+
+    // update both gridded and particle datasets at the same time (if necessary)
+    function assignVariables() {
+      griddedAssignments();
+      particleAssignments();
+      griddedAssignments = () => {};
+      particleAssignments = () => {};
+      initialLoad = false;
+    }
 
     // remove loading spinner from public/index.html
     document.body.removeAttribute('class');
