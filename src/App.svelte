@@ -22,6 +22,7 @@
   import Controls from './overlays/Controls.svelte';
 
   import Fetcher from './fetcher.js';
+  import { validDate } from './utility.js';
 
   import { onMount } from 'svelte';
   import { Float16Array } from '@petamoriken/float16';
@@ -126,6 +127,7 @@
     updateGriddedData = async () => {
       griddedLoading = true;
 
+      date = validDate(griddedDataset, date); // doesn't retrigger update
       let array = await fetcher.fetch(griddedDataset, date, 'gridded');
 
       if (!array) return;
@@ -157,6 +159,7 @@
 
       particleLoading = true;
 
+      date = validDate(particleDataset, date); // doesn't retrigger update
       let [uArray, vArray] =
         await fetcher.fetch(particleDataset, date, 'particle');
 
