@@ -60,7 +60,7 @@
   let zoom = 1.5;
 
   let griddedData = {
-    floatArray: new Float16Array([NaN]),
+    floatArray: new Float16Array([-Infinity]),
     width: 1,
     height: 1,
   };

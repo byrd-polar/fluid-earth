@@ -29,7 +29,8 @@ const wgrib2 = spawn('wgrib2', [
 const float16 = new Transform({
   transform(chunk, _encoding, callback) {
     const original = new Float32Array(chunk.buffer);
-    const converted = new Float16Array(original);
+    const filtered = original.map(v => v > 9.9989e20 ? -Infinity : v);
+    const converted = new Float16Array(filtered);
     callback(null, Buffer.from(converted.buffer)); 
   }
 });

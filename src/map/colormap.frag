@@ -13,8 +13,9 @@ varying vec2 v_position;
 void main() {
   float value = texture2D(u_data, (v_position + 1.0) / 2.0).a;
 
-  // Check for NaNs and use a consistent color for them
-  if (value != value) {
+  // Check for -Infinities and use a consistent color for them
+  // (not using NaN because of lack of support in some implementations)
+  if (value < -1e99) {
     gl_FragColor = vec4(0.15, 0.15, 0.15, 1); // greyish color
     return;
   }
