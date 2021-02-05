@@ -1,10 +1,9 @@
 import svelte from 'rollup-plugin-svelte';
 import glslify from 'rollup-plugin-glslify';
-import json from '@rollup/plugin-json';
 import resolve from '@rollup/plugin-node-resolve';
 
 export default {
-  input: 'exports/webcomponent.js',
+  input: 'exports/webcomponent/main.js',
   output: {
     sourcemap: true,
     format: 'iife',
@@ -18,7 +17,6 @@ export default {
       },
     }),
     glslify(),
-    json(),
     resolve({
       browser: true,
       dedupe: ['svelte']

@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "build": "rollup -c",
-    "buildwc": "rollup -c exports/webcomponent.rollup.config.js",
+    "build:wc": "rollup -c exports/webcomponent/rollup.config.js",
     "data": "node ./data/index.js",
     "dev": "rollup -c -w",
     "start": "sirv public --host",
