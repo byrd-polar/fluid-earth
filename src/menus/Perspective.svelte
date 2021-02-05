@@ -7,6 +7,7 @@
   import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph";
   import RangeSlider from 'svelte-range-slider-pips';
   import Button from '../components/Button.svelte';
+  import { clamp } from '../utility.js';
 
   export let minZoom;
   export let maxZoom;
@@ -28,10 +29,6 @@
   function pan({ up=0, down=0, left=0, right=0 }) {
     centerLatitude = clamp(centerLatitude + up - down, minLat, maxLat);
     centerLongitude = clamp(centerLongitude + right - left, minLong, maxLong);
-  }
-
-  function clamp(x, min, max) {
-    return x > max ? max : (x < min ? min : x);
   }
 </script>
 

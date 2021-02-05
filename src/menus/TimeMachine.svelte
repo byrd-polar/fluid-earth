@@ -4,6 +4,7 @@
   import RangeSlider from 'svelte-range-slider-pips';
   import Toggle from "svelte-toggle";
   import prettyBytes from 'pretty-bytes';
+  import { clamp } from '../utility.js';
 
   export let fetcher;
   export let date;
@@ -26,10 +27,6 @@
   function adjustDate(hours) {
     date.setHours(date.getHours() + hours);
     date = date;
-  }
-
-  function clamp(x, min, max) {
-    return x > max ? max : (x < min ? min : x);
   }
 
   function localDateFloor(d) {

@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import interact from 'interactjs';
   import { reproj } from '../map/projections/';
+  import { clamp } from '../utility.js';
 
   export let minZoom;
   export let maxZoom;
@@ -72,10 +73,6 @@
   function handleWheel(e) {
     let z = zoom - 0.25 * Math.sign(e.deltaY);
     zoom = clamp(z, minZoom, maxZoom);
-  }
-
-  function clamp(x, min, max) {
-    return x > max ? max : (x < min ? min : x);
   }
 </script>
 
