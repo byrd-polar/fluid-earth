@@ -48,6 +48,24 @@ for (let row of csv) {
   });
 }
 
+locations = locations.concat([
+  {
+    label: 'McMurdo Station, Ross Island, Antarctica',
+    longitude: 166.668235,
+    latitude: -77.846323,
+  },
+  {
+    label: 'Amundsen–Scott Station, South Pole, Antarctica',
+    longitude: 0,
+    latitude: -90,
+  },
+  {
+    label: 'Santa\'s Workshop, North Pole, Arctic',
+    longitude: 0,
+    latitude: 90,
+  },
+]);
+
 await writeFile(outputFile, JSON.stringify(locations));
 
 function reverseComma(text) {
