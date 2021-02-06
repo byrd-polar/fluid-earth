@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
 import { promisify } from 'util';
 
-import { download, OUTPUT_DIR, CACHE_DIR } from './utility.js';
+import { download, OUTPUT_DIR, CACHE_DIR, log } from './utility.js';
 
 import extract from 'extract-zip';
 import _parse from 'csv-parse';
@@ -18,7 +18,7 @@ const file = 'worldcities.csv';
 let zipFile = await download(url);
 let outputFile = path.join(OUTPUT_DIR, 'locations.json');
 
-console.log(`Generating locations...\n<= ${zipFile}\n=> ${outputFile}\n`);
+log('Generating locations', zipFile, outputFile);
 await extract(zipFile, { dir: path.resolve(CACHE_DIR, name) });
 
 let csvString = await readFile(path.join(CACHE_DIR, name, file), 'utf8');

@@ -1,4 +1,4 @@
-import { download, OUTPUT_DIR } from './utility.js';
+import { download, OUTPUT_DIR, log } from './utility.js';
 
 import path from 'path';
 import mapshaper from 'mapshaper';
@@ -17,7 +17,6 @@ let outputFile = path.join(OUTPUT_DIR, 'topology.json');
 let cmds = `-i ${files.join(' ')} combine-files \
   -o ${outputFile} format=topojson`;
 
-let inputs = files.map((file) => `<= ${file}`).join('\n');
-console.log(`Generating topology...\n${inputs}\n=> ${outputFile}\n`);
+log('Generating topology', files, outputFile);
 
 await mapshaper.runCommands(cmds);
