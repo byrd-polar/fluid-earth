@@ -1,4 +1,5 @@
-import { download, OUTPUT_DIR } from './helpers.js';
+import { download, OUTPUT_DIR } from './utility.js';
+
 import path from 'path';
 import mapshaper from 'mapshaper';
 
@@ -10,15 +11,13 @@ const urls = [
   base + '/50m_physical/ne_50m_coastline.shp',
 ];
 
-export default async function() {
-  let files = await Promise.all(urls.map(async (url) => await download(url)));
+let files = await Promise.all(urls.map(async (url) => await download(url)));
 
-  let outputFile = path.join(OUTPUT_DIR, 'topology.json');
-  let cmds = `-i ${files.join(' ')} combine-files \
-    -o ${outputFile} format=topojson`;
+let outputFile = path.join(OUTPUT_DIR, 'topology.json');
+let cmds = `-i ${files.join(' ')} combine-files \
+  -o ${outputFile} format=topojson`;
 
-  let inputs = files.map((file) => `<= ${file}`).join('\n');
-  console.log(`Generating topology...\n${inputs}\n=> ${outputFile}\n`);
+let inputs = files.map((file) => `<= ${file}`).join('\n');
+console.log(`Generating topology...\n${inputs}\n=> ${outputFile}\n`);
 
-  await mapshaper.runCommands(cmds);
-}
+await mapshaper.runCommands(cmds);

@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { existsSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import path from 'path';
 import { URL } from 'url';
@@ -6,13 +6,7 @@ import got from 'got';
 
 export const CACHE_DIR = 'data/cache/';
 export const OUTPUT_DIR = 'public/data/';
-
-// create dir if path doesn't exist
-export function mkdir(dirPath) {
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { mode: '755' });
-  }
-}
+export const INVENTORY_FILE = 'public/data/inventory.json';
 
 // downloads a file from url if it doesn't already exist in cache
 //
@@ -36,7 +30,7 @@ export async function download(url, prefix=false, suffix='', headers={}) {
   }
   let filepath = path.join(CACHE_DIR, filename);
 
-  if (fs.existsSync(filepath)) {
+  if (existsSync(filepath)) {
     console.log(`Exists in cache, not re-downloading...\n=> ${filepath}\n`);
   } else {
     console.log(`Downloading...\n${url}\n=> ${filepath}\n`);

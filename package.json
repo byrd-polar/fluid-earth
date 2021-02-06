@@ -12,6 +12,7 @@
     "build:bundles": "rollup -c",
     "build:webcomponent": "rollup -c exports/webcomponent/rollup.config.js",
     "data": "run-s data:**",
+    "data:init": "node data/init.js",
     "data:locations": "node data/locations.js",
     "data:topology": "node data/topology.js",
     "dev": "rollup -c -w",
