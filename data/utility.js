@@ -10,9 +10,9 @@ export const INVENTORY_FILE = 'public/data/inventory.json';
 
 // downloads a file from url if it doesn't already exist in cache
 //
-// set prefix to true if you want to whole URL in the file save path
-// suffix is appended to file save path
-// headers are sent with the request (used for HTTP range requests)
+// - set prefix to true if you want the whole URL in the file save path
+// - suffix is appended to file save path
+// - headers are sent with the request (used for HTTP range requests)
 //
 // returns a Promise that resolves to the path where file was saved to
 export async function download(url, prefix=false, suffix='', headers={}) {
