@@ -55,6 +55,7 @@
     "interactjs": "^1.10.2",
     "ky": "^0.26.0",
     "pretty-bytes": "^5.5.0",
+    "proper-lockfile": "^4.1.2",
     "sirv-cli": "^1.0.11",
     "svelte-calendar": "^2.0.4",
     "svelte-range-slider-pips": "1.6.1",

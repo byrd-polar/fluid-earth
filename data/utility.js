@@ -1,8 +1,9 @@
 import { existsSync } from 'fs';
-import { writeFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
 import { URL } from 'url';
 import got from 'got';
+import lockfile from 'proper-lockfile';
 
 export const CACHE_DIR = 'data/cache/';
 export const OUTPUT_DIR = 'public/data/';
@@ -69,4 +70,21 @@ export async function download(url, prefix=false, suffix='', headers={}) {
     }
   }
   return filepath;
+}
+
+// read the inventory.json file and ensure only one caller can access it at a
+// time using a lockfile
+//
+// returns the inventory object and a callback for writing to the inventory
+// while releasing the lockfile
+export async function lockAndReadInventory() {
+  let release = await lockfile.lock(INVENTORY_FILE, { retries: 8 });
+  let inventory = JSON.parse(await readFile(INVENTORY_FILE, 'utf8'));
+
+  let writeAndUnlockInventory = async inventory => {
+    await writeFile(INVENTORY_FILE, JSON.stringify(inventory));
+    release();
+  };
+
+  return [inventory, writeAndUnlockInventory];
 }
