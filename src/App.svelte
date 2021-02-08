@@ -127,7 +127,9 @@
     updateGriddedData = async () => {
       griddedLoading = true;
 
-      date = validDate(griddedDataset, date); // doesn't retrigger update
+      let valid = validDate(griddedDataset, date);
+      if (valid.getTime() !== date.getTime()) date = valid;
+
       let array = await fetcher.fetch(griddedDataset, date, 'gridded');
 
       if (!array) return;
@@ -159,7 +161,9 @@
 
       particleLoading = true;
 
-      date = validDate(particleDataset, date); // doesn't retrigger update
+      let valid = validDate(griddedDataset, date);
+      if (valid.getTime() !== date.getTime()) date = valid;
+
       let [uArray, vArray] =
         await fetcher.fetch(particleDataset, date, 'particle');
 
