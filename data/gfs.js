@@ -1,117 +1,138 @@
-import { download, OUTPUT_DIR, exit } from './helpers.js';
-import { spawnSync } from 'child_process';
+import * as util from './utility.js';
+import { DateTime } from "luxon";
+import { readFile, mkdir } from 'fs/promises';
 import path from 'path';
-import { readFile, writeFile } from 'fs/promises';
-
 import { promisify } from 'util';
-
+import { execFile as _execFile } from 'child_process';
 import _parseCSV from 'csv-parse';
 const parseCSV = promisify(_parseCSV);
+const execFile = promisify(_execFile);
 
-import { Float16Array } from '@petamoriken/float16';
+const gfs0p25props = {
+  bytesPerFile: 2076480,
+  width: 1440,
+  height: 721,
+  intervalInHours: 6,
+};
 
-export async function gfs() {
-  // from https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/
-  let now = new Date();
-  let year = now.getUTCFullYear();
-  let month = (now.getUTCMonth() + 1).toString().padStart(2, '0');
-  let day = (now.getUTCDate()).toString().padStart(2, '0');
-  let hour = [18, 12, 6, 0].find(h => h <= now.getUTCHours());
+const simpleScript = path.join('data', 'scripts', 'gfs-to-fp16.js');
+const simpleGribs = [
+  {
+    dataDir: 'gfs-0p25-temperature-surface/',
+    parameter: 'TMP',
+    level: 'surface',
+    datasetBase: {
+      name: 'temperature',
+      description: 'temperature at ground level',
+      units: 'K',
+      domain: [203.15, 343.15],
+      colormap: 'MAGMA',
+      ...gfs0p25props,
+    },
+  },
+];
 
-  // use the previous forecast, to lazily avoid case where current forecast is
-  // still processing
-  hour = (hour - 6 + 24) % 24;
-  hour = hour.toString().padStart(2, '0');
-  if (hour === '18') {
-    day = (day - 1).toString().padStart(2, '0');
-  }
+const compoundGribs = [
+  {
+    uParameter: 'UGRD',
+    vParameter: 'VGRD',
+    uDataDir: 'gfs-0p25-u-wind-velocity-10m/',
+    vDataDir: 'gfs-0p25-v-wind-velocity-10m/',
+    level: '10 m above ground',
+    datasetBase: {
+      name: 'wind velocities',
+      description: 'wind at 10m above ground level',
+      particleLifetime: 1000,
+      particleCount: 100000,
+      particleDisplay: {
+        size: 0.8,
+        rate: 50000,
+        opacity: 0.4,
+        fade: 0.96
+      },
+      ...gfs0p25props,
+    },
+  },
+];
 
-  const dataURL = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
-    `gfs.${year}${month}${day}/${hour}/gfs.t${hour}z.pgrb2.0p25.f000`;
-  const indexURL = dataURL + '.idx';
+const now = DateTime.utc();
 
-  // file containing information for partial downloads
-  let indexFile = await download(indexURL, true);
-  let indexString = await readFile(indexFile, 'utf-8');
-  let index = await parseCSV(indexString, { delimiter: ':' });
+let [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
 
-  await saveGFS(dataURL, index, 'TMP', 'surface', 'gfs-temperature.f32');
-  await saveGFS(dataURL, index, 'UGRD', '10 m above ground', 'gfs-u-wind.f32');
-  await saveGFS(dataURL, index, 'VGRD', '10 m above ground', 'gfs-v-wind.f32');
-  await calculateAndSaveWindSpeed(
-    path.join(OUTPUT_DIR, 'gfs-wind-speed.f32'),
-    path.join(OUTPUT_DIR, 'gfs-u-wind.f32'),
-    path.join(OUTPUT_DIR, 'gfs-v-wind.f32'),
-  );
-}
+const _ds = inventory.find(d => d.name === 'temperature');
+let dt = DateTime.fromISO(_ds?.end, {zone: 'utc'})
+  .plus({hours: _ds?.intervalInHours});
+if (!_ds) dt = DateTime.utc(now.year, now.month, now.day).minus({days: 3});
 
-// converts part of a Grib file from GFS to f32 format
-async function saveGFS(url, index, parameter, level, filename) {
-  let inputFile = await download(url, true, `_${parameter}_${level}`, {
-    Range: getRange(index, parameter, level),
-  });
-  let outputFile = path.join(OUTPUT_DIR, filename);
+const _year = dt.year;
+const _month = dt.toFormat('LL');
+const _day = dt.toFormat('dd');
+const _hour = dt.toFormat('HH');
+const dataURL = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
+  `gfs.${_year}${_month}${_day}/${_hour}/gfs.t${_hour}z.pgrb2.0p25.f000`;
 
-  console.log(`Generating GFS data...\n${inputFile}\n=> ${outputFile}\n`);
-  let wgrib2 = spawnSync(
-    'wgrib2',
-    [inputFile, '-bin', outputFile, '-no_header', '-order', 'raw' ]
-  );
+const _indexURL = dataURL + '.idx';
+const _indexFile = await util.download(_indexURL, true);
+const _indexString = await readFile(_indexFile, 'utf-8');
+const index = await parseCSV(_indexString, { delimiter: ':' });
 
-  if (wgrib2.status !== 0) {
-    console.log(
-      `Could not run wgrib2, skipping...\n=> ${wgrib2.stderr}\n`,
-    );
-  }
-  await halveFloatFile(outputFile);
-}
-
-async function calculateAndSaveWindSpeed(outputFile, uFile, vFile) {
-  let uBuffer = await readFile(uFile);
-  let vBuffer = await readFile(vFile);
-  let uVelocities = new Float32Array(uBuffer.buffer);
-  let vVelocities = new Float32Array(vBuffer.buffer);
-
-  let speeds = new Float32Array(uVelocities.length);
-  for (let i = 0; i < speeds.length; i++) {
-    speeds[i] = Math.sqrt(uVelocities[i]**2 + vVelocities[i]**2);
-  }
-
-  console.log(`Generating GFS data...\n${uFile} + ${vFile}\n=> ${outputFile}\n`);
-  await writeFile(outputFile, Buffer.from(speeds.buffer));
-  await halveFloatFile(outputFile);
-}
-
-// convert from f32 file to fp16 file
-async function halveFloatFile(file) {
-  let outputFile = file.replace(/\.[^.]+$/, '.fp16');
-
-  console.log(`Converting to half floats...\n${file}\n=> ${outputFile}\n`);
-  let f32File = await readFile(file)
-  let f32 = new Float32Array(f32File.buffer);
-  let fp16 = new Float16Array(f32);
-  writeFile(outputFile, Buffer.from(fp16.buffer));
-}
-
-// print the parsed index file to make sense of this function
-//
-// returns the string needed for the HTTP Range Request header
-function getRange(index, parameter, level) {
-  let i = index.findIndex((row) => {
-    return row[3] == parameter && row[4] == level;
-  });
-
-  if (i === -1) {
-    console.log("Could not find GFS parameter and level combination in index.");
-    exit();
-  }
+// download GFS grib file using HTTP Range Requests
+async function downloadGrib(parameter, level) {
+  let i = index.findIndex((row) => row[3] == parameter && row[4] == level);
+  if (i === -1) throw 'Could not find GFS parameter and level combination.';
 
   let start = index[i][1];
-  let end;
-  if (index[i+1] === undefined) {
-    end = '';
-  } else {
-    end = index[i+1][1] - 1;
-  }
-  return `bytes=${start}-${end}`;
+  let end = index[i+1] === undefined ? '' : index[i+1][1] - 1;
+
+  return await util.download(
+    dataURL, true, `_${parameter}_${level}`, {Range: `bytes=${start}-${end}`}
+  );
 }
+
+for (const grib of simpleGribs) {
+  const inputFile = await downloadGrib(grib.parameter, grib.level);
+  const outputPath = path.join(util.OUTPUT_DIR, grib.dataDir);
+
+  await mkdir(outputPath, { mode: '775', recursive: true });
+  await execFile(
+    simpleScript, [inputFile, path.join(outputPath, dt.toISO()) + '.fp16']
+  );
+
+  let dataset = inventory.find(d => d.path === util.browserPath(outputPath));
+  if (!dataset) inventory.push(dataset = grib.datasetBase);
+
+  for (const prop in grib.datasetBase) dataset[prop] = grib.datasetBase[prop];
+
+  dataset.path = util.browserPath(outputPath);
+  dataset.start = dataset.start ?? dt;
+  dataset.end = dt;
+}
+
+// same as simbleGribs loop above, except with split input and output variables
+for (const grib of compoundGribs) {
+  const uInputFile = await downloadGrib(grib.uParameter, grib.level);
+  const vInputFile = await downloadGrib(grib.vParameter, grib.level);
+  const uOutputPath = path.join(util.OUTPUT_DIR, grib.uDataDir);
+  const vOutputPath = path.join(util.OUTPUT_DIR, grib.vDataDir);
+
+  await mkdir(uOutputPath, { mode: '775', recursive: true });
+  await mkdir(vOutputPath, { mode: '775', recursive: true });
+  await execFile(
+    simpleScript, [uInputFile, path.join(uOutputPath, dt.toISO()) + '.fp16']
+  );
+  await execFile(
+    simpleScript, [vInputFile, path.join(vOutputPath, dt.toISO()) + '.fp16']
+  );
+
+  let dataset = inventory.find(d => d.uPath === util.browserPath(uOutputPath));
+  if (!dataset) inventory.push(dataset = grib.datasetBase);
+
+  for (const prop in grib.datasetBase) dataset[prop] = grib.datasetBase[prop];
+
+  dataset.uPath = util.browserPath(uOutputPath);
+  dataset.vPath = util.browserPath(vOutputPath);
+  dataset.start = dataset.start ?? dt;
+  dataset.end = dt;
+}
+
+await writeAndUnlockInventory(inventory);
