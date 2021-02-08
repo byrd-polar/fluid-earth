@@ -5,9 +5,16 @@ import { URL } from 'url';
 import got from 'got';
 import lockfile from 'proper-lockfile';
 
-export const CACHE_DIR = 'data/cache/';
-export const OUTPUT_DIR = 'public/data/';
-export const INVENTORY_FILE = 'public/data/inventory.json';
+export const CACHE_DIR = path.join('data', 'cache');
+export const OUTPUT_DIR = path.join('public', 'data');
+export const INVENTORY_FILE = path.join(OUTPUT_DIR, 'inventory.json');
+
+// converts local file system path to path for browser to use in a fetch call
+//
+// Example: public/data/topology.json => /data/topology.json
+export function browserPath(outputPath) {
+  return '/' + outputPath.split(path.sep).slice(1).join('/');
+}
 
 // pretty prints a file transformation operation
 //
