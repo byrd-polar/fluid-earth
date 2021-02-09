@@ -95,7 +95,8 @@ for (const grib of simpleGribs) {
 
   await mkdir(outputPath, { mode: '775', recursive: true });
   await execFile(
-    simpleScript, [inputFile, path.join(outputPath, dt.toISO()) + '.fp16']
+    'node',
+    [simpleScript, inputFile, util.join(outputPath, dt.toISO()) + '.fp16'],
   );
 
   let dataset = inventory.find(d => d.path === util.browserPath(outputPath));
@@ -118,10 +119,12 @@ for (const grib of compoundGribs) {
   await mkdir(uOutputPath, { mode: '775', recursive: true });
   await mkdir(vOutputPath, { mode: '775', recursive: true });
   await execFile(
-    simpleScript, [uInputFile, path.join(uOutputPath, dt.toISO()) + '.fp16']
+    'node',
+    [simpleScript, uInputFile, util.join(uOutputPath, dt.toISO()) + '.fp16']
   );
   await execFile(
-    simpleScript, [vInputFile, path.join(vOutputPath, dt.toISO()) + '.fp16']
+    'node',
+    [simpleScript, vInputFile, util.join(vOutputPath, dt.toISO()) + '.fp16']
   );
 
   let dataset = inventory.find(d => d.uPath === util.browserPath(uOutputPath));

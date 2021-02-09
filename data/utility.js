@@ -1,5 +1,6 @@
 import { existsSync } from 'fs';
 import { readFile, writeFile } from 'fs/promises';
+import { platform } from 'os';
 import path from 'path';
 import { URL } from 'url';
 import got from 'got';
@@ -8,6 +9,14 @@ import lockfile from 'proper-lockfile';
 export const CACHE_DIR = path.join('data', 'cache');
 export const OUTPUT_DIR = path.join('public', 'data');
 export const INVENTORY_FILE = path.join(OUTPUT_DIR, 'inventory.json');
+
+const windows = (platform() === 'win32');
+
+// join paths with ISO dates in a safe way for windows
+export function join(...args) {
+  let newPath = path.join(...args);
+  return windows ? newPath.replace(/:/g, '_' ) : newPath;
+}
 
 // converts local file system path to path for browser to use in a fetch call
 //
