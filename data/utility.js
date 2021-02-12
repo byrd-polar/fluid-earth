@@ -98,7 +98,7 @@ export async function lockAndReadInventory() {
   let inventory = JSON.parse(await readFile(INVENTORY_FILE, 'utf8'));
 
   let writeAndUnlockInventory = async inventory => {
-    await writeFile(INVENTORY_FILE, JSON.stringify(inventory));
+    await writeFile(INVENTORY_FILE, JSON.stringify(inventory, null, 2));
     release();
   };
 
