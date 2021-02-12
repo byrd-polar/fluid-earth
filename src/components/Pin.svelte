@@ -4,7 +4,7 @@
   import tooltip from '../tooltip.js';
   import { dataPoint } from '../map/gridded.js';
   import { clipped } from '../map/projections/';
-  import { convert } from '../utility.js';
+  import { convert, prettyUnit } from '../utility.js';
 
   export let pins;
   export let pin;
@@ -49,10 +49,10 @@
         <br>
       </span>
       <strong class="bold">
-        {convert(value, griddedDataset, griddedUnit).toPrecision(3)}
+        {convert(value, griddedDataset, griddedUnit).toFixed(1)}
       </strong>
       <strong class="bold">
-        {griddedUnit}
+        {prettyUnit(griddedUnit)}
       </strong><br>
       <small class="plain">
         {Math.abs(pin.longitude).toFixed(2)}° {lonDirection}, {Math.abs(pin.latitude).toFixed(2)}° {latDirection}

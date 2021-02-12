@@ -2,7 +2,7 @@
   import * as d3 from 'd3-selection';
   import { axisBottom } from 'd3-axis';
   import { scaleLinear } from 'd3-scale';
-  import { convert } from '../utility.js';
+  import { convert, prettyUnit } from '../utility.js';
 
   export let griddedDataset;
   export let griddedColormap;
@@ -45,7 +45,7 @@
 <section>
   <h3>
     {griddedDataset.description}
-    {#if griddedUnit}({griddedUnit}){/if}
+    {#if griddedUnit}({prettyUnit(griddedUnit)}){/if}
   </h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"

@@ -23,7 +23,7 @@ const simpleGribs = [
     level: '2 m above ground',
     datasetBase: {
       name: 'temperature',
-      description: 'temperature at 2m above ground',
+      description: 'temperature at 2 m above ground',
       unit: 'tempC',
       originalUnit: 'tempK',
       domain: [273.15 - 80, 273.15 + 55],
@@ -42,7 +42,7 @@ const compoundGribs = [
     level: '10 m above ground',
     datasetBase: {
       name: 'wind velocities',
-      description: 'wind at 10m above ground',
+      description: 'wind at 10 m above ground',
       particleLifetime: 1000,
       particleCount: 100000,
       particleDisplay: {

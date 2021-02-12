@@ -17,3 +17,12 @@ import Qty from 'js-quantities/esm';
 export function convert(value, dataset, newUnit) {
   return Qty(`${value} ${dataset.originalUnit}`).to(newUnit).scalar;
 }
+
+// Make a pretty string for a unit from the 'js-quantities' library
+export function prettyUnit(unit) {
+  switch (unit) {
+    case 'tempK': return 'K';
+    case 'tempC': return '°C';
+    default: return unit;
+  }
+}
