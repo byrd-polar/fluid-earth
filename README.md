@@ -39,7 +39,7 @@ with us to develop FEVer for a specific application, please email
 
 - [git](https://git-scm.com/)
 - [Node.js (version >= 14)](https://nodejs.org)
-<!-- - [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/) -->
+- [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/)
 
 ### Getting started
 
@@ -51,14 +51,10 @@ cd fev2r
 npm install
 ```
 
-...add the development data...
-
-Download the [starter
-packet](https://drive.google.com/file/d/1lgwKIJRu8Y8BKjF4ikIml6_oa8MV1K8p/view?usp=sharing),
-unzip it, and move the `data` directory into the `public` directory:
+...generate the data...
 
 ```bash
-unzip fev2r-development-data.zip -d public
+npm run data
 ```
 
 ...then start [Rollup](https://rollupjs.org):
