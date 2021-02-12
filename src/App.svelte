@@ -24,7 +24,7 @@
   import Fetcher from './fetcher.js';
   import { validDate } from './utility.js';
 
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { Float16Array } from '@petamoriken/float16';
 
   export let inventory;
@@ -157,12 +157,15 @@
     };
 
     updateParticleData = async () => {
+      let valid = validDate(particleDataset, date);
+      if (valid.getTime() !== date.getTime()) {
+        await tick();
+        particlesShown = false;
+      }
+
       if (!particlesShown) return;
 
       particleLoading = true;
-
-      let valid = validDate(griddedDataset, date);
-      if (valid.getTime() !== date.getTime()) date = valid;
 
       let [uArray, vArray] =
         await fetcher.fetch(particleDataset, date, 'particle');
