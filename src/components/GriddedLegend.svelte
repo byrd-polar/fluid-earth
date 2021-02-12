@@ -2,10 +2,12 @@
   import * as d3 from 'd3-selection';
   import { axisBottom } from 'd3-axis';
   import { scaleLinear } from 'd3-scale';
+  import { convert } from '../utility.js';
 
   export let griddedDataset;
   export let griddedColormap;
   export let griddedDomain;
+  export let griddedUnit;
 
   let svgScale;
   let svgScaleWidth;
@@ -21,7 +23,7 @@
 
     let axis = axisBottom(
       scaleLinear()
-        .domain(domain)
+        .domain(domain.map(v => convert(v, griddedDataset, griddedUnit)))
         .range([-0.5, width - 0.5])
     );
     d3.select(elem).call(axis);
@@ -43,7 +45,7 @@
 <section>
   <h3>
     {griddedDataset.description}
-    {#if griddedDataset.units}({griddedDataset.units}){/if}
+    {#if griddedUnit}({griddedUnit}){/if}
   </h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"

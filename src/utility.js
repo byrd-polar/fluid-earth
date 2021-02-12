@@ -10,3 +10,10 @@ export function validDate(dataset, date) {
   let d = new Date(dataset.start.getTime() + intervalInMilliseconds * n);
   return clamp(d, dataset.start, dataset.end);
 }
+
+import Qty from 'js-quantities/esm';
+
+// Convert a value between units
+export function convert(value, dataset, newUnit) {
+  return Qty(`${value} ${dataset.originalUnit}`).to(newUnit).scalar;
+}

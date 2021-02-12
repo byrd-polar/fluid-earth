@@ -55,6 +55,7 @@
     "d3-selection": "^2.0.0",
     "focus-trap": "^6.3.0",
     "interactjs": "^1.10.2",
+    "js-quantities": "^1.7.6",
     "ky": "^0.26.0",
     "pretty-bytes": "^5.5.0",
     "proper-lockfile": "^4.1.2",

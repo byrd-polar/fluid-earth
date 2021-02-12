@@ -66,6 +66,7 @@
   };
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
+  let griddedUnit = griddedDataset.unit;
 
   const emptyParticleData = {
     uVelocities: new Float16Array([0]),
@@ -146,6 +147,7 @@
         if (previousGriddedDataset !== griddedDataset) {
           griddedDomain = griddedDataset.domain;
           griddedColormap = griddedDataset.colormap;
+          griddedUnit = griddedDataset.unit;
 
           previousGriddedDataset = griddedDataset;
         }
@@ -345,6 +347,7 @@
       {d3geoProjection}
       {griddedData}
       {griddedDataset}
+      {griddedUnit}
     />
     <Loading {fetcher} />
     <Legends
@@ -353,6 +356,7 @@
       {particleDataset}
       {griddedColormap}
       {griddedDomain}
+      {griddedUnit}
       {particlesShown}
       {particleDisplay}
     />

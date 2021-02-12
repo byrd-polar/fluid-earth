@@ -11,6 +11,7 @@
   export let griddedDataset;
   export let griddedColormap;
   export let griddedDomain;
+  export let griddedUnit;
 
   let dateStringOptions = {
     weekday: 'long',
@@ -38,6 +39,7 @@
       {griddedDataset}
       {griddedColormap}
       {griddedDomain}
+      {griddedUnit}
     />
   </div>
 </div>

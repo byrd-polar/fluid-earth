@@ -24,7 +24,8 @@ const simpleGribs = [
     datasetBase: {
       name: 'temperature',
       description: 'temperature at ground level',
-      units: 'K',
+      unit: 'tempC',
+      originalUnit: 'tempK',
       domain: [203.15, 343.15],
       colormap: 'MAGMA',
       ...gfs0p25props,

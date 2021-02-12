@@ -4,12 +4,14 @@
   import tooltip from '../tooltip.js';
   import { dataPoint } from '../map/gridded.js';
   import { clipped } from '../map/projections/';
+  import { convert } from '../utility.js';
 
   export let pins;
   export let pin;
   export let d3geoProjection;
   export let griddedData;
   export let griddedDataset;
+  export let griddedUnit;
 
   let label = pin.label;
   let lonLat = [pin.longitude, pin.latitude];
@@ -47,10 +49,10 @@
         <br>
       </span>
       <strong class="bold">
-        {value.toPrecision(3)}
+        {convert(value, griddedDataset, griddedUnit).toPrecision(3)}
       </strong>
       <strong class="bold">
-        {griddedDataset.units}
+        {griddedUnit}
       </strong><br>
       <small class="plain">
         {Math.abs(pin.longitude).toFixed(2)}° {lonDirection}, {Math.abs(pin.latitude).toFixed(2)}° {latDirection}
