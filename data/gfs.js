@@ -18,15 +18,15 @@ const gfs0p25props = {
 const simpleScript = path.join('data', 'scripts', 'gfs-to-fp16.js');
 const simpleGribs = [
   {
-    dataDir: 'gfs-0p25-temperature-surface/',
+    dataDir: 'gfs-0p25-temperature-2m/',
     parameter: 'TMP',
-    level: 'surface',
+    level: '2 m above ground',
     datasetBase: {
       name: 'temperature',
-      description: 'temperature at ground level',
+      description: 'temperature at 2m above ground',
       unit: 'tempC',
       originalUnit: 'tempK',
-      domain: [203.15, 343.15],
+      domain: [273.15 - 80, 273.15 + 55],
       colormap: 'MAGMA',
       ...gfs0p25props,
     },
@@ -42,7 +42,7 @@ const compoundGribs = [
     level: '10 m above ground',
     datasetBase: {
       name: 'wind velocities',
-      description: 'wind at 10m above ground level',
+      description: 'wind at 10m above ground',
       particleLifetime: 1000,
       particleCount: 100000,
       particleDisplay: {
