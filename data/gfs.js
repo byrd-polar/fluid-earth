@@ -16,6 +16,8 @@ const gfs0p25props = {
 };
 
 const simpleScript = path.join('data', 'scripts', 'gfs-to-fp16.js');
+const speedScript = path.join('data', 'scripts', 'gfs-wind-to-fp16.js');
+
 const simpleGribs = [
   {
     dataDir: 'gfs-0p25-temperature-2m/',
@@ -31,6 +33,24 @@ const simpleGribs = [
       ...gfs0p25props,
     },
   },
+];
+
+const speedGribs = [
+  {
+    uParameter: 'UGRD',
+    vParameter: 'VGRD',
+    dataDir: 'gfs-0p25-wind-speed-10m/',
+    level: '10 m above ground',
+    datasetBase: {
+      name: 'wind speed',
+      description: 'wind speed at 10 m above ground',
+      unit: 'kph',
+      originalUnit: 'm/s',
+      domain: [0, 100],
+      colormap: 'CUBEHELIX_DEFAULT',
+      ...gfs0p25props,
+    },
+  }
 ];
 
 const compoundGribs = [
@@ -98,6 +118,31 @@ for (const grib of simpleGribs) {
   await execFile(
     'node',
     [simpleScript, inputFile, util.join(outputPath, dt.toISO()) + '.fp16'],
+  );
+
+  let dataset = inventory.find(d => d.path === util.browserPath(outputPath));
+  if (!dataset) inventory.push(dataset = grib.datasetBase);
+
+  for (const prop in grib.datasetBase) dataset[prop] = grib.datasetBase[prop];
+
+  dataset.path = util.browserPath(outputPath);
+  dataset.start = dataset.start ?? dt;
+  dataset.end = dt;
+}
+
+
+// same as simbleGribs loop except with split input variables
+for (const grib of speedGribs) {
+  const inputFiles = [
+    await downloadGrib(grib.uParameter, grib.level),
+    await downloadGrib(grib.vParameter, grib.level),
+  ];
+  const outputPath = path.join(util.OUTPUT_DIR, grib.dataDir);
+
+  await mkdir(outputPath, { mode: '775', recursive: true });
+  await execFile(
+    'node',
+    [speedScript, ...inputFiles, util.join(outputPath, dt.toISO()) + '.fp16'],
   );
 
   let dataset = inventory.find(d => d.path === util.browserPath(outputPath));

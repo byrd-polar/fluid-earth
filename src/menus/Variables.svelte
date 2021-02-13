@@ -27,8 +27,8 @@
   }
 
   let icons = [
-    Windy24,
     TemperatureHot24,
+    Windy24,
   ];
 </script>
 
