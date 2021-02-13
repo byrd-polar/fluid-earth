@@ -14,16 +14,17 @@
 
   // updates when changing domain independently of dataset (or after dataset
   // download completes
-  $: createAxis(svgScale, svgScaleWidth, griddedDomain);
+  $: createAxis(svgScale, svgScaleWidth, griddedDomain, griddedUnit);
   // updates immediately after selecting dataset instead of after download
-  $: createAxis(svgScale, svgScaleWidth, griddedDataset.domain);
+  $: createAxis(
+    svgScale, svgScaleWidth, griddedDataset.domain, griddedDataset.unit);
 
-  function createAxis(elem, width, domain) {
+  function createAxis(elem, width, domain, unit) {
     if (!elem) return;
 
     let axis = axisBottom(
       scaleLinear()
-        .domain(domain.map(v => convert(v, griddedDataset, griddedUnit)))
+        .domain(domain.map(v => convert(v, griddedDataset, unit)))
         .range([-0.5, width - 0.5])
     );
     d3.select(elem).call(axis);

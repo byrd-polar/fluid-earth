@@ -10,7 +10,6 @@
   export let pin;
   export let d3geoProjection;
   export let griddedData;
-  export let griddedDataset;
   export let griddedUnit;
 
   let label = pin.label;
@@ -49,7 +48,7 @@
         <br>
       </span>
       <strong class="bold">
-        {convert(value, griddedDataset, griddedUnit).toFixed(1)}
+        {convert(value, griddedData, griddedUnit).toFixed(1)}
       </strong>
       <strong class="bold">
         {prettyUnit(griddedUnit)}

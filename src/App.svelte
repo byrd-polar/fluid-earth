@@ -63,6 +63,7 @@
     floatArray: new Float16Array([-Infinity]),
     width: 1,
     height: 1,
+    originalUnit: griddedDataset.originalUnit,
   };
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
@@ -142,6 +143,7 @@
           floatArray: array,
           width: griddedDataset.width,
           height: griddedDataset.height,
+          originalUnit: griddedDataset.originalUnit,
         }
 
         if (previousGriddedDataset !== griddedDataset) {
@@ -346,7 +348,6 @@
       {pins}
       {d3geoProjection}
       {griddedData}
-      {griddedDataset}
       {griddedUnit}
     />
     <Loading {fetcher} />

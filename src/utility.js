@@ -14,8 +14,10 @@ export function validDate(dataset, date) {
 import Qty from 'js-quantities/esm';
 
 // Convert a value between units
-export function convert(value, dataset, newUnit) {
-  return Qty(`${value} ${dataset.originalUnit}`).to(newUnit).scalar;
+export function convert(value, datasetOrData, newUnit) {
+  if (!isFinite(value)) return value;
+
+  return Qty(`${value} ${datasetOrData.originalUnit}`).to(newUnit).scalar;
 }
 
 // Make a pretty string for a unit from the 'js-quantities' library
