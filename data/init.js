@@ -1,4 +1,3 @@
-import { existsSync } from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
 import { log, CACHE_DIR, OUTPUT_DIR, INVENTORY_FILE } from './utility.js';
 
