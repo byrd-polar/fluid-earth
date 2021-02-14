@@ -76,34 +76,43 @@ const compoundGribs = [
   },
 ];
 
-const now = DateTime.utc();
 
 let [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
+let dt = getDatetime(inventory);
 
-const _ds = inventory.find(d => d.name === 'temperature');
-let dt = DateTime.fromISO(_ds?.end, {zone: 'utc'})
-  .plus({hours: _ds?.intervalInHours});
-if (!_ds) dt = DateTime.utc(now.year, now.month, now.day).minus({days: 3});
+// calculate the datetime for when to find forecast grib files from
+function getDatetime(inventory) {
+  const dataset = inventory.find(d => d.name === 'temperature');
+  if (!dataset) {
+    const now = DateTime.utc();
+    return DateTime.utc(now.year, now.month, now.day).minus({days: 3})
+  }
 
-const _year = dt.year;
-const _month = dt.toFormat('LL');
-const _day = dt.toFormat('dd');
-const _hour = dt.toFormat('HH');
-const dataURL = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
-  `gfs.${_year}${_month}${_day}/${_hour}/gfs.t${_hour}z.pgrb2.0p25.f000`;
-
-const _indexURL = dataURL + '.idx';
-const _indexFile = await util.download(_indexURL, true);
-const _indexString = await readFile(_indexFile, 'utf-8');
-const index = await parseCSV(_indexString, { delimiter: ':' });
+  return DateTime
+    .fromISO(dataset.end, {zone: 'utc'})
+    .plus({hours: dataset.intervalInHours});
+}
 
 // download GFS grib file using HTTP Range Requests
-async function downloadGrib(parameter, level) {
-  let i = index.findIndex((row) => row[3] == parameter && row[4] == level);
+async function downloadGrib(datetime, forecast, parameter, level) {
+  const year = dt.year;
+  const month = dt.toFormat('LL');
+  const day = dt.toFormat('dd');
+  const hour = dt.toFormat('HH');
+  const fNum = forecast.toString().padStart(3, '0');
+  const dataURL = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
+    `gfs.${year}${month}${day}/${hour}/gfs.t${hour}z.pgrb2.0p25.f${fNum}`;
+
+  const indexURL = dataURL + '.idx';
+  const indexFile = await util.download(indexURL, true);
+  const indexString = await readFile(indexFile, 'utf-8');
+  const index = await parseCSV(indexString, { delimiter: ':' });
+
+  const i = index.findIndex((row) => row[3] == parameter && row[4] == level);
   if (i === -1) throw 'Could not find GFS parameter and level combination.';
 
-  let start = index[i][1];
-  let end = index[i+1] === undefined ? '' : index[i+1][1] - 1;
+  const start = index[i][1];
+  const end = index[i+1] === undefined ? '' : index[i+1][1] - 1;
 
   return await util.download(
     dataURL, true, `_${parameter}_${level}`, {Range: `bytes=${start}-${end}`}
@@ -111,7 +120,7 @@ async function downloadGrib(parameter, level) {
 }
 
 for (const grib of simpleGribs) {
-  const inputFile = await downloadGrib(grib.parameter, grib.level);
+  const inputFile = await downloadGrib(dt, 0, grib.parameter, grib.level);
   const outputPath = path.join(util.OUTPUT_DIR, grib.dataDir);
 
   await mkdir(outputPath, { mode: '775', recursive: true });
@@ -130,12 +139,11 @@ for (const grib of simpleGribs) {
   dataset.end = dt;
 }
 
-
 // same as simbleGribs loop except with split input variables
 for (const grib of speedGribs) {
   const inputFiles = [
-    await downloadGrib(grib.uParameter, grib.level),
-    await downloadGrib(grib.vParameter, grib.level),
+    await downloadGrib(dt, 0, grib.uParameter, grib.level),
+    await downloadGrib(dt, 0, grib.vParameter, grib.level),
   ];
   const outputPath = path.join(util.OUTPUT_DIR, grib.dataDir);
 
@@ -157,8 +165,8 @@ for (const grib of speedGribs) {
 
 // same as simbleGribs loop above, except with split input and output variables
 for (const grib of compoundGribs) {
-  const uInputFile = await downloadGrib(grib.uParameter, grib.level);
-  const vInputFile = await downloadGrib(grib.vParameter, grib.level);
+  const uInputFile = await downloadGrib(dt, 0, grib.uParameter, grib.level);
+  const vInputFile = await downloadGrib(dt, 0, grib.vParameter, grib.level);
   const uOutputPath = path.join(util.OUTPUT_DIR, grib.uDataDir);
   const vOutputPath = path.join(util.OUTPUT_DIR, grib.vDataDir);
 
