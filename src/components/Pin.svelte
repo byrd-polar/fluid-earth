@@ -48,10 +48,12 @@
         <br>
       </span>
       <strong class="bold">
-        {convert(value, griddedData, griddedUnit).toFixed(1)}
-      </strong>
-      <strong class="bold">
-        {prettyUnit(griddedUnit)}
+        {#if isNaN(value)}
+          No data
+        {:else}
+          {convert(value, griddedData, griddedUnit).toFixed(1)}
+          {prettyUnit(griddedUnit)}
+        {/if}
       </strong><br>
       <small class="plain">
         {Math.abs(pin.longitude).toFixed(2)}° {lonDirection}, {Math.abs(pin.latitude).toFixed(2)}° {latDirection}

@@ -11,6 +11,7 @@ export function dataPoint(
   let row = Math.round(-(lonLat[1] - 90) * hRes)
 
   let index = row * griddedData.width + col;
+  let value = griddedData.floatArray[index];
 
-  return griddedData.floatArray[index];
+  return value === Number.NEGATIVE_INFINITY ? NaN : value;
 }
