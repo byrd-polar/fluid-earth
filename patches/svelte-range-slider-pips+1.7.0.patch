@@ -1,11 +1,11 @@
 diff --git a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
-index b4867f0..18b9aec 100755
+index 96518bd..b120c9b 100755
 --- a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
 +++ b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
-@@ -13,6 +13,15 @@
-   export let vertical = false;
+@@ -14,6 +14,15 @@
    export let float = false;
    export let hover = true;
+   export let disabled = false;
 +  export let value = values[0];
 +
 +  // keep value and values in sync with each other
