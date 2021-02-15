@@ -8,6 +8,6 @@
 
 [[redirects]]
   from = "/data/*"
-  to = "https://fever.byrd.osu.edu/fev2r-data/:splat"
+  to = "https://fever.byrd.osu.edu/fev2r-data-2/:splat"
   status = 200
   force = true
