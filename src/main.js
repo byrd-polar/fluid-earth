@@ -11,8 +11,9 @@ import colormaps from './map/colormaps/';
     //
     // will need to update this if date strings are added in different sections
     // of the inventory
-    if (dataset.start && dataset.end) {
+    if (dataset.start && dataset.lastForecast && dataset.end) {
       dataset.start = new Date(dataset.start);
+      dataset.lastForecast = new Date(dataset.lastForecast);
       dataset.end = new Date(dataset.end);
     }
     // replace colormap strings with colormap objects

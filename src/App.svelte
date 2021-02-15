@@ -47,7 +47,7 @@
   const fetcher = new Fetcher();
   let griddedDataset = inventory.find(d => d.name === 'temperature');
   let particleDataset = inventory.find(d => d.name === 'wind velocities');
-  let date = griddedDataset.end;
+  let date = griddedDataset.lastForecast;
 
   // see comment in onMount
   let updateGriddedData = () => {};
