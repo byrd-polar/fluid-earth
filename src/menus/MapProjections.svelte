@@ -42,7 +42,7 @@
         projection = projections.STEREOGRAPHIC;
         centerLongitude = -70;
         centerLatitude = 90;
-        zoom = 2;
+        zoom = 5;
       },
       image: '/images/stereo-north-white-bg.svg',
     },
@@ -52,7 +52,7 @@
         projection = projections.STEREOGRAPHIC;
         centerLongitude = 0;
         centerLatitude = -90;
-        zoom = 2;
+        zoom = 5;
       },
       image: '/images/stereo-south-white-bg.svg',
     },
