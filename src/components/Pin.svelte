@@ -35,7 +35,7 @@
   <PinIcon
     class="marker"
     style="z-index: {-1e8 + Math.round(y * 8)}"
-    on:click={() => { pins.delete(pin); pins = pins}}
+    on:click={() => pins = pins.filter(p => p !== pin)}
   />
   {#if hovering}
     <div class="caption">

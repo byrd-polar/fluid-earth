@@ -96,11 +96,10 @@
     fade: 0.96,
   };
 
-  let pins = new Set();
+  let pins = [];
   function addPin(label, longitude, latitude) {
     let id = Math.max(0, ...[...pins].map(pin => pin.id)) + 1;
-    pins.add({ id, label, longitude, latitude });
-    pins = pins;
+    pins = [{ id, label, longitude, latitude }, ...pins];
   }
 
   onMount(() => {
@@ -345,7 +344,7 @@
       {addPin}
     />
     <Pins
-      {pins}
+      bind:pins
       {d3geoProjection}
       {griddedData}
       {griddedUnit}
