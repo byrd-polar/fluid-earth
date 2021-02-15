@@ -277,6 +277,7 @@
     bind:centerLongitude
     bind:centerLatitude
     bind:zoom
+    bind:pins
     {addPin}
   />
 </Menu>

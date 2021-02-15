@@ -7,6 +7,7 @@
   export let centerLongitude;
   export let centerLatitude;
   export let zoom;
+  export let pins;
   export let addPin;
 
   let label = 'Search by country, city, or region:';
@@ -59,9 +60,12 @@
   }
 
   function dropPin(city) {
-    console.log(city);
     let labelParts = city.label.split(",");
     let shortLabel = labelParts[0] + ", " + labelParts[labelParts.length - 1];
+
+    pins = pins.filter(
+      p => p.longitude !== city.longitude || p.latitude !== city.latitude
+    );
     addPin(shortLabel, city.longitude, city.latitude);
   }
 </script>
