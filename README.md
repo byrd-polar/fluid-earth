@@ -70,7 +70,7 @@ automatically reload with your changes.
 ### Updating local development environment
 
 Pull from upstream (i.e. the repository at
-[https://code.osu.edu/zhan.153/fev2r.git](https://code.osu.edu/zhan.153/fev2r.git))...
+[https://code.osu.edu/BPCRC/outreach/fev2r.git](https://code.osu.edu/BPCRC/outreach/fev2r.git))...
 
 ```bash
 git pull <URL or name of upstream remote> master
