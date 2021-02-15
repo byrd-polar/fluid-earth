@@ -1,5 +1,5 @@
 <script>
-  import { fly } from 'svelte/transition';
+  import { fly, fade } from 'svelte/transition';
   import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled32';
   import tooltip from '../tooltip.js';
   import { dataPoint } from '../map/gridded.js';
@@ -29,6 +29,7 @@
   class:clip
   style="left: {x}px; top: {y}px;"
   in:fly="{{ y: -150, duration: 250 }}"
+  out:fade="{{ duration: 250 }}"
   on:mouseenter={() => hovering = true}
   on:mouseleave={() => hovering = false}
 >
