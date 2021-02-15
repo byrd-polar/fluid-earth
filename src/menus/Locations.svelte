@@ -61,7 +61,7 @@
   function dropPin(city) {
     console.log(city);
     let labelParts = city.label.split(",");
-    let shortLabel = labelParts[0] + ", " + labelParts[2];
+    let shortLabel = labelParts[0] + ", " + labelParts[labelParts.length - 1];
     addPin(shortLabel, city.longitude, city.latitude);
   }
 </script>
