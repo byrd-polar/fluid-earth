@@ -11,13 +11,11 @@ import colormaps from './map/colormaps/';
     //
     // will need to update this if date strings are added in different sections
     // of the inventory
-    if (dataset.start && dataset.lastForecast && dataset.end) {
-      dataset.start = new Date(dataset.start);
-      dataset.lastForecast = new Date(dataset.lastForecast);
-      dataset.end = new Date(dataset.end);
+    for (const prop of ['start', 'lastForecast', 'end']) {
+      if (prop in dataset) dataset[prop] = new Date(dataset[prop]);
     }
     // replace colormap strings with colormap objects
-    if (dataset.colormap) {
+    if ('colormap' in dataset) {
       dataset.colormap = colormaps[dataset.colormap];
     }
   }
