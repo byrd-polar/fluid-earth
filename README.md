@@ -76,10 +76,12 @@ Pull from upstream (i.e. the repository at
 git pull <URL or name of upstream remote> master
 ```
 
-...then ensure any changes to dependencies are applied:
+...then ensure any changes to the dependencies and data are applied:
 
 ```bash
 npm install
+npm run clean
+npm run data
 ```
 
 ### Building and running in production mode
