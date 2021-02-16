@@ -80,11 +80,11 @@ const compoundGribs = [
 ];
 
 
-let [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
-let dt = getDatetime(inventory);
+const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
+const datetime = getDatetime(inventory);
 
 // calculate the datetime for when to find forecast grib files from
-function getDatetime(inventory) {
+function getDatetime() {
   const dataset = inventory.find(d => d.name === 'temperature');
   if (!dataset) {
     const now = DateTime.utc();
@@ -97,11 +97,11 @@ function getDatetime(inventory) {
 }
 
 // download GFS grib file using HTTP Range Requests
-async function downloadGrib(dt, forecast, parameter, level) {
-  const year = dt.year;
-  const month = dt.toFormat('LL');
-  const day = dt.toFormat('dd');
-  const hour = dt.toFormat('HH');
+async function downloadGrib(forecast, parameter, level) {
+  const year = datetime.year;
+  const month = datetime.toFormat('LL');
+  const day = datetime.toFormat('dd');
+  const hour = datetime.toFormat('HH');
   const fNum = forecast.toString().padStart(3, '0');
   const dataURL = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
     `gfs.${year}${month}${day}/${hour}/gfs.t${hour}z.pgrb2.0p25.f${fNum}`;
@@ -127,8 +127,8 @@ for (const grib of simpleGribs) {
   await mkdir(outputPath, { mode: '775', recursive: true });
 
   for (let f = 0; f <= FORECAST_HOURS; f++) {
-    const inputFile = await downloadGrib(dt, f, grib.parameter, grib.level);
-    const filename = dt.plus({hours: f}).toISO() + '.fp16';
+    const inputFile = await downloadGrib(f, grib.parameter, grib.level);
+    const filename = datetime.plus({hours: f}).toISO() + '.fp16';
     const outputFile = util.join(outputPath, filename);
 
     util.log('Converting GFS grib to fp16', inputFile, outputFile);
@@ -141,9 +141,9 @@ for (const grib of simpleGribs) {
   for (const prop in grib.datasetBase) dataset[prop] = grib.datasetBase[prop];
 
   dataset.path = util.browserPath(outputPath);
-  dataset.start = dataset.start ?? dt;
-  dataset.lastForecast = dt;
-  dataset.end = dt.plus({hours: FORECAST_HOURS});
+  dataset.start = dataset.start ?? datetime;
+  dataset.lastForecast = datetime;
+  dataset.end = datetime.plus({hours: FORECAST_HOURS});
 }
 
 // same as simbleGribs loop except with split input variables
@@ -153,10 +153,10 @@ for (const grib of speedGribs) {
 
   for (let f = 0; f <= FORECAST_HOURS; f++) {
     const inputFiles = [
-      await downloadGrib(dt, f, grib.uParameter, grib.level),
-      await downloadGrib(dt, f, grib.vParameter, grib.level),
+      await downloadGrib(f, grib.uParameter, grib.level),
+      await downloadGrib(f, grib.vParameter, grib.level),
     ];
-    const filename = dt.plus({hours: f}).toISO() + '.fp16';
+    const filename = datetime.plus({hours: f}).toISO() + '.fp16';
     const outputFile = util.join(outputPath, filename);
 
     util.log('Converting GFS grib to fp16', inputFiles, outputFile);
@@ -169,9 +169,9 @@ for (const grib of speedGribs) {
   for (const prop in grib.datasetBase) dataset[prop] = grib.datasetBase[prop];
 
   dataset.path = util.browserPath(outputPath);
-  dataset.start = dataset.start ?? dt;
-  dataset.lastForecast = dt;
-  dataset.end = dt.plus({hours: FORECAST_HOURS});
+  dataset.start = dataset.start ?? datetime;
+  dataset.lastForecast = datetime;
+  dataset.end = datetime.plus({hours: FORECAST_HOURS});
 }
 
 // same as simbleGribs loop above, except with split input and output variables
@@ -182,10 +182,10 @@ for (const grib of compoundGribs) {
   await mkdir(vOutputPath, { mode: '775', recursive: true });
 
   for (let f = 0; f <= FORECAST_HOURS; f++) {
-    const uInputFile = await downloadGrib(dt, f, grib.uParameter, grib.level);
-    const vInputFile = await downloadGrib(dt, f, grib.vParameter, grib.level);
+    const uInputFile = await downloadGrib(f, grib.uParameter, grib.level);
+    const vInputFile = await downloadGrib(f, grib.vParameter, grib.level);
 
-    const filename = dt.plus({hours: f}).toISO() + '.fp16';
+    const filename = datetime.plus({hours: f}).toISO() + '.fp16';
     const uOutputFile = util.join(uOutputPath, filename);
     const vOutputFile = util.join(vOutputPath, filename);
 
@@ -203,9 +203,9 @@ for (const grib of compoundGribs) {
 
   dataset.uPath = util.browserPath(uOutputPath);
   dataset.vPath = util.browserPath(vOutputPath);
-  dataset.start = dataset.start ?? dt;
-  dataset.lastForecast = dt;
-  dataset.end = dt.plus({hours: FORECAST_HOURS});
+  dataset.start = dataset.start ?? datetime;
+  dataset.lastForecast = datetime;
+  dataset.end = datetime.plus({hours: FORECAST_HOURS});
 }
 
 await writeAndUnlockInventory(inventory);
