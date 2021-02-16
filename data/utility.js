@@ -104,3 +104,11 @@ export async function lockAndReadInventory() {
 
   return [inventory, writeAndUnlockInventory];
 }
+
+// check if a URL exists (without having to download the whole file)
+//
+// intentionally strict as to not be mistaken for the cause of errors
+export async function exists(url) {
+  const response = await got(url, { method: 'HEAD', throwHttpErrors: false });
+  return response.statusCode !== 404;
+}

@@ -8,8 +8,6 @@ import _parseCSV from 'csv-parse';
 const parseCSV = promisify(_parseCSV);
 const execFile = promisify(_execFile);
 
-const FORECAST_HOURS = 6; // can be up to 120
-
 const gfs0p25props = {
   bytesPerFile: 2076480,
   width: 1440,
@@ -81,31 +79,56 @@ const compoundGribs = [
 
 
 const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
-const datetime = getDatetime(inventory);
+const [datetime, system] = await getDatetimeAndSystem(inventory);
 
-// calculate the datetime for when to find forecast grib files from
-function getDatetime() {
-  const dataset = inventory.find(d => d.name === 'temperature');
-  if (!dataset) {
-    const now = DateTime.utc();
-    return DateTime.utc(now.year, now.month, now.day).minus({days: 3})
-  }
+// can be up to 9 : 120 for GDAS and GFS, respectively
+const forecastHours = system === 'gdas' ? 6 : 6;
 
-  return DateTime
-    .fromISO(dataset.lastForecast, {zone: 'utc'})
-    .plus({hours: dataset.forecastIntervalInHours});
-}
-
-// download GFS grib file using HTTP Range Requests
-async function downloadGrib(forecast, parameter, level) {
+// determine the URL to download from
+function getDataURL(system, datetime, forecast) {
   const year = datetime.year;
   const month = datetime.toFormat('LL');
   const day = datetime.toFormat('dd');
   const hour = datetime.toFormat('HH');
   const fNum = forecast.toString().padStart(3, '0');
-  const dataURL = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
-    `gfs.${year}${month}${day}/${hour}/gfs.t${hour}z.pgrb2.0p25.f${fNum}`;
+  return 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
+    `${system}.${year}${month}${day}/${hour}/` +
+    `${system}.t${hour}z.pgrb2.0p25.f${fNum}`;
+}
 
+// determine when and where to find forecast grib files from
+async function getDatetimeAndSystem() {
+  let datetime, system;
+
+  const dataset = inventory.find(d => d.name === 'temperature');
+  if (dataset) {
+    datetime = DateTime.fromISO(dataset.lastForecast, {zone: 'utc'});
+
+    if (dataset.lastForecastSystem === 'gfs') {
+      system = 'gdas';
+
+    } else {
+      datetime = datetime.plus({hours: dataset.forecastIntervalInHours});
+
+      if (await util.exists(getDataURL('gdas', datetime, 0))) {
+        system = 'gdas';
+      } else if (await util.exists(getDataURL('gfs', datetime, 0))) {
+        system = 'gfs';
+      } else {
+        throw `GFS forecast not found for ${datetime}, maybe try again later?`;
+      }
+    }
+  } else {
+    const now = DateTime.utc();
+    datetime = DateTime.utc(now.year, now.month, now.day);
+    system = 'gdas';
+  }
+  return [datetime, system];
+}
+
+// download GFS grib file using HTTP Range Requests
+async function downloadGrib(forecast, parameter, level) {
+  const dataURL = getDataURL(system, datetime, forecast);
   const indexURL = dataURL + '.idx';
   const indexFile = await util.download(indexURL, true);
   const indexString = await readFile(indexFile, 'utf-8');
@@ -126,7 +149,7 @@ for (const grib of simpleGribs) {
   const outputPath = path.join(util.OUTPUT_DIR, grib.dataDir);
   await mkdir(outputPath, { mode: '775', recursive: true });
 
-  for (let f = 0; f <= FORECAST_HOURS; f++) {
+  for (let f = 0; f <= forecastHours; f++) {
     const inputFile = await downloadGrib(f, grib.parameter, grib.level);
     const filename = datetime.plus({hours: f}).toISO() + '.fp16';
     const outputFile = util.join(outputPath, filename);
@@ -141,9 +164,7 @@ for (const grib of simpleGribs) {
   for (const prop in grib.datasetBase) dataset[prop] = grib.datasetBase[prop];
 
   dataset.path = util.browserPath(outputPath);
-  dataset.start = dataset.start ?? datetime;
-  dataset.lastForecast = datetime;
-  dataset.end = datetime.plus({hours: FORECAST_HOURS});
+  setDatasetTimeProps(dataset);
 }
 
 // same as simbleGribs loop except with split input variables
@@ -151,7 +172,7 @@ for (const grib of speedGribs) {
   const outputPath = path.join(util.OUTPUT_DIR, grib.dataDir);
   await mkdir(outputPath, { mode: '775', recursive: true });
 
-  for (let f = 0; f <= FORECAST_HOURS; f++) {
+  for (let f = 0; f <= forecastHours; f++) {
     const inputFiles = [
       await downloadGrib(f, grib.uParameter, grib.level),
       await downloadGrib(f, grib.vParameter, grib.level),
@@ -169,9 +190,7 @@ for (const grib of speedGribs) {
   for (const prop in grib.datasetBase) dataset[prop] = grib.datasetBase[prop];
 
   dataset.path = util.browserPath(outputPath);
-  dataset.start = dataset.start ?? datetime;
-  dataset.lastForecast = datetime;
-  dataset.end = datetime.plus({hours: FORECAST_HOURS});
+  setDatasetTimeProps(dataset);
 }
 
 // same as simbleGribs loop above, except with split input and output variables
@@ -181,7 +200,7 @@ for (const grib of compoundGribs) {
   await mkdir(uOutputPath, { mode: '775', recursive: true });
   await mkdir(vOutputPath, { mode: '775', recursive: true });
 
-  for (let f = 0; f <= FORECAST_HOURS; f++) {
+  for (let f = 0; f <= forecastHours; f++) {
     const uInputFile = await downloadGrib(f, grib.uParameter, grib.level);
     const vInputFile = await downloadGrib(f, grib.vParameter, grib.level);
 
@@ -203,9 +222,22 @@ for (const grib of compoundGribs) {
 
   dataset.uPath = util.browserPath(uOutputPath);
   dataset.vPath = util.browserPath(vOutputPath);
+  setDatasetTimeProps(dataset);
+}
+
+// set the common props derived from datetime and system
+function setDatasetTimeProps(dataset) {
   dataset.start = dataset.start ?? datetime;
+  if (dataset.end) {
+    dataset.end = DateTime.max(
+      datetime.plus({hours: forecastHours}),
+      DateTime.fromISO(dataset.end, {zone: 'utc'}),
+    );
+  } else {
+    dataset.end = datetime.plus({hours: forecastHours});
+  }
   dataset.lastForecast = datetime;
-  dataset.end = datetime.plus({hours: FORECAST_HOURS});
+  dataset.lastForecastSystem = system;
 }
 
 await writeAndUnlockInventory(inventory);
