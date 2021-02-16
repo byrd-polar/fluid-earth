@@ -102,21 +102,16 @@ async function getDatetimeAndSystem() {
 
   const dataset = inventory.find(d => d.name === 'temperature');
   if (dataset) {
-    datetime = DateTime.fromISO(dataset.lastForecast, {zone: 'utc'});
 
     if (dataset.lastForecastSystem === 'gfs') {
+      datetime = DateTime.fromISO(dataset.lastForecast, {zone: 'utc'});
       system = 'gdas';
 
     } else {
-      datetime = datetime.plus({hours: dataset.forecastIntervalInHours});
-
-      if (await util.exists(getDataURL('gdas', datetime, 0))) {
-        system = 'gdas';
-      } else if (await util.exists(getDataURL('gfs', datetime, 0))) {
-        system = 'gfs';
-      } else {
-        throw `GFS forecast not found for ${datetime}, maybe try again later?`;
-      }
+      datetime = DateTime
+        .fromISO(dataset.lastForecast, {zone: 'utc'})
+        .plus({hours: dataset.forecastIntervalInHours});
+      system = 'gfs';
     }
   } else {
     const now = DateTime.utc();
