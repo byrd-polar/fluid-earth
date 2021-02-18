@@ -35,3 +35,11 @@ export function genericLabel(pins) {
   let locationNums = genericPins.map(pin => parseInt(pin.label.split(' ')[1]));
   return `Location ${Math.max(0, ...locationNums) + 1}`;
 }
+
+// Make a pretty string for a lat-lon coordinate
+export function prettyLatLon(latitude, longitude) {
+  let latDirection = latitude >= 0 ? 'N' : 'S';
+  let lonDirection = longitude >= 0 ? 'E' : 'W';
+  return `${Math.abs(latitude).toFixed(2)}° ${latDirection}, \
+          ${Math.abs(longitude).toFixed(2)}° ${lonDirection}`;
+}

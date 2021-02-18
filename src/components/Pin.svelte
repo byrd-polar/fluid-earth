@@ -4,7 +4,7 @@
   import tooltip from '../tooltip.js';
   import { dataPoint } from '../map/gridded.js';
   import { clipped } from '../map/projections/';
-  import { convert, prettyUnit } from '../utility.js';
+  import { convert, prettyUnit, prettyLatLon } from '../utility.js';
 
   export let pins;
   export let pin;
@@ -19,8 +19,6 @@
   $: [x, y] = d3geoProjection(lonLat);
   $: clip = clipped(d3geoProjection, lonLat);
   $: value = dataPoint(griddedData, lonLat);
-  $: lonDirection = pin.longitude >= 0 ? "E" : "W";
-  $: latDirection = pin.latitude >= 0 ? "N" : "S";
 </script>
 
 
@@ -57,8 +55,7 @@
         {/if}
       </strong><br>
       <small class="plain">
-        {Math.abs(pin.longitude).toFixed(2)}° {lonDirection}, {Math.abs(pin.latitude).toFixed(2)}° {latDirection}
-      </small><br>
+        {prettyLatLon(pin.latitude, pin.longitude)}
     </div>
   {/if}
 </div>
