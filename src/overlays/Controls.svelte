@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import interact from 'interactjs';
   import { reproj } from '../map/projections/';
-  import { clamp } from '../utility.js';
+  import { clamp, genericLabel } from '../utility.js';
 
   export let minZoom;
   export let maxZoom;
@@ -12,7 +12,7 @@
   export let zoom;
 
   export let d3geoProjection;
-  export let addPin;
+  export let pins;
 
   let interactionSurfaceElement;
   let screenRatio; // ratio of element height to our reference height
@@ -57,7 +57,7 @@
         let [longitude, latitude] = d3geoProjection.invert(point);
 
         if (reproj(d3geoProjection, point, [longitude, latitude])) {
-          addPin(null, longitude, latitude);
+          pins = [{ label: genericLabel(pins), longitude, latitude }, ...pins];
         }
       });
     interactionSurfaceElement.addEventListener('wheel', handleWheel);

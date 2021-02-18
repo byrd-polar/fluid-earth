@@ -28,3 +28,10 @@ export function prettyUnit(unit) {
     default: return unit;
   }
 }
+
+// Calculate a generic pin label for an object in the `pins` array
+export function genericLabel(pins) {
+  let genericPins = pins.filter(pin => pin.label.match(/Location [0-9]+/));
+  let locationNums = genericPins.map(pin => parseInt(pin.label.split(' ')[1]));
+  return `Location ${Math.max(0, ...locationNums) + 1}`;
+}
