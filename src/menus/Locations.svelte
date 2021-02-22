@@ -64,8 +64,9 @@
   }
 
   function dropPin(city) {
-    pins = pins.filter(pin => pin !== city);
-    pins = [city, ...pins];
+    if (!pins.find(pin => pin === city)) {
+      pins = [city, ...pins];
+    }
   }
 </script>
 
@@ -82,7 +83,7 @@
   Hold down the <b>left mouse button</b> at that location, or...
 </p>
 
-<SearchBox {label} {loadData} {onSelect} maxShown={10} />
+<SearchBox {label} {loadData} {onSelect} />
 <LocationsList
   bind:pins
   {griddedData}

@@ -2,7 +2,7 @@
   export let label = 'Search:';
   export let loadData = () => [];
   export let onSelect = () => {};
-  export let maxShown = 10;
+  export let maxShown = 9;
 
   let inputElement;
   let value = '';
@@ -32,7 +32,7 @@
 
   function select(option) {
     inputElement.blur();
-    value = option.label;
+    value = '';
     onSelect(option);
   }
 
@@ -68,7 +68,7 @@
   }
 </script>
 
-<div>
+<div style="position: relative">
   <label>
     {label}
     <input
@@ -125,12 +125,26 @@
     width: 100%;
     border: none;
     margin-top: 0.25em;
-    padding: 0.5em;
+    padding: 0.75em 0.5em;
+    outline: none;
+    border-radius: 0.5em;
+  }
+
+  input:focus {
+    border-radius: 0.5em 0.5em 0 0;
+    border-bottom: thin solid gray;
   }
 
   div.dropdown {
-    margin-top: 0.25em;
     position: absolute;
+    z-index: 1;
+    padding: 0.25em 0;
+  }
+
+  div.dropdown,
+  div.dropdown div.info,
+  div.dropdown ul :last-child {
+    border-radius: 0 0 0.5em 0.5em;
   }
 
   ul {
