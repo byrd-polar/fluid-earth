@@ -87,6 +87,7 @@
       on:input={filterOptions}
       on:keydown={handleKeydown}
       on:click={() => dropdownTemporarilyHidden = false}
+      class:dropdownShown
     >
   </label>
   {#if dropdownShown}
@@ -141,7 +142,7 @@
     border-bottom: thin solid transparent;
   }
 
-  input:focus {
+  input.dropdownShown {
     border-radius: 0.5em 0.5em 0 0;
     border-bottom: thin solid gray;
   }
