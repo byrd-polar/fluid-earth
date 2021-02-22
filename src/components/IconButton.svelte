@@ -4,12 +4,14 @@
   export let name = null;
   export let action = () => {};
   export let selected = false;
+  export let tipPlacement = 'right';
+  export let ariaLabel = '';
 </script>
 
 <button
-  aria-label={name}
+  aria-label={name || ariaLabel}
   on:click={action}
-  use:tooltip={{content: name}}
+  use:tooltip={{content: name, placement: tipPlacement}}
   class:selected
 >
   <slot></slot>

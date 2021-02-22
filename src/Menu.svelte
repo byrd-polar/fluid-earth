@@ -46,7 +46,7 @@
   bind:this={aside}
 >
   <header>
-    <IconButton action={closeMenu}>
+    <IconButton action={closeMenu} ariaLabel="close menu">
       <ArrowLeft24 />
     </IconButton>
     <h1>{menuName}</h1>

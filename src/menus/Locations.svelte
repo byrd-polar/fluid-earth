@@ -89,6 +89,7 @@
   bind:pins
   {griddedData}
   {griddedUnit}
+  {moveTo}
 />
 {#if pins.length > 1}
   <Button secondary full action={() => pins = []}>Clear all locations</Button>
