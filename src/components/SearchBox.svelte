@@ -138,6 +138,7 @@
     padding: 0.75em 0.5em;
     outline: none;
     border-radius: 0.5em;
+    border-bottom: thin solid transparent;
   }
 
   input:focus {
