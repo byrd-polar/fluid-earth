@@ -85,8 +85,8 @@
       on:focus={() => inputElement.select()}
       on:focus={filterOptions}
       on:input={filterOptions}
+      on:click={filterOptions}
       on:keydown={handleKeydown}
-      on:click={() => dropdownTemporarilyHidden = false}
       class:dropdownShown
     >
   </label>
