@@ -8,7 +8,7 @@
 </script>
 
 <div>
-  {#each [...pins] as pin (pin)}
+  {#each pins as pin (pin)}
     <Pin
       bind:pins
       {pin}

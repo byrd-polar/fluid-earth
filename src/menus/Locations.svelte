@@ -1,13 +1,18 @@
 <script>
   import ky from 'ky';
   import SearchBox from '../components/SearchBox.svelte';
+  import LocationsList from '../components/LocationsList.svelte';
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
+  import { dataPoint } from '../map/gridded.js';
+  import { convert, prettyUnit, prettyLatLon } from '../utility.js';
 
   export let centerLongitude;
   export let centerLatitude;
   export let zoom;
   export let pins;
+  export let griddedData;
+  export let griddedUnit;
 
   let label = 'Search by country, city, or region:';
 
@@ -59,9 +64,7 @@
   }
 
   function dropPin(city) {
-    pins = pins.filter(
-      p => p.longitude !== city.longitude || p.latitude !== city.latitude
-    );
+    pins = pins.filter(pin => pin !== city);
     pins = [city, ...pins];
   }
 </script>
@@ -80,6 +83,11 @@
 </p>
 
 <SearchBox {label} {loadData} {onSelect} maxShown={10} />
+<LocationsList
+  bind:pins
+  {griddedData}
+  {griddedUnit}
+/>
 
 </div>
 <footer>
@@ -92,7 +100,7 @@
 </footer>
 
 <style>
-  h2 {
+  h2:first-child {
     margin-top: 0;
   }
 

@@ -274,6 +274,8 @@
     bind:centerLatitude
     bind:zoom
     bind:pins
+    {griddedData}
+    {griddedUnit}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Map Projections" bind:menusDetailed>
