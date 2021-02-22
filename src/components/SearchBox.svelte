@@ -10,9 +10,13 @@
   let data = undefined;
   let focused = false;
   let loading = false;
-  $: dropdownShown = focused && (value.length > 0 || !loading);
+  let dropdownTemporarilyHidden = false;
+  $: dropdownShown = focused && (value.length > 0 || !loading) &&
+    !dropdownTemporarilyHidden;
 
   async function filterOptions() {
+    dropdownTemporarilyHidden = false;
+
     if (loading) return;
 
     if (!data) {
@@ -31,8 +35,8 @@
   }
 
   function select(option) {
-    inputElement.blur();
     value = '';
+    dropdownTemporarilyHidden = true;
     onSelect(option);
   }
 
@@ -82,6 +86,7 @@
       on:focus={filterOptions}
       on:input={filterOptions}
       on:keydown={handleKeydown}
+      on:click={() => dropdownTemporarilyHidden = false}
     >
   </label>
   {#if dropdownShown}
