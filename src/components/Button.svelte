@@ -1,5 +1,7 @@
 <script>
   import tooltip from '../tooltip.js';
+  import { fade } from 'svelte/transition';
+
   export let disabled = false;
   export let action = () => {};
   export let flex = false;
@@ -18,6 +20,7 @@
   class:secondary
   type={type}
   use:tooltip={{content: tip, placement: tipPlacement}}
+  transition:fade
 >
   <slot></slot>
 </button>

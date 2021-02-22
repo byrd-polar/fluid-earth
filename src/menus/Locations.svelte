@@ -2,6 +2,7 @@
   import ky from 'ky';
   import SearchBox from '../components/SearchBox.svelte';
   import LocationsList from '../components/LocationsList.svelte';
+  import Button from '../components/Button.svelte';
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
   import { dataPoint } from '../map/gridded.js';
@@ -89,6 +90,10 @@
   {griddedData}
   {griddedUnit}
 />
+{#if pins.length > 1}
+  <Button secondary full action={() => pins = []}>Clear all locations</Button>
+{/if}
+
 
 </div>
 <footer>
@@ -103,6 +108,10 @@
 <style>
   h2:first-child {
     margin-top: 0;
+  }
+
+  div {
+    margin-bottom: 2em;
   }
 
   footer {

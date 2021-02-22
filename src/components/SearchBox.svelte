@@ -68,7 +68,7 @@
   }
 </script>
 
-<div style="position: relative">
+<div class="wrapper">
   <label>
     {label}
     <input
@@ -115,6 +115,11 @@
 </div>
 
 <style>
+  div.wrapper {
+    position: relative;
+    margin-bottom: 0.5em;
+  }
+
   input, div.dropdown {
     color: white;
     background-color: #464646;
