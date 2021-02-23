@@ -6,10 +6,11 @@ import { promisify } from 'util';
 import { execFile as _execFile } from 'child_process';
 const execFile = promisify(_execFile);
 
-const dataDir = 'rtgssthr-0p083/';
+const outputPath = path.join(util.OUTPUT_DIR, 'rtgssthr-0p083/');
 const datasetBase = {
   name: 'sea surface temperature',
   description: 'sea temperature at surface',
+  path: util.browserPath(outputPath),
   unit: 'tempC',
   originalUnit: 'tempK',
   domain: [273.15 - 80, 273.15 + 55],
@@ -23,10 +24,7 @@ const datasetBase = {
 
 const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
 
-const outputPath = path.join(util.OUTPUT_DIR, dataDir);
-await mkdir(outputPath, { mode: '775', recursive: true });
-
-let dataset = inventory.find(d => d.path === util.browserPath(outputPath));
+let dataset = inventory.find(d => d.path === datasetBase.path);
 let datetime;
 
 if (dataset) {
@@ -46,6 +44,8 @@ const inputFile = await util.download(
   `sst.${year}${month}${day}/rtgssthr_grb_0.083_awips.grib2`,
   true
 );
+await mkdir(outputPath, { mode: '775', recursive: true });
+
 const outputFile = util.join(outputPath, datetime.toISO() + '.fp16');
 
 util.log('Converting GFS grib to fp16', inputFile, outputFile);
@@ -54,7 +54,6 @@ await execFile('node', [script, inputFile, outputFile]);
 
 for (const prop in datasetBase) dataset[prop] = datasetBase[prop];
 
-dataset.path = util.browserPath(outputPath);
 dataset.start = dataset.start ?? datetime;
 dataset.end = datetime;
 
