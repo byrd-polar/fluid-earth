@@ -115,7 +115,7 @@ async function getDatetimeAndSystem() {
     }
   } else {
     const now = DateTime.utc();
-    datetime = DateTime.utc(now.year, now.month, now.day);
+    datetime = DateTime.utc(now.year, now.month, now.day).minus({days: 2});
     system = 'gdas';
   }
   return [datetime, system];
