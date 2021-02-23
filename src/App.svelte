@@ -54,6 +54,7 @@
   let updateParticleData = () => {};
 
   let projection = projections.VERTICAL_PERSPECTIVE;
+  let offsetGriddedProjection = true;
   let d3geoProjection = projection.function;
   let centerLongitude = -60;
   let centerLatitude = 30;
@@ -145,6 +146,8 @@
           griddedDomain = griddedDataset.domain;
           griddedColormap = griddedDataset.colormap;
           griddedUnit = griddedDataset.unit;
+          offsetGriddedProjection = griddedDataset.offsetGriddedProjection ||
+            griddedDataset.offsetGriddedProjection === undefined;
 
           previousGriddedDataset = griddedDataset;
         }
@@ -317,6 +320,7 @@
 <main>
   <Map
     {projection}
+    {offsetGriddedProjection}
     {centerLongitude}
     {centerLatitude}
     {zoom}

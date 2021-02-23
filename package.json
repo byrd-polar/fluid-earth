@@ -17,6 +17,7 @@
     "data:locations": "node data/locations.js",
     "data:topology": "node data/topology.js",
     "data:gfs": "node data/gfs.js",
+    "data:rtgssthr": "node data/rtgssthr.js",
     "dev": "rollup -c -w",
     "start": "sirv public --host",
     "postinstall": "patch-package"
