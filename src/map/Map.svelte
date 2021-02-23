@@ -19,10 +19,11 @@
 
   import { Float16Array } from '@petamoriken/float16';
 
-  export let projection = projections.VERTICAL_PERSPECTIVE;
   export let centerLongitude = 0; // in degrees
   export let centerLatitude = 0; // in degrees
   export let zoom = 1;
+  export let projection = projections.VERTICAL_PERSPECTIVE;
+  export let offsetGriddedProjection = true;
 
   export let griddedData = {
     floatArray: new Float16Array([0]),
@@ -86,6 +87,7 @@
     u_lat0: centerLatitude,
     u_zoom: zoom,
     u_projection: projection.id,
+    u_offsetGridded: offsetGriddedProjection,
   };
 
   let backgroundGl;
