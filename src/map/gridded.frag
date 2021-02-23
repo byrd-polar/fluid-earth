@@ -68,14 +68,14 @@ void main() {
   // is the bottom left corner and (1,1) is the top right corner (despite the
   // grid having an aspect ratio of ~ 2:1, because that's just how textures work
   // in WebGL)
-  vec2 textureCoord = (lonLat + vec2(PI, PI_2)) / vec2(2.0 * PI, PI);
+  vec2 textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
 
   // needs to flipped vertically, since (0,0) is bottom-left, not top-left
   textureCoord.y = 1.0 - textureCoord.y;
 
   // offset/scale coords so it aligns accurately with given grid (grid points
   // were offset in the opposite direction earlier when texture was created)
-  float xOffset = 0.5 + (0.5 / u_gridWidth);
+  float xOffset = 0.5 / u_gridWidth;
   float yScale = (u_gridHeight - 1.0) / u_gridHeight;
 
   textureCoord.x = mod(textureCoord.x + xOffset, 1.0);
