@@ -10,10 +10,10 @@ export default Object.freeze({
     id: 0,
     function: (data, lonLat) => {
       const wRes = data.width / 360;
-      const col = Math.round((lonLat[0] + 360) * wRes) % data.width;
+      const hRes = (data.height - 1) / 180;
 
-      const hRes = (data.height - 1) / 180
-      const row = Math.round(-(lonLat[1] - 90) * hRes)
+      const col = Math.round((lonLat[0] + 360) * wRes) % data.width;
+      const row = Math.round(-(lonLat[1] - 90) * hRes);
 
       return row * data.width + col;
     },
@@ -21,8 +21,14 @@ export default Object.freeze({
   RTGSSTHR: {
     id: 1,
     function: (data, lonLat) => {
-      // TODO: implement this
-      return 0;
+      const wRes = data.width / 360;
+      const hRes = data.height / 180;
+
+      const col = Math.floor((lonLat[0] + 360) * wRes) % data.width;
+      const row =
+        Math.min(Math.floor(-(lonLat[1] - 90) * hRes), data.height - 1);
+
+      return row * data.width + col;
     },
   },
 });
