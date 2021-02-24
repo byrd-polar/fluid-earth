@@ -15,6 +15,10 @@
   import Map, { updateAllWebglResolutions } from './map/Map.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
+  import dataProjections, {
+    singleArrayDataGet,
+    pairedArrayDataGet,
+  } from './map/data-projections/';
 
   import Pins from './overlays/Pins.svelte';
   import Legends from './overlays/Legends.svelte';
@@ -54,7 +58,6 @@
   let updateParticleData = () => {};
 
   let projection = projections.VERTICAL_PERSPECTIVE;
-  let offsetGriddedProjection = true;
   let d3geoProjection = projection.function;
   let centerLongitude = -60;
   let centerLatitude = 30;
@@ -65,6 +68,8 @@
     width: 1,
     height: 1,
     originalUnit: griddedDataset.originalUnit,
+    projection: dataProjections.GFS,
+    get: lonLat => NaN,
   };
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
@@ -75,6 +80,8 @@
     vVelocities: new Float16Array([0]),
     width: 1,
     height: 1,
+    projection: dataProjections.GFS,
+    get: lonLat => NaN,
   };
   let particleData = emptyParticleData;
 
@@ -140,14 +147,14 @@
           width: griddedDataset.width,
           height: griddedDataset.height,
           originalUnit: griddedDataset.originalUnit,
-        }
+          projection: griddedDataset.projection,
+          get: lonLat => singleArrayDataGet(griddedData, lonLat),
+        };
 
         if (previousGriddedDataset !== griddedDataset) {
           griddedDomain = griddedDataset.domain;
           griddedColormap = griddedDataset.colormap;
           griddedUnit = griddedDataset.unit;
-          offsetGriddedProjection = griddedDataset.offsetGriddedProjection ||
-            griddedDataset.offsetGriddedProjection === undefined;
 
           previousGriddedDataset = griddedDataset;
         }
@@ -182,6 +189,8 @@
           vVelocities: vArray,
           width: particleDataset.width,
           height: particleDataset.height,
+          projection: particleDataset.projection,
+          get: lonLat => pairedArrayDataGet(particleData, lonLat),
         };
 
         if (previousParticleDataset !== particleDataset) {
@@ -320,7 +329,6 @@
 <main>
   <Map
     {projection}
-    {offsetGriddedProjection}
     {centerLongitude}
     {centerLatitude}
     {zoom}

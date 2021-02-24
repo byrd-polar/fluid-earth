@@ -14,6 +14,7 @@ const gfs0p25props = {
   height: 721,
   intervalInHours: 1,
   forecastIntervalInHours: 6,
+  projection: 'GFS',
 };
 
 const simpleScript = path.join('data', 'scripts', 'gfs-to-fp16.js');

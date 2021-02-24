@@ -4,6 +4,9 @@ precision highp float;
 #pragma glslify: encode = require(./encode.glsl)
 #pragma glslify: decode = require(./decode.glsl)
 
+#pragma glslify: dp0 = require(../../data-projections/gfs.glsl)
+#pragma glslify: dp1 = require(../../data-projections/rtgssthr.glsl)
+
 uniform sampler2D u_particleLongitudes;
 uniform sampler2D u_particleLatitudes;
 uniform sampler2D u_particleLifetimes;
@@ -14,6 +17,7 @@ uniform vec2 u_randLonLatOffsets;
 
 uniform float u_gridWidth;
 uniform float u_gridHeight;
+uniform int u_particleDataProjection;
 
 uniform float u_particleLifetime;
 uniform float u_timeDelta;
@@ -36,21 +40,15 @@ void main() {
       u_particleLifetime, 0.0);
   lifetime += u_timeDelta;
 
-  // 90N 0E corresponds top-left corner
-  // y-axis is flipped because textures start at bottom, not top
-  vec2 texCoord;
-  texCoord.x = mod(lonLat.x, DIM.x) / DIM.x;
-  texCoord.y = (-lonLat.y + DIM_2.y) / DIM.y; // y-axis flip!!!
+  vec2 textureCoord;
 
-  // offset/scale coords so it aligns accurately with given grid (grid points
-  // were offset in the opposite direction earlier when texture was created)
-  float xOffset = 0.5 / u_gridWidth;
-  float yScale = (u_gridHeight - 1.0) / u_gridHeight;
+  if (u_particleDataProjection == 0) {
+    dp0(textureCoord, radians(lonLat), u_gridWidth, u_gridHeight);
+  } else if (u_particleDataProjection == 1) {
+    dp1(textureCoord, radians(lonLat), u_gridWidth, u_gridHeight);
+  }
 
-  texCoord.x = mod(texCoord.x + xOffset, 1.0);
-  texCoord.y = yScale * (texCoord.y - 0.5) + 0.5;
-
-  float velocity = texture2D(u_vectorFieldU, texCoord).a;
+  float velocity = texture2D(u_vectorFieldU, textureCoord).a;
 
   if (lifetime > u_particleLifetime) {
     // "randomly" relocate particle to keep grid "full"

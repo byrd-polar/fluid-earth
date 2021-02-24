@@ -2,7 +2,6 @@
   import { fly, fade } from 'svelte/transition';
   import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled32';
   import tooltip from '../tooltip.js';
-  import { dataPoint } from '../map/gridded.js';
   import { clipped } from '../map/projections/';
   import { convert, prettyUnit, prettyLatLon } from '../utility.js';
 
@@ -18,7 +17,7 @@
 
   $: [x, y] = d3geoProjection(lonLat);
   $: clip = clipped(d3geoProjection, lonLat);
-  $: value = dataPoint(griddedData, lonLat);
+  $: value = griddedData.get(lonLat);
 </script>
 
 

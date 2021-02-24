@@ -9,11 +9,15 @@ precision highp float;
 #pragma glslify: p4 = require(./projections/vertical-perspective/invert.glsl)
 #pragma glslify: p5 = require(./projections/stereographic/invert.glsl)
 
+#pragma glslify: dp0 = require(./data-projections/gfs.glsl)
+#pragma glslify: dp1 = require(./data-projections/rtgssthr.glsl)
+
 uniform float u_canvasRatio;
 uniform float u_lon0;
 uniform float u_lat0;
 uniform float u_zoom;
 uniform int u_projection;
+uniform int u_griddedDataProjection;
 uniform bool u_offsetGridded;
 
 uniform sampler2D u_texture;
@@ -65,25 +69,13 @@ void main() {
     return;
   }
 
-  // texture coordinates on an equirectangular map projection grid, where (0,0)
-  // is the bottom left corner and (1,1) is the top right corner (despite the
-  // grid having an aspect ratio of ~ 2:1, because that's just how textures work
-  // in WebGL)
-  vec2 textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
+  vec2 textureCoord;
 
-  // needs to flipped vertically, since (0,0) is bottom-left, not top-left
-  textureCoord.y = 1.0 - textureCoord.y;
-
-  // offset/scale coords so it aligns accurately with given grid (grid points
-  // were offset in the opposite direction earlier when texture was created)
-  if (u_offsetGridded) {
-    float xOffset = 0.5 / u_gridWidth;
-    float yScale = (u_gridHeight - 1.0) / u_gridHeight;
-
-    textureCoord.x += xOffset;
-    textureCoord.y = yScale * (textureCoord.y - 0.5) + 0.5;
+  if (u_griddedDataProjection == 0) {
+    dp0(textureCoord, lonLat, u_gridWidth, u_gridHeight);
+  } else if (u_griddedDataProjection == 1) {
+    dp1(textureCoord, lonLat, u_gridWidth, u_gridHeight);
   }
 
-  textureCoord.x = mod(textureCoord.x, 1.0);
   gl_FragColor = texture2D(u_texture, textureCoord);
 }

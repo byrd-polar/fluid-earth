@@ -1,6 +1,7 @@
 import ky from 'ky';
 import App from './App.svelte';
 import colormaps from './map/colormaps/';
+import dataProjections from './map/data-projections/';
 
 (async () => {
   let inventory = await ky('/data/inventory.json', {timeout: false}).json();
@@ -17,6 +18,10 @@ import colormaps from './map/colormaps/';
     // replace colormap strings with colormap objects
     if ('colormap' in dataset) {
       dataset.colormap = colormaps[dataset.colormap];
+    }
+    // replace projection strings with projection objects
+    if ('projection' in dataset) {
+      dataset.projection = dataProjections[dataset.projection];
     }
   }
 

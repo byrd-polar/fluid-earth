@@ -3,7 +3,6 @@
   import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled32';
   import Close32 from "carbon-icons-svelte/lib/Close32";
   import { slide } from 'svelte/transition';
-  import { dataPoint } from '../map/gridded.js';
   import { convert, prettyUnit, prettyLatLon } from '../utility.js';
 
   export let pins;
@@ -11,9 +10,7 @@
   export let griddedUnit;
   export let moveTo;
 
-  $: values = pins.map(pin => {
-    return dataPoint(griddedData, [pin.longitude, pin.latitude]);
-  });
+  $: values = pins.map(pin => griddedData.get([pin.longitude, pin.latitude]));
 </script>
 
 <ul>

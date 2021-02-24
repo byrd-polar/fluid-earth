@@ -5,7 +5,6 @@
   import Button from '../components/Button.svelte';
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
-  import { dataPoint } from '../map/gridded.js';
   import { convert, prettyUnit, prettyLatLon } from '../utility.js';
 
   export let centerLongitude;

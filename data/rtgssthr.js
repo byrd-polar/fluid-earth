@@ -19,7 +19,7 @@ const datasetBase = {
   width: 4320,
   height: 2160,
   intervalInHours: 24,
-  offsetGriddedProjection: false,
+  projection: 'RTGSSTHR',
 };
 
 const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();

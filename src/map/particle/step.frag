@@ -1,6 +1,9 @@
 // Fragment shader for particle simulation
 precision highp float;
 
+#pragma glslify: dp0 = require(../data-projections/gfs.glsl)
+#pragma glslify: dp1 = require(../data-projections/rtgssthr.glsl)
+
 uniform sampler2D u_particleData;
 uniform sampler2D u_vectorFieldU;
 uniform sampler2D u_vectorFieldV;
@@ -10,6 +13,7 @@ uniform vec2 u_randLonLatOffsets;
 
 uniform float u_gridWidth;
 uniform float u_gridHeight;
+uniform int u_particleDataProjection;
 
 uniform float u_particleLifetime;
 uniform float u_timeDelta;
@@ -28,23 +32,17 @@ void main() {
   vec2 lonLat = data.rg;
   float lifetime = data.b + u_timeDelta;
 
-  // 90N 0E corresponds top-left corner
-  // y-axis is flipped because textures start at bottom, not top
-  vec2 texCoord;
-  texCoord.x = mod(lonLat.x, DIM.x) / DIM.x;
-  texCoord.y = (-lonLat.y + DIM_2.y) / DIM.y; // y-axis flip!!!
+  vec2 textureCoord;
 
-  // offset/scale coords so it aligns accurately with given grid (grid points
-  // were offset in the opposite direction earlier when texture was created)
-  float xOffset = 0.5 / u_gridWidth;
-  float yScale = (u_gridHeight - 1.0) / u_gridHeight;
-
-  texCoord.x = mod(texCoord.x + xOffset, 1.0);
-  texCoord.y = yScale * (texCoord.y - 0.5) + 0.5;
+  if (u_particleDataProjection == 0) {
+    dp0(textureCoord, radians(lonLat), u_gridWidth, u_gridHeight);
+  } else if (u_particleDataProjection == 1) {
+    dp1(textureCoord, radians(lonLat), u_gridWidth, u_gridHeight);
+  }
 
   vec2 velocity;
-  velocity.x = texture2D(u_vectorFieldU, texCoord).a;
-  velocity.y = texture2D(u_vectorFieldV, texCoord).a;
+  velocity.x = texture2D(u_vectorFieldU, textureCoord).a;
+  velocity.y = texture2D(u_vectorFieldV, textureCoord).a;
   float speed = length(velocity);
 
   if (lifetime > u_particleLifetime) {
