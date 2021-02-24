@@ -2,13 +2,7 @@
 
 precision highp float;
 
-#pragma glslify: p0 = require(./projections/equirectangular/invert.glsl)
-#pragma glslify: p1 = require(./projections/mercator/invert.glsl)
-#pragma glslify: p2 = require(./projections/equal-earth/invert.glsl)
-#pragma glslify: p3 = require(./projections/orthographic/invert.glsl)
-#pragma glslify: p4 = require(./projections/vertical-perspective/invert.glsl)
-#pragma glslify: p5 = require(./projections/stereographic/invert.glsl)
-
+#pragma glslify: invertProject = require(./projections/invert.glsl)
 #pragma glslify: projectToTexture = require(./data-projections/)
 
 uniform float u_canvasRatio;
@@ -45,19 +39,13 @@ void main() {
   // where the map is centered
   vec2 lonLat0 = radians(vec2(u_lon0, u_lat0));
 
-  if (u_projection == 0) {
-    p0(displayCoord, lonLat0, lonLat);
-  } else if (u_projection == 1) {
-    p1(displayCoord, lonLat0, lonLat);
-  } else if (u_projection == 2) {
-    p2(displayCoord, lonLat0, lonLat);
-  } else if (u_projection == 3) {
-    p3(displayCoord, lonLat0, lonLat);
-  } else if (u_projection == 4) {
-    p4(displayCoord, lonLat0, lonLat, u_zoom);
-  } else if (u_projection == 5) {
-    p5(displayCoord, lonLat0, lonLat);
-  }
+  invertProject(
+      displayCoord,
+      lonLat0,
+      lonLat,
+      u_zoom,
+      u_projection
+  );
 
   // don't render points with lonLat out of range
   if (lonLat.x >  PI ||

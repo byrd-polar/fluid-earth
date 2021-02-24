@@ -1,11 +1,6 @@
 // Copied from ../draw.vert, modified to read RGBA instead of float textures
 
-#pragma glslify: p0 = require(../../projections/equirectangular/forward.glsl)
-#pragma glslify: p1 = require(../../projections/mercator/forward.glsl)
-#pragma glslify: p2 = require(../../projections/equal-earth/forward.glsl)
-#pragma glslify: p3 = require(../../projections/orthographic/forward.glsl)
-#pragma glslify: p4 = require(../../projections/vertical-perspective/forward.glsl)
-#pragma glslify: p5 = require(../../projections/stereographic/forward.glsl)
+#pragma glslify: forwardProject = require(../../projections/forward.glsl)
 
 #pragma glslify: decode = require(./decode.glsl)
 #pragma glslify: MAX_SPEED = require(./speed.glsl)
@@ -49,19 +44,14 @@ void main() {
 
   bool clip; // true if vertex will not be rendered
 
-  if (u_projection == 0) {
-    p0(displayCoord, lonLat0, lonLat, clip);
-  } else if (u_projection == 1) {
-    p1(displayCoord, lonLat0, lonLat, clip);
-  } else if (u_projection == 2) {
-    p2(displayCoord, lonLat0, lonLat, clip);
-  } else if (u_projection == 3) {
-    p3(displayCoord, lonLat0, lonLat, clip);
-  } else if (u_projection == 4) {
-    p4(displayCoord, lonLat0, lonLat, clip, u_zoom);
-  } else if (u_projection == 5) {
-    p5(displayCoord, lonLat0, lonLat, clip);
-  }
+  forwardProject(
+      displayCoord,
+      lonLat0,
+      lonLat,
+      clip,
+      u_zoom,
+      u_projection
+  );
 
   // determines if fragment shader should not render line to avoid lines
   // wrapping across the map from the anti-meridian or map edge

@@ -1,0 +1,30 @@
+#pragma glslify: p0 = require(./equirectangular/invert.glsl)
+#pragma glslify: p1 = require(./mercator/invert.glsl)
+#pragma glslify: p2 = require(./equal-earth/invert.glsl)
+#pragma glslify: p3 = require(./orthographic/invert.glsl)
+#pragma glslify: p4 = require(./vertical-perspective/invert.glsl)
+#pragma glslify: p5 = require(./stereographic/invert.glsl)
+
+#pragma glslify: export(invertProject)
+
+void invertProject(
+    in vec2 displayCoord,
+    in vec2 lonLat0,
+    out vec2 lonLat,
+    in float zoom,
+    in int projection
+) {
+  if (projection == 0) {
+    p0(displayCoord, lonLat0, lonLat);
+  } else if (projection == 1) {
+    p1(displayCoord, lonLat0, lonLat);
+  } else if (projection == 2) {
+    p2(displayCoord, lonLat0, lonLat);
+  } else if (projection == 3) {
+    p3(displayCoord, lonLat0, lonLat);
+  } else if (projection == 4) {
+    p4(displayCoord, lonLat0, lonLat, zoom);
+  } else if (projection == 5) {
+    p5(displayCoord, lonLat0, lonLat);
+  }
+}
