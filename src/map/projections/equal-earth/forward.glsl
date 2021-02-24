@@ -7,7 +7,7 @@ const float A3 = 0.000893;
 const float A4 = 0.003796;
 const float M = sqrt(3.0) / 2.0;
 
-void equalEarth(inout vec2 coord, in vec2 lonLat0, in vec2 lonLat,
+void equalEarth(out vec2 coord, in vec2 lonLat0, in vec2 lonLat,
     out bool clip) {
   rotate(lonLat0, lonLat, clip);
 

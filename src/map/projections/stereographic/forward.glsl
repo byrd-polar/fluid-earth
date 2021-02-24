@@ -1,7 +1,7 @@
 #pragma glslify: export(stereographic)
 #pragma glslify: rotate = require(../rotate/forward.glsl)
 
-void stereographic(inout vec2 coord, in vec2 lonLat0, in vec2 lonLat,
+void stereographic(out vec2 coord, in vec2 lonLat0, in vec2 lonLat,
     out bool clip) {
   rotate(lonLat0, lonLat, clip);
   clip = false;
