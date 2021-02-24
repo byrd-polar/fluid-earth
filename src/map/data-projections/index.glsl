@@ -8,10 +8,10 @@ void projectToTexture(
     in vec2 lonLat,
     in float gridWidth,
     in float gridHeight,
-    in int projectionID
+    in int projection
 ) {
   // GFS
-  if (projectionID == 0) {
+  if (projection == 0) {
 
     textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
 
@@ -22,7 +22,7 @@ void projectToTexture(
     textureCoord.y = yScale * (textureCoord.y - 0.5) + 0.5;
   }
   // RTGSSTHR
-  else if (projectionID == 1) {
+  else if (projection == 1) {
 
     textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
     textureCoord.x = mod(textureCoord.x, 1.0);
