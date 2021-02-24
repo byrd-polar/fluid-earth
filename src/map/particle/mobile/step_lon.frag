@@ -4,8 +4,7 @@ precision highp float;
 #pragma glslify: encode = require(./encode.glsl)
 #pragma glslify: decode = require(./decode.glsl)
 
-#pragma glslify: dp0 = require(../../data-projections/gfs.glsl)
-#pragma glslify: dp1 = require(../../data-projections/rtgssthr.glsl)
+#pragma glslify: projectToTexture = require(../../data-projections/)
 
 uniform sampler2D u_particleLongitudes;
 uniform sampler2D u_particleLatitudes;
@@ -41,12 +40,13 @@ void main() {
   lifetime += u_timeDelta;
 
   vec2 textureCoord;
-
-  if (u_particleDataProjection == 0) {
-    dp0(textureCoord, radians(lonLat), u_gridWidth, u_gridHeight);
-  } else if (u_particleDataProjection == 1) {
-    dp1(textureCoord, radians(lonLat), u_gridWidth, u_gridHeight);
-  }
+  projectToTexture(
+      textureCoord,
+      radians(lonLat),
+      u_gridWidth,
+      u_gridHeight,
+      u_particleDataProjection
+  );
 
   float velocity = texture2D(u_vectorFieldU, textureCoord).a;
 

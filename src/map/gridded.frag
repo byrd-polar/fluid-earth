@@ -9,8 +9,7 @@ precision highp float;
 #pragma glslify: p4 = require(./projections/vertical-perspective/invert.glsl)
 #pragma glslify: p5 = require(./projections/stereographic/invert.glsl)
 
-#pragma glslify: dp0 = require(./data-projections/gfs.glsl)
-#pragma glslify: dp1 = require(./data-projections/rtgssthr.glsl)
+#pragma glslify: projectToTexture = require(./data-projections/)
 
 uniform float u_canvasRatio;
 uniform float u_lon0;
@@ -70,12 +69,13 @@ void main() {
   }
 
   vec2 textureCoord;
-
-  if (u_griddedDataProjection == 0) {
-    dp0(textureCoord, lonLat, u_gridWidth, u_gridHeight);
-  } else if (u_griddedDataProjection == 1) {
-    dp1(textureCoord, lonLat, u_gridWidth, u_gridHeight);
-  }
+  projectToTexture(
+      textureCoord,
+      lonLat,
+      u_gridWidth,
+      u_gridHeight,
+      u_griddedDataProjection
+  );
 
   gl_FragColor = texture2D(u_texture, textureCoord);
 }
