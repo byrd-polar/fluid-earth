@@ -14,7 +14,6 @@ void projectToTexture(
   if (projectionID == 0) {
 
     textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
-    textureCoord.y = 1.0 - textureCoord.y;
 
     float xOffset = 0.5 / gridWidth;
     float yScale = (gridHeight - 1.0) / gridHeight;
@@ -26,8 +25,6 @@ void projectToTexture(
   else if (projectionID == 1) {
 
     textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
-    textureCoord.y = 1.0 - textureCoord.y;
-
     textureCoord.x = mod(textureCoord.x, 1.0);
   }
 }

@@ -23,7 +23,7 @@ const wgrib2 = spawn('wgrib2', [
   '-inv', platform() === 'win32' ? 'NUL' : '/dev/null',
   '-bin', '-',
   '-no_header',
-  '-order', 'we:ns'
+  '-order', 'we:sn'
 ]);
 
 const float16 = new Transform({

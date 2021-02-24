@@ -13,7 +13,7 @@ export default Object.freeze({
       const hRes = (data.height - 1) / 180;
 
       const col = Math.round((lonLat[0] + 360) * wRes) % data.width;
-      const row = Math.round(-(lonLat[1] - 90) * hRes);
+      const row = Math.round((lonLat[1] + 90) * hRes);
 
       return row * data.width + col;
     },
@@ -26,7 +26,7 @@ export default Object.freeze({
 
       const col = Math.floor((lonLat[0] + 360) * wRes) % data.width;
       const row =
-        Math.min(Math.floor(-(lonLat[1] - 90) * hRes), data.height - 1);
+        Math.min(Math.floor((lonLat[1] + 90) * hRes), data.height - 1);
 
       return row * data.width + col;
     },
