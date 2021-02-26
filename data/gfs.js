@@ -50,6 +50,20 @@ const simpleGribs = [
       ...gfs0p25props,
     },
   },
+  {
+    dataDir: 'gfs-0p25-total-precipitable-water/',
+    parameter: 'PWAT',
+    level: 'entire atmosphere (considered as a single layer)',
+    datasetBase: {
+      name: 'total precipitable water',
+      description: 'total precipitable water',
+      unit: 'kg/m^2',
+      originalUnit: 'kg/m^2',
+      domain: [0, 70],
+      colormap: 'TOTAL_PRECIP',
+      ...gfs0p25props,
+    },
+  },
 ];
 
 const speedGribs = [
