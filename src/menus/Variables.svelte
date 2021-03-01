@@ -29,6 +29,8 @@
 
   let icons = [
     TemperatureHot24,
+    TemperatureHot24,
+    TemperatureHot24,
     QOperationGauge24,
     RainDrop24,
     Windy24,
