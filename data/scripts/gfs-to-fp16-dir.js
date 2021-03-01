@@ -4,7 +4,7 @@
 //
 // Example of input file format: gfs.0p25.2020080500.f000.grib2(+ more chars)
 //
-// Usage node gfs-to-fp16-dir.js <dir>
+// Usage node gfs-to-fp16-dir.js <dir> [<factor>]
 
 import { execFile } from 'child_process';
 import { readdirSync } from 'fs';
@@ -14,13 +14,14 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-if (process.argv.length < 2 + 1) {
-  console.log('wrong number of arguments, expected 1\n');
-  console.log('Usage node gfs-to-fp16-dir.js <dir>');
+if (process.argv.length != 2 + 1 && process.argv.length != 2 + 2) {
+  console.log('wrong number of arguments, expected 1-2\n');
+  console.log('Usage node gfs-to-fp16-dir.js <dir> [<factor>]');
   process.exit(1);
 }
 
 const dir = process.argv[2];
+const factor = process.argv[3]
 
 for (const inputFile of readdirSync(dir).filter(f => !f.includes('.fp16'))) {
   const year = inputFile.slice(9, 13);
@@ -33,7 +34,7 @@ for (const inputFile of readdirSync(dir).filter(f => !f.includes('.fp16'))) {
 
   execFile(
     join(__dirname, 'gfs-to-fp16.js'),
-    [inputFile, outputFile],
+    [inputFile, outputFile, factor].filter(a => a !== undefined),
     { cwd: dir },
     () => { console.log(`${inputFile} => ${outputFile}`) },
   );

@@ -142,6 +142,7 @@ async function downloadGrib(forecast, parameter, level) {
 }
 
 for (const grib of simpleGribs) {
+  const factor = grib.factor ?? 1;
   const outputPath = path.join(util.OUTPUT_DIR, grib.dataDir);
   await mkdir(outputPath, { mode: '775', recursive: true });
 
@@ -151,7 +152,7 @@ for (const grib of simpleGribs) {
     const outputFile = util.join(outputPath, filename);
 
     util.log('Converting GFS grib to fp16', inputFile, outputFile);
-    await execFile('node', [simpleScript, inputFile, outputFile]);
+    await execFile('node', [simpleScript, inputFile, outputFile, factor]);
   }
 
   let dataset = inventory.find(d => d.path === util.browserPath(outputPath));
