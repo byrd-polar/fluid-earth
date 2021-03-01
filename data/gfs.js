@@ -17,6 +17,13 @@ const gfs0p25props = {
   projection: 'GFS',
 };
 
+const temperatureProps = {
+  unit: 'tempC',
+  originalUnit: 'tempK',
+  domain: [273.15 - 80, 273.15 + 55],
+  colormap: 'MAGMA',
+};
+
 const simpleScript = path.join('data', 'scripts', 'gfs-to-fp16.js');
 const speedScript = path.join('data', 'scripts', 'gfs-wind-to-fp16.js');
 
@@ -28,10 +35,7 @@ const simpleGribs = [
     datasetBase: {
       name: 'temperature at ground level',
       description: 'temperature at 2 m above ground',
-      unit: 'tempC',
-      originalUnit: 'tempK',
-      domain: [273.15 - 80, 273.15 + 55],
-      colormap: 'TEMP',
+      ...temperatureProps,
       ...gfs0p25props,
     },
   },
@@ -42,10 +46,7 @@ const simpleGribs = [
     datasetBase: {
       name: 'temperature at cloud level',
       description: 'temperature at cloud level',
-      unit: 'tempC',
-      originalUnit: 'tempK',
-      domain: [273.15 - 80, 273.15 + 55],
-      colormap: 'TEMP',
+      ...temperatureProps,
       ...gfs0p25props,
     },
   },
@@ -56,10 +57,7 @@ const simpleGribs = [
     datasetBase: {
       name: 'temperature at cruise level',
       description: 'temperature at cruise level',
-      unit: 'tempC',
-      originalUnit: 'tempK',
-      domain: [273.15 - 80, 273.15 + 55],
-      colormap: 'TEMP',
+      ...temperatureProps,
       ...gfs0p25props,
     },
   },
