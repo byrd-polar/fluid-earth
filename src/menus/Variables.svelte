@@ -1,6 +1,7 @@
 <script>
   import Windy24 from "carbon-icons-svelte/lib/Windy24";
   import TemperatureHot24 from "carbon-icons-svelte/lib/TemperatureHot24";
+  import TemperatureWater24 from "carbon-icons-svelte/lib/TemperatureWater24";
   import QOperationGauge24 from "carbon-icons-svelte/lib/QOperationGauge24";
   import Rain24 from "carbon-icons-svelte/lib/Rain24";
   import Cloudy24 from "carbon-icons-svelte/lib/Cloudy24";
@@ -29,7 +30,9 @@
   let icons = [
     TemperatureHot24,
     QOperationGauge24,
+    RainDrop24,
     Windy24,
+    TemperatureWater24,
   ];
 </script>
 
