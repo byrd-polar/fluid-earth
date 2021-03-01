@@ -28,6 +28,7 @@
 
   let icons = [
     TemperatureHot24,
+    QOperationGauge24,
     Windy24,
   ];
 </script>

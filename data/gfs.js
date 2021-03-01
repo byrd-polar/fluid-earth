@@ -35,6 +35,21 @@ const simpleGribs = [
       ...gfs0p25props,
     },
   },
+  {
+    dataDir: 'gfs-0p25-mslp/',
+    parameter: 'PRMSL',
+    level: 'mean sea level',
+    factor: 100,
+    datasetBase: {
+      name: 'mean sea level',
+      description: 'mean sea level pressure',
+      unit: 'hPa',
+      originalUnit: 'hPa',
+      domain: [960, 1050],
+      colormap: 'MEAN_SEA_LEVEL_PRESSURE',
+      ...gfs0p25props,
+    },
+  },
 ];
 
 const speedGribs = [
