@@ -1,7 +1,7 @@
 #!/bin/env node
 // Convert a GFS file to fp16
 //
-// Usage: node gfs-to-fp16.js [inputFile] [outputFile]
+// Usage: node gfs-to-fp16.js <inputFile> <outputFile>
 
 import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';
@@ -11,7 +11,7 @@ import { platform } from 'os';
 
 if (process.argv.length != 2 + 2) {
   console.log('wrong number of arguments, expected 2\n');
-  console.log('Usage: node gfs-to-fp16.js [inputFile] [outputFile]');
+  console.log('Usage: node gfs-to-fp16.js <inputFile> <outputFile>');
   process.exit(1);
 }
 

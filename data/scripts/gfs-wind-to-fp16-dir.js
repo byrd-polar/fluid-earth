@@ -5,7 +5,7 @@
 //
 // Example of input file format: gfs.0p25.2020080500.f000.grib2(+ more chars)
 //
-// Usage node gfs-wind-to-fp16-dir.js [uDir] [vDir] [outputDir]
+// Usage node gfs-wind-to-fp16-dir.js <uDir> <vDir> <outputDir>
 
 import { execFile } from 'child_process';
 import { readdirSync } from 'fs';
@@ -17,7 +17,7 @@ const __dirname = dirname(__filename);
 
 if (process.argv.length < 2 + 3) {
   console.log('wrong number of arguments, expected 3\n');
-  console.log('Usage node gfs-wind-to-fp16-dir.js [uDir] [vDir] [outputDir]');
+  console.log('Usage node gfs-wind-to-fp16-dir.js <uDir> <vDir> <outputDir>');
   process.exit(1);
 }
 

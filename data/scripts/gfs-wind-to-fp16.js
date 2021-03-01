@@ -1,7 +1,7 @@
 #!/bin/env node
 // Calculate wind speed from GFS files and convert to fp16
 //
-// Usage: node gfs-wind-to-fp16.js [uWind] [vWind] [outputFile]
+// Usage: node gfs-wind-to-fp16.js <uWind> <vWind> <outputFile>
 
 import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';
@@ -11,7 +11,7 @@ import { platform } from 'os';
 
 if (process.argv.length != 2 + 3) {
   console.log('wrong number of arguments, expected 3\n');
-  console.log('Usage: node gfs-to-fp16.js [uWind] [vWind] [outputFile]');
+  console.log('Usage: node gfs-to-fp16.js <uWind> <vWind> <outputFile>');
   process.exit(1);
 }
 
