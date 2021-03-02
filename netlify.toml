@@ -5,6 +5,7 @@
 
 [build.environment]
   NODE_VERSION = "14"
+  NPM_VERSION = "7"
 
 [[redirects]]
   from = "/data/*"
