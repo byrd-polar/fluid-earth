@@ -36,6 +36,19 @@ export default {
     file: 'public/build/bundle.js'
   },
   plugins: [
+    replace({
+      // For tippy.js, do find/replace for a reference to Node environment in code
+      // with actual value (since it will be running in the browser, not Node?).
+      // See: https://atomiks.github.io/tippyjs/v6/faq/#rollup
+      'process.env.NODE_ENV': JSON.stringify(
+        production ? 'production' : 'development'
+      ),
+      // Fix local file paths for dev environments on Windows
+      __windows__: JSON.stringify(windows),
+      // Plugin option to avoid assignment errors
+      preventAssignment: true,
+    }),
+
     svelte({
       compilerOptions: {
         // enable run-time checks when not in production
@@ -62,16 +75,6 @@ export default {
       extract: true,
       minimize: production,
       sourceMap: true,
-    }),
-
-    replace({
-      // For tippy.js, do find/replace for a reference to Node environment in code
-      // with actual value (since it will be running in the browser, not Node?).
-      // See: https://atomiks.github.io/tippyjs/v6/faq/#rollup
-      'process.env.NODE_ENV': JSON.stringify(
-        production ? 'production' : 'development'
-      ),
-      __windows__: JSON.stringify(windows),
     }),
 
     // If you have external dependencies installed from
