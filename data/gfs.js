@@ -101,7 +101,7 @@ const speedGribs = [
     datasetBase: {
       name: 'wind speed',
       description: 'wind speed at 10 m above ground',
-      unit: 'kph',
+      unit: 'km/h',
       originalUnit: 'm/s',
       domain: [0, 100],
       colormap: 'CUBEHELIX_DEFAULT',
