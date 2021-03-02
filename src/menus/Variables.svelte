@@ -33,6 +33,7 @@
     TemperatureHot24,
     QOperationGauge24,
     RainDrop24,
+    Cloudy24,
     Windy24,
     TemperatureWater24,
   ];

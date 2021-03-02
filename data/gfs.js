@@ -90,6 +90,20 @@ const simpleGribs = [
       ...gfs0p25props,
     },
   },
+  {
+    dataDir: 'gfs-0p25-total-cloud-water/',
+    parameter: 'CWAT',
+    level: 'entire atmosphere (considered as a single layer)',
+    datasetBase: {
+      name: 'total cloud water',
+      description: 'total cloud water',
+      unit: 'kg/m^2',
+      originalUnit: 'kg/m^2',
+      domain: [0.0, 1.0],
+      colormap: 'TOTAL_CLOUD',
+      ...gfs0p25props,
+    },
+  },
 ];
 
 const speedGribs = [
