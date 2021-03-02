@@ -40,7 +40,7 @@ const simpleGribs = [
     },
   },
   {
-    dataDir: 'gfs-0p25-temperature-5000m/',
+    dataDir: 'gfs-0p25-temperature-500mb/',
     parameter: 'TMP',
     level: '500 mb',
     datasetBase: {
@@ -51,7 +51,7 @@ const simpleGribs = [
     },
   },
   {
-    dataDir: 'gfs-0p25-temperature-13000m/',
+    dataDir: 'gfs-0p25-temperature-200mb/',
     parameter: 'TMP',
     level: '200 mb',
     datasetBase: {
