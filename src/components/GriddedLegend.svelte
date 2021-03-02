@@ -12,12 +12,21 @@
   let svgScale;
   let svgScaleWidth;
 
-  // updates when changing domain independently of dataset (or after dataset
-  // download completes
-  $: createAxis(svgScale, svgScaleWidth, griddedDomain, griddedUnit);
-  // updates immediately after selecting dataset instead of after download
+  // first $: statement in each group updates immediately after selecting
+  // dataset instead of after download
+
+  // second $: statment in each group updates when changing values independently
+  // of dataset (or after dataset download completes)
+
   $: createAxis(
     svgScale, svgScaleWidth, griddedDataset.domain, griddedDataset.unit);
+  $: createAxis(svgScale, svgScaleWidth, griddedDomain, griddedUnit);
+
+  $: cssLut = generateLut(griddedDataset.colormap);
+  $: cssLut = generateLut(griddedColormap);
+
+  $: unit = prettyUnit(griddedDataset.unit);
+  $: unit = prettyUnit(griddedUnit);
 
   function createAxis(elem, width, domain, unit) {
     if (!elem) return;
@@ -30,12 +39,6 @@
     d3.select(elem).call(axis);
   }
 
-  // updates when changing colormap independently of dataset (or after dataset
-  // download completes)
-  $: cssLut = generateLut(griddedColormap);
-  // updates immediately after selecting dataset instead of after download
-  $: cssLut = generateLut(griddedDataset.colormap);
-
   function generateLut(colormap) {
     return colormap.lut.map(colorArray => {
       return `rgb(${colorArray.map(c => Math.round(255 * c)).join()})`;
@@ -45,8 +48,7 @@
 
 <section>
   <h3>
-    {griddedDataset.description}
-    {#if griddedUnit}({prettyUnit(griddedUnit)}){/if}
+    {griddedDataset.description} ({unit})
   </h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"
