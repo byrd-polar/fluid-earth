@@ -4,7 +4,12 @@ import colormaps from './map/colormaps/';
 import dataProjections from './map/data-projections/';
 
 (async () => {
-  let inventory = await ky('/data/inventory.json', {timeout: false}).json();
+  let inventory = await ky('/data/inventory.json', {
+    timeout: false,
+    headers: {
+      'Cache-Control': 'no-cache',
+    },
+  }).json();
 
   // replace some strings in inventory with objects
   for (const dataset of inventory) {
