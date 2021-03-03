@@ -4,6 +4,7 @@ html {
   box-sizing: border-box;
   height: 100%;
   overflow: hidden;
+  line-height: 1.5;
 }
 
 *, *:before, *:after {
@@ -20,7 +21,6 @@ p {
   text-align: justify;
   -webkit-hyphens: auto;
   hyphens: auto;
-  line-height: 1.5;
 }
 
 sup {

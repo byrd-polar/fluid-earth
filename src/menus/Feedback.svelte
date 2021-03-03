@@ -7,12 +7,8 @@
 
 <p>
   Help us improve FEVer by providing us with your feedback.
-</p>
-<p>
   Tell us what you like or don't like, what works or doesn't work, what features
   you would like added, etc.
-</p>
-<p>
   Feedback from the community and educators has helped make this project a
   success.
 </p>
