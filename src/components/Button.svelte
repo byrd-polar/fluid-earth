@@ -10,6 +10,7 @@
   export let type = 'button';
   export let tip = '';
   export let tipPlacement = 'top';
+  export let transition = false;
 </script>
 
 <button
@@ -20,7 +21,7 @@
   class:secondary
   type={type}
   use:tooltip={{content: tip, placement: tipPlacement}}
-  transition:fade
+  transition:fade={{duration: transition ? 400 : 0}}
 >
   <slot></slot>
 </button>
