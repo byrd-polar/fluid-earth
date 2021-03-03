@@ -151,8 +151,7 @@ const compoundGribs = [
 const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
 const [datetime, system] = await getDatetimeAndSystem(inventory);
 
-// can be up to 9 : 120 for GDAS and GFS, respectively
-const forecastHours = system === 'gdas' ? 6 : 6;
+const forecastHours = system === 'gdas' ? 9 : 120;
 
 // determine the URL to download from
 function getDataURL(system, datetime, forecast) {
