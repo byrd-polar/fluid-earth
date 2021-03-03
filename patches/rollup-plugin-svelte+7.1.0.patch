@@ -1,0 +1,20 @@
+diff --git a/node_modules/rollup-plugin-svelte/index.js b/node_modules/rollup-plugin-svelte/index.js
+index 1e4836e..c44e578 100644
+--- a/node_modules/rollup-plugin-svelte/index.js
++++ b/node_modules/rollup-plugin-svelte/index.js
+@@ -130,15 +130,5 @@ module.exports = function (options = {}) {
+ 
+ 			return compiled.js;
+ 		},
+-
+-		/**
+-		 * All resolutions done; display warnings wrt `package.json` access.
+-		 */
+-		generateBundle() {
+-			if (pkg_export_errors.size > 0) {
+-				console.warn(`\n${PREFIX} The following packages did not export their \`package.json\` file so we could not check the "svelte" field. If you had difficulties importing svelte components from a package, then please contact the author and ask them to export the package.json file.\n`);
+-				console.warn(Array.from(pkg_export_errors, s => `- ${s}`).join('\n') + '\n');
+-			}
+-		}
+ 	};
+ };

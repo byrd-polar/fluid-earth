@@ -47,18 +47,7 @@ export default {
       __windows__: JSON.stringify(windows),
       // Plugin option to avoid assignment errors
       preventAssignment: true,
-
     }),
-    // If you have external dependencies installed from
-    // npm, you'll most likely need these plugins. In
-    // some cases you'll need additional configuration -
-    // consult the documentation for details:
-    // https://github.com/rollup/plugins/tree/master/packages/commonjs
-    resolve({
-      browser: true,
-      dedupe: ['svelte']
-    }),
-    commonjs(),
 
     svelte({
       compilerOptions: {
@@ -87,6 +76,17 @@ export default {
       minimize: production,
       sourceMap: true,
     }),
+
+    // If you have external dependencies installed from
+    // npm, you'll most likely need these plugins. In
+    // some cases you'll need additional configuration -
+    // consult the documentation for details:
+    // https://github.com/rollup/plugins/tree/master/packages/commonjs
+    resolve({
+      browser: true,
+      dedupe: ['svelte']
+    }),
+    commonjs(),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
