@@ -77,10 +77,6 @@
     text-transform: uppercase;
   }
 
-  h3 :global(sup) {
-    line-height: 0;
-  }
-
   div {
     height: 0.8em;
   }

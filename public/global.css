@@ -16,6 +16,10 @@ body {
   background-color: black;
 }
 
+sup {
+  line-height: 0;
+}
+
 /* Modified from https://stephanwagner.me/only-css-loading-spinner */
 @keyframes spinner {
   to {transform: rotate(360deg);}
