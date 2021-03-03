@@ -48,7 +48,7 @@
 
 <section>
   <h3>
-    {griddedDataset.description} ({unit})
+    {griddedDataset.description} ({@html unit})
   </h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"
@@ -75,6 +75,10 @@
 
   h3::first-letter {
     text-transform: uppercase;
+  }
+
+  h3 :global(sup) {
+    line-height: 0;
   }
 
   div {

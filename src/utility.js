@@ -25,7 +25,7 @@ export function prettyUnit(unit) {
   switch (unit) {
     case 'tempK': return 'K';
     case 'tempC': return '°C';
-    default: return unit.replace(/\^2/g, '²');
+    default: return unit.replace(/\^([0-9]+)/g, '<sup>$1</sup>');
   }
 }
 
