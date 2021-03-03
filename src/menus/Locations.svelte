@@ -74,12 +74,10 @@
 <h2>PIN A LOCATION</h2>
 
 <p>
-  Locations on the map can be marked with a pin. Hover over the pin to see information about that location.<br>
-  To mark a location with a pin:
+  Locations on the map can be marked with a pin. Hover over the pin to see information about that location.
 </p>
-
 <p>
-  Hold down the <b>left mouse button</b> at that location, or...
+  To mark a location with a pin, hold down the <b>left mouse button</b> at that location, or...
 </p>
 
 <SearchBox {label} {loadData} {onSelect} />
@@ -98,12 +96,14 @@
 
 </div>
 <footer>
+<p>
   Data from
   "<a href="https://simplemaps.com/data/world-cities">
   Basic World Cities Database v1.73</a>" by
   <a href="https://simplemaps.com">Pareto Software, LLC</a>, used under
   <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
   / Text reformatted from original
+</p>
 </footer>
 
 <style>
@@ -119,7 +119,7 @@
     border-top: 1px solid white;
     margin-top: auto;
     font-size: 0.825em;
-    padding: 0.5em;
+    padding: 0 0.5em;
   }
 
   a {

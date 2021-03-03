@@ -16,6 +16,13 @@ body {
   background-color: black;
 }
 
+p {
+  text-align: justify;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  line-height: 1.5;
+}
+
 sup {
   line-height: 0;
 }
