@@ -8,6 +8,7 @@ import {
 
 import {
   temp,
+  alternate_temp,
   precip_6h,
   total_cloud_water,
   total_precipitable_water,
@@ -242,6 +243,12 @@ let colormaps = {
     name: 'temperature',
     type: 'FEVer 1 original',
     get lut() { return convert(temp) }
+  },
+
+  ALTERNATE_TEMP:{
+    name: 'alternate_temp',
+    type: 'FEVer 1 original',
+    get lut() { return convert(alternate_temp) }
   },
 
   SEA_SURFACE_TEMP:{
