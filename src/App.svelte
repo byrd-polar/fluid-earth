@@ -268,6 +268,7 @@
     {inventory}
     bind:griddedDataset
     bind:particleDataset
+    bind:particlesShown
   />
 </Menu>
 <Menu bind:openedMenu menuName="Time Machine" bind:menusDetailed>

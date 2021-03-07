@@ -1,7 +1,10 @@
 <script>
+  import Toggle from 'svelte-toggle';
+
   export let inventory;
   export let griddedDataset;
   export let particleDataset;
+  export let particlesShown;
 </script>
 
 <h2>Gridded Datasets</h2>
@@ -31,6 +34,17 @@
     </label>
   {/each}
 </form>
+
+<h2>Settings</h2>
+
+<Toggle
+  bind:toggled={particlesShown}
+  label="streamlines"
+  toggledColor="#676778"
+  on="particle animation enabled"
+  off="particle animation disabled"
+  style="order: 2; margin-left: auto"
+/>
 
 <style>
   label {
