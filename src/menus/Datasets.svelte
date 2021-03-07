@@ -8,32 +8,30 @@
 </script>
 
 <h2>Gridded Datasets</h2>
-<form>
-  {#each inventory.filter(d => d.colormap) as dataset}
-    <label>
-      <input
-        type="radio"
-        bind:group={griddedDataset}
-        value={dataset}
-      >
-      {dataset.name}
-    </label>
-  {/each}
-</form>
+{#each inventory.filter(d => d.colormap) as dataset}
+  <label>
+    <input
+      type="radio"
+      name="griddedDataset"
+      bind:group={griddedDataset}
+      value={dataset}
+    >
+    {dataset.name}
+  </label>
+{/each}
 
 <h2>Particle Datasets</h2>
-<form>
-  {#each inventory.filter(d => d.particleDisplay) as dataset}
-    <label>
-      <input
-        type="radio"
-        bind:group={particleDataset}
-        value={dataset}
-      >
-      {dataset.name}
-    </label>
-  {/each}
-</form>
+{#each inventory.filter(d => d.particleDisplay) as dataset}
+  <label>
+    <input
+      type="radio"
+      name="particleDataset"
+      bind:group={particleDataset}
+      value={dataset}
+    >
+    {dataset.name}
+  </label>
+{/each}
 
 <h2>Settings</h2>
 
