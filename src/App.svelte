@@ -3,7 +3,7 @@
   import Drawer from './Drawer.svelte';
   import Menu from './Menu.svelte';
 
-  import Variables from './menus/Variables.svelte';
+  import Datasets from './menus/Datasets.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
   import Locations from './menus/Locations.svelte';
   import MapProjections from './menus/MapProjections.svelte';
@@ -264,10 +264,10 @@
   bind:drawerOpen
 />
 <Menu bind:openedMenu menuName="Datasets">
-  <Variables
+  <Datasets
     {inventory}
     bind:griddedDataset
-    bind:particlesShown
+    bind:particleDataset
   />
 </Menu>
 <Menu bind:openedMenu menuName="Time Machine" bind:menusDetailed>
