@@ -16,6 +16,7 @@
 
   import colormaps from './colormaps/';
   import projections, { proj } from './projections/';
+  import dataProjections from './data-projections/';
 
   import { Float16Array } from '@petamoriken/float16';
 
@@ -28,6 +29,7 @@
     floatArray: new Float16Array([0]),
     width: 1,
     height: 1,
+    projection: dataProjections.GFS,
   };
   export let griddedColormap = colormaps.VIRIDIS;
   export let griddedDomain = [0, 1];
@@ -37,6 +39,7 @@
     vVelocities: new Float16Array([0]),
     width: 1,
     height: 1,
+    projection: dataProjections.GFS,
   };
   export let particlesShown = true;
   export let particleLifetime = 1000; // milliseconds
