@@ -33,7 +33,7 @@ const simpleGribs = [
     parameter: 'TMP',
     level: '2 m above ground',
     datasetBase: {
-      name: 'temperature at ground level',
+      name: 'temperature at 2 m above ground',
       description: 'temperature at 2 m above ground',
       ...temperatureProps,
       ...gfs0p25props,
@@ -44,7 +44,7 @@ const simpleGribs = [
     parameter: 'TMP',
     level: '500 mb',
     datasetBase: {
-      name: 'temperature at cloud level',
+      name: 'temperature at 500 mb',
       description: 'temperature at cloud level',
       ...temperatureProps,
       ...gfs0p25props,
@@ -55,7 +55,7 @@ const simpleGribs = [
     parameter: 'TMP',
     level: '200 mb',
     datasetBase: {
-      name: 'temperature at cruise level',
+      name: 'temperature at 200 mb',
       description: 'temperature at cruise level',
       ...temperatureProps,
       ...gfs0p25props,
@@ -67,7 +67,7 @@ const simpleGribs = [
     level: 'mean sea level',
     factor: 1000,
     datasetBase: {
-      name: 'mean sea level',
+      name: 'mean sea level pressure',
       description: 'mean sea level pressure',
       unit: 'hPa',
       originalUnit: 'kPa',
@@ -82,7 +82,7 @@ const simpleGribs = [
     level: 'entire atmosphere (considered as a single layer)',
     datasetBase: {
       name: 'total precipitable water',
-      description: 'total precipitable water',
+      description: 'precipitable water for entire atmosphere as a single layer',
       unit: 'kg/m^2',
       originalUnit: 'kg/m^2',
       domain: [0, 70],
@@ -96,7 +96,7 @@ const simpleGribs = [
     level: 'entire atmosphere (considered as a single layer)',
     datasetBase: {
       name: 'total cloud water',
-      description: 'total cloud water',
+      description: 'cloud water for entire atmosphere as a single layer',
       unit: 'kg/m^2',
       originalUnit: 'kg/m^2',
       domain: [0.0, 1.0],
@@ -113,7 +113,7 @@ const speedGribs = [
     dataDir: 'gfs-0p25-wind-speed-10m/',
     level: '10 m above ground',
     datasetBase: {
-      name: 'wind speed',
+      name: 'wind speed at 10 m above ground',
       description: 'wind speed at 10 m above ground',
       unit: 'km/h',
       originalUnit: 'm/s',
@@ -132,7 +132,7 @@ const compoundGribs = [
     vDataDir: 'gfs-0p25-v-wind-velocity-10m/',
     level: '10 m above ground',
     datasetBase: {
-      name: 'wind velocities',
+      name: 'wind at 10 m above ground',
       description: 'wind at 10 m above ground',
       particleLifetime: 1000,
       particleCount: 100000,

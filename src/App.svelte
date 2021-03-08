@@ -49,8 +49,8 @@
   $: storage.setItem('menusDetailed', JSON.stringify(menusDetailed));
 
   const fetcher = new Fetcher();
-  let griddedDataset = inventory.find(d => d.name === 'temperature at ground level');
-  let particleDataset = inventory.find(d => d.name === 'wind velocities');
+  let griddedDataset = inventory.filter(d => d.colormap)[0];
+  let particleDataset = inventory.filter(d => d.particleDisplay)[0];
   let date = griddedDataset.lastForecast;
 
   // see comment in onMount

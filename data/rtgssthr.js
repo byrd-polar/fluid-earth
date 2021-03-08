@@ -9,7 +9,7 @@ const execFile = promisify(_execFile);
 const outputPath = path.join(util.OUTPUT_DIR, 'rtgssthr-0p083/');
 const datasetBase = {
   name: 'sea surface temperature',
-  description: 'sea temperature at surface',
+  description: 'temperature of water near the sea\'s surface',
   path: util.browserPath(outputPath),
   unit: 'tempC',
   originalUnit: 'tempK',
