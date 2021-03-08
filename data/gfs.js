@@ -169,7 +169,10 @@ function getDataURL(system, datetime, forecast) {
 async function getDatetimeAndSystem() {
   let datetime, system;
 
-  const dataset = inventory.find(d => d.name === 'temperature');
+  const outputPath = path.join(util.OUTPUT_DIR, simpleGribs[0].dataDir);
+  const datasetPath = util.browserPath(outputPath);
+
+  const dataset = inventory.find(d => d.path === datasetPath);
   if (dataset) {
 
     if (dataset.lastForecastSystem === 'gfs') {
