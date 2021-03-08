@@ -10,7 +10,7 @@
 </script>
 
 <section>
-  <h3>{particleDataset.description}</h3>
+  <h3>{particleDataset.name}</h3>
   <div></div>
   <span>{info.rate.toLocaleString()} times faster than actual</span>
 </section>

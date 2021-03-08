@@ -48,7 +48,7 @@
 
 <section>
   <h3>
-    {griddedDataset.description} ({@html unit})
+    {griddedDataset.name} ({@html unit})
   </h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"
