@@ -106,6 +106,13 @@ const simpleGribs = [
   },
 ];
 
+const windSpeedProps = {
+   unit: 'km/h',
+   originalUnit: 'm/s',
+   domain: [0, 100],
+   colormap: 'CUBEHELIX_DEFAULT',
+};
+
 const speedGribs = [
   {
     uParameter: 'UGRD',
@@ -115,14 +122,46 @@ const speedGribs = [
     datasetBase: {
       name: 'wind speed at 10 m above ground',
       description: 'wind speed at 10 m above ground',
-      unit: 'km/h',
-      originalUnit: 'm/s',
-      domain: [0, 100],
-      colormap: 'CUBEHELIX_DEFAULT',
+      ...windSpeedProps,
       ...gfs0p25props,
     },
-  }
+  },
+  {
+    uParameter: 'UGRD',
+    vParameter: 'VGRD',
+    dataDir: 'gfs-0p25-wind-speed-500mb/',
+    level: '500 mb',
+    datasetBase: {
+      name: 'wind speed at 500 mb',
+      description: 'wind speed at 10 m above ground',
+      ...windSpeedProps,
+      ...gfs0p25props,
+    },
+  },
+  {
+    uParameter: 'UGRD',
+    vParameter: 'VGRD',
+    dataDir: 'gfs-0p25-wind-speed-200mb/',
+    level: '200 mb',
+    datasetBase: {
+      name: 'wind speed at 200 mb',
+      description: 'wind speed at cruise level',
+      ...windSpeedProps,
+      ...gfs0p25props,
+    },
+  },
 ];
+
+const windProps = {
+  particleLifetime: 1000,
+  particleCount: 100000,
+  particleDisplay: {
+    size: 0.8,
+    rate: 50000,
+    opacity: 0.4,
+    fade: 0.96
+  },
+};
 
 const compoundGribs = [
   {
@@ -134,14 +173,33 @@ const compoundGribs = [
     datasetBase: {
       name: 'wind at 10 m above ground',
       description: 'wind at 10 m above ground',
-      particleLifetime: 1000,
-      particleCount: 100000,
-      particleDisplay: {
-        size: 0.8,
-        rate: 50000,
-        opacity: 0.4,
-        fade: 0.96
-      },
+      ...windProps,
+      ...gfs0p25props,
+    },
+  },
+  {
+    uParameter: 'UGRD',
+    vParameter: 'VGRD',
+    uDataDir: 'gfs-0p25-u-wind-velocity-500mb/',
+    vDataDir: 'gfs-0p25-v-wind-velocity-500mb/',
+    level: '500 mb',
+    datasetBase: {
+      name: 'wind at 500 mb',
+      description: 'wind at cloud level',
+      ...windProps,
+      ...gfs0p25props,
+    },
+  },
+  {
+    uParameter: 'UGRD',
+    vParameter: 'VGRD',
+    uDataDir: 'gfs-0p25-u-wind-velocity-200mb/',
+    vDataDir: 'gfs-0p25-v-wind-velocity-200mb/',
+    level: '200 mb',
+    datasetBase: {
+      name: 'wind at 200 mb',
+      description: 'wind at cruise level',
+      ...windProps,
       ...gfs0p25props,
     },
   },
