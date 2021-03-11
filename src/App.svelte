@@ -248,6 +248,7 @@
   ];
 </script>
 
+<div class="wrapper">
 <!--
   Note: for the attributes/props in the components below, {variable} is
   shorthand for variable={variable} and bind:variable is shorthand for
@@ -344,7 +345,7 @@
     {vectorData}
     bind:d3geoProjection
   >
-    <div slot="background"></div>
+    <div class="background" slot="background"></div>
     <Controls
       {minZoom}
       {maxZoom}
@@ -373,9 +374,11 @@
     />
   </Map>
 </main>
+</div>
 
 <style>
-  :global(body) {
+  div.wrapper {
+    flex: 1;
     display: flex;
     flex-direction: row;
     position: relative;
@@ -387,13 +390,7 @@
     flex-direction: row;
   }
 
-  @media (orientation: portrait) {
-    main {
-      flex-direction: column;
-    }
-  }
-
-  div {
+  div.background {
     background-image: url("/images/starfield.png");
     background-position: center;
     background-size: auto 100%;
