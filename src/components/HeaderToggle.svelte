@@ -8,7 +8,7 @@
   <Toggle
     bind:toggled={menusDetailed}
     label="Advanced options"
-    toggledColor="#40B598"
+    toggledColor="var(--primary-color-light)"
     untoggledColor="#ABABAB"
     style="margin-left: auto"
   />

@@ -375,6 +375,12 @@
 </main>
 
 <style>
+  :root {
+    --primary-color: #015B5B;
+    --primary-color-light: #00BFA5;
+    --secondary-color: #525260;
+  }
+
   :global(body) {
     display: flex;
     flex-direction: row;

@@ -174,7 +174,7 @@ dataset from that date.</p>
   end={new Date(end)}
   bind:selected
   style="display: block; width: max-content; margin: 2em auto"
-  highlightColor="#015B5B"
+  highlightColor="var(--primary-color)"
 >
   <Button>
     {date.toLocaleDateString(undefined, dateStringOptionsMore)}
@@ -192,7 +192,7 @@ dataset from that date.</p>
   end={rangeEndMinusOne}
   bind:selected={rangeStart}
   style="display: block; width: max-content; margin: 1em auto 0"
-  highlightColor="#676778"
+  highlightColor="var(--secondary-color)"
 >
   <Button secondary>
     {rangeStart.toLocaleDateString(undefined, dateStringOptions)}
@@ -205,7 +205,7 @@ dataset from that date.</p>
   end={localDateCeil(end)}
   bind:selected={rangeEnd}
   style="display: block; width: max-content; margin: 0 auto 1em"
-  highlightColor="#676778"
+  highlightColor="var(--secondary-color)"
 >
   <Button secondary>
     {rangeEnd.toLocaleDateString(undefined, dateStringOptions)}
@@ -242,7 +242,7 @@ dataset from that date.</p>
 <Toggle
   bind:toggled={particlesShown}
   label="streamlines"
-  toggledColor="#676778"
+  toggledColor="var(--secondary-color)"
   on="enabled (larger download size)"
   off="disabled (smaller download size)"
   style="order: 2; margin-left: auto"

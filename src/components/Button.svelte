@@ -35,7 +35,7 @@
     padding: 0.5em 1em;
     text-align: center;
     text-transform: uppercase;
-    background-color: #015B5B;
+    background-color: var(--primary-color);
     border-radius: 4px;
     font-size: 0.875rem;
     font-weight: 500;
@@ -70,7 +70,7 @@
   }
 
   button.secondary {
-    background-color: #525260;
+    background-color: var(--secondary-color);
   }
 
   button:focus, button:hover {

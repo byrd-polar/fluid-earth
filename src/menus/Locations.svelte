@@ -123,6 +123,6 @@
   }
 
   a {
-    color: #00BFA5;
+    color: var(--primary-color-light);
   }
 </style>

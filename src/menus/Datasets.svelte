@@ -38,7 +38,7 @@
 <Toggle
   bind:toggled={particlesShown}
   label="streamlines"
-  toggledColor="#676778"
+  toggledColor="var(--secondary-color)"
   on="particle animation enabled"
   off="particle animation disabled"
   style="order: 2; margin-left: auto"

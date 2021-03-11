@@ -42,6 +42,6 @@
   }
 
   button.selected {
-    color: #00BFA5; /* should match theme */
+    color: var(--primary-color-light);
   }
 </style>

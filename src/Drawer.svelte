@@ -98,7 +98,7 @@
 
 <style>
   aside {
-    background-color: #015B5B;
+    background-color: var(--primary-color);
     color: white;
 
     z-index: 10000; /* place above tooltip (z-index: 9999) when opening */

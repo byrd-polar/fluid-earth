@@ -5,7 +5,7 @@
 
   let series = [{
     perc: 0,
-    color: '#015B5B', // theme color
+    color: getComputedStyle(document.body).getPropertyValue('--primary-color'),
   }];
   let closed = true;
 

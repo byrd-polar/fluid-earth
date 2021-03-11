@@ -97,7 +97,7 @@
   }
 
   header {
-    background-color: #015B5B;
+    background-color: var(--primary-color);
     height: 64px;
     padding: 0 1em 0 0.75em;
     display: flex;
