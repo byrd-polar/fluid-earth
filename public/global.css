@@ -42,6 +42,6 @@ sup {
   margin-left: -5em;
   border-radius: 50%;
   border: 0.5em solid #202124;
-  border-top-color: #015b5b;
+  border-top-color: var(--primary-color);
   animation: spinner 1s linear infinite;
 }
