@@ -36,6 +36,8 @@
   export let centerLatitude = 30;
   export let zoom = 1.5;
   export let id = 1;
+  export let pins = [];
+
 
   const minZoom = 0.5;
   const maxZoom = 15;
@@ -104,8 +106,6 @@
     opacity: 0.4,
     fade: 0.96,
   };
-
-  let pins = [];
 
   onMount(() => {
     // workaround some race condition loading bugs

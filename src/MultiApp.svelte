@@ -7,6 +7,7 @@
   let centerLongitude;
   let centerLatitude;
   let zoom;
+  let pins;
 </script>
 
 {#each {length: count} as _, id}
@@ -14,6 +15,7 @@
     bind:centerLongitude
     bind:centerLatitude
     bind:zoom
+    bind:pins
     {inventory}
     {id}
   />
