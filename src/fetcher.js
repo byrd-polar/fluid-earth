@@ -1,6 +1,8 @@
 import ky from 'ky';
 import { Float16Array } from '@petamoriken/float16';
 
+const CACHE = {};
+
 export default class Fetcher {
   constructor() {
     this._downloadListeners = [];
@@ -12,7 +14,6 @@ export default class Fetcher {
     this._completedURLs = [];
 
     this._abortControllers = {};
-    this._cache = {};
   }
 
   addDownloadListener(func) {
@@ -47,7 +48,7 @@ export default class Fetcher {
       this.abort(type);
     }
 
-    let cachedResponse = this._cache[url];
+    let cachedResponse = CACHE[url];
     if (cachedResponse) {
       return cachedResponse;
     }
@@ -126,7 +127,7 @@ export default class Fetcher {
       return false;
     }
 
-    this._cache[url] = data;
+    CACHE[url] = data;
     return data;
   }
 

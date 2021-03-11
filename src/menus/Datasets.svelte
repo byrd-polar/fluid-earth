@@ -2,6 +2,7 @@
   import Toggle from 'svelte-toggle';
 
   export let inventory;
+  export let id;
   export let griddedDataset;
   export let particleDataset;
   export let particlesShown;
@@ -12,7 +13,7 @@
   <label>
     <input
       type="radio"
-      name="griddedDataset"
+      name={`griddedDataset-${id}`}
       bind:group={griddedDataset}
       value={dataset}
     >
@@ -25,7 +26,7 @@
   <label>
     <input
       type="radio"
-      name="particleDataset"
+      name={`particleDataset-${id}`}
       bind:group={particleDataset}
       value={dataset}
     >

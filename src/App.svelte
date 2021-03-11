@@ -32,6 +32,10 @@
   import { Float16Array } from '@petamoriken/float16';
 
   export let inventory;
+  export let centerLongitude = -60;
+  export let centerLatitude = 30;
+  export let zoom = 1.5;
+  export let id = 1;
 
   const minZoom = 0.5;
   const maxZoom = 15;
@@ -59,9 +63,6 @@
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let d3geoProjection = projection.function;
-  let centerLongitude = -60;
-  let centerLatitude = 30;
-  let zoom = 1.5;
 
   let griddedData = {
     floatArray: new Float16Array([-Infinity]),
@@ -248,7 +249,7 @@
   ];
 </script>
 
-<div class="wrapper">
+<div class="wrapper" style={`z-index: ${10000 - id}`}>
 <!--
   Note: for the attributes/props in the components below, {variable} is
   shorthand for variable={variable} and bind:variable is shorthand for
@@ -267,6 +268,7 @@
 <Menu bind:openedMenu menuName="Datasets">
   <Datasets
     {inventory}
+    {id}
     bind:griddedDataset
     bind:particleDataset
     bind:particlesShown

@@ -1,5 +1,5 @@
 import ky from 'ky';
-import App from './App.svelte';
+import MultiApp from './MultiApp.svelte';
 import colormaps from './map/colormaps/';
 import dataProjections from './map/data-projections/';
 
@@ -30,7 +30,7 @@ import dataProjections from './map/data-projections/';
     }
   }
 
-  new App({
+  new MultiApp({
     target: document.body,
     props: { inventory },
   });
