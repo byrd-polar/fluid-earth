@@ -5,6 +5,9 @@ html {
   height: 100%;
   overflow: hidden;
   line-height: 1.5;
+  --primary-color: #015B5B;
+  --primary-color-light: #00BFA5;
+  --secondary-color: #525260;
 }
 
 *, *:before, *:after {

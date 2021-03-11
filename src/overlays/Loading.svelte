@@ -5,7 +5,9 @@
 
   let series = [{
     perc: 0,
-    color: getComputedStyle(document.body).getPropertyValue('--primary-color'),
+    color: getComputedStyle(document.body)
+      .getPropertyValue('--primary-color')
+      .substring(1),
   }];
   let closed = true;
 
