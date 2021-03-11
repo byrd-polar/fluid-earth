@@ -69,6 +69,7 @@
   h3 {
     width: max-content;
     align-self: end;
+    text-align: right;
     font-size: 1.2em;
     padding: 0.25rem 0.75rem;
     margin: 0 0 0 auto;
