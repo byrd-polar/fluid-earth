@@ -5,8 +5,6 @@
   import ArrowLeft24 from "carbon-icons-svelte/lib/ArrowLeft24";
   import HeaderToggle from './components/HeaderToggle.svelte';
   import { tips } from './tooltip.js';
-  import 'overlayscrollbars/css/OverlayScrollbars.css';
-  import OverlayScrollbars from 'overlayscrollbars/js/OverlayScrollbars.js';
 
   export let openedMenu;
   export let menuName;
@@ -32,14 +30,13 @@
     tips.forEach(t => t.hide());
   }
 
-  let aside, div;
+  let aside;
   onMount(() => {
     aside.addEventListener('transitionend', e => {
       if (e.propertyName === 'margin-left') {
         updateAllWebglResolutions();
       }
     });
-    OverlayScrollbars(div, { className: 'os-theme-light' });
   });
 </script>
 
@@ -57,7 +54,7 @@
       <HeaderToggle bind:menusDetailed />
     {/if}
   </header>
-  <div bind:this={div}>
+  <div>
     <section class:flexbox>
       <slot></slot>
     </section>
