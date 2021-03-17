@@ -65,10 +65,6 @@
 </aside>
 
 <style>
-  aside :global(*) {
-    visibility: inherit;
-  }
-
   aside {
     background-color: #1d1d1d;
     color: hsla(0, 0%, 100%, .8);
