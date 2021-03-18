@@ -191,5 +191,9 @@
     header :global(button) {
       margin-right: 4px;
     }
+
+    section {
+      padding: 1em 0.75em;
+    }
   }
 </style>
