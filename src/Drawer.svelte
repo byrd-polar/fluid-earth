@@ -130,7 +130,7 @@
   }
 
   header {
-    padding: 1.5em 1em 0;
+    padding: 1em 1em 0;
   }
 
   h1 {
@@ -153,7 +153,7 @@
   }
 
   footer {
-    padding: 1em 1em 1.5em;
+    padding: 0 1em 1em 1em;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
