@@ -125,7 +125,7 @@
   }
 
   section {
-    padding: 1em;
+    padding: 1em 1.25em;
   }
 
   section.flexbox {
