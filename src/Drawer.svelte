@@ -4,7 +4,7 @@
   import List from './components/List.svelte';
   import Button from './components/Button.svelte';
   import { createFocusTrap } from 'focus-trap';
-
+  import overlayscroll from './overlayscroll.js';
 
   import Blog32 from "carbon-icons-svelte/lib/Blog32";
   import LogoFacebook32 from "carbon-icons-svelte/lib/LogoFacebook32";
@@ -59,7 +59,7 @@
     </Button>
     <hr>
   </header>
-  <section>
+  <section use:overlayscroll>
     <List
       items={menus}
       action={openMenu}
