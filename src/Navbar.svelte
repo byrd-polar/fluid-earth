@@ -2,6 +2,7 @@
   import IconButton from './components/IconButton.svelte';
   import Menu24 from "carbon-icons-svelte/lib/Menu24";
   import { tick } from 'svelte';
+  import overlayscroll from './overlayscroll.js';
 
   export let menus;
   export let openedMenu;
@@ -28,7 +29,7 @@
   })() }
 </script>
 
-<div class="rail" bind:this={rail}>
+<div class="rail" bind:this={rail} use:overlayscroll>
 <nav>
   <IconButton
     name="Menus"
