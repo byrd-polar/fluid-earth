@@ -8,6 +8,8 @@ html {
   --primary-color: #015B5B;
   --primary-color-light: #00BFA5;
   --secondary-color: #525260;
+  --input-color: rgba(70,70,70,0.8);
+  --input-color-opaque: #464646;
 }
 
 *, *:before, *:after {

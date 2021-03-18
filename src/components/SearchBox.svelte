@@ -128,7 +128,6 @@
 
   input, div.dropdown {
     color: white;
-    background-color: #464646;
   }
 
   input {
@@ -140,6 +139,7 @@
     outline: none;
     border-radius: 0.5em;
     border-bottom: thin solid transparent;
+    background-color: var(--input-color);
   }
 
   input.dropdownShown {
@@ -151,6 +151,7 @@
     position: absolute;
     z-index: 1;
     padding: 0.25em 0;
+    background-color: var(--input-color-opaque);
   }
 
   div.dropdown,

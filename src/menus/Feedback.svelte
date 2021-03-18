@@ -62,7 +62,7 @@
   input, textarea {
     font: inherit;
     color: white;
-    background-color: #464646;
+    background-color: var(--input-color);
     border: none;
     border-radius: 4px;
   }
