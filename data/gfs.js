@@ -26,6 +26,7 @@ const temperatureProps = {
 
 const simpleScript = path.join('data', 'scripts', 'gfs-to-fp16.js');
 const speedScript = path.join('data', 'scripts', 'gfs-wind-to-fp16.js');
+const accScript = path.join('data', 'scripts', 'gfs-acc-to-fp16.js');
 
 const simpleGribs = [
   {
@@ -205,6 +206,23 @@ const compoundGribs = [
   },
 ];
 
+const accumulationGribs = [
+  {
+    dataDir: 'gfs-0p25-1hr-precip/',
+    parameter: 'APCP',
+    level: 'surface',
+    datasetBase: {
+      name: '1 hour precipitation',
+      description: 'total precipitation for the next hour',
+      unit: 'kg/m^2',
+      originalUnit: 'kg/m^2',
+      domain: [0, 50],
+      colormap: 'TURBO',
+      ...gfs0p25props,
+    },
+  },
+];
+
 
 const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
 const [datetime, system] = await getDatetimeAndSystem(inventory);
@@ -252,15 +270,17 @@ async function getDatetimeAndSystem() {
 }
 
 // download GFS grib file using HTTP Range Requests
-async function downloadGrib(forecast, parameter, level) {
+async function downloadGrib(forecast, parameter, level, fcst) {
   const dataURL = getDataURL(system, datetime, forecast);
   const indexURL = dataURL + '.idx';
   const indexFile = await util.download(indexURL, true);
   const indexString = await readFile(indexFile, 'utf-8');
   const index = await parseCSV(indexString, { delimiter: ':' });
 
-  const i = index.findIndex((row) => row[3] == parameter && row[4] == level);
-  if (i === -1) throw 'Could not find GFS parameter and level combination.';
+  const i = index.findIndex((row) => {
+    return row[3] == parameter && row[4] == level && (!fcst || row[5] == fcst);
+  });
+  if (i === -1) throw 'Could not find GFS parameter-level-fcst combination.';
 
   const start = index[i][1];
   const end = index[i+1] === undefined ? '' : index[i+1][1] - 1;
@@ -351,19 +371,59 @@ for (const grib of compoundGribs) {
   setDatasetTimeProps(dataset);
 }
 
+// same as simbleGribs loop above, except with split input variables, offset
+// start time, and fcst download param
+for (const grib of accumulationGribs) {
+  const outputPath = path.join(util.OUTPUT_DIR, grib.dataDir);
+  await mkdir(outputPath, { mode: '775', recursive: true });
+
+  // first file doesn't need a special script (only one input file)
+  const inputFile =
+    await downloadGrib(1, grib.parameter, grib.level, fcstString(1));
+  const filename = datetime.toISO() + '.fp16';
+  const outputFile = util.join(outputPath, filename);
+
+  util.log('Converting GFS grib to fp16', inputFile, outputFile);
+  await execFile('node', [simpleScript, inputFile, outputFile]);
+
+  for (let f = 1; f < forecastHours; f++) {
+    const inputFiles = [
+      await downloadGrib(f, grib.parameter, grib.level, fcstString(f)),
+      await downloadGrib(f+1, grib.parameter, grib.level, fcstString(f+1)),
+    ];
+    const filename = datetime.plus({hours: f}).toISO() + '.fp16';
+    const outputFile = util.join(outputPath, filename);
+
+    util.log('Converting GFS grib to fp16', inputFiles, outputFile);
+    await execFile('node', [accScript, ...inputFiles, outputFile]);
+  }
+
+  let dataset = inventory.find(d => d.path === util.browserPath(outputPath));
+  if (!dataset) inventory.push(dataset = grib.datasetBase);
+
+  for (const prop in grib.datasetBase) dataset[prop] = grib.datasetBase[prop];
+
+  dataset.path = util.browserPath(outputPath);
+  setDatasetTimeProps(dataset, 1);
+}
+
 // set the common props derived from datetime and system
-function setDatasetTimeProps(dataset) {
+function setDatasetTimeProps(dataset, offset=0) {
   dataset.start = dataset.start ?? datetime;
   if (dataset.end) {
     dataset.end = DateTime.max(
-      datetime.plus({hours: forecastHours}),
+      datetime.plus({hours: forecastHours - offset}),
       DateTime.fromISO(dataset.end, {zone: 'utc'}),
     );
   } else {
-    dataset.end = datetime.plus({hours: forecastHours});
+    dataset.end = datetime.plus({hours: forecastHours - offset});
   }
   dataset.lastForecast = datetime;
   dataset.lastForecastSystem = system;
+}
+
+function fcstString(f) {
+  return (f % 24 === 0 ? `0-${f} day` : `0-${f} hour`) + ' acc fcst';
 }
 
 await writeAndUnlockInventory(inventory);
