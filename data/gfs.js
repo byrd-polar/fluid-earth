@@ -213,7 +213,7 @@ const accumulationGribs = [
     level: 'surface',
     datasetBase: {
       name: '1 hour precipitation',
-      description: 'total precipitation for the next hour',
+      description: 'total precipitation for the previous hour',
       unit: 'kg/m^2',
       originalUnit: 'kg/m^2',
       domain: [0, 50],
@@ -380,16 +380,16 @@ for (const grib of accumulationGribs) {
   // first file doesn't need a special script (only one input file)
   const inputFile =
     await downloadGrib(1, grib.parameter, grib.level, fcstString(1));
-  const filename = datetime.toISO() + '.fp16';
+  const filename = datetime.plus({hours: 1}).toISO() + '.fp16';
   const outputFile = util.join(outputPath, filename);
 
   util.log('Converting GFS grib to fp16', inputFile, outputFile);
   await execFile('node', [simpleScript, inputFile, outputFile]);
 
-  for (let f = 1; f < forecastHours; f++) {
+  for (let f = 2; f <= forecastHours; f++) {
     const inputFiles = [
+      await downloadGrib(f-1, grib.parameter, grib.level, fcstString(f-1)),
       await downloadGrib(f, grib.parameter, grib.level, fcstString(f)),
-      await downloadGrib(f+1, grib.parameter, grib.level, fcstString(f+1)),
     ];
     const filename = datetime.plus({hours: f}).toISO() + '.fp16';
     const outputFile = util.join(outputPath, filename);
@@ -409,14 +409,14 @@ for (const grib of accumulationGribs) {
 
 // set the common props derived from datetime and system
 function setDatasetTimeProps(dataset, offset=0) {
-  dataset.start = dataset.start ?? datetime;
+  dataset.start = dataset.start ?? datetime.plus({hours: offset});
   if (dataset.end) {
     dataset.end = DateTime.max(
-      datetime.plus({hours: forecastHours - offset}),
+      datetime.plus({hours: forecastHours}),
       DateTime.fromISO(dataset.end, {zone: 'utc'}),
     );
   } else {
-    dataset.end = datetime.plus({hours: forecastHours - offset});
+    dataset.end = datetime.plus({hours: forecastHours});
   }
   dataset.lastForecast = datetime;
   dataset.lastForecastSystem = system;
