@@ -423,7 +423,7 @@ function setDatasetTimeProps(dataset, offset=0) {
 }
 
 function fcstString(f) {
-  return (f % 24 === 0 ? `0-${f} day` : `0-${f} hour`) + ' acc fcst';
+  return (f % 24 === 0 ? `0-${f/24} day` : `0-${f} hour`) + ' acc fcst';
 }
 
 await writeAndUnlockInventory(inventory);
