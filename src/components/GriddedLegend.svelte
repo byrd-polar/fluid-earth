@@ -102,7 +102,7 @@
     -webkit-tap-highlight-color: transparent;
     transition: background-color 0.25s ease 0s;
 
-    margin-right: auto;
+    margin-left: auto;
   }
 
   section.canchange {
@@ -121,6 +121,7 @@
   h3 {
     margin: 0;
     font-size: 1em;
+    text-align: right;
   }
 
   div {
@@ -133,5 +134,11 @@
 
     overflow: visible;
     width: 100%;
+  }
+
+  @media (max-width: 36rem) {
+    h3 {
+      text-align: left;
+    }
   }
 </style>

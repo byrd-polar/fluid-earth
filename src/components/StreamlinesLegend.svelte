@@ -1,6 +1,7 @@
 <script>
   import { capitalizeFirstLetter } from '../utility.js';
   import tooltip from '../tooltip.js';
+  import WindStream32 from "carbon-icons-svelte/lib/WindStream32";
 
   export let particleDataset;
   export let particleDisplay;
@@ -25,30 +26,34 @@
   use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
   tabindex="0"
 >
-  <h3>{capitalizeFirstLetter(particleDataset.name)}</h3>
-  <div class:paused={particlesPaused}></div>
-  <span>
-    {#if particlesPaused}
-      particle animation paused
-    {:else}
-      {info.rate.toLocaleString()} times faster than actual
-    {/if}
-  </span>
+  <div class="wind-icon">
+    <WindStream32 />
+  </div>
+  <div>
+    <h3>{capitalizeFirstLetter(particleDataset.name)}</h3>
+    <span>
+      {#if particlesPaused}
+        particle animation paused
+      {:else}
+        {info.rate.toLocaleString()} times faster than actual
+      {/if}
+    </span>
+  </div>
 </section>
 
 <style>
   section {
-    flex: 1;
     padding: 0.25rem 0.75rem;
-    max-width: 32em;
-    flex-basis: 24em;
     pointer-events: auto;
     border-radius: 4px;
     -webkit-tap-highlight-color: transparent;
     transition: background-color 0.25s ease 0s;
     cursor: pointer;
 
-    margin-left: auto;
+    margin-right: auto;
+
+    display: flex;
+    flex-direction: row;
   }
 
   section:focus, section:hover {
@@ -65,20 +70,9 @@
     font-size: 1em;
   }
 
-  @keyframes slide {
-    from { background-position-x: 0; }
-    to   { background-position-x: 0.8em; }
-  }
-
-  div {
-    height: 0.8em;
-
-    background-image:
-      radial-gradient(#ffffff88 0%, #ffffff88 60%, transparent 60%);
-    background-position: 0 -0.05em;
-    background-size: 0.8em 0.8em;
-    animation: slide 0.3s linear;
-    animation-iteration-count: infinite;
+  div.wind-icon {
+    padding-top: 0.25em;
+    margin-right: 0.5em;
   }
 
   div.paused {
@@ -90,7 +84,6 @@
     min-height: 1.25rem;
 
     display: block;
-    text-align: center;
     border-top: 1px solid white;
   }
 </style>

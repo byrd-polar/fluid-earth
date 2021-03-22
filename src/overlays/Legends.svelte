@@ -2,6 +2,8 @@
   import GriddedLegend from '../components/GriddedLegend.svelte';
   import StreamlinesLegend from '../components/StreamlinesLegend.svelte';
   import tooltip from '../tooltip.js';
+  import Calendar32 from "carbon-icons-svelte/lib/Calendar32";
+  import Time32 from "carbon-icons-svelte/lib/Time32";
   import { fix24 } from '../utility.js';
 
   export let date;
@@ -18,6 +20,8 @@
 
   export let preferredUnits;
   export let particlesPaused;
+
+  export let openedMenu;
 
   $: dateOptions = {
     timeZone: utc ? 'UTC' : undefined,
@@ -40,6 +44,14 @@
 
     utc = !utc
   }
+
+  function toggleTimeMachineMenu() {
+    if (openedMenu === "Time Machine") {
+      openedMenu = null;
+    } else {
+      openedMenu = "Time Machine";
+    }
+  }
 </script>
 
 <div class="wrapper">
@@ -50,20 +62,21 @@
       use:tooltip={{ content: 'Change timezone', placement: 'bottom'}}
       tabindex="0"
     >
-      <h3 class="date">{date.toLocaleDateString(undefined, dateOptions)}</h3>
-      <h3 class="time">
-        {fix24(date.toLocaleTimeString(undefined, timeOptions))}
-      </h3>
+      <div class="icon">
+        <Calendar32 />
+      </div>
+      <div>
+        <h3>{date.toLocaleDateString(undefined, dateOptions)}</h3>
+      </div>
+      <div class="icon">
+        <Time32 />
+      </div>
+      <div>
+        <h3>{fix24(date.toLocaleTimeString(undefined, timeOptions))}</h3>
+      </div>
     </section>
   </div>
   <div class="bottom">
-    <GriddedLegend
-      {griddedDataset}
-      {griddedColormap}
-      {griddedDomain}
-      bind:griddedUnit
-      bind:preferredUnits
-    />
     {#if particlesShown}
       <StreamlinesLegend
         {particleDataset}
@@ -71,6 +84,13 @@
         bind:particlesPaused
       />
     {/if}
+    <GriddedLegend
+      {griddedDataset}
+      {griddedColormap}
+      {griddedDomain}
+      bind:griddedUnit
+      bind:preferredUnits
+    />
   </div>
 </div>
 
@@ -97,8 +117,11 @@
   }
 
   div.top {
-    flex-direction: column;
-    align-items: flex-end;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    pointer-events: auto;
+    cursor: pointer;
   }
 
   section {
@@ -106,6 +129,7 @@
     border-radius: 4px;
     -webkit-tap-highlight-color: transparent;
     transition: background-color 0.25s ease 0s;
+    display: flex;
   }
 
   section:focus, section:hover {
@@ -117,22 +141,23 @@
     background-color: inherit;
   }
 
-  h3 {
-    text-align: right;
-    font-size: 1.2em;
-    padding: 0.25rem 0.75rem 0;
-    margin: 0;
-    pointer-events: auto;
-  }
-
-  h3.time {
-    padding-top: 0;
-    font-weight: normal;
-  }
-
   div.bottom {
     margin-top: auto;
-    flex-wrap: wrap-reverse;
+    flex-wrap: wrap;
+  }
+
+  div.icon {
+    padding-top: 0.25em;
+  }
+
+  h3 {
+    width: max-content;
+    align-self: end;
+    text-align: right;
+    font-size: 1.2em;
+    padding: 0.25rem 0.75rem 0.25rem 0.5rem;
+    margin: 0 0 0 auto;
+    pointer-events: auto;
   }
 
   @media (max-width: 36rem) {
@@ -145,8 +170,8 @@
       padding: 0.5rem 0.75rem;
     }
 
-    h3.date {
-      padding: 0.5rem 0.75rem 0;
+    div.icon {
+      display: none;
     }
   }
 </style>

@@ -444,6 +444,7 @@
       {particlesShown}
       {particleDisplay}
       bind:particlesPaused
+      bind:openedMenu
     />
   </Map>
 </main>
