@@ -237,7 +237,7 @@ function getDataURL(system, datetime, forecast) {
   const hour = datetime.toFormat('HH');
   const fNum = forecast.toString().padStart(3, '0');
   return 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
-    `${system}.${year}${month}${day}/${hour}/` +
+    `${system}.${year}${month}${day}/${hour}/atmos/` +
     `${system}.t${hour}z.pgrb2.0p25.f${fNum}`;
 }
 
@@ -263,7 +263,7 @@ async function getDatetimeAndSystem() {
     }
   } else {
     const now = DateTime.utc();
-    datetime = DateTime.utc(now.year, now.month, now.day).minus({days: 1});
+    datetime = DateTime.utc(now.year, now.month, now.day).minus({days: 0.5});
     system = 'gdas';
   }
   return [datetime, system];
