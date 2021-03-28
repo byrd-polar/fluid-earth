@@ -35,7 +35,6 @@ const simpleGribs = [
     level: '2 m above ground',
     datasetBase: {
       name: 'temperature at 2 m above ground',
-      description: 'temperature at 2 m above ground',
       ...temperatureProps,
       ...gfs0p25props,
     },
@@ -46,7 +45,6 @@ const simpleGribs = [
     level: '500 mb',
     datasetBase: {
       name: 'temperature at 500 mb',
-      description: 'temperature at cloud level',
       ...temperatureProps,
       ...gfs0p25props,
     },
@@ -69,7 +67,6 @@ const simpleGribs = [
     factor: 1000,
     datasetBase: {
       name: 'mean sea level pressure',
-      description: 'mean sea level pressure',
       unit: 'hPa',
       originalUnit: 'kPa',
       domain: [96, 105],
@@ -83,7 +80,6 @@ const simpleGribs = [
     level: 'entire atmosphere (considered as a single layer)',
     datasetBase: {
       name: 'total precipitable water',
-      description: 'precipitable water for entire atmosphere as a single layer',
       unit: 'kg/m^2',
       originalUnit: 'kg/m^2',
       domain: [0, 70],
@@ -97,7 +93,6 @@ const simpleGribs = [
     level: 'entire atmosphere (considered as a single layer)',
     datasetBase: {
       name: 'total cloud water',
-      description: 'cloud water for entire atmosphere as a single layer',
       unit: 'kg/m^2',
       originalUnit: 'kg/m^2',
       domain: [0.0, 1.0],
@@ -122,7 +117,6 @@ const speedGribs = [
     level: '10 m above ground',
     datasetBase: {
       name: 'wind speed at 10 m above ground',
-      description: 'wind speed at 10 m above ground',
       ...windSpeedProps,
       ...gfs0p25props,
     },
@@ -134,7 +128,6 @@ const speedGribs = [
     level: '500 mb',
     datasetBase: {
       name: 'wind speed at 500 mb',
-      description: 'wind speed at 10 m above ground',
       ...windSpeedProps,
       ...gfs0p25props,
     },
@@ -146,7 +139,6 @@ const speedGribs = [
     level: '200 mb',
     datasetBase: {
       name: 'wind speed at 200 mb',
-      description: 'wind speed at cruise level',
       ...windSpeedProps,
       ...gfs0p25props,
     },
@@ -173,7 +165,6 @@ const compoundGribs = [
     level: '10 m above ground',
     datasetBase: {
       name: 'wind at 10 m above ground',
-      description: 'wind at 10 m above ground',
       ...windProps,
       ...gfs0p25props,
     },
@@ -186,7 +177,6 @@ const compoundGribs = [
     level: '500 mb',
     datasetBase: {
       name: 'wind at 500 mb',
-      description: 'wind at cloud level',
       ...windProps,
       ...gfs0p25props,
     },
@@ -199,7 +189,6 @@ const compoundGribs = [
     level: '200 mb',
     datasetBase: {
       name: 'wind at 200 mb',
-      description: 'wind at cruise level',
       ...windProps,
       ...gfs0p25props,
     },
@@ -212,8 +201,7 @@ const accumulationGribs = [
     parameter: 'APCP',
     level: 'surface',
     datasetBase: {
-      name: '1 hour precipitation',
-      description: 'total precipitation for the previous hour',
+      name: '1 hour precipitation', // for previous hour
       unit: 'kg/m^2',
       originalUnit: 'kg/m^2',
       domain: [0, 50],
