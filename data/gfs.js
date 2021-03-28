@@ -61,7 +61,7 @@ const simpleGribs = [
     },
   },
   {
-    dataDir: 'gfs-0p25-mslp/',
+    dataDir: 'gfs-0p25-mean-sea-level-pressure/',
     parameter: 'PRMSL',
     level: 'mean sea level',
     factor: 1000,
