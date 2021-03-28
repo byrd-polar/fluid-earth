@@ -113,7 +113,7 @@ simpleGribs.push({
     unit: 'kg/m^2',
     originalUnit: 'kg/m^2',
     domain: [0.0, 1.0],
-    colormap: 'TOTAL_CLOUD',
+    colormap: 'BLUES_REVERSED',
     ...gfs0p25props,
   },
 });
