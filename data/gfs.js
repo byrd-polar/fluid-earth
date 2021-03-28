@@ -8,6 +8,14 @@ import _parseCSV from 'csv-parse';
 const parseCSV = promisify(_parseCSV);
 const execFile = promisify(_execFile);
 
+const simpleScript = path.join('data', 'scripts', 'gfs-to-fp16.js');
+const speedScript = path.join('data', 'scripts', 'gfs-wind-to-fp16.js');
+const accScript = path.join('data', 'scripts', 'gfs-acc-to-fp16.js');
+
+
+const GDAS_FORECAST_HRS = 9;
+const GFS_FORECAST_HRS = 120;
+
 const gfs0p25props = {
   bytesPerFile: 2076480,
   width: 1440,
@@ -17,205 +25,180 @@ const gfs0p25props = {
   projection: 'GFS',
 };
 
-const temperatureProps = {
-  unit: 'tempC',
-  originalUnit: 'tempK',
-  domain: [273.15 - 80, 273.15 + 55],
-  colormap: 'MAGMA',
-};
+const mbLevels = [850, 500, 300, 200, 10].map(x => `${x} mb`);
 
-const simpleScript = path.join('data', 'scripts', 'gfs-to-fp16.js');
-const speedScript = path.join('data', 'scripts', 'gfs-wind-to-fp16.js');
-const accScript = path.join('data', 'scripts', 'gfs-acc-to-fp16.js');
+const simpleGribs = [];
 
-const simpleGribs = [
-  {
-    dataDir: 'gfs-0p25-temperature-2m/',
+for (const level of ['2 m above ground'].concat(mbLevels)) {
+  simpleGribs.push({
+    dataDir: `gfs-0p25-temperature-${level.replace(/ /g, '-')}/`,
     parameter: 'TMP',
-    level: '2 m above ground',
+    level: level,
     datasetBase: {
-      name: 'temperature at 2 m above ground',
-      ...temperatureProps,
+      name: `temperature at ${level}`,
+      unit: 'tempC',
+      originalUnit: 'tempK',
+      domain: [273.15 - 80, 273.15 + 55],
+      colormap: 'MAGMA',
       ...gfs0p25props,
     },
-  },
-  {
-    dataDir: 'gfs-0p25-temperature-500mb/',
-    parameter: 'TMP',
-    level: '500 mb',
+  });
+}
+
+for (const level of ['2 m above ground'].concat(mbLevels)) {
+  simpleGribs.push({
+    dataDir: `gfs-0p25-relative-humidity-${level.replace(/ /g, '-')}/`,
+    parameter: 'RH',
+    level: level,
     datasetBase: {
-      name: 'temperature at 500 mb',
-      ...temperatureProps,
+      name: `relative humidity at ${level}`,
+      unit: '%',
+      originalUnit: '%',
+      domain: [0, 100],
+      colormap: 'CIVIDIS_REVERSED',
       ...gfs0p25props,
     },
+  });
+}
+
+simpleGribs.push({
+  dataDir: 'gfs-0p25-mean-sea-level-pressure/',
+  parameter: 'PRMSL',
+  level: 'mean sea level',
+  factor: 1000,
+  datasetBase: {
+    name: 'mean sea level pressure',
+    unit: 'hPa',
+    originalUnit: 'kPa',
+    domain: [96, 105],
+    colormap: 'MEAN_SEA_LEVEL_PRESSURE',
+    ...gfs0p25props,
   },
-  {
-    dataDir: 'gfs-0p25-temperature-200mb/',
-    parameter: 'TMP',
-    level: '200 mb',
-    datasetBase: {
-      name: 'temperature at 200 mb',
-      description: 'temperature at cruise level',
-      ...temperatureProps,
-      ...gfs0p25props,
-    },
+});
+
+simpleGribs.push({
+  dataDir: 'gfs-0p25-convective-available-potential-energy/',
+  parameter: 'CAPE',
+  level: 'surface',
+  datasetBase: {
+    name: 'convective available potential energy',
+    unit: 'J/kg',
+    originalUnit: 'J/kg',
+    domain: [0, 5000],
+    colormap: 'INFERNO',
+    ...gfs0p25props,
   },
-  {
-    dataDir: 'gfs-0p25-mean-sea-level-pressure/',
-    parameter: 'PRMSL',
-    level: 'mean sea level',
+});
+
+simpleGribs.push({
+  dataDir: 'gfs-0p25-total-precipitable-water/',
+  parameter: 'PWAT',
+  level: 'entire atmosphere (considered as a single layer)',
+  datasetBase: {
+    name: 'total precipitable water',
+    unit: 'kg/m^2',
+    originalUnit: 'kg/m^2',
+    domain: [0, 70],
+    colormap: 'TOTAL_PRECIP',
+    ...gfs0p25props,
+  },
+});
+
+simpleGribs.push({
+  dataDir: 'gfs-0p25-total-cloud-water/',
+  parameter: 'CWAT',
+  level: 'entire atmosphere (considered as a single layer)',
+  datasetBase: {
+    name: 'total cloud water',
+    unit: 'kg/m^2',
+    originalUnit: 'kg/m^2',
+    domain: [0.0, 1.0],
+    colormap: 'TOTAL_CLOUD',
+    ...gfs0p25props,
+  },
+});
+
+for (const level of ['surface'].concat(mbLevels)) {
+  simpleGribs.push({
+    dataDir: `gfs-0p25-geopotential-height-${level.replace(/ /g, '-')}/`,
+    parameter: 'HGT',
+    level: level,
     factor: 1000,
     datasetBase: {
-      name: 'mean sea level pressure',
-      unit: 'hPa',
-      originalUnit: 'kPa',
-      domain: [96, 105],
-      colormap: 'MEAN_SEA_LEVEL_PRESSURE',
-      ...gfs0p25props,
-    },
-  },
-  {
-    dataDir: 'gfs-0p25-total-precipitable-water/',
-    parameter: 'PWAT',
-    level: 'entire atmosphere (considered as a single layer)',
-    datasetBase: {
-      name: 'total precipitable water',
-      unit: 'kg/m^2',
-      originalUnit: 'kg/m^2',
-      domain: [0, 70],
-      colormap: 'TOTAL_PRECIP',
-      ...gfs0p25props,
-    },
-  },
-  {
-    dataDir: 'gfs-0p25-total-cloud-water/',
-    parameter: 'CWAT',
-    level: 'entire atmosphere (considered as a single layer)',
-    datasetBase: {
-      name: 'total cloud water',
-      unit: 'kg/m^2',
-      originalUnit: 'kg/m^2',
-      domain: [0.0, 1.0],
-      colormap: 'TOTAL_CLOUD',
-      ...gfs0p25props,
-    },
-  },
-];
-
-const windSpeedProps = {
-   unit: 'km/h',
-   originalUnit: 'm/s',
-   domain: [0, 100],
-   colormap: 'CUBEHELIX_DEFAULT',
-};
-
-const speedGribs = [
-  {
-    uParameter: 'UGRD',
-    vParameter: 'VGRD',
-    dataDir: 'gfs-0p25-wind-speed-10m/',
-    level: '10 m above ground',
-    datasetBase: {
-      name: 'wind speed at 10 m above ground',
-      ...windSpeedProps,
-      ...gfs0p25props,
-    },
-  },
-  {
-    uParameter: 'UGRD',
-    vParameter: 'VGRD',
-    dataDir: 'gfs-0p25-wind-speed-500mb/',
-    level: '500 mb',
-    datasetBase: {
-      name: 'wind speed at 500 mb',
-      ...windSpeedProps,
-      ...gfs0p25props,
-    },
-  },
-  {
-    uParameter: 'UGRD',
-    vParameter: 'VGRD',
-    dataDir: 'gfs-0p25-wind-speed-200mb/',
-    level: '200 mb',
-    datasetBase: {
-      name: 'wind speed at 200 mb',
-      ...windSpeedProps,
-      ...gfs0p25props,
-    },
-  },
-];
-
-const windProps = {
-  particleLifetime: 1000,
-  particleCount: 100000,
-  particleDisplay: {
-    size: 0.8,
-    rate: 50000,
-    opacity: 0.4,
-    fade: 0.96
-  },
-};
-
-const compoundGribs = [
-  {
-    uParameter: 'UGRD',
-    vParameter: 'VGRD',
-    uDataDir: 'gfs-0p25-u-wind-velocity-10m/',
-    vDataDir: 'gfs-0p25-v-wind-velocity-10m/',
-    level: '10 m above ground',
-    datasetBase: {
-      name: 'wind at 10 m above ground',
-      ...windProps,
-      ...gfs0p25props,
-    },
-  },
-  {
-    uParameter: 'UGRD',
-    vParameter: 'VGRD',
-    uDataDir: 'gfs-0p25-u-wind-velocity-500mb/',
-    vDataDir: 'gfs-0p25-v-wind-velocity-500mb/',
-    level: '500 mb',
-    datasetBase: {
-      name: 'wind at 500 mb',
-      ...windProps,
-      ...gfs0p25props,
-    },
-  },
-  {
-    uParameter: 'UGRD',
-    vParameter: 'VGRD',
-    uDataDir: 'gfs-0p25-u-wind-velocity-200mb/',
-    vDataDir: 'gfs-0p25-v-wind-velocity-200mb/',
-    level: '200 mb',
-    datasetBase: {
-      name: 'wind at 200 mb',
-      ...windProps,
-      ...gfs0p25props,
-    },
-  },
-];
-
-const accumulationGribs = [
-  {
-    dataDir: 'gfs-0p25-1hr-precip/',
-    parameter: 'APCP',
-    level: 'surface',
-    datasetBase: {
-      name: '1 hour precipitation', // for previous hour
-      unit: 'kg/m^2',
-      originalUnit: 'kg/m^2',
-      domain: [0, 50],
+      name: `geopotential height at ${level}`,
+      unit: 'km',
+      originalUnit: 'km',
+      domain: [0, 32],
       colormap: 'TURBO',
       ...gfs0p25props,
     },
+  });
+}
+
+const speedGribs = [];
+
+for (const level of ['10 m above ground'].concat(mbLevels)) {
+  speedGribs.push({
+    uParameter: 'UGRD',
+    vParameter: 'VGRD',
+    dataDir: `gfs-0p25-wind-speed-${level.replace(/ /g, '-')}/`,
+    level: level,
+    datasetBase: {
+      name: `wind speed at ${level}`,
+      unit: 'km/h',
+      originalUnit: 'm/s',
+      domain: [0, 100],
+      colormap: 'CUBEHELIX_DEFAULT',
+      ...gfs0p25props,
+    },
+  });
+}
+
+const compoundGribs = [];
+
+for (const level of ['10 m above ground'].concat(mbLevels)) {
+  compoundGribs.push({
+    uParameter: 'UGRD',
+    vParameter: 'VGRD',
+    uDataDir: `gfs-0p25-u-wind-velocity-${level.replace(/ /g, '-')}/`,
+    vDataDir: `gfs-0p25-v-wind-velocity-${level.replace(/ /g, '-')}/`,
+    level: level,
+    datasetBase: {
+      name: `wind at ${level}`,
+      particleLifetime: 1000,
+      particleCount: 100000,
+      particleDisplay: {
+        size: 0.8,
+        rate: 50000,
+        opacity: 0.4,
+        fade: 0.96
+      },
+      ...gfs0p25props,
+    },
+  });
+}
+
+const accumulationGribs = [];
+
+accumulationGribs.push({
+  dataDir: 'gfs-0p25-1-hour-precipitation/',
+  parameter: 'APCP',
+  level: 'surface',
+  datasetBase: {
+    name: '1 hour precipitation', // for previous hour
+    unit: 'kg/m^2',
+    originalUnit: 'kg/m^2',
+    domain: [0, 50],
+    colormap: 'TURBO',
+    ...gfs0p25props,
   },
-];
+});
 
 
 const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
 const [datetime, system] = await getDatetimeAndSystem(inventory);
 
-const forecastHours = system === 'gdas' ? 9 : 120;
+const forecastHours = system === 'gdas' ? GDAS_FORECAST_HRS : GFS_FORECAST_HRS;
 
 // determine the URL to download from
 function getDataURL(system, datetime, forecast) {
