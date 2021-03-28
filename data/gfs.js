@@ -77,11 +77,11 @@ simpleGribs.push({
 });
 
 simpleGribs.push({
-  dataDir: 'gfs-0p25-convective-available-potential-energy/',
+  dataDir: 'gfs-0p25-convective-available-potential-energy-surface/',
   parameter: 'CAPE',
   level: 'surface',
   datasetBase: {
-    name: 'convective available potential energy',
+    name: 'convective available potential energy at surface',
     unit: 'J/kg',
     originalUnit: 'J/kg',
     domain: [0, 5000],
