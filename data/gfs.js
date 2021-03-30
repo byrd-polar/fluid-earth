@@ -118,6 +118,20 @@ simpleGribs.push({
   },
 });
 
+simpleGribs.push({
+  dataDir: 'gfs-0p25-total-ozone/',
+  parameter: 'TOZNE',
+  level: 'entire atmosphere (considered as a single layer)',
+  datasetBase: {
+    name: 'total ozone',
+    unit: 'DU',
+    originalUnit: 'DU',
+    domain: [200, 600],
+    colormap: 'VIRIDIS',
+    ...gfs0p25props,
+  },
+});
+
 for (const level of ['surface'].concat(mbLevels)) {
   simpleGribs.push({
     dataDir: `gfs-0p25-geopotential-height-${level.replace(/ /g, '-')}/`,

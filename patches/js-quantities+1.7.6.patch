@@ -1,0 +1,12 @@
+diff --git a/node_modules/js-quantities/build/quantities.mjs b/node_modules/js-quantities/build/quantities.mjs
+index 1a25dde..a340af4 100644
+--- a/node_modules/js-quantities/build/quantities.mjs
++++ b/node_modules/js-quantities/build/quantities.mjs
+@@ -338,6 +338,7 @@ var UNITS = {
+   /* concentration */
+   "<molar>" : [["M","molar"], 1000, "concentration", ["<mole>"], ["<meter>","<meter>","<meter>"]],
+   "<wtpercent>"  : [["wt%","wtpercent"], 10, "concentration", ["<kilogram>"], ["<meter>","<meter>","<meter>"]],
++  "<dobson>"  : [["DU","Dobson unit"], 4.4615e-4, "concentration", ["<mole>"], ["<meter>","<meter>"]],
+ 
+   /* activity */
+   "<katal>" :  [["kat","katal","Katal"], 1.0, "activity", ["<mole>"], ["<second>"]],
