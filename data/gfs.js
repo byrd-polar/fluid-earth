@@ -45,6 +45,20 @@ for (const level of ['2 m above ground'].concat(mbLevels)) {
   });
 }
 
+simpleGribs.push({
+  dataDir: 'gfs-0p25-total-relative-humidity/',
+  parameter: 'RH',
+  level: 'entire atmosphere (considered as a single layer)',
+  datasetBase: {
+    name: 'total relative humidity',
+    unit: '%',
+    originalUnit: '%',
+    domain: [0, 100],
+    colormap: 'CIVIDIS_REVERSED',
+    ...gfs0p25props,
+  },
+});
+
 for (const level of ['2 m above ground'].concat(mbLevels)) {
   simpleGribs.push({
     dataDir: `gfs-0p25-relative-humidity-${level.replace(/ /g, '-')}/`,
