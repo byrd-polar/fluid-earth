@@ -199,11 +199,27 @@ accumulationGribs.push({
   parameter: 'APCP',
   level: 'surface',
   datasetBase: {
-    name: '1 hour precipitation', // for previous hour
+    name: 'precipitation in previous hour',
     unit: 'kg/m^2',
     originalUnit: 'kg/m^2',
     domain: [0, 50],
     colormap: 'TURBO',
+    ...gfs0p25props,
+  },
+});
+
+const accumulation6hrGribs = [];
+
+accumulation6hrGribs.push({
+  dataDir: 'gfs-0p25-sunshine-duration/',
+  parameter: 'SUNSD',
+  level: 'surface',
+  datasetBase: {
+    name: 'sunshine in previous hour',
+    unit: 'min',
+    originalUnit: 's',
+    domain: [0, 7200],
+    colormap: 'GREYS_REVERSED',
     ...gfs0p25props,
   },
 });
@@ -381,6 +397,43 @@ for (const grib of accumulationGribs) {
 
     util.log('Converting GFS grib to fp16', inputFiles, outputFile);
     await execFile('node', [accScript, ...inputFiles, outputFile]);
+  }
+
+  let dataset = inventory.find(d => d.path === util.browserPath(outputPath));
+  if (!dataset) inventory.push(dataset = grib.datasetBase);
+
+  for (const prop in grib.datasetBase) dataset[prop] = grib.datasetBase[prop];
+
+  dataset.path = util.browserPath(outputPath);
+  setDatasetTimeProps(dataset, 1);
+}
+
+// similar to accumulationGribs loop above, except accumulation resets every 6
+// hours
+for (const grib of accumulation6hrGribs) {
+  const outputPath = path.join(util.OUTPUT_DIR, grib.dataDir);
+  await mkdir(outputPath, { mode: '775', recursive: true });
+
+  for (let f = 1; f <= forecastHours; f++) {
+    if (f % 6 === 1) {
+      const inputFile = await downloadGrib(f, grib.parameter, grib.level);
+      const filename = datetime.plus({hours: f}).toISO() + '.fp16';
+      const outputFile = util.join(outputPath, filename);
+
+      util.log('Converting GFS grib to fp16', inputFile, outputFile);
+      await execFile('node', [simpleScript, inputFile, outputFile]);
+
+    } else {
+      const inputFiles = [
+        await downloadGrib(f-1, grib.parameter, grib.level),
+        await downloadGrib(f, grib.parameter, grib.level),
+      ];
+      const filename = datetime.plus({hours: f}).toISO() + '.fp16';
+      const outputFile = util.join(outputPath, filename);
+
+      util.log('Converting GFS grib to fp16', inputFiles, outputFile);
+      await execFile('node', [accScript, ...inputFiles, outputFile]);
+    }
   }
 
   let dataset = inventory.find(d => d.path === util.browserPath(outputPath));
