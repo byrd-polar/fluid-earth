@@ -163,6 +163,51 @@ for (const level of ['surface'].concat(mbLevels)) {
   });
 }
 
+simpleGribs.push({
+  dataDir: 'gfs-0p25-significant-wave-height/',
+  parameter: 'HTSGW',
+  level: 'surface',
+  wave: true,
+  datasetBase: {
+    name: 'significant wave height', // of combined wind waves and swell waves
+    unit: 'm',
+    originalUnit: 'm',
+    domain: [0, 12],
+    colormap: 'COOL',
+    ...gfs0p25props,
+  },
+});
+
+simpleGribs.push({
+  dataDir: 'gfs-0p25-primary-wave-mean-period/',
+  parameter: 'PERPW',
+  level: 'surface',
+  wave: true,
+  datasetBase: {
+    name: 'primary wave mean period',
+    unit: 's',
+    originalUnit: 's',
+    domain: [0, 22],
+    colormap: 'PU_BU_GN',
+    ...gfs0p25props,
+  },
+});
+
+simpleGribs.push({
+  dataDir: 'gfs-0p25-primary-wave-direction/',
+  parameter: 'DIRPW',
+  level: 'surface',
+  wave: true,
+  datasetBase: {
+    name: 'primary wave direction (from)',
+    unit: 'deg',
+    originalUnit: 'deg',
+    domain: [0, 360],
+    colormap: 'RAINBOW',
+    ...gfs0p25props,
+  },
+});
+
 const speedGribs = [];
 
 for (const level of ['10 m above ground'].concat(mbLevels)) {
@@ -245,12 +290,19 @@ const [datetime, system] = await getDatetimeAndSystem(inventory);
 const forecastHours = system === 'gdas' ? GDAS_FORECAST_HRS : GFS_FORECAST_HRS;
 
 // determine the URL to download from
-function getDataURL(system, datetime, forecast) {
+function getDataURL(system, datetime, forecast, wave) {
   const year = datetime.year;
   const month = datetime.toFormat('LL');
   const day = datetime.toFormat('dd');
   const hour = datetime.toFormat('HH');
   const fNum = forecast.toString().padStart(3, '0');
+
+  if (wave) {
+    return 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
+      `${system}.${year}${month}${day}/${hour}/wave/gridded/` +
+      `${system}wave.t${hour}z.global.0p25.f${fNum}.grib2`;
+  }
+
   return 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
     `${system}.${year}${month}${day}/${hour}/atmos/` +
     `${system}.t${hour}z.pgrb2.0p25.f${fNum}`;
@@ -285,8 +337,8 @@ async function getDatetimeAndSystem() {
 }
 
 // download GFS grib file using HTTP Range Requests
-async function downloadGrib(forecast, parameter, level, fcst) {
-  const dataURL = getDataURL(system, datetime, forecast);
+async function downloadGrib(forecast, parameter, level, fcst=null, wave=false) {
+  const dataURL = getDataURL(system, datetime, forecast, wave);
   const indexURL = dataURL + '.idx';
   const indexFile = await util.download(indexURL, true);
   const indexString = await readFile(indexFile, 'utf-8');
@@ -311,7 +363,8 @@ for (const grib of simpleGribs) {
   await mkdir(outputPath, { mode: '775', recursive: true });
 
   for (let f = 0; f <= forecastHours; f++) {
-    const inputFile = await downloadGrib(f, grib.parameter, grib.level);
+    const inputFile =
+      await downloadGrib(f, grib.parameter, grib.level, null, grib.wave);
     const filename = datetime.plus({hours: f}).toISO() + '.fp16';
     const outputFile = util.join(outputPath, filename);
 
