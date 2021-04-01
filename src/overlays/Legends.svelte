@@ -13,11 +13,14 @@
   export let griddedDomain;
   export let griddedUnit;
 
-  let dateStringOptions = {
+  const dateOptions = {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+  };
+
+  const timeOptions = {
     hour: 'numeric',
     minute: 'numeric',
     timeZoneName: 'short',
@@ -26,7 +29,8 @@
 
 <div class="wrapper">
   <div class="top">
-    <h3>{date.toLocaleDateString(undefined, dateStringOptions)}</h3>
+    <h3 class="date">{date.toLocaleDateString(undefined, dateOptions)}</h3>
+    <h3 class="time">{date.toLocaleTimeString(undefined, timeOptions)}</h3>
   </div>
   <div class="bottom">
     {#if particlesShown}
@@ -66,14 +70,22 @@
     user-select: none;
   }
 
+  div.top {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
   h3 {
-    width: max-content;
-    align-self: end;
     text-align: right;
     font-size: 1.2em;
-    padding: 0.25rem 0.75rem;
-    margin: 0 0 0 auto;
+    padding: 0.25rem 0.75rem 0;
+    margin: 0;
     pointer-events: auto;
+  }
+
+  h3.time {
+    padding-top: 0;
+    font-weight: normal;
   }
 
   div.bottom {
@@ -86,10 +98,17 @@
       font-size: 0.875em;
     }
 
+    div.top {
+      align-items: center;
+    }
+
     h3 {
-      /* height of nav rail (top plus bottom padding plus icon height) */
-      margin: calc(48px + 1rem) auto 0;
       font-size: 1em;
+    }
+
+    h3.date {
+      /* height of nav rail (top plus bottom padding plus icon height) */
+      margin-top: calc(48px + 1rem);
     }
   }
 </style>
