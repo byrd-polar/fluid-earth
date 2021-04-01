@@ -77,6 +77,9 @@ export default class Fetcher {
           this._resetIfComplete();
         },
         timeout: false,
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
       });
       if (url.split('.').pop() === 'json') {
         data = await res.json();
