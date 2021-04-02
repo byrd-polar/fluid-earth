@@ -135,6 +135,10 @@ function copyLicenseAndPatches() {
     async generateBundle() {
       await copyFile('LICENSE', 'public/build/LICENSE');
 
+      const party = 'public/build/THIRD_PARTY';
+      await appendFile(party, '\n\n\n---\n\n');
+      await appendFile(party, await readFile('src/map/colormaps/VENDORED'));
+
       let patchDir = 'patches/';
       let modFile = 'public/build/MODIFICATIONS';
 
