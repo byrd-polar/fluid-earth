@@ -7,6 +7,15 @@ import {
 } from './cmocean.js';
 
 import {
+  rocket,
+  mako,
+  vlag,
+  icefire,
+  flare,
+  crest,
+} from './seaborn.js';
+
+import {
   temp,
   alternate_temp,
   precip_6h,
@@ -58,6 +67,26 @@ let colormaps = {
     name: 'cividis',
     type: 'sequential (multi-hue)',
     get lut() { return lutFromD3(d3.interpolateCividis) }
+  },
+  ROCKET: {
+    name: 'rocket',
+    type: 'sequential (multi-hue)',
+    lut: rocket,
+  },
+  MAKO: {
+    name: 'mako',
+    type: 'sequential (multi-hue)',
+    lut: mako,
+  },
+  FLARE: {
+    name: 'flare',
+    type: 'sequential (multi-hue)',
+    lut: flare,
+  },
+  CREST: {
+    name: 'crest',
+    type: 'sequential (multi-hue)',
+    lut: crest,
   },
   WARM: {
     name: 'warm',
@@ -209,6 +238,16 @@ let colormaps = {
     name: 'Spectral',
     type: 'diverging',
     get lut() { return lutFromD3Scheme(d3.schemeSpectral, 11) }
+  },
+  VLAG: {
+    name: 'vlag',
+    type: 'diverging',
+    lut: vlag,
+  },
+  ICEFIRE: {
+    name: 'icefire',
+    type: 'diverging',
+    lut: icefire,
   },
   /////////////////////////////////////////////////////////////////////////////
   // Cyclical
