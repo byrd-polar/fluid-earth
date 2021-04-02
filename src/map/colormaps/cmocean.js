@@ -1,6 +1,6 @@
 // Suggested usage: https://matplotlib.org/cmocean/#colormap-details
 //
-// Source: https://github.com/matplotlib/cmocean/tree/master/cmocean/rgb
+// Source: https://github.com/matplotlib/cmocean/tree/2.0/cmocean/rgb
 // License information under 'cmocean' entry in VENDORED
 
 export const thermal = [
