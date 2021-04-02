@@ -88,6 +88,17 @@ let colormaps = {
     type: 'sequential (multi-hue)',
     lut: crest,
   },
+  THERMAL: {
+    name: 'thermal',
+    type: 'sequential (multi-hue)',
+    lut: thermal,
+  },
+  ICE: {
+    name: 'ice',
+    type: 'sequential (multi-hue)',
+    lut: thermal,
+    lut: ice,
+  },
   WARM: {
     name: 'warm',
     type: 'sequential (multi-hue)',
@@ -261,19 +272,6 @@ let colormaps = {
     name: 'sinebow',
     type: 'cyclical',
     get lut() { return lutFromD3(d3.interpolateSinebow) }
-  },
-  /////////////////////////////////////////////////////////////////////////////
-  // cmocean colormaps
-  /////////////////////////////////////////////////////////////////////////////
-  THERMAL: {
-    name: 'thermal',
-    type: 'cmocean',
-    lut: thermal,
-  },
-  ICE: {
-    name: 'ice',
-    type: 'cmocean',
-    lut: ice,
   },
   /////////////////////////////////////////////////////////////////////////////
   // FEVer original colormaps
