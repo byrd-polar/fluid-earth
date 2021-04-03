@@ -33,6 +33,28 @@ sup {
   line-height: 0;
 }
 
+#splash {
+  background-color: var(--primary-color);
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  z-index: 3;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+#splash.faded {
+  opacity: 0;
+}
+
+#splash h1 {
+  z-index: 1;
+}
+
 /* Modified from https://stephanwagner.me/only-css-loading-spinner */
 @keyframes spinner {
   to {transform: rotate(360deg);}

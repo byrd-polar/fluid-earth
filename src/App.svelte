@@ -216,8 +216,13 @@
       initialLoad = false;
     }
 
-    // remove loading spinner from public/index.html
-    document.body.removeAttribute('class');
+    // fade out and remove splash screen from public/index.html after loading
+    const splashElement = document.getElementById('splash');
+    splashElement.classList.add('faded');
+    setTimeout(
+      () => splashElement.remove(),
+      1000 * parseFloat(getComputedStyle(splashElement)['transitionDuration'])
+    );
   });
 
   $: date, griddedDataset, updateGriddedData();
