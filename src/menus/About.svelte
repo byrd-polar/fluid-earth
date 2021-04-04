@@ -40,29 +40,34 @@ Together, this team has extensive experience communicating with public audiences
 of all ages.
 <dl>
   <dt>Jason Cervenec (PI)
-  <dd><img src="/images/cervenec.png" alt="portrait of Jason">
+  <dd><img src="/images/cervenec.png" height="100" width="100"
+           alt="portrait of Jason">
   <dd>BPCRC Education &amp; Outreach Director
   <dd>Oversees project and creation and field-testing of learning experiences
 
   <dt>Jesse Fox
-  <dd><img src="/images/fox.png" alt="portrait of Jesse">
+  <dd><img src="/images/fox.png" height="100" width="100"
+           alt="portrait of Jesse">
   <dd>School of Communication Associate Professor
   <dd>Oversees user-testing and virtual environment settings
 
   <dt>Bidhyananda Yadav
-  <dd><img src="/images/yadav.png" alt="portrait of Bidhya">
+  <dd><img src="/images/yadav.png" height="100" width="100"
+           alt="portrait of Bidhya">
   <dd>BPCRC Research Associate
   <dd>Oversees code development and collaborates with J. Cervenec on
     field-testing and learning experiences
 
   <dt>Aaron Wilson
-  <dd><img src="/images/wilson.png" alt="portrait of Aaron">
+  <dd><img src="/images/wilson.png" height="100" width="100"
+           alt="portrait of Aaron">
   <dd>BPCRC Senior Research Associate
   <dd>Collaborates with B. Yadav on code development and with J. Cervenec on
     field-testing and learning experiences
 
   <dt>Michael Gravina
-  <dd><img src="/images/gravina.png" alt="portrait of Mike">
+  <dd><img src="/images/gravina.png" height="100" width="100"
+           alt="portrait of Mike">
   <dd>Front-End Developer
   <dd>Collaborates with B. Yadav on code development and with J. Cervenec on
     field-testing and learning experiences
@@ -137,7 +142,6 @@ SOFTWARE.
 
   img {
     float: right;
-    height: 100px;
     border-radius: 50%;
     margin: 0 1em 1em 1em;
   }

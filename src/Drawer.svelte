@@ -69,12 +69,14 @@
     <a href="https://bpcrc.osu.edu/">
       <img
         width="224"
+        height="33"
         alt="The Ohio State University"
         src="/images/TheOhioStateUniversity-REV-Horiz-RGBHEX.png"
       >
     </a>
     <a href="https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=504793">
       <img
+        width="48"
         height="48"
         alt="National Science Foundation"
         src="/images/NSF_4-Color_bitmap_Logo.png"
