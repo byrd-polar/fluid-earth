@@ -22,11 +22,12 @@ import dataProjections from './map/data-projections/';
     }
     // replace colormap strings with colormap objects
     if ('colormap' in dataset) {
-      dataset.colormap = colormaps[dataset.colormap];
+      dataset.colormap = colormaps[dataset.colormap] || colormaps['VIRIDIS'];
     }
     // replace projection strings with projection objects
     if ('projection' in dataset) {
-      dataset.projection = dataProjections[dataset.projection];
+      dataset.projection =
+        dataProjections[dataset.projection] || dataProjections['GFS'];
     }
   }
 
