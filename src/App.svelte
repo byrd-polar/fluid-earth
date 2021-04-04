@@ -395,8 +395,6 @@
   }
 
   div.background {
-    background-image: url("/images/starfield.png");
-    background-position: center;
-    background-size: auto 100%;
+    background-color: var(--primary-color-dark);
   }
 </style>
