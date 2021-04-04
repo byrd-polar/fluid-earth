@@ -136,6 +136,7 @@
   h1 {
     font-size: 1.4em;
     margin: 0 0 0.25em;
+    font-variant: small-caps;
   }
 
   p {
