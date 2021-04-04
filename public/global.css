@@ -23,12 +23,6 @@ body {
   background-color: black;
 }
 
-p {
-  text-align: justify;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-}
-
 sup {
   line-height: 0;
 }
