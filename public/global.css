@@ -39,12 +39,15 @@ sup {
   height: 100%;
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   color: white;
   z-index: 3;
   opacity: 1;
   transition: opacity 0.5s;
+  --sk-size: 2.5em;
+  --sk-color: white;
 }
 
 #splash.faded {
@@ -52,24 +55,69 @@ sup {
 }
 
 #splash h1 {
-  z-index: 1;
+  font-variant: small-caps;
 }
 
-/* Modified from https://stephanwagner.me/only-css-loading-spinner */
-@keyframes spinner {
-  to {transform: rotate(360deg);}
+/*
+ * Spinner from: https://github.com/tobiasahlin/SpinKit/blob/master/spinkit.css
+ *
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2020 Tobias Ahlin
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+.sk-swing {
+  width: var(--sk-size);
+  height: var(--sk-size);
+  position: relative;
+  animation: sk-swing 1.8s infinite linear;
 }
-.spinner:before {
-  content: '';
+
+.sk-swing-dot {
+  width: 45%;
+  height: 45%;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10em;
-  height: 10em;
-  margin-top: -5em;
-  margin-left: -5em;
-  border-radius: 50%;
-  border: 0.5em solid #202124;
-  border-top-color: var(--primary-color);
-  animation: spinner 1s linear infinite;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  background-color: var(--sk-color);
+  border-radius: 100%;
+  animation: sk-swing-dot 2s infinite ease-in-out;
+}
+
+.sk-swing-dot:nth-child(2) {
+  top: auto;
+  bottom: 0;
+  animation-delay: -1s;
+}
+
+@keyframes sk-swing {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sk-swing-dot {
+  0%, 100% {
+    transform: scale(0.2); }
+  50% {
+    transform: scale(1);
+  }
 }
