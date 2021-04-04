@@ -54,7 +54,7 @@ simpleGribs.push({
     unit: '%',
     originalUnit: '%',
     domain: [0, 100],
-    colormap: 'CIVIDIS_REVERSED',
+    colormap: 'CREST',
     ...gfs0p25props,
   },
 });
@@ -69,7 +69,7 @@ for (const level of ['2 m above ground'].concat(mbLevels)) {
       unit: '%',
       originalUnit: '%',
       domain: [0, 100],
-      colormap: 'CIVIDIS_REVERSED',
+      colormap: 'CREST',
       ...gfs0p25props,
     },
   });
