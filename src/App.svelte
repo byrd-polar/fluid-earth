@@ -86,10 +86,6 @@
   let particleData = emptyParticleData;
 
   let vectorData = { objects: {} };
-  (async () => {
-    let topologyDataset = inventory.find(d => d.name === 'topology')
-    vectorData = await fetcher.fetch(topologyDataset);
-  })();
 
   let particlesShown = true;
   $: if (!particlesShown) {
@@ -106,7 +102,7 @@
 
   let pins = [];
 
-  onMount(() => {
+  onMount(async () => {
     // workaround some race condition loading bugs
     setTimeout(updateAllWebglResolutions, 0.5);
 
@@ -215,6 +211,9 @@
       particleAssignments = () => {};
       initialLoad = false;
     }
+
+    let topologyDataset = inventory.find(d => d.name === 'topology')
+    vectorData = await fetcher.fetch(topologyDataset);
 
     // fade out and remove splash screen from public/index.html after loading
     const splashElement = document.getElementById('splash');
