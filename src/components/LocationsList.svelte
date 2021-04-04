@@ -21,7 +21,7 @@
           action={() => moveTo(pin)}
           ariaLabel="Move to pin"
         >
-          <PinIcon style="color: red" />
+          <PinIcon style="color: var(--primary-color-light)" />
         </IconButton>
         <div class="text">
           <h3>{pin.label}</h3>
