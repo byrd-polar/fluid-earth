@@ -1,4 +1,5 @@
 <script>
+  import Calendar from '../components/Calendar.svelte';
   import Datepicker from 'svelte-calendar';
   import Button from '../components/Button.svelte';
   import RangeSlider from 'svelte-range-slider-pips';
@@ -43,34 +44,11 @@
     return clamp(d, start, end);
   }
 
-  let selected;
-  $: date, updateSelected();
-  $: selected, updateDate();
-
-  function updateSelected() {
-    let floor = localDateFloor(date);
-    if (selected === undefined || selected.getTime() !== floor.getTime()) {
-      selected = floor;
-    }
-  }
-
-  function updateDate() {
-    let floor = localDateFloor(date);
-    if (selected.getTime() !== floor.getTime()) {
-      date = datasetDateCeil(selected);
-    }
-  }
-
   const dateStringOptions = {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  };
-
-  const dateStringOptionsMore = {
-    ...dateStringOptions,
-    hour: 'numeric',
   };
 
   function localDateCeil(d) {
@@ -142,6 +120,14 @@
 </script>
 
 
+<h2>Calendar</h2>
+
+<Calendar
+  minDate={start}
+  maxDate={end}
+  bind:date
+/>
+
 <h2>Stepper</h2>
 
 <p>Use the buttons below to move one step backward or forwards in time.</p>
@@ -162,25 +148,6 @@
     +{interval} hours
   </Button>
 </div>
-
-
-<h2>Calendar</h2>
-
-<p>Use the button below to open a calendar. Select a date to see the earliest
-dataset from that date.</p>
-
-<Datepicker
-  start={new Date(start)}
-  end={new Date(end)}
-  bind:selected
-  style="display: block; width: max-content; margin: 2em auto"
-  highlightColor="var(--primary-color)"
->
-  <Button>
-    {date.toLocaleDateString(undefined, dateStringOptionsMore)}
-  </Button>
-</Datepicker>
-
 
 {#if menusDetailed }
 
