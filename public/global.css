@@ -5,9 +5,9 @@ html {
   height: 100%;
   overflow: hidden;
   line-height: 1.5;
-  --primary-color: #7A0A00;
+  --primary-color: #872222;
   --primary-color-light: #FF3D33;
-  --primary-color-dark: #210000;
+  --primary-color-dark: black;
   --secondary-color: #525260;
   --input-color: rgba(70,70,70,0.8);
   --input-color-opaque: #464646;
