@@ -16,6 +16,7 @@ import {
 } from './seaborn.js';
 
 import {
+  wind,
   temp,
   sea_surface_temp,
   precip_6h,
@@ -279,6 +280,12 @@ let colormaps = {
   /////////////////////////////////////////////////////////////////////////////
   // FEVer original colormaps
   /////////////////////////////////////////////////////////////////////////////
+  WIND:{
+    name: 'wind',
+    type: 'FEVer 1 original',
+    get lut() { return lutFromEarthScale(wind, [0, 100]) }
+  },
+
   TEMP:{
     name: 'temperature',
     type: 'FEVer 1 original',

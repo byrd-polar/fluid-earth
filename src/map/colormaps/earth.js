@@ -27,6 +27,40 @@ function segmentedColorScale(segments, method) {
   };
 }
 
+var τ = 2 * Math.PI;
+var BOUNDARY = 0.45;
+var fadeToWhite = colorInterpolator(sinebowColor(1.0), [255, 255, 255]);
+
+function extendedSinebowColor(i) {
+  return i <= BOUNDARY ?
+    sinebowColor(i / BOUNDARY) :
+    fadeToWhite((i - BOUNDARY) / (1 - BOUNDARY));
+}
+
+function sinebowColor(hue) {
+  var rad = hue * τ * 5/6;
+  rad *= 0.75;
+
+  var s = Math.sin(rad);
+  var c = Math.cos(rad);
+  var r = Math.floor(Math.max(0, -c) * 255);
+  var g = Math.floor(Math.max(s, 0) * 255);
+  var b = Math.floor(Math.max(c, 0, -s) * 255);
+  return [r, g, b];
+}
+
+function colorInterpolator(start, end) {
+  var r = start[0], g = start[1], b = start[2];
+  var Δr = end[0] - r, Δg = end[1] - g, Δb = end[2] - b;
+  return function(i) {
+    return [
+      Math.floor(r + i * Δr), Math.floor(g + i * Δg), Math.floor(b + i * Δb)
+    ];
+  };
+}
+
+export const wind = v => extendedSinebowColor(Math.min(v, 100) / 100);
+
 export const temp = segmentedColorScale([
   [193,     [37, 4, 42]],
   [206,     [41, 10, 130]],
