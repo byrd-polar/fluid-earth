@@ -32,7 +32,8 @@ export default class Fetcher {
       return [await uData, await vData];
     }
 
-    let url = dataset.path;
+    // __fev2r_api__ is '' by default, can be replaced by env variable
+    let url = __fev2r_api__ + dataset.path;
     if (date) {
       url += date.toISOString() + '.fp16';
     }

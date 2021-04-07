@@ -45,6 +45,9 @@ export default {
       ),
       // Fix local file paths for dev environments on Windows
       __windows__: JSON.stringify(windows),
+      // Allow environments (e.g. Cloudflare Pages) to specify a custom prefix for
+      // fetcher.js requests
+      __fev2r_api__: JSON.stringify(process.env.FEV2R_API ?? ''),
       // Plugin option to avoid assignment errors
       preventAssignment: true,
     }),
