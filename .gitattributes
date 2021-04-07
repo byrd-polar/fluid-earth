@@ -1,3 +1,5 @@
 exports/webcomponent/demo.html linguist-vendored
 src/map/colormaps/cmocean.js linguist-vendored
+src/map/colormaps/seaborn.js linguist-vendored
+src/map/colormaps/earth.js linguist-vendored
 src/map/colormaps/VENDORED linguist-vendored
