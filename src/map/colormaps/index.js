@@ -17,7 +17,7 @@ import {
 
 import {
   temp,
-  alternate_temp,
+  sea_surface_temp,
   precip_6h,
   total_cloud_water,
   total_precipitable_water,
@@ -27,7 +27,10 @@ import {
   dust_mass,
   total_column_ozone,
   currents,
-  sea_surface_temp,
+} from './earth.js';
+
+import {
+  alternate_temp,
 } from './fever.js';
 
 // Enums for colormaps
@@ -279,7 +282,7 @@ let colormaps = {
   TEMP:{
     name: 'temperature',
     type: 'FEVer 1 original',
-    get lut() { return convert(temp) }
+    get lut() { return lutFromEarthScale(temp, [193, 328]) }
   },
 
   ALTERNATE_TEMP:{
@@ -291,61 +294,61 @@ let colormaps = {
   SEA_SURFACE_TEMP:{
     name: 'sea_surface_temp',
     type: 'FEVer 1 original',
-    get lut() { return convert(sea_surface_temp) }
+    get lut() { return lutFromEarthScale(sea_surface_temp, [271.35, 304.65]) }
   },
 
   PERCIP_6H:{
     name: 'precip_6h',
     type: 'FEVer 1 original',
-    get lut() { return convert(precip_6h) }
+    get lut() { return lutFromEarthScale(precip_6h, [0, 150]) }
   },
 
   TOTAL_CLOUD:{
     name: 'total_cloud_water',
     type: 'FEVer 1 original',
-    get lut(){ return convert(total_cloud_water) }
+    get lut() { return lutFromEarthScale(total_cloud_water, [0, 1]) }
   },
 
   TOTAL_PRECIP:{
     name: 'total_precipitable_water',
     type: 'FEVer 1 original',
-    get lut(){ return convert(total_precipitable_water) }
+    get lut() { return lutFromEarthScale(total_precipitable_water, [0, 70]) }
   },
 
   MEAN_SEA_LEVEL_PRESSURE:{
     name: 'mean_sea_level_pressure',
     type: 'FEVer 1 original',
-    get lut() { return convert(mean_sea_level_pressure) }
+    get lut() { return lutFromEarthScale(mean_sea_level_pressure, [960, 1050]) }
   },
 
   SO2_MASS:{
     name: 'sulfur_dioxide_mass',
     type: 'FEVer 1 original',
-    get lut() { return convert(so2_mass) }
+    get lut() { return lutFromEarthScale(so2_mass, [0, 100]) }
   },
 
   CO_SURFACE:{
     name: 'carbon_monoxide_surface',
     type: 'FEVer 1 original',
-    get lut() { return convert(carbon_monoxide_surface) }
+    get lut() { return lutFromEarthScale(carbon_monoxide_surface, [1, 1000]) }
   },
 
   DUST_MASS:{
     name: 'dust_mass',
     type: 'FEVer 1 original',
-    get lut() { return convert(dust_mass) }
+    get lut() { return lutFromEarthScale(dust_mass, [0, 900]) }
   },
 
   COLUMN_OZONE:{
     name:'total_column_ozone',
     type: 'FEVer 1 original',
-    get lut() { return convert(total_column_ozone) }
+    get lut() { return lutFromEarthScale(total_column_ozone, [200, 600]) }
   },
 
   CURRENTS:{
     name: 'currents',
     type: 'FEVer 1 original',
-    get lut() { return convert(currents) }
+    get lut() { return lutFromEarthScale(currents, [0, 1.5]) }
   },
 };
 
@@ -390,5 +393,12 @@ function lutFromD3Scheme(scheme, kmax) {
   return scheme[kmax].map(hex => {
     let c = color(hex);
     return [c.r, c.g, c.b].map(x => x / 255);
+  });
+}
+
+function lutFromEarthScale(scale, bounds) {
+  return Array.from({ length: 256 }, (_, i) => {
+    let val = bounds[0] + (i / 255) * (bounds[1] - bounds[0]);
+    return scale(val).map(x => x * 0.66 / 255);
   });
 }
