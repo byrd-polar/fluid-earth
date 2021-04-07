@@ -21,6 +21,20 @@ void main() {
   }
 
   float t = clamp((value - u_domain.x) / (u_domain.y - u_domain.x), 0.0, 1.0);
+
+  // Converts t value to actual texture coordinate by offseting so that instead
+  // of this alignment...
+  //
+  // |c|...|c|
+  // 0       1
+  //
+  // we have this alignment where the endpoints are centered over the end
+  // pixels.
+  //
+  // |c|...|c|
+  //  0     1
+  //
+  // (the |c|s are the pixels in the u_colormap texture)
   float tOffset = (u_colormapN - 1.0) / u_colormapN * (t - 0.5) + 0.5;
 
   gl_FragColor = texture2D(u_colormap, vec2(tOffset, 0));
