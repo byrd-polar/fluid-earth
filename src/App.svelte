@@ -59,6 +59,7 @@
 
   let projection = projections.VERTICAL_PERSPECTIVE;
   let d3geoProjection = projection.function;
+  let MAX_TEXTURE_SIZE = Infinity;
   let centerLongitude = -60;
   let centerLatitude = 30;
   let zoom = 1.5;
@@ -271,6 +272,7 @@
 <Menu bind:openedMenu menuName="Datasets">
   <Datasets
     {inventory}
+    {MAX_TEXTURE_SIZE}
     bind:griddedDataset
     bind:particleDataset
     bind:particlesShown
@@ -348,6 +350,7 @@
     {particleDisplay}
     {vectorData}
     bind:d3geoProjection
+    bind:MAX_TEXTURE_SIZE
   >
     <div class="background" slot="background"></div>
     <Controls

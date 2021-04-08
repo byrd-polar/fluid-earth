@@ -2,6 +2,7 @@
   import Toggle from 'svelte-toggle';
 
   export let inventory;
+  export let MAX_TEXTURE_SIZE;
   export let griddedDataset;
   export let particleDataset;
   export let particlesShown;
@@ -15,6 +16,7 @@
       name="griddedDataset"
       bind:group={griddedDataset}
       value={dataset}
+      disabled={Math.max(dataset.width, dataset.height) > MAX_TEXTURE_SIZE}
     >
     {dataset.name}
   </label>
@@ -28,6 +30,7 @@
       name="particleDataset"
       bind:group={particleDataset}
       value={dataset}
+      disabled={Math.max(dataset.width, dataset.height) > MAX_TEXTURE_SIZE}
     >
     {dataset.name}
   </label>

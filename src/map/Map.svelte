@@ -78,6 +78,8 @@
       zoom,
     d3geoProjectionNeedsUpdate = true;
 
+  export let MAX_TEXTURE_SIZE = Infinity;
+
   let mpcTestCanvas;
   let webgl2TestCanvas;
   let backgroundCanvas;
@@ -152,6 +154,8 @@
     particleGl = particleCanvas.getContext(webglVersion, {
       premultipliedAlpha: !majorPerformanceCaveat,
     });
+
+    MAX_TEXTURE_SIZE = backgroundGl.getParameter(backgroundGl.MAX_TEXTURE_SIZE);
 
     mapBackground = new MapBackground(backgroundGl, {
       data: griddedData,
