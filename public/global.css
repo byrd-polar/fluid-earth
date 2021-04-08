@@ -29,7 +29,7 @@ sup {
 }
 
 #splash {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color-dark);
   position: absolute;
   height: 100%;
   width: 100%;
@@ -42,7 +42,7 @@ sup {
   opacity: 1;
   transition: opacity 0.5s;
   --sk-size: 2.5em;
-  --sk-color: white;
+  --sk-color: var(--primary-color);
 }
 
 #splash.faded {
