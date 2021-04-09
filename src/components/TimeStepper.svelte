@@ -15,8 +15,15 @@
   };
 
   function stepDate(hours) {
-    date.setHours(date.getHours() + hours);
-    date = date;
+    date = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      date.getHours() + hours,
+      date.getMinutes(),
+      date.getSeconds(),
+      date.getMilliseconds()
+    );
   }
 
   const bigStep = 6;
