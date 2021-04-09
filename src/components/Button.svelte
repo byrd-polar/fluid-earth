@@ -51,7 +51,6 @@
 
   button.flex {
     flex: 1;
-    margin-left: 0.5em;
   }
 
   button.flex:first-child {

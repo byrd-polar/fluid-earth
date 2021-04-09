@@ -108,7 +108,7 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px;
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
 
   div.header {
