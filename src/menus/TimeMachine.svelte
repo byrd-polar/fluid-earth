@@ -1,6 +1,7 @@
 <script>
   import Calendar from '../components/Calendar.svelte';
   import TimeStepper from '../components/TimeStepper.svelte';
+  import RangeLoader from '../components/RangeLoader.svelte';
 
   export let date;
   export let griddedDataset;
@@ -15,6 +16,12 @@
 
 <h2>Time Stepper</h2>
 <TimeStepper
+  dataset={griddedDataset}
+  bind:date
+/>
+
+<h2>Range Loader</h2>
+<RangeLoader
   dataset={griddedDataset}
   bind:date
 />
