@@ -236,7 +236,7 @@ export default class ParticleSimulator {
   }
 
   _createTextures() {
-    const randomTextureSize = 2048;
+    const randomTextureSize = 128;
 
     return {
       random: twgl.createTexture(this._gl, {
