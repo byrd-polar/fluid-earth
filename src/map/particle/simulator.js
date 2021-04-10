@@ -17,7 +17,7 @@ import {
 export default class ParticleSimulator {
   constructor(gl, options) {
     // private variables with corresponding public setters
-    this._count = this._sqrtFloor(options.count);
+    this._count = this._roundToSquareNumber(options.count);
     this._lifetime = options.lifetime;
     this._data = options.data;
 
@@ -48,7 +48,7 @@ export default class ParticleSimulator {
   }
 
   set count(c) {
-    this._count = this._sqrtFloor(c);
+    this._count = this._roundToSquareNumber(c);
 
     this._gl.deleteBuffer(this._buffers.draw.indices);
     this._gl.deleteTexture(this._textures.simA);
@@ -355,7 +355,7 @@ export default class ParticleSimulator {
     );
   }
 
-  _sqrtFloor(x) {
+  _roundToSquareNumber(x) {
     return Math.pow(Math.floor(Math.sqrt(x)), 2);
   }
 }

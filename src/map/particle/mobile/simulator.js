@@ -21,7 +21,7 @@ import {
 
 export default class ParticleSimulatorMobile extends ParticleSimulator {
   set count(c) {
-    this._count = this._sqrtFloor(c);
+    this._count = this._roundToSquareNumber(c);
 
     this._gl.deleteBuffer(this._buffers.draw.indices);
     this._gl.deleteTexture(this._textures.simA.longitudes);
