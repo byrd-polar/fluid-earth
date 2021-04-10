@@ -13,7 +13,6 @@
   const msInHour = 60 * 60 * 1000;
 
   const dateOptions = {
-    weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
