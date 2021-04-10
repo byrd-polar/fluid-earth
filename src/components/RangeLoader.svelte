@@ -2,6 +2,8 @@
   export let date;
   export let dataset;
 
+  const msInHour = 60 * 60 * 1000;
+
   const dateOptions = {
     weekday: 'long',
     year: 'numeric',
@@ -12,24 +14,30 @@
     timeZoneName: 'short',
   }
 
-  $: endDate = new Date(date.getTime());
+  let timepoints = 10;
+  let interval = dataset.intervalInHours;
+
+  $: endDate = new Date(date.getTime() + (timepoints-1) * interval * msInHour);
 </script>
 
 <div>
-  <label for="range-inc">Increment (hours):</label>
+  <label for="range-timepoints">Number of timepoints:</label>
+  <input
+    id="range-timepoints"
+    type="number"
+    bind:value={timepoints}
+    min="2"
+    max={((dataset.end - date) / (interval * msInHour)) + 1}
+    step="1"
+  />
+  <label for="range-inc">Interval (hours):</label>
   <input
     id="range-inc"
     type="number"
-    value={dataset.intervalInHours}
+    bind:value={interval}
     min={dataset.intervalInHours}
+    max={(dataset.end - date) / ((timepoints-1) * msInHour)}
     step={dataset.intervalInHours}
-  />
-  <label for="range-steps">Number of steps:</label>
-  <input
-    id="range-steps"
-    type="number"
-    value="12"
-    min="1"
   />
   <p>
     End date:
