@@ -71,7 +71,7 @@
       <ChevronLeft32 />
     </button>
     <div>
-      {month.toLocaleString('en-US', { month: 'long', year: 'numeric' })}
+      {month.toLocaleString(undefined, { month: 'long', year: 'numeric' })}
     </div>
     <button
       on:click={() => month = nextMonth}
