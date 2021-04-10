@@ -281,7 +281,9 @@
 <Menu bind:openedMenu menuName="Time Machine">
   <TimeMachine
     bind:date
+    {fetcher}
     {griddedDataset}
+    bind:particlesShown
   />
 </Menu>
 <Menu bind:openedMenu menuName="Locations" flexbox>

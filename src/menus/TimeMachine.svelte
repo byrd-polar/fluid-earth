@@ -4,7 +4,10 @@
   import RangeLoader from '../components/RangeLoader.svelte';
 
   export let date;
+  export let fetcher;
   export let griddedDataset;
+  export let particleDataset;
+  export let particlesShown;
 </script>
 
 <h2>Calendar</h2>
@@ -22,6 +25,8 @@
 
 <h2>Range Loader</h2>
 <RangeLoader
-  dataset={griddedDataset}
   bind:date
+  {fetcher}
+  {griddedDataset}
+  bind:particlesShown
 />
