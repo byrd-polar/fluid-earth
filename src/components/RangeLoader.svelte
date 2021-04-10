@@ -113,6 +113,7 @@
     max={timepointsMax}
     step={1}
     disabled={loading}
+    required
   />
   <label for="range-inc">Interval (hours):</label>
   <input
@@ -123,6 +124,7 @@
     max={intervalMax}
     step={griddedDataset.intervalInHours}
     disabled={loading || timepoints === 1}
+    required
   />
   <p>
     End time:
