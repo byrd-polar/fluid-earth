@@ -6,7 +6,6 @@
   export let date;
   export let fetcher;
   export let griddedDataset;
-  export let particleDataset;
   export let particlesShown;
 </script>
 
@@ -23,7 +22,7 @@
   bind:date
 />
 
-<h2>Range Loader</h2>
+<h2>Range Loader (No Streamlines)</h2>
 <RangeLoader
   bind:date
   {fetcher}

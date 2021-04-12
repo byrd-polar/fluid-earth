@@ -42,7 +42,8 @@
   let loading = false;
   let loaded = false;
 
-  $: start, griddedDataset, particleDataset, timepoints, interval,
+  $: start, timepoints, interval,
+     griddedDataset, particleDataset, particlesShown,
     loaded = false;
 
   let baseDate = date;
@@ -70,6 +71,7 @@
 
     if (results.every(r => r)) {
       particlesShown = false;
+      await tick();
       value = 0;
       loaded = true;
     }
