@@ -114,6 +114,10 @@
       updateAllWebglResolutions();
     });
 
+    // Load topology (lines on globe) data completely first
+    let topologyDataset = inventory.find(d => d.name === 'topology')
+    vectorData = await fetcher.fetch(topologyDataset);
+
     // Methods for updating gridded and particle data in response to date or
     // dataset changes. Defined here so that they aren't triggered multiple
     // times during the initial mount due to a Svelte bug with bindings.
@@ -212,9 +216,6 @@
       particleAssignments = () => {};
       initialLoad = false;
     }
-
-    let topologyDataset = inventory.find(d => d.name === 'topology')
-    vectorData = await fetcher.fetch(topologyDataset);
 
     // fade out and remove splash screen from public/index.html after loading
     const splashElement = document.getElementById('splash');
