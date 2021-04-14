@@ -2,8 +2,8 @@
 Description=Update RTGSSTHR data every 24 hours
 
 [Timer]
-# TODO: change to 22:45 once we are able to merge inventory.json updates
-OnCalendar=*-*-* 00:00 UTC
+# TODO: change to 18:45 once we are able to merge inventory.json updates
+OnCalendar=*-*-* 20:00
 Persistent=true
 
 [Install]

@@ -1,9 +1,10 @@
 # systemd unit files
 
-Automatically updates data files at specificied times. Paths hardcoded for the
-`fever` server, currently.
+Automatically updates data files at specificied times. Paths and (lackof)
+timezone are hardcoded for the `fever` server; will need modifications if
+switching host.
 
-## Installation on Linux system
+## Installation
 
 1. Link all `.service`s:
 
