@@ -1,0 +1,17 @@
+[Unit]
+Description=Update GFS data every 3 hours
+
+[Timer]
+# Starting with 00 UTC GFS run (a delay of 4.5 hours), alternating GFS/GDAS
+OnCalendar=*-*-* 04:30 UTC
+OnCalendar=*-*-* 07:30 UTC
+OnCalendar=*-*-* 10:30 UTC
+OnCalendar=*-*-* 13:30 UTC
+OnCalendar=*-*-* 16:30 UTC
+OnCalendar=*-*-* 19:30 UTC
+OnCalendar=*-*-* 22:30 UTC
+OnCalendar=*-*-* 01:30 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target

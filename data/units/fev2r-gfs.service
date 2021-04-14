@@ -1,0 +1,7 @@
+[Unit]
+Description=Download and process GFS data for Fluid Earth Viewer 2
+
+[Service]
+Type=oneshot
+WorkingDirectory=/export/data/fev2r/repository
+ExecStart=/usr/bin/npm run data:gfs

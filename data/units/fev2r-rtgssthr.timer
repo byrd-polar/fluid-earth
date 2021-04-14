@@ -1,0 +1,10 @@
+[Unit]
+Description=Update RTGSSTHR data every 24 hours
+
+[Timer]
+# TODO: change to 22:45 once we are able to merge inventory.json updates
+OnCalendar=*-*-* 00:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target
