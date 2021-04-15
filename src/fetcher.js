@@ -118,13 +118,10 @@ export default class Fetcher {
       this._resetIfComplete();
 
       if (error.name === 'AbortError') {
-        console.log('Fetch aborted:', url);
-        console.log(
-          'Ignore the surrounding errors (if any), please. AbortController',
-          '(experimental web API) throws some weird errors sometimes but the',
-          'desired behavior seems to work regardless.'
-        );
+        // Do nothing
       } else {
+        // Note: Chromium throws TypeErrors instead of AbortErrors if download
+        // is partially complete, so ignore this in that case
         console.error('Fetch error:', error);
       }
       return false;
