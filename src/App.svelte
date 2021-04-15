@@ -171,8 +171,9 @@
     };
 
     updateParticleData = async () => {
+      if (validDate(griddedDataset, date).getTime() !== date.getTime()) return;
+
       let valid = validDate(particleDataset, date);
-      date = validDate(griddedDataset, date);
       if (valid.getTime() !== date.getTime()) {
         await tick();
         particlesShown = false;
