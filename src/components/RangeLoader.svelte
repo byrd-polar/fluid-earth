@@ -7,7 +7,6 @@
   export let date;
   export let fetcher;
   export let griddedDataset;
-  export let particleDataset;
   export let particlesShown;
 
   const msInHour = 60 * 60 * 1000;
@@ -42,8 +41,7 @@
   let loading = false;
   let loaded = false;
 
-  $: start, timepoints, interval,
-     griddedDataset, particleDataset, particlesShown,
+  $: start, timepoints, interval, griddedDataset, particlesShown,
     loaded = false;
 
   let baseDate = date;
