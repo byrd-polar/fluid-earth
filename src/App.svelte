@@ -134,7 +134,11 @@
       griddedLoading = true;
 
       let valid = validDate(griddedDataset, date);
-      if (valid.getTime() !== date.getTime()) date = valid;
+      if (valid.getTime() !== date.getTime()) {
+        await tick();
+        date = valid;
+        return;
+      }
 
       let array = await fetcher.fetch(griddedDataset, date, 'gridded');
 
