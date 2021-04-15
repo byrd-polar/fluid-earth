@@ -55,5 +55,6 @@ for (const prop in datasetBase) dataset[prop] = datasetBase[prop];
 
 dataset.start = dataset.start ?? datetime;
 dataset.end = datetime;
+dataset.lastForecast = datetime;
 
 await writeAndUnlockInventory(inventory);
