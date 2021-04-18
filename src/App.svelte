@@ -2,6 +2,7 @@
   import Navbar from './Navbar.svelte';
   import Drawer from './Drawer.svelte';
   import Menu from './Menu.svelte';
+  import Controlbar from './Controlbar.svelte';
 
   import Datasets from './menus/Datasets.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
@@ -385,6 +386,13 @@
       {particleDisplay}
     />
   </Map>
+  <Controlbar
+    {fetcher}
+    {inventory}
+    bind:griddedDataset
+    bind:particlesShown
+    bind:date
+  />
 </main>
 </div>
 
@@ -399,7 +407,7 @@
   main {
     flex: 1;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
   }
 
   div.background {

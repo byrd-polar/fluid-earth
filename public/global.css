@@ -38,7 +38,7 @@ sup {
   justify-content: center;
   align-items: center;
   color: white;
-  z-index: 3;
+  z-index: 5;
   opacity: 1;
   transition: opacity 0.5s;
   --sk-size: 2.5em;

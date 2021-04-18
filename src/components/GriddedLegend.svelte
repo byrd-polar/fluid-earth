@@ -65,7 +65,7 @@
     flex-basis: 24em;
     pointer-events: auto;
 
-    margin-left: auto;
+    margin-right: auto;
   }
 
   h3 {

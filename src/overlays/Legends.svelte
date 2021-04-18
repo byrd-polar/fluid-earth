@@ -33,18 +33,18 @@
     <h3 class="time">{date.toLocaleTimeString(undefined, timeOptions)}</h3>
   </div>
   <div class="bottom">
-    {#if particlesShown}
-      <StreamlinesLegend
-        {particleDataset}
-        {particleDisplay}
-      />
-    {/if}
     <GriddedLegend
       {griddedDataset}
       {griddedColormap}
       {griddedDomain}
       {griddedUnit}
     />
+    {#if particlesShown}
+      <StreamlinesLegend
+        {particleDataset}
+        {particleDisplay}
+      />
+    {/if}
   </div>
 </div>
 

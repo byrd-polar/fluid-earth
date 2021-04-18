@@ -23,7 +23,7 @@
     flex-basis: 24em;
     pointer-events: auto;
 
-    margin-right: auto;
+    margin-left: auto;
   }
 
   h3 {
