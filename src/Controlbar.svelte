@@ -36,10 +36,8 @@
   }
 
   function handlePause() {
-    if (loading) {
-      fetcher.abort('range-loader');
-      loading = false;
-    }
+    if (loading) fetcher.abort('range-loader');
+
     window.clearTimeout(timeoutID);
     playing = false;
   }
@@ -59,8 +57,9 @@
     }
 
     let results = await Promise.all(fetches);
-    loopDate();
     loading = false;
+
+    if (results.every(r => r)) loopDate();
   }
 
   function loopDate() {
