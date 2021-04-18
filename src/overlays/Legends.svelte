@@ -90,7 +90,7 @@
 
   div.bottom {
     margin-top: auto;
-    flex-wrap: wrap;
+    flex-wrap: wrap-reverse;
   }
 
   @media (max-width: 36rem) {
