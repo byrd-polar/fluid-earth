@@ -17,7 +17,12 @@ import Qty from 'js-quantities/esm';
 export function convert(value, datasetOrData, newUnit) {
   if (!isFinite(value)) return value;
 
-  return Qty(`${value} ${datasetOrData.originalUnit}`).to(newUnit).scalar;
+  try {
+    return Qty(`${value} ${datasetOrData.originalUnit}`).to(newUnit).scalar;
+  } catch (e) {
+    console.error(e);
+    return 0;
+  }
 }
 
 // Make a pretty string for a unit from the 'js-quantities' library
