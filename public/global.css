@@ -11,6 +11,8 @@ html {
   --secondary-color: #42424D;
   --input-color: rgba(70,70,70,0.8);
   --input-color-opaque: #464646;
+  --range-handle: var(--primary-color-light);
+  --range-handle-focus: var(--primary-color-light);
 }
 
 *, *:before, *:after {
@@ -42,7 +44,7 @@ sup {
   opacity: 1;
   transition: opacity 0.5s;
   --sk-size: 2.5em;
-  --sk-color: var(--primary-color);
+  --sk-color: var(--primary-color-light);
 }
 
 #splash.faded {
