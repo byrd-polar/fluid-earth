@@ -139,6 +139,10 @@
     margin: 1em 1.5em;
   }
 
+  div > :global(.rangeSlider .rangeHandle) {
+    z-index: 1 !important;
+  }
+
   div.hidden {
     display: none;
   }
