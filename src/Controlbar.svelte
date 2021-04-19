@@ -1,7 +1,7 @@
 <script>
   import IconButton from './components/IconButton.svelte';
   import SkipBackFilled24 from "carbon-icons-svelte/lib/SkipBackFilled24";
-  import PauseFilled24 from "carbon-icons-svelte/lib/PauseFilled24";
+  import PauseFilled32 from "carbon-icons-svelte/lib/PauseFilled32";
   import PlayFilledAlt24 from "carbon-icons-svelte/lib/PlayFilledAlt24";
   import SkipForwardFilled24 from "carbon-icons-svelte/lib/SkipForwardFilled24";
   import RangeSlider from 'svelte-range-slider-pips';
@@ -96,7 +96,7 @@
   </IconButton>
   {#if playing}
     <IconButton action={handlePause}>
-      <PauseFilled24 />
+      <PauseFilled32 />
     </IconButton>
   {:else}
     <IconButton action={handlePlay}>
