@@ -114,6 +114,12 @@
     on:start={handleStart}
     on:stop={handleStop}
     springValues={{ stiffness: 1, damping: 1 }}
+    pips
+    float
+    formatter={v => {
+      const d = new Date(start.getTime() + v * msInHour);
+      return d.toLocaleString(undefined, { hour: 'numeric' });
+    }}
   />
 </div>
 
@@ -124,15 +130,15 @@
     color: white;
     padding: 0.25em;
     align-items: center;
-    filter: brightness(80%);
     box-shadow:
       0 -2px  4px -1px rgba(0,0,0,.2),
       0 -4px  5px  0   rgba(0,0,0,.14),
       0 -1px 10px  0   rgba(0,0,0,.12);
   }
 
-  div > :global(:nth-child(4)) {
+  div > :global(.rangeSlider.pips) {
     flex: 1;
+    margin: 1em 1.5em;
   }
 
   div.hidden {
