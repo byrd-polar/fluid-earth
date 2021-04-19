@@ -12,7 +12,6 @@
   export let particlesShown;
   export let date;
 
-
   let playing = false;
   let loading = false;
   let timeoutID;
@@ -27,7 +26,6 @@
 
   $: hidden = !datasets.includes(griddedDataset);
   $: griddedDataset, handlePause();
-  $: particlesShown = !playing;
 
   function skipDataset(step) {
     const currentIndex = datasets.findIndex(d => d === griddedDataset);
@@ -40,6 +38,7 @@
 
     window.clearTimeout(timeoutID);
     playing = false;
+    particlesShown = true;
   }
 
   const msInHour = 60 * 60 * 1000;
@@ -48,6 +47,7 @@
 
   async function handlePlay() {
     playing = true;
+    particlesShown = false;
     loading = true;
 
     let fetches = [];
@@ -79,6 +79,15 @@
   function slideDate() {
     date = new Date(start.getTime() + value * msInHour);
   }
+
+  function handleStart() {
+    handlePause();
+    particlesShown = false;
+  }
+
+  function handleStop() {
+    particlesShown = true;
+  }
 </script>
 
 <div class:hidden>
@@ -102,6 +111,8 @@
     max={9}
     step={1}
     bind:value
+    on:start={handleStart}
+    on:stop={handleStop}
     springValues={{ stiffness: 1, damping: 1 }}
   />
 </div>
