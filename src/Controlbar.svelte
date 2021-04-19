@@ -94,15 +94,13 @@
   <IconButton action={() => skipDataset(-1)}>
     <SkipBackFilled24 />
   </IconButton>
-  {#if playing}
-    <IconButton action={handlePause}>
+  <IconButton action={playing ? handlePause : handlePlay}>
+    {#if playing}
       <PauseFilled32 />
-    </IconButton>
-  {:else}
-    <IconButton action={handlePlay}>
+    {:else}
       <PlayFilledAlt24 />
-    </IconButton>
-  {/if}
+    {/if}
+  </IconButton>
   <IconButton action={() => skipDataset(+1)}>
     <SkipForwardFilled24 />
   </IconButton>
