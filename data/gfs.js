@@ -2,6 +2,7 @@ import * as util from './utility.js';
 import { DateTime } from "luxon";
 import { readFile, mkdir } from 'fs/promises';
 import path from 'path';
+import got from 'got';
 import pThrottle from 'p-throttle';
 import { promisify } from 'util';
 import { execFile as _execFile } from 'child_process';
@@ -16,7 +17,7 @@ const throttle = pThrottle({
   interval: 60 * 1000,
   strict: true,
 });
-const throttledDownload = throttle(util.download);
+const throttled = throttle(got);
 
 const simpleScript = path.join('data', 'scripts', 'gfs-to-fp16.js');
 const speedScript = path.join('data', 'scripts', 'gfs-wind-to-fp16.js');
@@ -350,7 +351,7 @@ async function getDatetimeAndSystem() {
 async function downloadGrib(forecast, parameter, level, fcst=null, wave=false) {
   const dataURL = getDataURL(system, datetime, forecast, wave);
   const indexURL = dataURL + '.idx';
-  const indexFile = await throttledDownload(indexURL, true);
+  const indexFile = await util.download(indexURL, true, '', {}, throttled);
   const indexString = await readFile(indexFile, 'utf-8');
   const index = await parseCSV(indexString, { delimiter: ':' });
 
@@ -362,8 +363,9 @@ async function downloadGrib(forecast, parameter, level, fcst=null, wave=false) {
   const start = index[i][1];
   const end = index[i+1] === undefined ? '' : index[i+1][1] - 1;
 
-  return await throttledDownload(
-    dataURL, true, `_${parameter}_${level}`, {Range: `bytes=${start}-${end}`}
+  return await util.download(
+    dataURL, true, `_${parameter}_${level}`, {Range: `bytes=${start}-${end}`},
+    throttled
   );
 }
 

@@ -56,9 +56,13 @@ export function log(message, input=[], output=[]) {
 // - set prefix to true if you want the whole URL in the file save path
 // - suffix is appended to file save path
 // - headers are sent with the request (used for HTTP range requests)
+// - downloadFn is the got-compatible function used download the data; can pass
+//   a throttled version of got to rate-limit api calls
 //
 // returns a Promise that resolves to the path where file was saved to
-export async function download(url, prefix=false, suffix='', headers={}) {
+export async function download(
+  url, prefix=false, suffix='', headers={}, downloadFn=got
+) {
   url = new URL(url);
 
   let filename;
@@ -78,7 +82,7 @@ export async function download(url, prefix=false, suffix='', headers={}) {
   } else {
     log('Downloading', url, filepath);
     try {
-      let res = await got(url, { headers: headers });
+      let res = await downloadFn(url, { headers: headers });
       await writeFile(filepath, res.rawBody);
     } catch(err) {
       console.log(`Failed to download... ${url}\n=> ${err}`);
