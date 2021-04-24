@@ -34,7 +34,6 @@
     "luxon": "^1.26.0",
     "mapshaper": "^0.5.40",
     "npm-run-all": "^4.1.5",
-    "p-throttle": "^4.1.1",
     "patch-package": "^6.4.7",
     "postcss": "^8.2.9",
     "proper-lockfile": "^4.1.2",
@@ -46,6 +45,7 @@
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "sirv-cli": "^1.0.11",
+    "strict-throttle": "^1.0.1",
     "svelte": "^3.37.0"
   },
   "dependencies": {
