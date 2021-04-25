@@ -1,0 +1,6 @@
+[Unit]
+Description=Send email to the Fluid Earth 2 developers about the status of %i
+
+[Service]
+Type=oneshot
+ExecStart=/export/data/fev2r/repository/data/units/fev2r-email.sh %i

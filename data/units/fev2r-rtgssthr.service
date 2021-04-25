@@ -1,5 +1,6 @@
 [Unit]
 Description=Download and process RTGSSTHR data for Fluid Earth Viewer 2
+OnFailure=fev2r-email@%n.service
 
 [Service]
 Type=oneshot
