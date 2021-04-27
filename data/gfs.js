@@ -13,7 +13,7 @@ const execFile = promisify(_execFile);
 // Rate-limit https://ftpprd.ncep.noaa.gov calls to 120/min in accordance with
 // https://www.weather.gov/media/notification/pdf2/scn21-32nomad_changes.pdf
 const throttle = pThrottle({
-  limit: 119,
+  limit: 111,
   interval: 60 * 1000,
   strict: true,
 });
