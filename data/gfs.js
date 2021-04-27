@@ -2,7 +2,8 @@ import * as util from './utility.js';
 import { DateTime } from "luxon";
 import { readFile, mkdir } from 'fs/promises';
 import path from 'path';
-import strictThrottle from 'strict-throttle';
+import got from 'got';
+import pThrottle from 'p-throttle';
 import { promisify } from 'util';
 import { execFile as _execFile } from 'child_process';
 import _parseCSV from 'csv-parse';
@@ -11,10 +12,12 @@ const execFile = promisify(_execFile);
 
 // Rate-limit https://ftpprd.ncep.noaa.gov calls to 120/min in accordance with
 // https://www.weather.gov/media/notification/pdf2/scn21-32nomad_changes.pdf
-const throttle = strictThrottle({
+const throttle = pThrottle({
   limit: 119,
   interval: 60 * 1000,
+  strict: true,
 });
+const throttled = throttle(got);
 
 const simpleScript = path.join('data', 'scripts', 'gfs-to-fp16.js');
 const speedScript = path.join('data', 'scripts', 'gfs-wind-to-fp16.js');
@@ -348,7 +351,7 @@ async function getDatetimeAndSystem() {
 async function downloadGrib(forecast, parameter, level, fcst=null, wave=false) {
   const dataURL = getDataURL(system, datetime, forecast, wave);
   const indexURL = dataURL + '.idx';
-  const indexFile = await util.download(indexURL, true, '', {}, throttle);
+  const indexFile = await util.download(indexURL, true, '', {}, throttled);
   const indexString = await readFile(indexFile, 'utf-8');
   const index = await parseCSV(indexString, { delimiter: ':' });
 
@@ -362,7 +365,7 @@ async function downloadGrib(forecast, parameter, level, fcst=null, wave=false) {
 
   return await util.download(
     dataURL, true, `_${parameter}_${level}`, {Range: `bytes=${start}-${end}`},
-    throttle
+    throttled
   );
 }
 

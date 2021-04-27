@@ -56,12 +56,12 @@ export function log(message, input=[], output=[]) {
 // - set prefix to true if you want the whole URL in the file save path
 // - suffix is appended to file save path
 // - headers are sent with the request (used for HTTP range requests)
-// - throttle is used to rate-limit api calls, a function that takes a
-//   function and throttles its execution
+// - downloadFn is the got-compatible function used download the data; can pass
+//   a throttled version of got to rate-limit api calls
 //
 // returns a Promise that resolves to the path where file was saved to
 export async function download(
-  url, prefix=false, suffix='', headers={}, throttle=(f => f())
+  url, prefix=false, suffix='', headers={}, downloadFn=got
 ) {
   url = new URL(url);
 
@@ -82,7 +82,7 @@ export async function download(
   } else {
     log('Downloading', url, filepath);
     try {
-      let res = await throttle(() => got(url, { headers: headers }));
+      let res = await downloadFn(url, { headers: headers });
       await writeFile(filepath, res.rawBody);
     } catch(err) {
       console.log(`Failed to download... ${url}\n=> ${err}`);
