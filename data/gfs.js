@@ -232,7 +232,7 @@ for (const level of ['10 m above ground'].concat(mbLevels)) {
       unit: 'km/h',
       originalUnit: 'm/s',
       domain: [0, 100],
-      colormap: 'CUBEHELIX_DEFAULT',
+      colormap: 'TURBO',
       ...gfs0p25props,
     },
   });
