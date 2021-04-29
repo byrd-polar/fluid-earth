@@ -286,12 +286,13 @@
     bind:particlesShown
   />
 </Menu>
-<Menu bind:openedMenu menuName="Time Machine">
+<Menu bind:openedMenu menuName="Time Machine" bind:menusDetailed>
   <TimeMachine
     bind:date
     {fetcher}
     {griddedDataset}
     bind:particlesShown
+    {menusDetailed}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Locations" flexbox>
@@ -386,13 +387,15 @@
       {particleDisplay}
     />
   </Map>
-  <Mediabar
-    {fetcher}
-    {inventory}
-    bind:griddedDataset
-    bind:particlesShown
-    bind:date
-  />
+  {#if menusDetailed}
+    <Mediabar
+      {fetcher}
+      {inventory}
+      bind:griddedDataset
+      bind:particlesShown
+      bind:date
+    />
+  {/if}
 </main>
 </div>
 

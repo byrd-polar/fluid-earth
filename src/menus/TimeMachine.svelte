@@ -7,6 +7,7 @@
   export let fetcher;
   export let griddedDataset;
   export let particlesShown;
+  export let menusDetailed;
 </script>
 
 <h2>Calendar</h2>
@@ -22,10 +23,12 @@
   bind:date
 />
 
-<h2>Range Loader (No Streamlines)</h2>
-<RangeLoader
-  bind:date
-  {fetcher}
-  {griddedDataset}
-  bind:particlesShown
-/>
+{#if menusDetailed}
+  <h2>Range Loader (No Streamlines)</h2>
+  <RangeLoader
+    bind:date
+    {fetcher}
+    {griddedDataset}
+    bind:particlesShown
+  />
+{/if}
