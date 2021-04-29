@@ -43,6 +43,8 @@ export default {
       'process.env.NODE_ENV': JSON.stringify(
         production ? 'production' : 'development'
       ),
+      // Set date to closest time in production
+      __production__: JSON.stringify(production),
       // Fix local file paths for dev environments on Windows
       __windows__: JSON.stringify(windows),
       // Allow environments (e.g. Cloudflare Pages) to specify a custom prefix for
