@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import interact from 'interactjs';
   import { reproj } from '../map/projections/';
-  import { clamp, genericLabel } from '../utility.js';
+  import { clamp, modulo, genericLabel } from '../utility.js';
 
   export let minZoom;
   export let maxZoom;
@@ -36,7 +36,7 @@
           move (e) {
             let lon = centerLongitude - PAN_FACTOR * e.dx / zoom / screenRatio;
             let lat = centerLatitude + PAN_FACTOR * e.dy / zoom / screenRatio;
-            centerLongitude = ((lon + 540) % 360) - 180;
+            centerLongitude = modulo(lon, 360, -180);
             centerLatitude = clamp(lat, -90, 90);
           },
         },
