@@ -58,6 +58,7 @@
     "d3-scale": "^3.2.4",
     "d3-scale-chromatic": "^2.0.0",
     "d3-selection": "^2.0.0",
+    "debounce": "^1.2.1",
     "focus-trap": "^6.3.0",
     "interactjs": "^1.10.11",
     "js-quantities": "^1.7.6",

@@ -3,6 +3,11 @@ export function clamp(x, min, max) {
   return x > max ? max : (x < min ? min : x);
 }
 
+// Takes x modulo y with optional offset
+export function modulo(x, y, offset=0) {
+  return (((x - offset % y ) + y ) % y) + offset;
+}
+
 // Returns the closest valid date from the dataset relative to the given date
 export function validDate(dataset, date) {
   let intervalInMilliseconds = (dataset.intervalInHours * 60 * 60 * 1000) || 1;

@@ -1,4 +1,5 @@
 <script>
+  import Hash from './Hash.svelte';
   import Navbar from './Navbar.svelte';
   import Drawer from './Drawer.svelte';
   import Menu from './Menu.svelte';
@@ -269,6 +270,19 @@
   shorthand for variable={variable} and bind:variable is shorthand for
   bind:variable={variable}
 -->
+<Hash
+  bind:date
+  bind:griddedDataset
+  bind:particleDataset
+  bind:particlesShown
+  bind:projection
+  bind:centerLatitude
+  bind:centerLongitude
+  bind:zoom
+  {inventory}
+  {minZoom}
+  {maxZoom}
+/>
 <Navbar
   {menus}
   bind:openedMenu
