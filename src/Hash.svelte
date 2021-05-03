@@ -12,6 +12,7 @@
   export let centerLatitude;
   export let centerLongitude;
   export let zoom;
+  export let pins;
 
   export let inventory;
   export let minZoom;
@@ -29,6 +30,7 @@
     lat:    centerLatitude.toFixed(2),
     lon:    centerLongitude.toFixed(2),
     zoom:   zoom.toFixed(2),
+    pins:   JSON.stringify(pins),
   };
   $: debouncedSetHashFromAppState(stateObj);
 
@@ -85,6 +87,24 @@
     val = parseFloat(hash.get('zoom'));
     if (!isNaN(val)) {
       zoom = clamp(val, minZoom, maxZoom);
+    }
+
+    try {
+      val = JSON.parse(hash.get('pins'));
+    } catch {
+      val = false;
+    }
+    if (Array.isArray(val) && val.every(pin => {
+      let keys = Object.keys(pin);
+      let expectedKeys = ['label', 'longitude', 'latitude'];
+
+      return keys.length === expectedKeys.length &&
+        expectedKeys.every(key => keys.includes(key)) &&
+        typeof pin.label === 'string' &&
+        typeof pin.latitude === 'number' &&
+        typeof pin.longitude === 'number';
+    })) {
+      pins = val;
     }
 
     // fix any invalid parts of the URL

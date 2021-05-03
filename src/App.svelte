@@ -279,6 +279,7 @@
   bind:centerLatitude
   bind:centerLongitude
   bind:zoom
+  bind:pins
   {inventory}
   {minZoom}
   {maxZoom}
