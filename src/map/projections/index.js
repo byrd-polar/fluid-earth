@@ -38,6 +38,7 @@ export default Object.freeze({
     name: 'stereographic',
     id: 5,
     function: d3.geoStereographic().clipAngle(null),
+    particleSizeFactor: 0.5,
   },
 });
 

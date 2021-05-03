@@ -248,13 +248,9 @@
     }
 
     if (particlesShown) {
-      let particleSize = (projection === projections.STEREOGRAPHIC) ?
-        particleDisplay.size / 2 :
-        particleDisplay.size;
-
       particleSimulator.drawWithTrails(
         sharedUniforms,
-        particleSize,
+        particleDisplay.size * (projection.particleSizeFactor || 1),
         particleDisplay.opacity,
         particleDisplay.fade
       );
