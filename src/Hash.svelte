@@ -40,6 +40,8 @@
   }
 
   function setAppStateFromHash() {
+    if (!window.location.hash) return;
+
     let hash = new URLSearchParams(window.location.hash.slice(1));
 
     // for each variable, get value from hash, and update variable if valid
