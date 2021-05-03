@@ -22,8 +22,8 @@
   // mapping of keys (in the hashURL) to their state variable representations
   $: stateObj = {
     date:   date.toISOString(),
-    g:      griddedDataset.name,
-    p:      particleDataset.name,
+    gdata:  griddedDataset.name,
+    pdata:  particleDataset.name,
     pshow:  particlesShown,
     proj:   projection.name,
     lat:    centerLatitude,
@@ -52,12 +52,12 @@
       date = val;
     }
 
-    val = inventory.find(d => d.name === hash.get('g'));
+    val = inventory.find(d => d.name === hash.get('gdata'));
     if (val) {
       griddedDataset = val;
     }
 
-    val = inventory.find(d => d.name === hash.get('p'));
+    val = inventory.find(d => d.name === hash.get('pdata'));
     if (val) {
       particleDataset = val;
     }
