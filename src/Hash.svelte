@@ -26,9 +26,9 @@
     pdata:  particleDataset.name,
     pshow:  particlesShown,
     proj:   projection.name,
-    lat:    centerLatitude,
-    lon:    centerLongitude,
-    zoom:   zoom,
+    lat:    centerLatitude.toFixed(2),
+    lon:    centerLongitude.toFixed(2),
+    zoom:   zoom.toFixed(2),
   };
   $: debouncedSetHashFromAppState(stateObj);
 
