@@ -6,14 +6,7 @@
   export let centerLongitude;
   export let centerLatitude;
   export let zoom;
-  export let particleDisplay;
   export let menusDetailed;
-
-  $: if (projection === projections.STEREOGRAPHIC) {
-    particleDisplay.size = 0.4;
-  } else {
-    particleDisplay.size = 0.8;
-  }
 
   let selectedViews = [
     {

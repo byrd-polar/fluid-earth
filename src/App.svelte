@@ -327,7 +327,6 @@
     bind:centerLongitude
     bind:centerLatitude
     bind:zoom
-    bind:particleDisplay
     {menusDetailed}
   />
 </Menu>
