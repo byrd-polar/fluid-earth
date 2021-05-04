@@ -77,7 +77,7 @@
   div.pin > :global(.marker) {
     top: -30px;
     left: -16px;
-    color: var(--primary-color-light);
+    color: red;
     cursor: pointer;
     filter: drop-shadow(0 0 0.25em black);
     display: block;
