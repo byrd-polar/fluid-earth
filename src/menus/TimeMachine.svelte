@@ -2,12 +2,21 @@
   import Calendar from '../components/Calendar.svelte';
   import TimeStepper from '../components/TimeStepper.svelte';
   import RangeLoader from '../components/RangeLoader.svelte';
+  import { validDate } from '../utility.js';
 
   export let date;
   export let fetcher;
   export let griddedDataset;
   export let particlesShown;
   export let menusDetailed;
+
+  // kinda a hack to ensure date update propagates to this components children
+  $: {
+    let valid = validDate(griddedDataset, date);
+    if (valid.getTime() !== date.getTime()) {
+      date = valid;
+    }
+  }
 </script>
 
 <h2>Calendar</h2>
