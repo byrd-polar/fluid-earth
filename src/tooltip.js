@@ -2,6 +2,9 @@ import tippy, { animateFill } from 'tippy.js';
 import 'tippy.js/dist/tippy.css'; // for styling
 import 'tippy.js/themes/material.css'; // Material Design theme
 
+import { get } from 'svelte/store';
+import { mobile } from './stores.js';
+
 tippy.setDefaultProps({
   theme: 'material',
   placement: 'right',
@@ -26,7 +29,7 @@ export default function tooltip(node, options) {
 
   addTip();
 
-  if (mediaQuery.matches) tip.disable();
+  if (get(mobile)) tip.disable();
 
   return {
     update(newOptions) {
@@ -41,10 +44,8 @@ export default function tooltip(node, options) {
 }
 
 // hide tooltips on small screens / mobile
-let mediaQuery = window.matchMedia('(max-width: 36rem)');
-
-window.addEventListener('resize', () => {
-  if (mediaQuery.matches) {
+mobile.subscribe(val => {
+  if (val) {
     tips.forEach(t => t.disable());
   } else {
     tips.forEach(t => t.enable());
