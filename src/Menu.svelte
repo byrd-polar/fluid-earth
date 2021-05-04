@@ -6,6 +6,7 @@
   import HeaderToggle from './components/HeaderToggle.svelte';
   import { tips } from './tooltip.js';
   import overlayscroll from './overlayscroll.js';
+  import { mobile } from './stores.js';
 
   export let openedMenu;
   export let menuName;
@@ -24,8 +25,13 @@
   $: menuOpen = openedMenu === menuName;
 
   function closeMenu() {
-    // foucs on the rail button that corresonds to this menu
-    aside.parentNode.querySelector('div.rail button.selected').focus();
+    if ($mobile) {
+      // foucs on menus button (other rail buttons are hidden)
+      aside.parentNode.querySelector('div.rail button').focus();
+    } else {
+      // foucs on the rail button that corresonds to this menu
+      aside.parentNode.querySelector('div.rail button.selected').focus();
+    }
     openedMenu = null;
     // hide the tooltip for the just-closed menu
     tips.forEach(t => t.hide());

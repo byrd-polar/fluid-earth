@@ -3,6 +3,7 @@
   import Menu24 from "carbon-icons-svelte/lib/Menu24";
   import { tick } from 'svelte';
   import overlayscroll from './overlayscroll.js';
+  import { mobile } from './stores.js';
 
   export let menus;
   export let openedMenu;
@@ -37,15 +38,17 @@
   >
     <Menu24 />
   </IconButton>
-  {#each menus as menu}
-    <IconButton
-      name={menu.name}
-      action={() => toggleMenu(menu.name)}
-      selected={openedMenu === menu.name}
-    >
-      <svelte:component this={menu.icon}/>
-    </IconButton>
-  {/each}
+  {#if !$mobile}
+    {#each menus as menu}
+      <IconButton
+        name={menu.name}
+        action={() => toggleMenu(menu.name)}
+        selected={openedMenu === menu.name}
+      >
+        <svelte:component this={menu.icon}/>
+      </IconButton>
+    {/each}
+  {/if}
 </nav>
 </div>
 
@@ -74,7 +77,6 @@
     div.rail {
       background: transparent;
       position: absolute;
-      width: 100%;
       box-shadow: none;
     }
 
@@ -84,7 +86,7 @@
     }
 
     nav :global(button) {
-      margin: 0 0.5em;
+      margin: 0;
       /* multiple shadows used to increase intensity */
       filter:
         drop-shadow(0 0 0.125em black)

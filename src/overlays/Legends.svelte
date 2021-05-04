@@ -98,17 +98,12 @@
       font-size: 0.875em;
     }
 
-    div.top {
-      align-items: center;
-    }
-
     h3 {
       font-size: 1em;
     }
 
     h3.date {
-      /* height of nav rail (top plus bottom padding plus icon height) */
-      margin-top: calc(48px + 1rem);
+      padding: 0.75rem 0.75rem 0;
     }
   }
 </style>
