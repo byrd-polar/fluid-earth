@@ -104,7 +104,13 @@
         typeof pin.latitude === 'number' &&
         typeof pin.longitude === 'number';
     })) {
-      pins = val;
+      pins = val.map(p => {
+        return {
+          label: p.label,
+          latitude: clamp(p.latitude, -90, 90),
+          longitude: modulo(p.longitude, 360, -180),
+        };
+      });
     }
 
     // fix any invalid parts of the URL
