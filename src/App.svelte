@@ -56,6 +56,7 @@
   let date = __production__ ?
     validDate(griddedDataset, new Date()) :
     griddedDataset.lastForecast;
+  let currentDate = false;
 
   // see comment in onMount
   let updateGriddedData = () => {};
@@ -269,6 +270,7 @@
 -->
 <Hash
   bind:date
+  bind:currentDate
   bind:griddedDataset
   bind:particleDataset
   bind:particlesShown

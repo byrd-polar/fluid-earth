@@ -1,10 +1,11 @@
 <script>
   import debounce from 'debounce';
   import { onMount } from 'svelte';
-  import { clamp, modulo } from './utility.js';
+  import { clamp, modulo, validDate } from './utility.js';
   import projections from './map/projections/';
 
-  export let date
+  export let date;
+  export let currentDate;
   export let griddedDataset;
   export let particleDataset;
   export let particlesShown;
@@ -22,7 +23,7 @@
 
   // mapping of keys (in the hashURL) to their state variable representations
   $: stateObj = {
-    date:   date.toISOString(),
+    date:   currentDate ? 'current' : date.toISOString(),
     gdata:  griddedDataset.name,
     pdata:  particleDataset.name,
     pshow:  particlesShown,
@@ -111,6 +112,12 @@
           longitude: modulo(p.longitude, 360, -180),
         };
       });
+    }
+
+    // special case for URL that always sets date to current
+    if (hash.get('date') === 'current') {
+      date = validDate(griddedDataset, new Date());
+      currentDate = true;
     }
 
     // fix any invalid parts of the URL
