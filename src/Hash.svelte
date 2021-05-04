@@ -37,7 +37,15 @@
 
   onMount(setAppStateFromHash);
 
+  let initialPageLoad = true;
+
   function setHashFromAppState(stateObj) {
+    // avoid setting the hash based on initial value if hash already exists
+    if (initialPageLoad) {
+      initialPageLoad = false;
+      if (window.location.hash) return;
+    }
+
     let hash = new URLSearchParams(stateObj);
     window.history.replaceState(null, '', `#${hash}`);
   }
