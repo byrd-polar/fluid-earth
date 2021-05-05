@@ -57,6 +57,9 @@
     validDate(griddedDataset, new Date()) :
     griddedDataset.lastForecast;
   let currentDate = false;
+  $: if (validDate(griddedDataset, new Date()).getTime() !== date.getTime()) {
+    currentDate = false;
+  }
 
   // see comment in onMount
   let updateGriddedData = () => {};
