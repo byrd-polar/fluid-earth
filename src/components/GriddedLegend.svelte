@@ -20,7 +20,7 @@
 
   $: createAxis(
     svgScale, svgScaleWidth, griddedDataset.domain, griddedDataset.unit);
-  $: createAxis(svgScale, svgScaleWidth, griddedDomain, griddedUnit);
+  $: createAxis2(svgScale, griddedDomain, griddedUnit);
 
   $: cssLut = generateLut(griddedDataset.colormap);
   $: cssLut = generateLut(griddedColormap);
@@ -37,6 +37,12 @@
         .range([-0.5, width - 0.5])
     );
     d3.select(elem).call(axis);
+  }
+
+  // version of createAxis that doesn't get reactively called when svgScaleWidth
+  // changes, prevents potential griddedDataset and unit mismatch in convert
+  function createAxis2(elem, domain, unit) {
+    createAxis(elem, svgScaleWidth, domain, unit);
   }
 
   function generateLut(colormap) {
