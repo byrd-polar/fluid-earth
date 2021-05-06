@@ -1,6 +1,6 @@
 <script>
   import debounce from 'debounce';
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { clamp, modulo, validDate } from './utility.js';
   import projections from './map/projections/';
 
@@ -35,7 +35,10 @@
   };
   $: debouncedSetHashFromAppState(stateObj);
 
-  onMount(setAppStateFromHash);
+  onMount(async () => {
+    await tick(); // fixes parts of app not updating on initial load
+    setAppStateFromHash();
+  });
 
   let initialPageLoad = true;
 
