@@ -61,11 +61,6 @@
     // for each variable, get value from hash, and update variable if valid
     let val;
 
-    val = new Date(hash.get('date'));
-    if (!isNaN(val)) {
-      date = val;
-    }
-
     val = inventory.find(d => d.name === hash.get('gdata'));
     if (val) {
       griddedDataset = val;
@@ -123,6 +118,11 @@
           longitude: modulo(p.longitude, 360, -180),
         };
       });
+    }
+
+    val = new Date(hash.get('date'));
+    if (!isNaN(val)) {
+      date = validDate(griddedDataset, val);
     }
 
     // special case for URL that always sets date to current
