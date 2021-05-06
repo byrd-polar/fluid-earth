@@ -5,7 +5,6 @@
   import projections from './map/projections/';
 
   export let date;
-  export let currentDate;
   export let griddedDataset;
   export let particleDataset;
   export let particlesShown;
@@ -23,7 +22,7 @@
 
   // mapping of keys (in the hashURL) to their state variable representations
   $: stateObj = {
-    date:   currentDate ? 'current' : date.toISOString(),
+    date:   date.toISOString(),
     gdata:  griddedDataset.name,
     pdata:  particleDataset.name,
     pshow:  particlesShown,
@@ -120,15 +119,9 @@
       });
     }
 
-    val = new Date(hash.get('date'));
+    val = hash.has('date') ? new Date(hash.get('date')) : NaN;
     if (!isNaN(val)) {
       date = validDate(griddedDataset, val);
-    }
-
-    // special case for URL that always sets date to current
-    if (hash.get('date') === 'current') {
-      date = validDate(griddedDataset, new Date());
-      currentDate = true;
     }
 
     // fix any invalid parts of the URL
