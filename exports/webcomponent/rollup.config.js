@@ -8,7 +8,7 @@ export default {
     sourcemap: true,
     format: 'iife',
     name: 'app',
-    file: 'public/build/webcomponent.js'
+    file: 'dist/webcomponent.js'
   },
   plugins: [
     svelte({

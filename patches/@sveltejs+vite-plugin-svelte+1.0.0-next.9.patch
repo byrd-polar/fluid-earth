@@ -1,0 +1,16 @@
+diff --git a/node_modules/@sveltejs/vite-plugin-svelte/dist/index.js b/node_modules/@sveltejs/vite-plugin-svelte/dist/index.js
+index 1bb3bf2..c7be5d4 100644
+--- a/node_modules/@sveltejs/vite-plugin-svelte/dist/index.js
++++ b/node_modules/@sveltejs/vite-plugin-svelte/dist/index.js
+@@ -848,11 +848,6 @@ function vitePluginSvelte(inlineOptions) {
+     transformIndexHtml(html, ctx) {
+       log.debug("transformIndexHtml", html);
+     },
+-    buildEnd() {
+-      if (pkg_export_errors.size > 0) {
+-        log.warn(`The following packages did not export their \`package.json\` file so we could not check the "svelte" field. If you had difficulties importing svelte components from a package, then please contact the author and ask them to export the package.json file.`, Array.from(pkg_export_errors, (s) => `- ${s}`).join("\n"));
+-      }
+-    }
+   };
+ }
+ module.exports = vitePluginSvelte;

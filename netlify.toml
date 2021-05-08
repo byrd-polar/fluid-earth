@@ -1,6 +1,6 @@
 [build]
-  publish = "public/"
-  command = "npm run build:bundles"
+  publish = "dist/"
+  command = "npm run build:website"
   ignore = "[[ $HEAD == master ]]"
 
 [build.environment]
