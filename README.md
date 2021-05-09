@@ -63,7 +63,7 @@ npm run data
 npm run dev
 ```
 
-Navigate to [localhost:5000](http://localhost:5000). You should see your app
+Navigate to [localhost:3000](http://localhost:3000). You should see your app
 running. Edit a component file in `src`, save it, and the page should
 automatically reload with your changes.
 
