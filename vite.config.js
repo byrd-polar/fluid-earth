@@ -9,16 +9,16 @@ import dedent from 'dedent';
 
 const windows = (platform() === 'win32');
 const commit = execSync('git rev-parse --short HEAD').toString().trim();
-const preamble = dedent`
-  /**
-   * Fluid Earth Viewer 2 (FEV2r) minified bundle
-   * =====================================================================
-   * Commit:                                  ${commit}
-   * Generated:                               ${(new Date).toISOString()}
-   * License:                                 /legal/LICENSE
-   * Licenses of third-party libraries:       /legal/THIRD_PARTY
-   * Modifications to third-party libraries:  /legal/MODIFICATIONS
-   */
+const htmlComment = dedent`
+  <!--
+    Fluid Earth Viewer 2 (FEV2r)
+    =====================================================================
+    Commit:                                  ${commit}
+    Generated:                               ${(new Date).toISOString()}
+    License:                                 /legal/LICENSE
+    Licenses of third-party libraries:       /legal/THIRD_PARTY
+    Modifications to third-party libraries:  /legal/MODIFICATIONS
+  -->
 `;
 
 // https://vitejs.dev/config/
@@ -42,6 +42,9 @@ export default ({ _, mode }) => {
     glslify({
       compress: production,
     }),
+    // Add build and license info to index.html
+    commentHtml(),
+
   ];
 
   const productionOnlyPlugins = [
@@ -61,7 +64,7 @@ export default ({ _, mode }) => {
         plugins: productionOnlyPlugins,
       },
       terserOptions: {
-        format: { preamble, comments: false },
+        format: { comments: false },
       },
       cleanCssOptions: {
         level: { 1: { specialComments: false }},
@@ -70,6 +73,16 @@ export default ({ _, mode }) => {
       sourcemap: true,
     },
     plugins,
+  };
+}
+
+function commentHtml() {
+  return {
+    transformIndexHtml(html) {
+      return html
+        .replace('<!-- insert build and license info -->', htmlComment)
+        .replace('  \n<script', '  <script'); // fix built-in transform spacing
+    }
   };
 }
 
