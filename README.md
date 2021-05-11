@@ -40,6 +40,7 @@ with us to develop FEVer for a specific application, please email
 - [git](https://git-scm.com/)
 - [Node.js (version >= 14)](https://nodejs.org)
 - [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/)
+- [NetCDF](https://www.unidata.ucar.edu/downloads/netcdf/)
 
 ### Getting started
 
