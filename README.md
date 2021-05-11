@@ -57,7 +57,7 @@ npm install
 npm run data
 ```
 
-...then start [Rollup](https://rollupjs.org):
+...then start [Vite](https://vitejs.dev/):
 
 ```bash
 npm run dev
