@@ -41,7 +41,7 @@
     "rollup-plugin-license": "^2.3.0",
     "rollup-plugin-svelte": "^7.1.0",
     "svelte": "^3.38.2",
-    "vite": "^2.2.4"
+    "vite": "^2.3.0"
   },
   "dependencies": {
     "@okrad/svelte-progressbar": "^1.11.2",
