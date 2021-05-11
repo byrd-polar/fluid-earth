@@ -41,6 +41,7 @@
     "rollup-plugin-glslify": "^1.2.0",
     "rollup-plugin-license": "^2.3.0",
     "rollup-plugin-svelte": "^7.1.0",
+    "split2": "^3.2.2",
     "svelte": "^3.38.2",
     "vite": "^2.3.0"
   },
