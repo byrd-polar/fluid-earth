@@ -89,10 +89,10 @@ npm run data
 To create an optimised version of the app:
 
 ```bash
-npm run build
+npm run build:app
 ```
 
-You can run the newly built app with `npm run start`.
+You can run the newly built app with `npm run preview`.
 
 ## Terms of Use
 

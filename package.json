@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "build": "run-s build:**",
-    "build:website": "vite build",
+    "build:app": "vite build",
     "build:webcomponent": "rollup -c exports/webcomponent/rollup.config.js",
     "clean": "node data/clean.js",
     "data": "run-s data:**",
@@ -19,7 +19,8 @@
     "data:gfs": "node data/gfs.js",
     "data:rtgssthr": "node data/rtgssthr.js",
     "dev": "vite",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.0.0",
