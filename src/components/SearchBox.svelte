@@ -125,7 +125,6 @@
 <style>
   div.wrapper {
     position: relative;
-    margin-bottom: 0.5em;
   }
 
   input, div.dropdown {
