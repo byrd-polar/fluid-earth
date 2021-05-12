@@ -69,9 +69,8 @@
   <div class="header">
     <button
       on:click={() => month = prevMonth}
-      aria-label="previous month"
       disabled={!months.find(m => m.getTime() === prevMonth.getTime())}
-      use:tooltip={{content: 'Previous month', placement: 'top'}}
+      use:tooltip={{content: 'Prev month'}}
     >
       <ChevronLeft32 />
     </button>
@@ -80,9 +79,8 @@
     </div>
     <button
       on:click={() => month = nextMonth}
-      aria-label="next month"
       disabled={!months.find(m => m.getTime() === nextMonth.getTime())}
-      use:tooltip={{content: 'Next month', placement: 'top'}}
+      use:tooltip={{content: 'Next month'}}
     >
       <ChevronRight32 />
     </button>
@@ -104,7 +102,7 @@
         !sameDate(day, minDate) &&
         !sameDate(day, maxDate)
       }
-      use:tooltip={{content: 'Set date', placement: 'top'}}
+      use:tooltip={{content: 'Set date'}}
     >
       {day.getDate()}
     </button>

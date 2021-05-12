@@ -7,7 +7,10 @@ import { mobile } from './stores.js';
 
 tippy.setDefaultProps({
   theme: 'material',
-  placement: 'right',
+  placement: 'top',
+  aria: {
+    content: 'labelledby',
+  },
 });
 
 export let tips = new Set();
