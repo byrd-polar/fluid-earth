@@ -3,7 +3,6 @@
   import Navbar from './Navbar.svelte';
   import Drawer from './Drawer.svelte';
   import Menu from './Menu.svelte';
-  import Mediabar from './Mediabar.svelte';
 
   import Datasets from './menus/Datasets.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
@@ -408,15 +407,6 @@
       {particleDisplay}
     />
   </Map>
-  {#if menusDetailed}
-    <Mediabar
-      {fetcher}
-      {inventory}
-      bind:griddedDataset
-      bind:particlesShown
-      bind:date
-    />
-  {/if}
 </main>
 </div>
 
