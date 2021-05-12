@@ -1,6 +1,7 @@
 <script>
   import ChevronLeft32 from "carbon-icons-svelte/lib/ChevronLeft32";
   import ChevronRight32 from "carbon-icons-svelte/lib/ChevronRight32";
+  import tooltip from '../tooltip.js';
   import { validDate } from '../utility.js';
 
   export let date;
@@ -70,6 +71,7 @@
       on:click={() => month = prevMonth}
       aria-label="previous month"
       disabled={!months.find(m => m.getTime() === prevMonth.getTime())}
+      use:tooltip={{content: 'Previous month', placement: 'top'}}
     >
       <ChevronLeft32 />
     </button>
@@ -80,6 +82,7 @@
       on:click={() => month = nextMonth}
       aria-label="next month"
       disabled={!months.find(m => m.getTime() === nextMonth.getTime())}
+      use:tooltip={{content: 'Next month', placement: 'top'}}
     >
       <ChevronRight32 />
     </button>
@@ -100,6 +103,10 @@
         !sameDate(day, minDate) &&
         !sameDate(day, maxDate)
       }
+      use:tooltip={{
+        content: sameDate(day, date) ? '' : 'Set date',
+        placement: 'top',
+      }}
     >
       {day.getDate()}
     </button>
@@ -107,11 +114,25 @@
 </div>
 
 <style>
+  button {
+    -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    border: 0;
+    outline: none;
+    color: white;
+  }
+
+  button:focus, button:hover {
+    filter: brightness(125%);
+  }
+
   div.calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px;
     font-size: 1.2em;
+    border-radius: 4px;
+    overflow: hidden;
   }
 
   div.header {
@@ -136,15 +157,13 @@
 
   div.header button {
     flex: 1;
-    margin: 0;
-    border: 0;
-    color: white;
-    background: transparent;
+    background: inherit;
     cursor: pointer;
   }
 
   div.header button:disabled {
     color: grey;
+    filter: none;
   }
 
   div.days-of-week {
@@ -165,10 +184,7 @@
   }
 
   button.day {
-    margin: 0;
-    border: 0;
     background: var(--input-color);
-    color: white;
     padding: 0;
     display: flex;
     justify-content: center;
@@ -181,13 +197,7 @@
     color: darkgrey;
   }
 
-  button.day:hover, button.day:focus {
-    filter: brightness(90%);
-    background: var(--primary-color);
-  }
-
   button.day.selected {
-    filter: none;
     background: var(--primary-color);
     cursor: auto;
   }
