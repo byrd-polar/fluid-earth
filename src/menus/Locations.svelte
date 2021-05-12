@@ -14,6 +14,7 @@
   export let griddedUnit;
 
   let label = 'Search by country, city, or region:';
+  let placeholder = 'Columbus, Ohio, United States';
 
   async function loadData() {
     return await ky('/data/locations.json', {timeout: false}).json();
@@ -71,16 +72,17 @@
 
 <div>
 
+<h2>Information</h2>
+<p>
+Locations on the map can be marked with a pin. Hover over the pin to see
+information about that location.
+<p>
+To mark a location with a pin, hold down the <b>left mouse button</b> at that
+location, or use the search box below.
+
 <h2>PIN A LOCATION</h2>
 
-<p>
-  Locations on the map can be marked with a pin. Hover over the pin to see information about that location.
-</p>
-<p>
-  To mark a location with a pin, hold down the <b>left mouse button</b> at that location, or...
-</p>
-
-<SearchBox {label} {loadData} {onSelect} />
+<SearchBox {label} {placeholder} {loadData} {onSelect} />
 <LocationsList
   bind:pins
   {griddedData}

@@ -1,5 +1,6 @@
 <script>
   export let label = 'Search:';
+  export let placeholder = '';
   export let loadData = () => [];
   export let onSelect = () => {};
   export let maxShown = 9;
@@ -88,6 +89,7 @@
       on:click={filterOptions}
       on:keydown={handleKeydown}
       class:dropdownShown
+      {placeholder}
     >
   </label>
   {#if dropdownShown}
