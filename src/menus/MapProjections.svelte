@@ -6,7 +6,7 @@
   export let centerLongitude;
   export let centerLatitude;
   export let zoom;
-  export let menusDetailed;
+  export let advancedOptions;
 
   let selectedViews = [
     {
@@ -75,7 +75,7 @@
   tradeoffs and use cases.
 </p>
 
-{#if menusDetailed}
+{#if advancedOptions}
 
 <h2>All Projections</h2>
 

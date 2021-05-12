@@ -8,7 +8,7 @@
   export let fetcher;
   export let griddedDataset;
   export let particlesShown;
-  export let menusDetailed;
+  export let advancedOptions;
 
   // kinda a hack to ensure date update propagates to this components children
   $: {
@@ -32,7 +32,7 @@
   bind:date
 />
 
-{#if menusDetailed}
+{#if advancedOptions}
   <h2>Range Loader (No Streamlines)</h2>
   <RangeLoader
     bind:date

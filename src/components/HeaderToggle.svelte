@@ -1,12 +1,12 @@
 <script>
   import Toggle from "svelte-toggle";
 
-  export let menusDetailed;
+  export let advancedOptions;
 </script>
 
 <div>
   <Toggle
-    bind:toggled={menusDetailed}
+    bind:toggled={advancedOptions}
     label="Advanced options"
     toggledColor="var(--primary-color-light)"
     untoggledColor="#ABABAB"

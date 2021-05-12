@@ -46,8 +46,8 @@
   let drawerOpen = false;
 
   const storage = window.localStorage;
-  let menusDetailed = JSON.parse(storage.getItem('menusDetailed')) || false;
-  $: storage.setItem('menusDetailed', JSON.stringify(menusDetailed));
+  let advancedOptions = JSON.parse(storage.getItem('advancedOptions')) || false;
+  $: storage.setItem('advancedOptions', JSON.stringify(advancedOptions));
 
   const fetcher = new Fetcher();
   let griddedDataset = inventory.filter(d => d.colormap)[0];
@@ -255,16 +255,21 @@
   import Information24 from "carbon-icons-svelte/lib/Information24";
   import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
 
-  const menus = [
+  const defaultMenus = [
     { name: 'Datasets', icon: Grid24 },
     { name: 'Time Machine', icon: Time24 },
     { name: 'Locations', icon: Location24 },
     { name: 'Map Projections', icon: Globe24 },
-    { name: 'Colormaps', icon: ColorPalette24 },
-    { name: 'Perspective', icon: View24 },
     { name: 'About FEVer', icon: Information24 },
     { name: 'Feedback', icon: RequestQuote24 },
   ];
+
+  const extraMenus = [
+    { name: 'Colormaps', icon: ColorPalette24 },
+    { name: 'Perspective', icon: View24 },
+  ];
+
+  $: menus = advancedOptions ? defaultMenus.concat(extraMenus) : defaultMenus;
 </script>
 
 <div class="wrapper">
@@ -306,13 +311,13 @@
     bind:particlesShown
   />
 </Menu>
-<Menu bind:openedMenu menuName="Time Machine" bind:menusDetailed>
+<Menu bind:openedMenu menuName="Time Machine" bind:advancedOptions>
   <TimeMachine
     bind:date
     {fetcher}
     {griddedDataset}
     bind:particlesShown
-    {menusDetailed}
+    {advancedOptions}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Locations" flexbox>
@@ -325,31 +330,13 @@
     {griddedUnit}
   />
 </Menu>
-<Menu bind:openedMenu menuName="Map Projections" bind:menusDetailed>
+<Menu bind:openedMenu menuName="Map Projections" bind:advancedOptions>
   <MapProjections
     bind:projection
     bind:centerLongitude
     bind:centerLatitude
     bind:zoom
-    {menusDetailed}
-  />
-</Menu>
-<Menu bind:openedMenu menuName="Colormaps">
-  <Colormaps
-    bind:griddedColormap
-  />
-</Menu>
-<Menu bind:openedMenu menuName="Perspective">
-  <Perspective
-    {minZoom}
-    {maxZoom}
-    bind:zoom
-    {minLat}
-    {maxLat}
-    {minLong}
-    {maxLong}
-    bind:centerLatitude
-    bind:centerLongitude
+    {advancedOptions}
   />
 </Menu>
 <Menu bind:openedMenu menuName="About FEVer">
@@ -360,6 +347,26 @@
   <Feedback
   />
 </Menu>
+{#if advancedOptions}
+  <Menu bind:openedMenu menuName="Colormaps">
+    <Colormaps
+      bind:griddedColormap
+    />
+  </Menu>
+  <Menu bind:openedMenu menuName="Perspective">
+    <Perspective
+      {minZoom}
+      {maxZoom}
+      bind:zoom
+      {minLat}
+      {maxLat}
+      {minLong}
+      {maxLong}
+      bind:centerLatitude
+      bind:centerLongitude
+    />
+  </Menu>
+{/if}
 <main>
   <Map
     {projection}

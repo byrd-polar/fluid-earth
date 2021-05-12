@@ -10,7 +10,7 @@
 
   export let openedMenu;
   export let menuName;
-  export let menusDetailed = undefined;
+  export let advancedOptions = undefined;
   export let flexbox = false;
 
   // avoid animating menu open/close when there is already a menu open
@@ -57,8 +57,8 @@
       <ArrowLeft24 />
     </IconButton>
     <h1>{menuName}</h1>
-    {#if menusDetailed !== undefined}
-      <HeaderToggle bind:menusDetailed />
+    {#if advancedOptions !== undefined}
+      <HeaderToggle bind:advancedOptions />
     {/if}
   </header>
   <div use:overlayscroll>
