@@ -41,7 +41,7 @@
     onSelect(option);
   }
 
-  $: candidateOption = options.length > 0 ? options[0] : null;
+  $: candidateOption = dropdownShown && options.length > 0 ? options[0] : null;
 
   function handleKeydown(e) {
     switch(e.key) {
