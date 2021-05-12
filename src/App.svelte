@@ -258,8 +258,8 @@
   const defaultMenus = [
     { name: 'Datasets', icon: Grid24 },
     { name: 'Time Machine', icon: Time24 },
-    { name: 'Locations', icon: Location24 },
     { name: 'Map Projections', icon: Globe24 },
+    { name: 'Locations', icon: Location24 },
     { name: 'About FEVer', icon: Information24 },
     { name: 'Feedback', icon: RequestQuote24 },
   ];
@@ -320,6 +320,15 @@
     {advancedOptions}
   />
 </Menu>
+<Menu bind:openedMenu menuName="Map Projections" bind:advancedOptions>
+  <MapProjections
+    bind:projection
+    bind:centerLongitude
+    bind:centerLatitude
+    bind:zoom
+    {advancedOptions}
+  />
+</Menu>
 <Menu bind:openedMenu menuName="Locations" flexbox>
   <Locations
     bind:centerLongitude
@@ -328,15 +337,6 @@
     bind:pins
     {griddedData}
     {griddedUnit}
-  />
-</Menu>
-<Menu bind:openedMenu menuName="Map Projections" bind:advancedOptions>
-  <MapProjections
-    bind:projection
-    bind:centerLongitude
-    bind:centerLatitude
-    bind:zoom
-    {advancedOptions}
   />
 </Menu>
 <Menu bind:openedMenu menuName="About FEVer">
