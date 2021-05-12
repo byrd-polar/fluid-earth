@@ -1,10 +1,13 @@
 <script>
   import ChevronLeft32 from "carbon-icons-svelte/lib/ChevronLeft32";
   import ChevronRight32 from "carbon-icons-svelte/lib/ChevronRight32";
+  import { validDate } from '../utility.js';
 
   export let date;
-  export let minDate;
-  export let maxDate;
+  export let griddedDataset;
+
+  $: minDate = griddedDataset.start;
+  $: maxDate = griddedDataset.end;
 
   let month = new Date(date.getFullYear(), date.getMonth());
   $: prevMonth = getMonth(month, -1);
@@ -49,7 +52,7 @@
 
   function setDate(day) {
     // set date (e.g. 2021-01-01) while preserving time (e.g. 8:00am)
-    date = new Date(
+    date = validDate(griddedDataset, new Date(
       day.getFullYear(),
       day.getMonth(),
       day.getDate(),
@@ -57,7 +60,7 @@
       date.getMinutes(),
       date.getSeconds(),
       date.getMilliseconds()
-    );
+    ));
   }
 </script>
 
