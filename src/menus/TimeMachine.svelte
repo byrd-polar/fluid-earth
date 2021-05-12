@@ -31,3 +31,5 @@
     bind:particlesShown
   />
 {/if}
+
+<svelte:options immutable={true} />
