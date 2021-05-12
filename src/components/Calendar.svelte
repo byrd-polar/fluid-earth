@@ -99,14 +99,12 @@
       class:not-in-month={day.getMonth() !== month.getMonth()}
       on:click={() => { if (!sameDate(day, date)) setDate(day) }}
       disabled={
+        sameDate(day, date) ||
         (day < minDate || day > maxDate) &&
         !sameDate(day, minDate) &&
         !sameDate(day, maxDate)
       }
-      use:tooltip={{
-        content: sameDate(day, date) ? '' : 'Set date',
-        placement: 'top',
-      }}
+      use:tooltip={{content: 'Set date', placement: 'top'}}
     >
       {day.getDate()}
     </button>
@@ -197,15 +195,16 @@
     color: darkgrey;
   }
 
-  button.day.selected {
-    background: var(--primary-color);
-    cursor: auto;
-  }
 
   button.day:disabled {
     filter: brightness(50%);
     background: var(--input-color);
     cursor: auto;
+  }
+
+  button.day.selected {
+    filter: none;
+    background: var(--primary-color);
   }
 
   button.day::before {
