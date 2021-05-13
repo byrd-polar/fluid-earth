@@ -50,20 +50,34 @@
   }
 </script>
 
-<aside class:open={drawerOpen} bind:this={drawer} on:keydown={handleKeydown}>
+<aside
+  class:open={drawerOpen}
+  bind:this={drawer}
+  on:keydown={handleKeydown}
+  use:overlayscroll
+>
+<div class="wrapper">
   <header>
     <h1>Fluid Earth Viewer 2</h1>
     <p>From the FEVer Team at Byrd</p>
     <Button action={closeDrawer} full>
       Return to map
     </Button>
-    <hr>
+    <span class="line"></span>
   </header>
-  <section use:overlayscroll>
+  <section>
     <List
       items={menus}
       action={openMenu}
     />
+  </section>
+  <section class="info">
+    <span class="line"></span>
+    <p>For educational use only.</p>
+    <p>Please consult official weather services for up-to-date information about
+    severe weather events.</p>
+    <p>Legacy site:
+    <a href="https://fever.byrd.osu.edu/">fever.byrd.osu.edu</a></p>
   </section>
   <footer>
     <a href="https://bpcrc.osu.edu/">
@@ -95,8 +109,14 @@
       <LogoGithub32 aria-label="Github" />
     </a>
   </footer>
+</div>
 </aside>
-<div class:open={drawerOpen} on:click={closeDrawer} bind:this={scrim}></div>
+<div
+  class="scrim"
+  class:open={drawerOpen}
+  on:click={closeDrawer}
+  bind:this={scrim}
+></div>
 
 <style>
   aside {
@@ -105,11 +125,10 @@
 
     z-index: 10000; /* place above tooltip (z-index: 9999) when opening */
     position: absolute;
-    display: flex;
-    flex-direction: column;
 
     height: 100%;
     width: 256px;
+    overflow: auto;
 
     margin-left: -256px;
     visibility: hidden;
@@ -131,6 +150,12 @@
       visibility 0s linear 0s;
   }
 
+  div.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   header {
     padding: 1em 1em 0;
   }
@@ -142,18 +167,27 @@
     white-space: nowrap;
   }
 
-  p {
+  header p {
     font-size: 0.9em;
     margin-top: 0.25em;
   }
 
-  hr {
-    color: white;
+  span.line {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: white;
+    margin: 0.5em 0;
   }
 
-  section {
-    flex: 1;
-    overflow: auto;
+  section.info {
+    padding: 0 1em;
+    font-size: 0.9em;
+    margin-top: auto;
+  }
+
+  a {
+    color: white;
   }
 
   footer {
@@ -179,7 +213,7 @@
     margin: 0 auto;
   }
 
-  div {
+  div.scrim {
     z-index: 9999;
     background-color: black;
     -webkit-tap-highlight-color: transparent;
@@ -196,7 +230,7 @@
       visibility 0s linear 0.25s;
   }
 
-  div.open {
+  div.scrim.open {
     cursor: pointer;
     opacity: 0.5;
     visibility: visible;
