@@ -1,8 +1,8 @@
 diff --git a/node_modules/@sveltejs/vite-plugin-svelte/dist/index.js b/node_modules/@sveltejs/vite-plugin-svelte/dist/index.js
-index 1bb3bf2..c7be5d4 100644
+index e57a017..914a0de 100644
 --- a/node_modules/@sveltejs/vite-plugin-svelte/dist/index.js
 +++ b/node_modules/@sveltejs/vite-plugin-svelte/dist/index.js
-@@ -848,11 +848,6 @@ function vitePluginSvelte(inlineOptions) {
+@@ -856,11 +856,6 @@ function vitePluginSvelte(inlineOptions) {
      transformIndexHtml(html, ctx) {
        log.debug("transformIndexHtml", html);
      },
