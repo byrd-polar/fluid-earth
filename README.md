@@ -5,7 +5,7 @@ A potential successor to [FEVer](https://fever.byrd.osu.edu), making use of of
 
 ## Preview
 
-[https://loving-morse-6b791c.netlify.app/](https://loving-morse-6b791c.netlify.app/)
+[https://fev2r.netlify.app/](https://fev2r.netlify.app/)
 
 Note: this site is built from the `preview` branch and may not reflect the
 latest changes on the `master` branch.
