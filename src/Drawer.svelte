@@ -183,7 +183,7 @@
   section.info {
     padding: 0 1em;
     font-size: 0.9em;
-    margin-top: auto;
+    margin: auto;
   }
 
   a {
