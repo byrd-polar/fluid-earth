@@ -21,7 +21,7 @@
           action={() => moveTo(pin)}
           ariaLabel="Move to pin"
         >
-          <PinIcon style="color: var(--primary-color-light)" />
+          <PinIcon style="color: red" />
         </IconButton>
         <div class="text">
           <h3>{pin.label}</h3>
@@ -56,7 +56,7 @@
   div.wrapper {
     border: thin solid rgba(255, 255, 255, 0.3);
     border-radius: 0.5em;
-    background: rgba(255, 255, 255, 0.03);
+    background-color: rgba(29, 29, 29, 0.75);
     display: flex;
     align-items: center;
     padding: 0.5em;
