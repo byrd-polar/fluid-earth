@@ -160,6 +160,7 @@
   div.header button:disabled {
     color: grey;
     filter: none;
+    cursor: auto;
   }
 
   div.days-of-week {
@@ -192,7 +193,6 @@
   button.day.not-in-month {
     color: darkgrey;
   }
-
 
   button.day:disabled {
     filter: brightness(50%);
