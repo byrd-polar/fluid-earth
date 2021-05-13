@@ -133,7 +133,7 @@
 
   div.header {
     grid-column-start: span 7;
-    background: var(--secondary-color);
+    background: var(--primary-color);
     display: flex;
   }
 
@@ -168,7 +168,7 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px;
-    background: var(--secondary-color);
+    background: var(--primary-color);
   }
 
   div.days-of-week > div {
@@ -181,7 +181,7 @@
   }
 
   button.day {
-    background: var(--input-color);
+    background: var(--secondary-color);
     padding: 0;
     display: flex;
     justify-content: center;
@@ -196,7 +196,7 @@
 
   button.day:disabled {
     filter: brightness(50%);
-    background: var(--input-color);
+    background: var(--secondary-color);
     cursor: auto;
   }
 
