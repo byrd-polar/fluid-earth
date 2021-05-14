@@ -30,8 +30,9 @@ const geosVars = [
             name: 'Sulfur Dioxide Surface Mass',
             description: 'Sulfur Dioxide Surface Mass',
             path: util.browserPath(outputPath),
-            unit: 'tempC',
-            originalUnit: 'tempK',
+            unit: 'ug/m^3',
+            originalUnit: 'ug/m^3',
+            factor: 10e9,
             domain: [0, 100],
             colormap: 'SO2_MASS',
             ...geosProps
@@ -44,8 +45,8 @@ const geosVars = [
             name: 'Carbon Monoxide Surface Concentration',
             description: 'Carbon Monoxide Surface Concentration',
             path: util.browserPath(outputPath),
-            unit: 'tempC',
-            originalUnit: 'tempK',
+            unit: 'ppm',
+            originalUnit: 'ppm', // TODO: allow for PPB
             domain: [1, 1000],
             colormap: 'CO_SURFACE',
             ...geosProps
@@ -58,8 +59,9 @@ const geosVars = [
             name: 'Dust Surface Mass Concentration',
             description: 'Dust Surface Mass Concentration',
             path: util.browserPath(outputPath),
-            unit: 'tempC',
-            originalUnit: 'tempK',
+            unit: 'ug/m^3',
+            originalUnit: 'ug/m^3',
+            factor: 10e9,
             domain: [0, 900],
             colormap: 'DUST_MASS',
             ...geosProps
