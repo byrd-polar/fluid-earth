@@ -2,12 +2,14 @@
   import * as d3 from 'd3-selection';
   import { axisBottom } from 'd3-axis';
   import { scaleLinear } from 'd3-scale';
+  import Qty from 'js-quantities/esm';
   import { convert, prettyUnit } from '../utility.js';
 
   export let griddedDataset;
   export let griddedColormap;
   export let griddedDomain;
   export let griddedUnit;
+  export let preferredUnits;
 
   let svgScale;
   let svgScaleWidth;
@@ -50,9 +52,18 @@
       return `rgb(${colorArray.map(c => Math.round(255 * c)).join()})`;
     }).join();
   }
+
+  $: unitList = preferredUnits[Qty(griddedDataset.unit).kind()];
+
+  function toggleUnit() {
+    if (!unitList) return;
+
+    unitList.push(unitList.shift()); // rotate list
+    griddedUnit = unitList[0];
+  }
 </script>
 
-<section>
+<section on:click={toggleUnit}>
   <h3>
     {griddedDataset.name} ({@html unit})
   </h3>

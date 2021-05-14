@@ -12,6 +12,7 @@
   export let griddedColormap;
   export let griddedDomain;
   export let griddedUnit;
+  export let preferredUnits;
 
   const dateOptions = {
     weekday: 'long',
@@ -37,7 +38,8 @@
       {griddedDataset}
       {griddedColormap}
       {griddedDomain}
-      {griddedUnit}
+      bind:griddedUnit
+      bind:preferredUnits
     />
     {#if particlesShown}
       <StreamlinesLegend

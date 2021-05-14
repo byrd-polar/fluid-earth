@@ -31,6 +31,7 @@
 
   import { onMount } from 'svelte';
   import { Float16Array } from '@petamoriken/float16';
+  import Qty from 'js-quantities/esm';
 
   export let inventory;
 
@@ -78,6 +79,12 @@
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
   let griddedUnit = griddedDataset.unit;
+  let preferredUnits = {
+    speed: ['km/h', 'm/s', 'kn', 'mph'],
+    temperature: ['tempC', 'tempF', 'tempK'],
+    pressure: ['hPa', 'mmHg', 'inHg'],
+    length: ['m', 'ft'],
+  };
 
   const emptyParticleData = {
     uVelocities: new Float16Array([0]),
@@ -146,6 +153,12 @@
       let valid = validDate(griddedDataset, date);
       if (valid.getTime() !== date.getTime()) {
         date = valid;
+      }
+
+      // Set consistent units across datasets
+      let unitList = preferredUnits[Qty(griddedDataset.unit).kind()];
+      if (unitList) {
+        griddedDataset.unit = unitList[0];
       }
 
       let array = await fetcher.fetch(griddedDataset, date, 'gridded');
@@ -409,7 +422,8 @@
       {particleDataset}
       {griddedColormap}
       {griddedDomain}
-      {griddedUnit}
+      bind:griddedUnit
+      bind:preferredUnits
       {particlesShown}
       {particleDisplay}
     />

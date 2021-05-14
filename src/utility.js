@@ -30,6 +30,7 @@ export function prettyUnit(unit) {
   switch (unit) {
     case 'tempK': return 'K';
     case 'tempC': return '°C';
+    case 'tempF': return '°F';
     default: return unit.replace(/\^([0-9]+)/g, '<sup>$1</sup>');
   }
 }
