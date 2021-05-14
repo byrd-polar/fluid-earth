@@ -29,6 +29,7 @@
     "@sveltejs/vite-plugin-svelte": "*",
     "csv-parse": "^4.15.4",
     "dedent": "^0.7.0",
+    "dom-parser": "^0.1.6",
     "extract-zip": "^2.0.1",
     "fx": "^20.0.2",
     "got": "^11.8.2",
