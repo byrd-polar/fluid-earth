@@ -1,4 +1,6 @@
 <script>
+  import { capitalizeFirstLetter } from '../utility.js';
+
   export let particleDataset;
   export let particleDisplay;
 
@@ -10,7 +12,7 @@
 </script>
 
 <section>
-  <h3>{particleDataset.name}</h3>
+  <h3>{capitalizeFirstLetter(particleDataset.name)}</h3>
   <div></div>
   <span>{info.rate.toLocaleString()} times faster than actual</span>
 </section>
@@ -29,10 +31,6 @@
   h3 {
     margin: 0;
     font-size: 1em;
-  }
-
-  h3::first-letter {
-    text-transform: uppercase;
   }
 
   @keyframes slide {

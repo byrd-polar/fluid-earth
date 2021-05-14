@@ -3,7 +3,7 @@
   import { axisBottom } from 'd3-axis';
   import { scaleLinear } from 'd3-scale';
   import Qty from 'js-quantities/esm';
-  import { convert, prettyUnit } from '../utility.js';
+  import { convert, prettyUnit, capitalizeFirstLetter } from '../utility.js';
 
   export let griddedDataset;
   export let griddedColormap;
@@ -65,7 +65,7 @@
 
 <section on:click={toggleUnit}>
   <h3>
-    {griddedDataset.name} ({@html unit})
+    {capitalizeFirstLetter(`${griddedDataset.name} (${unit})`)}
   </h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"
@@ -88,10 +88,6 @@
   h3 {
     margin: 0;
     font-size: 1em;
-  }
-
-  h3::first-letter {
-    text-transform: uppercase;
   }
 
   div {

@@ -50,7 +50,7 @@
           No data
         {:else}
           {convert(value, griddedData, griddedUnit).toFixed(1)}
-          {@html prettyUnit(griddedUnit)}
+          {prettyUnit(griddedUnit)}
         {/if}
       </strong><br>
       <small class="plain">

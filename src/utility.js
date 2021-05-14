@@ -31,7 +31,8 @@ export function prettyUnit(unit) {
     case 'tempK': return 'K';
     case 'tempC': return '°C';
     case 'tempF': return '°F';
-    default: return unit.replace(/\^([0-9]+)/g, '<sup>$1</sup>');
+    // using Unicode instead of <sup> mainly because of text-shadow issues
+    default: return unit.replace('^2', '²').replace('^3', '³');
   }
 }
 
@@ -48,4 +49,10 @@ export function prettyLatLon(latitude, longitude) {
   let lonDirection = longitude >= 0 ? 'E' : 'W';
   return `${Math.abs(latitude).toFixed(2)}° ${latDirection}, \
           ${Math.abs(longitude).toFixed(2)}° ${lonDirection}`;
+}
+
+// Capitalize first letter, used instead of ::first-letter CSS because of text
+// nodes behaving weirdly with text-shadows
+export function capitalizeFirstLetter(str) {
+  return str[0].toUpperCase() + str.substring(1);
 }

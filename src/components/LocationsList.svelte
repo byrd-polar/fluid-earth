@@ -27,7 +27,7 @@
           <h3>{pin.label}</h3>
           <p>
             {convert(values[i], griddedData, griddedUnit).toFixed(1)}
-            {@html prettyUnit(griddedUnit)}
+            {prettyUnit(griddedUnit)}
           </p>
           <p>{prettyLatLon(pin.latitude, pin.longitude)}</p>
         </div>
