@@ -14,7 +14,7 @@ const execFile = promisify(_execFile);
 const outputPath = path.join(util.OUTPUT_DIR, 'GEOS/');
 
 const geosProps = {
-    bytesPerFile: 2076480, // TODO
+    bytesPerFile: 1661184,
     width: 1152,
     height: 721,
     intervalInHours: 1,
@@ -33,7 +33,7 @@ const geosVars = [
             unit: 'tempC',
             originalUnit: 'tempK',
             domain: [0, 100],
-            colormap: 'MAGMA',
+            colormap: 'SO2_MASS',
             ...geosProps
         }
     },
@@ -47,7 +47,7 @@ const geosVars = [
             unit: 'tempC',
             originalUnit: 'tempK',
             domain: [1, 1000],
-            colormap: 'MAGMA',
+            colormap: 'CO_SURFACE',
             ...geosProps
         }
     },
@@ -61,40 +61,61 @@ const geosVars = [
             unit: 'tempC',
             originalUnit: 'tempK',
             domain: [0, 900],
-            colormap: 'MAGMA',
+            colormap: 'DUST_MASS',
             ...geosProps
         }
     }
 ]
 const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
 
-async function downloadGEOSData(year, month, day) {
+function contains(dom, selector, text) {
+    var elements = dom.getElementsByTagName(selector);
+    return [].filter.call(elements, function (element) {
+        return RegExp(text).test(element.textContent);
+    });
+}
+async function findDataFromIndex(dataset, year, month, day, forecast, indexPageURL) {
     var parser = new DomParser();
-
-    const forecast = "inst1_2d_hwl_Nx";
-    const indexPageURL = 'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
-        `Y${year}/M${month}/D${day}/`;
-
     const indexPageFilename = await util.download(indexPageURL, true);
 
-    function contains(dom, selector, text) {
-        var elements = dom.getElementsByTagName(selector);
-        return [].filter.call(elements, function (element) {
-            return RegExp(text).test(element.textContent);
-        });
-    }
-
-    var inputFilePath;
     var html = await fs.readFile(indexPageFilename, 'utf8');
 
     var dom = parser.parseFromString(html);
     var matchingAnchor = contains(dom, "a", `${forecast}.${year}${month}${day}_0000z.nc4`);
 
-    inputFilePath = matchingAnchor[0].attributes[0]['value'];
+    var urlName = matchingAnchor[0].attributes[0]['value'];
+
+    dataset.filenamePrefix = urlName.substring(0, urlName.indexOf("." + forecast));
+
+    return urlName;
+}
+async function downloadGEOSData(dataset, year, month, day) {
+
+    var inputFileURL;
+    const forecast = "inst1_2d_hwl_Nx";
+    const indexPageURL = 'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
+        `Y${year}/M${month}/D${day}/`;
+
+    if (dataset.filenamePrefix) {
+        console.log("GEOS: Attempting to find data using previous prefix...");
+        const prefix = dataset.filenamePrefix;
+        const attemptPrefixURL = `${prefix}.${forecast}.${year}${month}${day}_0000z.nc4`
+
+        let attemptPrefixFilename;
+        try {
+            attemptPrefixFilename = await util.download(indexPageURL + attemptPrefixURL, true);
+
+            inputFileURL = attemptPrefixURL;
+        } catch (error) {
+            inputFileURL = await findDataFromIndex(dataset, year, month, day, forecast, indexPageURL);
+        }
+    } else {
+        inputFileURL = await findDataFromIndex(dataset, year, month, day, forecast, indexPageURL);
+    }
 
     const inputFile = await util.download(
         'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
-        `Y${year}/M${month}/D${day}/` + inputFilePath,
+        `Y${year}/M${month}/D${day}/` + inputFileURL,
         true
     );
 
@@ -113,7 +134,7 @@ for (const geosVar of geosVars) {
         datetime = DateTime.fromISO(dataset.end, { zone: 'utc' }).plus({ day: 1 });
     } else {
         const now = DateTime.utc();
-        datetime = DateTime.utc(now.year, now.month, now.day).minus({ days: 1 });
+        datetime = DateTime.utc(now.year, now.month, now.day).minus({ days: 31 });
         inventory.push(dataset = geosVar.datasetBase);
     }
 
@@ -121,8 +142,9 @@ for (const geosVar of geosVars) {
     const month = datetime.toFormat('LL');
     const day = datetime.toFormat('dd');
 
-    const inputFile = await downloadGEOSData(year, month, day);
-    const filename = datetime.plus({ hours: f }).toISO() + '.fp16';
+    const inputFile = await downloadGEOSData(dataset, year, month, day);
+    const filename = datetime.toISO() + '.fp16';
+    // const filename = datetime.plus({ hours: f }).toISO() + '.fp16';
     const outputFile = util.join(outputPath, filename);
 
     util.log('Converting NETCDF to fp16', inputFile, outputFile);
@@ -139,5 +161,3 @@ for (const geosVar of geosVars) {
 }
 
 await writeAndUnlockInventory(inventory);
-
-debugger;
