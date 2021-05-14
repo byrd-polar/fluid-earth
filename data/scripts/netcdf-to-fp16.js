@@ -10,10 +10,10 @@ import { createWriteStream } from 'fs';
 import { platform } from 'os';
 import split2 from 'split2';
 
-if (process.argv.length != 2 + 3) {
-  console.log('wrong number of arguments, expected 3\n');
+if (process.argv.length != 2 + 3 && process.argv.length != 2 + 4) {
+  console.log('wrong number of arguments, expected 3-4\n');
   console.log(
-    'Usage: node netcdf-to-fp16.js <inputFile> <outputFile> <variable>'
+    'Usage: node netcdf-to-fp16.js <inputFile> <outputFile> <variable> [<factor>]'
   );
   process.exit(1);
 }
@@ -21,6 +21,7 @@ if (process.argv.length != 2 + 3) {
 const inputFile = process.argv[2];
 const outputFile = process.argv[3];
 const variable = process.argv[4];
+const factor = process.argv[5];
 
 const netcdf = spawn('ncdump', ['-v', variable, inputFile]);
 
@@ -38,7 +39,11 @@ const float16 = new Transform({
 
     const chunkAsFloats =
       chunkAsString.split(/[,;]/).slice(0, -1).map(x => parseFloat(x));
-    const original = new Float32Array(chunkAsFloats);
+    let original = new Float32Array(chunkAsFloats);
+
+    // allows for multiplication of values too small for 16-bit floats
+    if (factor) original = original.map(v => v * factor);
+
     const converted = new Float16Array(original);
     callback(null, Buffer.from(converted.buffer));
   }
