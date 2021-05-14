@@ -1,12 +1,10 @@
 import tippy, { animateFill } from 'tippy.js';
 import 'tippy.js/dist/tippy.css'; // for styling
-import 'tippy.js/themes/material.css'; // Material Design theme
 
 import { get } from 'svelte/store';
 import { mobile } from './stores.js';
 
 tippy.setDefaultProps({
-  theme: 'material',
   placement: 'top',
   aria: {
     content: 'labelledby',
