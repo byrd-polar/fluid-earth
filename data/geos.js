@@ -26,13 +26,13 @@ const geosVars = [
     {
         dataDir: 'geos-sulfur-dioxide-surface-mass/',
         varName: 'SO2SMASS',
+        factor: 10e9,
         datasetBase: {
             name: 'Sulfur Dioxide Surface Mass',
             description: 'Sulfur Dioxide Surface Mass',
             path: util.browserPath(outputPath),
             unit: 'ug/m^3',
             originalUnit: 'ug/m^3',
-            factor: 10e9,
             domain: [0, 100],
             colormap: 'SO2_MASS',
             ...geosProps
@@ -55,13 +55,13 @@ const geosVars = [
     {
         dataDir: 'geos-dust-surface-mass-concentration/',
         varName: 'DUSMASS',
+        factor: 10e9,
         datasetBase: {
             name: 'Dust Surface Mass Concentration',
             description: 'Dust Surface Mass Concentration',
             path: util.browserPath(outputPath),
             unit: 'ug/m^3',
             originalUnit: 'ug/m^3',
-            factor: 10e9,
             domain: [0, 900],
             colormap: 'DUST_MASS',
             ...geosProps
@@ -150,7 +150,7 @@ for (const geosVar of geosVars) {
     const outputFile = util.join(outputPath, filename);
 
     util.log('Converting NETCDF to fp16', inputFile, outputFile);
-    await execFile('node', [script, inputFile, outputFile, geosVarName]);
+    await execFile('node', [script, inputFile, outputFile, geosVarName, geosVar.factor]);
 
 
 
