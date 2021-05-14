@@ -128,6 +128,7 @@ async function downloadGEOSData(dataset, year, month, day, hour) {
 }
 
 for (const geosVar of geosVars) {
+    const factor = geosVar.factor ?? 1;
     const outputPath = path.join(util.OUTPUT_DIR, geosVar.dataDir);
     const geosVarName = geosVar.varName;
     await mkdir(outputPath, { mode: '775', recursive: true });
@@ -154,7 +155,7 @@ for (const geosVar of geosVars) {
         const outputFile = util.join(outputPath, filename);
 
         util.log('Converting NETCDF to fp16', inputFile, outputFile);
-        await execFile('node', [script, inputFile, outputFile, geosVarName, geosVar.factor]);
+        await execFile('node', [script, inputFile, outputFile, geosVarName, factor]);
     }
 
     for (const prop in geosVar.datasetBase) dataset[prop] = geosVar.datasetBase[prop];
