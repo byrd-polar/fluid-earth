@@ -4,6 +4,7 @@
   import { scaleLinear } from 'd3-scale';
   import Qty from 'js-quantities/esm';
   import { convert, prettyUnit, capitalizeFirstLetter } from '../utility.js';
+  import tooltip from '../tooltip.js';
 
   export let griddedDataset;
   export let griddedColormap;
@@ -61,9 +62,25 @@
     unitList.push(unitList.shift()); // rotate list
     griddedUnit = unitList[0];
   }
+
+  // simulate html button functionality
+  function handleKeydown(e) {
+    if (!(e.code === 'Space' || e.code === 'Enter')) return;
+
+    toggleUnit();
+  }
 </script>
 
-<section on:click={toggleUnit}>
+<section
+  on:click={toggleUnit}
+  on:keydown={handleKeydown}
+  tabindex="0"
+  class:canchange={unitList}
+  use:tooltip={{
+    content: unitList ? 'Change units' : 'No alternate units available',
+    placement: 'top',
+  }}
+>
   <h3>
     {capitalizeFirstLetter(`${griddedDataset.name} (${unit})`)}
   </h3>
@@ -77,12 +94,23 @@
 <style>
   section {
     flex: 1;
-    padding: 0 0.75rem 0.25rem;
+    padding: 0.25rem 0.75rem;
     max-width: 32em;
     flex-basis: 24em;
     pointer-events: auto;
+    border-radius: 4px;
+    -webkit-tap-highlight-color: transparent;
 
     margin-right: auto;
+  }
+
+  section.canchange {
+    cursor: pointer;
+  }
+
+  section:focus, section:hover {
+    background-color: var(--input-color);
+    outline: none;
   }
 
   h3 {

@@ -23,6 +23,8 @@ export default function tooltip(node, options) {
   function addTip() {
     tip = tippy(node, options);
     tips.add(tip);
+
+    if (get(mobile)) tip.disable();
   }
 
   function removeTip() {
@@ -31,8 +33,6 @@ export default function tooltip(node, options) {
   }
 
   addTip();
-
-  if (get(mobile)) tip.disable();
 
   return {
     update(newOptions) {

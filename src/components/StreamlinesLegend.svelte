@@ -20,7 +20,7 @@
 <style>
   section {
     flex: 1;
-    padding: 0 0.75rem 0.25rem;
+    padding: 0.25rem 0.75rem;
     max-width: 32em;
     flex-basis: 24em;
     pointer-events: auto;
