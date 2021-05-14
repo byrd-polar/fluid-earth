@@ -18,6 +18,7 @@
     "data:topology": "node data/topology.js",
     "data:gfs": "node data/gfs.js",
     "data:oscar": "node data/oscar.js",
+    "data:geos": "node data/geos.js",
     "data:rtgssthr": "node data/rtgssthr.js",
     "dev": "vite",
     "postinstall": "patch-package",
