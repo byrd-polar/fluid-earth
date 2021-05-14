@@ -6,12 +6,14 @@ import { promisify } from 'util';
 import * as util from './utility.js';
 import fs from 'fs/promises';
 import DomParser from 'dom-parser';
+import { debug } from 'console';
 
+const script = path.join('data', 'scripts', 'netcdf-to-fp16.js');
 const execFile = promisify(_execFile);
 
 const outputPath = path.join(util.OUTPUT_DIR, 'GEOS/');
 
-const geos_props = {
+const geosProps = {
     bytesPerFile: 2076480, // TODO
     width: 1152,
     height: 721,
@@ -20,88 +22,122 @@ const geos_props = {
     projection: 'GEOS',
 };
 
-const datasetBase = {
-    name: 'Sulfur Dioxide Surface Mass',
-    description: 'Sulfur Dioxide Surface Mass',
-    path: util.browserPath(outputPath),
-    unit: 'tempC',
-    originalUnit: 'tempK',
-    domain: [273.15 - 80, 273.15 + 55],
-    colormap: 'MAGMA',
-    bytesPerFile: 18662400,
-    width: 4320,
-    height: 2160,
-    intervalInHours: 24,
-    projection: 'GEOS',
-};
-
+const geosVars = [
+    {
+        dataDir: 'geos-sulfur-dioxide-surface-mass/',
+        varName: 'SO2SMASS',
+        datasetBase: {
+            name: 'Sulfur Dioxide Surface Mass',
+            description: 'Sulfur Dioxide Surface Mass',
+            path: util.browserPath(outputPath),
+            unit: 'tempC',
+            originalUnit: 'tempK',
+            domain: [0, 100],
+            colormap: 'MAGMA',
+            ...geosProps
+        }
+    },
+    {
+        dataDir: 'geos-carbon-monoxide-surface-concentration/',
+        varName: 'COSC',
+        datasetBase: {
+            name: 'Carbon Monoxide Surface Concentration',
+            description: 'Carbon Monoxide Surface Concentration',
+            path: util.browserPath(outputPath),
+            unit: 'tempC',
+            originalUnit: 'tempK',
+            domain: [1, 1000],
+            colormap: 'MAGMA',
+            ...geosProps
+        }
+    },
+    {
+        dataDir: 'geos-dust-surface-mass-concentration/',
+        varName: 'DUSMASS',
+        datasetBase: {
+            name: 'Dust Surface Mass Concentration',
+            description: 'Dust Surface Mass Concentration',
+            path: util.browserPath(outputPath),
+            unit: 'tempC',
+            originalUnit: 'tempK',
+            domain: [0, 900],
+            colormap: 'MAGMA',
+            ...geosProps
+        }
+    }
+]
 const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
 
-let dataset = inventory.find(d => d.path === datasetBase.path);
-let datetime;
+async function downloadGEOSData(year, month, day) {
+    var parser = new DomParser();
 
-// if (dataset) {
-//     datetime = DateTime.fromISO(dataset.end, { zone: 'utc' }).plus({ day: 1 });
-// } else {
-const now = DateTime.utc();
-datetime = DateTime.utc(now.year, now.month, now.day).minus({ months: 1 });
-inventory.push(dataset = datasetBase);
-// }
-const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
-const [datetime, system] = await getDatetimeAndSystem(inventory);
-const year = datetime.year;
-const month = datetime.toFormat('LL');
-const day = datetime.toFormat('dd');
+    const forecast = "inst1_2d_hwl_Nx";
+    const indexPageURL = 'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
+        `Y${year}/M${month}/D${day}/`;
 
-if (dataset) {
-    console.log(dataset);
-    console.log(dataset.end);
-} else {
+    const indexPageFilename = await util.download(indexPageURL, true);
 
-}
-debugger;
-var parser = new DomParser();
+    function contains(dom, selector, text) {
+        var elements = dom.getElementsByTagName(selector);
+        return [].filter.call(elements, function (element) {
+            return RegExp(text).test(element.textContent);
+        });
+    }
 
-const forecast = "inst1_2d_hwl_Nx";
-const searchDir = 'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
-    `Y${year}/M${month}/D${day}/`;
+    var inputFilePath;
+    var html = await fs.readFile(indexPageFilename, 'utf8');
 
-const dataIndex = await util.download(searchDir, true);
+    var dom = parser.parseFromString(html);
+    var matchingAnchor = contains(dom, "a", `${forecast}.${year}${month}${day}_0000z.nc4`);
 
-function contains(dom, selector, text) {
-    var elements = dom.getElementsByTagName(selector);
-    return [].filter.call(elements, function (element) {
-        return RegExp(text).test(element.textContent);
-    });
+    inputFilePath = matchingAnchor[0].attributes[0]['value'];
+
+    const inputFile = await util.download(
+        'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
+        `Y${year}/M${month}/D${day}/` + inputFilePath,
+        true
+    );
+
+    return inputFile;
 }
 
-var inputFilePath;
-var html = await fs.readFile(dataIndex, 'utf8');
+for (const geosVar of geosVars) {
+    const outputPath = path.join(util.OUTPUT_DIR, geosVar.dataDir);
+    const geosVarName = geosVar.varName;
+    await mkdir(outputPath, { mode: '775', recursive: true });
 
-var dom = parser.parseFromString(html);
-var matchingAnchor = contains(dom, "a", `${forecast}.${year}${month}${day}_0000z.nc4`);
+    let dataset = inventory.find(d => d.path === util.browserPath(outputPath));
+    let datetime;
 
-inputFilePath = matchingAnchor[0].attributes[0]['value']; // 
+    if (dataset) {
+        datetime = DateTime.fromISO(dataset.end, { zone: 'utc' }).plus({ day: 1 });
+    } else {
+        const now = DateTime.utc();
+        datetime = DateTime.utc(now.year, now.month, now.day).minus({ days: 1 });
+        inventory.push(dataset = geosVar.datasetBase);
+    }
+
+    const year = datetime.year;
+    const month = datetime.toFormat('LL');
+    const day = datetime.toFormat('dd');
+
+    const inputFile = await downloadGEOSData(year, month, day);
+    const filename = datetime.plus({ hours: f }).toISO() + '.fp16';
+    const outputFile = util.join(outputPath, filename);
+
+    util.log('Converting NETCDF to fp16', inputFile, outputFile);
+    await execFile('node', [script, inputFile, outputFile, geosVarName]);
 
 
-const inputFile = await util.download(
-    'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
-    `Y${year}/M${month}/D${day}/` + inputFilePath,
-    true
-);
-await mkdir(outputPath, { mode: '775', recursive: true });
 
+    for (const prop in geosVar.datasetBase) dataset[prop] = geosVar.datasetBase[prop];
 
-const outputFile = util.join(outputPath, datetime.toISO() + '.fp16');
+    dataset.path = util.browserPath(outputPath);
+    dataset.start = dataset.start ?? datetime;
+    dataset.end = datetime;
 
-
-// util.log('Converting NETCDF to fp16', inputFile, outputFile);
-// const script = path.join('data', 'scripts', 'netcdf-to-fp16.js');
-// await execFile('node', [script, inputFile, outputFile]);
-
-for (const prop in datasetBase) dataset[prop] = datasetBase[prop];
-
-dataset.start = dataset.start ?? datetime;
-dataset.end = datetime;
+}
 
 await writeAndUnlockInventory(inventory);
+
+debugger;
