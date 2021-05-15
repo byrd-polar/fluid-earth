@@ -5,17 +5,28 @@
   import { validDate } from '../utility.js';
 
   export let date;
+  export let utc;
   export let griddedDataset;
 
   $: minDate = griddedDataset.start;
   $: maxDate = griddedDataset.end;
 
-  let month = new Date(date.getFullYear(), date.getMonth());
-  $: prevMonth = getMonth(month, -1);
-  $: nextMonth = getMonth(month, +1);
+  let month = utc ?
+    new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth())) :
+    new Date(date.getFullYear(), date.getMonth());
+  $: prevMonth = utc ? getUTCMonth(month, -1) : getMonth(month, -1);
+  $: nextMonth = utc ? getUTCMonth(month, +1) : getMonth(month, +1);
 
-  $: months = deriveMonths(minDate, maxDate);
-  $: days = deriveDays(month);
+  $: months = utc ?
+    deriveUTCMonths(minDate, maxDate) :
+    deriveMonths(minDate, maxDate);
+  $: days = utc ? deriveUTCDays(month) : deriveDays(month);
+
+  $: monthOptions = {
+    timeZone: utc ? 'UTC' : undefined,
+    month: 'long',
+    year: 'numeric',
+  };
 
   function getMonth(month, offset) {
     let newMonth = clone(month);
@@ -63,6 +74,50 @@
       date.getMilliseconds()
     ));
   }
+
+  // UTC copies of functions above
+
+  function getUTCMonth(month, offset) {
+    let newMonth = clone(month);
+    newMonth.setUTCMonth(month.getUTCMonth() + offset);
+    return newMonth;
+  }
+
+  function deriveUTCMonths(minDate, maxDate) {
+    const months = [];
+    let m = new Date(Date.UTC(minDate.getUTCFullYear(), minDate.getUTCMonth()));
+    while (m <= new Date(Date.UTC(maxDate.getUTCFullYear(), maxDate.getUTCMonth()))) {
+      months.push(m);
+      m = clone(m);
+      m.setUTCMonth(m.getUTCMonth() + 1);
+    }
+    return months;
+  }
+
+  function deriveUTCDays(month) {
+    const days = Array.from({ length: 42 }, () => clone(month));
+    const offset = -month.getUTCDay() + 1;
+    for (let i = 0; i < days.length; i++) days[i].setUTCDate(i + offset);
+    return days;
+  }
+
+  function sameUTCDate(dateA, dateB) {
+    return dateA.getUTCFullYear() === dateB.getUTCFullYear() &&
+           dateA.getUTCMonth()    === dateB.getUTCMonth()    &&
+           dateA.getUTCDate()     === dateB.getUTCDate();
+  }
+
+  function setUTCDate(day) {
+    date = validDate(griddedDataset, new Date(Date.UTC(
+      day.getUTCFullYear(),
+      day.getUTCMonth(),
+      day.getUTCDate(),
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      date.getUTCSeconds(),
+      date.getUTCMilliseconds()
+    )));
+  }
 </script>
 
 <div class="calendar">
@@ -75,7 +130,7 @@
       <ChevronLeft32 />
     </button>
     <div>
-      {month.toLocaleString(undefined, { month: 'long', year: 'numeric' })}
+      {month.toLocaleString(undefined, monthOptions)}
     </div>
     <button
       on:click={() => month = nextMonth}

@@ -7,14 +7,30 @@
 
   export let dataset;
   export let date;
+  export let utc;
 
-  const timeOptions = {
+  $: timeOptions = {
+    timeZone: utc ? 'UTC' : undefined,
+    hour12: utc ? false : undefined,
     hour: 'numeric',
     minute: 'numeric',
     timeZoneName: 'short',
   };
 
   function stepDate(hours) {
+    if (utc) {
+      date = new Date(Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        date.getUTCHours() + hours,
+        date.getUTCMinutes(),
+        date.getUTCSeconds(),
+        date.getUTCMilliseconds()
+      ));
+      return;
+    }
+
     date = new Date(
       date.getFullYear(),
       date.getMonth(),

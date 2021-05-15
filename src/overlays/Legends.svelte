@@ -1,8 +1,10 @@
 <script>
   import GriddedLegend from '../components/GriddedLegend.svelte';
   import StreamlinesLegend from '../components/StreamlinesLegend.svelte';
+  import tooltip from '../tooltip.js';
 
   export let date;
+  export let utc;
 
   export let particlesShown;
   export let particleDataset;
@@ -12,26 +14,43 @@
   export let griddedColormap;
   export let griddedDomain;
   export let griddedUnit;
+
   export let preferredUnits;
 
-  const dateOptions = {
+  $: dateOptions = {
+    timeZone: utc ? 'UTC' : undefined,
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   };
 
-  const timeOptions = {
+  $: timeOptions = {
+    timeZone: utc ? 'UTC' : undefined,
+    hour12: utc ? false : undefined,
     hour: 'numeric',
     minute: 'numeric',
     timeZoneName: 'short',
   };
+
+  function handleKeydown(e) {
+    if (!(e.code === 'Space' || e.code === 'Enter')) return;
+
+    utc = !utc
+  }
 </script>
 
 <div class="wrapper">
-  <div class="top">
-    <h3 class="date">{date.toLocaleDateString(undefined, dateOptions)}</h3>
-    <h3 class="time">{date.toLocaleTimeString(undefined, timeOptions)}</h3>
+  <div class="top" >
+    <section
+      on:click={() => utc = !utc}
+      on:keydown={handleKeydown}
+      use:tooltip={{ content: 'Change timezone', placement: 'bottom'}}
+      tabindex="0"
+    >
+      <h3 class="date">{date.toLocaleDateString(undefined, dateOptions)}</h3>
+      <h3 class="time">{date.toLocaleTimeString(undefined, timeOptions)}</h3>
+    </section>
   </div>
   <div class="bottom">
     <GriddedLegend
@@ -75,6 +94,17 @@
   div.top {
     flex-direction: column;
     align-items: flex-end;
+  }
+
+  section {
+    cursor: pointer;
+    border-radius: 4px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  section:focus, section:hover {
+    background-color: var(--input-color);
+    outline: none;
   }
 
   h3 {

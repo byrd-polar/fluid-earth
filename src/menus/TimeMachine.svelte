@@ -4,6 +4,7 @@
   import RangeLoader from '../components/RangeLoader.svelte';
 
   export let date;
+  export let utc;
   export let fetcher;
   export let griddedDataset;
   export let particlesShown;
@@ -14,12 +15,14 @@
 <Calendar
   {griddedDataset}
   bind:date
+  {utc}
 />
 
 <h2>Time Stepper</h2>
 <TimeStepper
   dataset={griddedDataset}
   bind:date
+  {utc}
 />
 
 {#if advancedOptions}
@@ -29,6 +32,7 @@
     {fetcher}
     {griddedDataset}
     bind:particlesShown
+    {utc}
   />
 {/if}
 

@@ -118,6 +118,7 @@
     fade: 0.96,
   };
 
+  let utc = false;
   let pins = [];
 
   onMount(async () => {
@@ -327,6 +328,7 @@
 <Menu bind:openedMenu menuName="Time Machine" bind:advancedOptions>
   <TimeMachine
     bind:date
+    {utc}
     {fetcher}
     {griddedDataset}
     bind:particlesShown
@@ -418,6 +420,7 @@
     <Loading {fetcher} />
     <Legends
       {date}
+      bind:utc
       {griddedDataset}
       {particleDataset}
       {griddedColormap}

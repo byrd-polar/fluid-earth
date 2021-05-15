@@ -5,13 +5,16 @@
   import { tick } from 'svelte'
 
   export let date;
+  export let utc;
   export let fetcher;
   export let griddedDataset;
   export let particlesShown;
 
   const msInHour = 60 * 60 * 1000;
 
-  const dateOptions = {
+  $: dateOptions = {
+    timeZone: utc ? 'UTC' : undefined,
+    hour12: utc ? false : undefined,
     year: 'numeric',
     month: 'long',
     day: 'numeric',
