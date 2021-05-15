@@ -81,7 +81,7 @@
   }
 
   div.paused {
-    animation: none;
+    animation-play-state: paused;
   }
 
   span {
