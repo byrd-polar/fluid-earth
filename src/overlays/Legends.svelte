@@ -16,6 +16,7 @@
   export let griddedUnit;
 
   export let preferredUnits;
+  export let particlesPaused;
 
   $: dateOptions = {
     timeZone: utc ? 'UTC' : undefined,
@@ -64,6 +65,7 @@
       <StreamlinesLegend
         {particleDataset}
         {particleDisplay}
+        bind:particlesPaused
       />
     {/if}
   </div>

@@ -42,6 +42,7 @@
     projection: dataProjections.GFS,
   };
   export let particlesShown = true;
+  export let particlesPaused = false;
   export let particleLifetime = 1000; // milliseconds
   export let particleCount = 1e5;
   export let particleDisplay = {
@@ -240,10 +241,16 @@
 
     if (trailsNeedsReset) {
       particleSimulator.resetTrails();
+      particleSimulator.drawWithTrails(
+        sharedUniforms,
+        particleDisplay.size * (projection.particleSizeFactor || 1),
+        particleDisplay.opacity,
+        particleDisplay.fade
+      );
       trailsNeedsReset = false;
     }
 
-    if (particlesShown) {
+    if (particlesShown && !particlesPaused) {
       particleSimulator.drawWithTrails(
         sharedUniforms,
         particleDisplay.size * (projection.particleSizeFactor || 1),

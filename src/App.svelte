@@ -109,6 +109,7 @@
   $: if (!particlesShown) {
     particleData = emptyParticleData;
   }
+  let particlesPaused = false;
   let particleLifetime = 1000;
   let particleCount = 1e5;
   let particleDisplay = {
@@ -393,6 +394,7 @@
     {griddedDomain}
     {particleData}
     {particlesShown}
+    {particlesPaused}
     {particleLifetime}
     {particleCount}
     {particleDisplay}
@@ -429,6 +431,7 @@
       bind:preferredUnits
       {particlesShown}
       {particleDisplay}
+      bind:particlesPaused
     />
   </Map>
 </main>

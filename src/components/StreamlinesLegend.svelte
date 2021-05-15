@@ -1,20 +1,39 @@
 <script>
   import { capitalizeFirstLetter } from '../utility.js';
+  import tooltip from '../tooltip.js';
 
   export let particleDataset;
   export let particleDisplay;
+  export let particlesPaused;
 
   // updates when changing display independently of dataset (or after dataset
   // download completes)
   $: info = particleDisplay;
   // updates immediately after selecting dataset instead of after download
   $: info = particleDataset.particleDisplay;
+
+  function handleKeydown(e) {
+    if (!(e.code === 'Space' || e.code === 'Enter')) return;
+
+    particlesPaused = !particlesPaused
+  }
 </script>
 
-<section>
+<section
+  on:click={() => particlesPaused = !particlesPaused}
+  on:keydown={handleKeydown}
+  use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
+  tabindex="0"
+>
   <h3>{capitalizeFirstLetter(particleDataset.name)}</h3>
-  <div></div>
-  <span>{info.rate.toLocaleString()} times faster than actual</span>
+  <div class:paused={particlesPaused}></div>
+  <span>
+    {#if particlesPaused}
+      particle animation paused
+    {:else}
+      {info.rate.toLocaleString()} times faster than actual
+    {/if}
+  </span>
 </section>
 
 <style>
@@ -24,8 +43,16 @@
     max-width: 32em;
     flex-basis: 24em;
     pointer-events: auto;
+    border-radius: 4px;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
 
     margin-left: auto;
+  }
+
+  section:focus, section:hover {
+    background-color: var(--input-color);
+    outline: none;
   }
 
   h3 {
@@ -47,6 +74,10 @@
     background-size: 0.8em 0.8em;
     animation: slide 0.3s linear;
     animation-iteration-count: infinite;
+  }
+
+  div.paused {
+    animation: none;
   }
 
   span {
