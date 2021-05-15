@@ -139,11 +139,11 @@
 
     h3 {
       font-size: 1em;
-      padding: 0.75rem;
+      padding: 0.5rem 0.75rem;
     }
 
     h3.date {
-      padding: 0.75rem 0.75rem 0;
+      padding: 0.5rem 0.75rem 0;
     }
   }
 </style>
