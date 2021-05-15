@@ -139,6 +139,7 @@
 
     h3 {
       font-size: 1em;
+      padding: 0.75rem;
     }
 
     h3.date {
