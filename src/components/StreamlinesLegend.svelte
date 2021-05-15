@@ -45,6 +45,7 @@
     pointer-events: auto;
     border-radius: 4px;
     -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.25s ease 0s;
     cursor: pointer;
 
     margin-left: auto;

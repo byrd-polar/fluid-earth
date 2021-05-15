@@ -36,7 +36,9 @@
     text-align: center;
     border-radius: 50%;
     background-color: transparent;
-    transition: transform 150ms ease-out;
+    transition:
+      transform 150ms ease-out,
+      background-color 0.25s ease 0s;
   }
 
   div :global(button[aria-checked="true"]::after) {

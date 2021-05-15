@@ -30,6 +30,7 @@
   button {
     all: unset;
     -webkit-tap-highlight-color: transparent;
+    transition: filter 0.25s ease 0s;
     box-sizing: border-box;
     color: white;
     padding: 0.5em 1em;
