@@ -109,6 +109,10 @@
     outline: none;
   }
 
+  section:focus:not(:focus-visible):not(:hover) {
+    background-color: inherit;
+  }
+
   h3 {
     text-align: right;
     font-size: 1.2em;
