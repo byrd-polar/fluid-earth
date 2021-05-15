@@ -115,11 +115,15 @@ export default class ParticleSimulator {
   // render the particles to the screen, where sharedUnfiorms determines the
   // projection, zoom, and lonLat centering
   //
+  // size: any value > 0, diameter of particles in pixels at a zoom value of 1
+  // and a canvas (drawing buffer) height of 1080 pixels.
+  //
   // opacity: from 0 to 1, how opaque the particles are
-  draw(sharedUniforms, opacity) {
+  draw(sharedUniforms, size, opacity) {
     glDraw(this._gl, this._programs.draw, this._buffers.draw, {
       u_particlePositions: this._textures.simA,
       u_particleCountSqrt: Math.sqrt(this._count),
+      u_size: size,
       u_color: [1, 1, 1, opacity],
       ...sharedUniforms,
     }, this._gl.POINTS);
@@ -158,13 +162,7 @@ export default class ParticleSimulator {
     }
 
     // then, draw new particle positions on top of that
-    glDraw(this._gl, this._programs.draw, this._buffers.draw, {
-      u_particlePositions: this._textures.simA,
-      u_particleCountSqrt: Math.sqrt(this._count),
-      u_size: size,
-      u_color: [1, 1, 1, opacity],
-      ...sharedUniforms,
-    }, this._gl.POINTS);
+    this.draw(sharedUniforms, size, opacity);
 
     // finally, draw texture to screen
     twgl.bindFramebufferInfo(this._gl, null);
