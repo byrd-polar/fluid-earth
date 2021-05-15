@@ -92,13 +92,13 @@ export default class ParticleSimulatorMobile extends ParticleSimulator {
       [this._framebuffers.simB, this._framebuffers.simA];
   }
 
-  draw(sharedUniforms, opacity) {
+  draw(sharedUniforms, size, opacity) {
     super.draw({
       u_particleLongitudes: this._textures.simA.longitudes,
       u_particleLatitudes: this._textures.simA.latitudes,
       u_particleSpeeds: this._textures.simA.speeds,
       ...sharedUniforms,
-    }, opacity);
+    }, size, opacity);
   }
 
   drawWithTrails(sharedUniforms, size, opacity, fade) {
