@@ -3,7 +3,7 @@
   import IconButton from '../components/IconButton.svelte';
   import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled32';
   import Close32 from "carbon-icons-svelte/lib/Close32";
-  import { slide } from 'svelte/transition';
+  import { slide, fade } from 'svelte/transition';
   import { convert, prettyUnit, prettyLatLon } from '../utility.js';
   import tooltip from '../tooltip.js';
 
@@ -45,22 +45,24 @@
   {/each}
 </ul>
 {#if pins.length > 1}
+  <div transition:slide>
   <Button secondary full transition action={() => pins = []}>
     Remove all pins
   </Button>
+  </div>
 {:else if pins.length === 0}
-  <p>There are currently no pinned locations.</p>
+  <p transition:fade>There are currently no pinned locations.</p>
 {/if}
 
 <style>
   ul {
     padding: 0;
-    margin: 0.5em 0;
+    margin: 0;
   }
 
   li {
-    padding: 0.25em 0;
     list-style: none;
+    padding-bottom: 0.5em;
   }
 
   div.wrapper {
