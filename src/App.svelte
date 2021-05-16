@@ -159,7 +159,7 @@
 
       // Set consistent units across datasets
       let unitList = preferredUnits[Qty(griddedDataset.unit).kind()];
-      if (unitList) {
+      if (unitList && previousGriddedDataset !== griddedDataset) {
         griddedDataset.unit = unitList[0];
       }
 
