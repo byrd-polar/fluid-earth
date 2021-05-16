@@ -4,6 +4,7 @@
   import Close32 from "carbon-icons-svelte/lib/Close32";
   import { slide } from 'svelte/transition';
   import { convert, prettyUnit, prettyLatLon } from '../utility.js';
+  import tooltip from '../tooltip.js';
 
   export let pins;
   export let griddedData;
@@ -19,7 +20,8 @@
       <div class="wrapper">
         <IconButton
           action={() => moveTo(pin)}
-          ariaLabel="Move to pin"
+          name={'Fly to pin'}
+          tipPlacement={'top'}
         >
           <PinIcon style="color: red" />
         </IconButton>
@@ -33,7 +35,7 @@
         </div>
         <IconButton
           action={() => pins = pins.filter(p => p !== pin)}
-          ariaLabel="remove pin"
+          ariaLabel="Remove pin"
         >
           <Close32 />
         </IconButton>

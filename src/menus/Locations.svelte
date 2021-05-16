@@ -92,7 +92,7 @@ map, or use the following search box.
 />
 {#if pins.length > 1}
   <Button secondary full transition action={() => pins = []}>
-    Clear all locations
+    Remove all pins
   </Button>
 {:else if pins.length === 0}
   <p>There are currently no pinned locations.</p>
