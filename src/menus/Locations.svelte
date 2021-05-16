@@ -2,7 +2,6 @@
   import ky from 'ky';
   import SearchBox from '../components/SearchBox.svelte';
   import LocationsList from '../components/LocationsList.svelte';
-  import Button from '../components/Button.svelte';
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
 
@@ -90,14 +89,6 @@ map, or use the following search box.
   {griddedUnit}
   {moveTo}
 />
-{#if pins.length > 1}
-  <Button secondary full transition action={() => pins = []}>
-    Remove all pins
-  </Button>
-{:else if pins.length === 0}
-  <p>There are currently no pinned locations.</p>
-{/if}
-
 
 </div>
 <footer>

@@ -1,4 +1,5 @@
 <script>
+  import Button from '../components/Button.svelte';
   import IconButton from '../components/IconButton.svelte';
   import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled32';
   import Close32 from "carbon-icons-svelte/lib/Close32";
@@ -43,6 +44,13 @@
     </li>
   {/each}
 </ul>
+{#if pins.length > 1}
+  <Button secondary full transition action={() => pins = []}>
+    Remove all pins
+  </Button>
+{:else if pins.length === 0}
+  <p>There are currently no pinned locations.</p>
+{/if}
 
 <style>
   ul {
