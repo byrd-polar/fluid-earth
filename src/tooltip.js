@@ -1,9 +1,6 @@
 import tippy, { animateFill } from 'tippy.js';
 import 'tippy.js/dist/tippy.css'; // for styling
 
-import { get } from 'svelte/store';
-import { mobile } from './stores.js';
-
 tippy.setDefaultProps({
   placement: 'top',
   aria: {
@@ -21,8 +18,6 @@ export default function tooltip(node, options) {
   function addTip() {
     tip = tippy(node, options);
     tips.add(tip);
-
-    if (get(mobile)) tip.disable();
   }
 
   function removeTip() {
@@ -43,12 +38,3 @@ export default function tooltip(node, options) {
     }
   };
 }
-
-// hide tooltips on small screens / mobile
-mobile.subscribe(val => {
-  if (val) {
-    tips.forEach(t => t.disable());
-  } else {
-    tips.forEach(t => t.enable());
-  }
-});
