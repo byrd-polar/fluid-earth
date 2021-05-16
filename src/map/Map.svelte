@@ -239,28 +239,27 @@
       backgroundNeedsRedraw = false;
     }
 
-    if (trailsNeedsReset) {
-      particleSimulator.resetTrails();
-      particleSimulator.drawWithTrails(
-        sharedUniforms,
-        particleDisplay.size * (projection.particleSizeFactor || 1),
-        particleDisplay.opacity,
-        particleDisplay.fade
-      );
-      trailsNeedsReset = false;
-    }
-
-    if (particlesShown && !particlesPaused) {
-      particleSimulator.drawWithTrails(
-        sharedUniforms,
-        particleDisplay.size * (projection.particleSizeFactor || 1),
-        particleDisplay.opacity,
-        particleDisplay.fade
-      );
-      particleSimulator.step(
-        Math.min(timeDelta, 100),
-        particleDisplay.rate
-      );
+    if (particlesShown) {
+      if (trailsNeedsReset) {
+        particleSimulator.resetTrails();
+      }
+      if (!particlesPaused || (particlesPaused && trailsNeedsReset)) {
+        particleSimulator.drawWithTrails(
+          sharedUniforms,
+          particleDisplay.size * (projection.particleSizeFactor || 1),
+          particleDisplay.opacity,
+          particleDisplay.fade
+        );
+      }
+      if (!particlesPaused) {
+        particleSimulator.step(
+          Math.min(timeDelta, 100),
+          particleDisplay.rate
+        );
+      }
+      if (trailsNeedsReset) {
+        trailsNeedsReset = false;
+      }
     }
 
     if (particlesNeedClearing) {
