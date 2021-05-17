@@ -66,7 +66,7 @@ export const propertyFilters = {
     return name === 'sea surface temperature';
   },
   'wave height': name => {
-    return name === 'signifigicant wave height';
+    return name === 'significant wave height';
   },
   'wave period': name => {
     return name === 'primary wave mean period';
