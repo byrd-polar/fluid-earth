@@ -6,6 +6,7 @@ tippy.setDefaultProps({
   aria: {
     content: 'labelledby',
   },
+  hideOnClick: false,
 });
 
 export let tips = new Set();
