@@ -258,7 +258,7 @@
 
   button.day.selected {
     filter: none;
-    background: var(--primary-color);
+    background: var(--primary-color-light);
   }
 
   button.day::before {
