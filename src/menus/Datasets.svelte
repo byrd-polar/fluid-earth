@@ -1,6 +1,11 @@
 <script>
   import ChipGroup from '../components/ChipGroup.svelte';
   import Toggle from 'svelte-toggle';
+  import {
+    categoryFilters,
+    propertyFilters,
+    levelFilters,
+  } from './datasetFilters.js';
 
   export let inventory;
   export let MAX_TEXTURE_SIZE;
@@ -9,41 +14,85 @@
   export let particlesShown;
   export let advancedOptions;
 
-  const categoryOptions = [
-    'atmosphere',
-    'oceans',
-    'other',
-  ];
+  let griddedDatasets = inventory.filter(d => d.colormap)
+  let particleDatasets = inventory.filter(d => d.particleDisplay);
+  let datasetNames = griddedDatasets.map(dataset => dataset.name);
 
-  const atmospherePropertyOptions = [
-    'temperature',
-    'wind',
-    'relative humidity',
-    'mean sea level pressure',
-  ];
+  let categories = Object.keys(categoryFilters);
+  let properties = Object.keys(propertyFilters);
+  let levels = Object.keys(levelFilters);
 
-  const levelOptions = [
-    'near ground',
-    '850 mb',
-    '500 mb',
-    '300 mb',
-    '200 mb',
-    '10 mb',
-    'total column',
-  ];
+  let category;
+  let property;
+  let level;
+
+  $: griddedDataset, updateFilterSelections();
+
+  function updateFilterSelections() {
+    category = categories.find(c => categoryFilters[c](griddedDataset.name));
+    property = properties.find(p => propertyFilters[p](griddedDataset.name));
+    level = levels.find(l => levelFilters[l](griddedDataset.name));
+  }
+
+  $: categoryOptions = categories.filter(key => key !== 'undefined');
+  $: propertyOptions = properties.filter(key => {
+    return datasetNames.filter(categoryFilters[category]).find(name => {
+      return propertyFilters[key](name);
+    });
+  });
+  $: levelOptions = levels.filter(key => {
+    return datasetNames.filter(propertyFilters[property]).find(name => {
+      return levelFilters[key](name);
+    });
+  });
+
+  $: if (!propertyOptions.includes(property)) property = propertyOptions[0];
+  $: if (!levelOptions.includes(level)) level = levelOptions[0];
+
+  $: category, property, level, updateDatasets();
+
+  function updateDatasets() {
+    let gCandidate = inventory.filter(d => d.colormap).find(d => {
+      return categoryFilters[category](d.name) &&
+             propertyFilters[property](d.name) &&
+             levelFilters[level](d.name);
+    });
+    if (gCandidate) {
+      griddedDataset = gCandidate;
+    }
+    let pCandidate = inventory.filter(d => d.particleDisplay).find(d => {
+      return categoryFilters[category](d.name) &&
+             levelFilters[level](d.name);
+    });
+    if (!pCandidate) {
+      pCandidate = inventory.filter(d => d.particleDisplay).find(d => {
+        return levelFilters[level](d.name);
+      });
+    }
+    if (!pCandidate && level === 'total column') {
+      pCandidate = inventory.filter(d => d.particleDisplay).find(d => {
+        return levelFilters['500 mb (cloud)'](d.name);
+      });
+    }
+    if (pCandidate) {
+      particleDataset = pCandidate;
+    } else {
+      particlesShown = false;
+    }
+  }
 </script>
 
 <h2>Filters</h2>
 
 <h3>Category</h3>
-<ChipGroup options={categoryOptions}/>
+<ChipGroup options={categoryOptions} bind:selected={category}/>
 
 <h3>Property</h3>
-<ChipGroup options={atmospherePropertyOptions}/>
+<ChipGroup options={propertyOptions} bind:selected={property}/>
 
 
 <h3>Level</h3>
-<ChipGroup options={levelOptions}/>
+<ChipGroup options={levelOptions} bind:selected={level}/>
 
 <h2>Settings</h2>
 
@@ -56,17 +105,11 @@
   style="order: 2; margin-left: auto"
 />
 
-<h2>About this menu</h2>
-
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eu nisl nunc mi ipsum faucibus. Molestie at elementum eu facilisis sed odio morbi quis. Arcu dictum varius duis at. Egestas dui id ornare arcu odio ut sem nulla. Placerat duis ultricies lacus sed. Eget mi proin sed libero. Aliquam id diam maecenas ultricies mi eget mauris pharetra et. Egestas sed tempus urna et pharetra. Suspendisse in est ante in nibh mauris cursus.
-</p>
-
 {#if advancedOptions}
   <h2>All Datasets</h2>
 
   <h3>Gridded</h3>
-  {#each inventory.filter(d => d.colormap) as dataset}
+  {#each griddedDatasets as dataset}
     <label>
       <input
         type="radio"
@@ -80,7 +123,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
   {/each}
 
   <h3>Particle</h3>
-  {#each inventory.filter(d => d.particleDisplay) as dataset}
+  {#each particleDatasets as dataset}
     <label>
       <input
         type="radio"
