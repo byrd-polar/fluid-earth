@@ -317,13 +317,14 @@
   bind:openedMenu
   bind:drawerOpen
 />
-<Menu bind:openedMenu menuName="Datasets">
+<Menu bind:openedMenu menuName="Datasets" bind:advancedOptions>
   <Datasets
     {inventory}
     {MAX_TEXTURE_SIZE}
     bind:griddedDataset
     bind:particleDataset
     bind:particlesShown
+    {advancedOptions}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Time Machine" bind:advancedOptions>
