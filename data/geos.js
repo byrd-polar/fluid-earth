@@ -8,6 +8,7 @@ import fs from 'fs/promises';
 import DomParser from 'dom-parser';
 import { debug } from 'console';
 
+const forecastHours = 6;
 const script = path.join('data', 'scripts', 'netcdf-to-fp16.js');
 const execFile = promisify(_execFile);
 
@@ -76,14 +77,14 @@ function contains(dom, selector, text) {
         return RegExp(text).test(element.textContent);
     });
 }
-async function findDataFromIndex(dataset, year, month, day, forecast, indexPageURL) {
+async function findDataFromIndex(dataset, year, month, day, hour, forecast, indexPageURL) {
     var parser = new DomParser();
     const indexPageFilename = await util.download(indexPageURL, true);
 
     var html = await fs.readFile(indexPageFilename, 'utf8');
 
     var dom = parser.parseFromString(html);
-    var matchingAnchor = contains(dom, "a", `${forecast}.${year}${month}${day}_0000z.nc4`);
+    var matchingAnchor = contains(dom, "a", `${forecast}.${year}${month}${day}_${hour}00z.nc4`);
 
     var urlName = matchingAnchor[0].attributes[0]['value'];
 
@@ -91,30 +92,32 @@ async function findDataFromIndex(dataset, year, month, day, forecast, indexPageU
 
     return urlName;
 }
-async function downloadGEOSData(dataset, year, month, day) {
+async function downloadGEOSData(dataset, year, month, day, hour) {
 
     var inputFileURL;
     const forecast = "inst1_2d_hwl_Nx";
     const indexPageURL = 'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
-        `Y${year}/M${month}/D${day}/`;
+        `Y${year}/M${month}/D${day}/`; // base URL, as well as HTML index of data
 
-    if (dataset.filenamePrefix) {
+    if (dataset.filenamePrefix) { // attempt to use previous prefix 
         console.log("GEOS: Attempting to find data using previous prefix...");
         const prefix = dataset.filenamePrefix;
-        const attemptPrefixURL = `${prefix}.${forecast}.${year}${month}${day}_0000z.nc4`
+        const attemptPrefixURL = `${prefix}.${forecast}.${year}${month}${day}_${hour}00z.nc4`
 
         let attemptPrefixFilename;
         try {
             attemptPrefixFilename = await util.download(indexPageURL + attemptPrefixURL, true);
-
+            // next line only runs if download is successful
             inputFileURL = attemptPrefixURL;
         } catch (error) {
-            inputFileURL = await findDataFromIndex(dataset, year, month, day, forecast, indexPageURL);
+            console.log("Previous prefix did not work, searching the index instead.")
+            inputFileURL = await findDataFromIndex(dataset, year, month, day, hour, forecast, indexPageURL);
         }
-    } else {
-        inputFileURL = await findDataFromIndex(dataset, year, month, day, forecast, indexPageURL);
+    } else { // first run, find using index search
+        inputFileURL = await findDataFromIndex(dataset, year, month, day, hour, forecast, indexPageURL);
     }
 
+    // If previous prefix worked, the following code does nothing as it finds it in cache. Otherwise, downloads the data.
     const inputFile = await util.download(
         'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
         `Y${year}/M${month}/D${day}/` + inputFileURL,
@@ -133,26 +136,26 @@ for (const geosVar of geosVars) {
     let datetime;
 
     if (dataset) {
-        datetime = DateTime.fromISO(dataset.end, { zone: 'utc' }).plus({ day: 1 });
+        datetime = DateTime.fromISO(dataset.end, { zone: 'utc' }).plus({ hour: forecastHours });
     } else {
         const now = DateTime.utc();
-        datetime = DateTime.utc(now.year, now.month, now.day).minus({ days: 31 });
+        datetime = DateTime.utc(now.year, now.month, now.day).minus({ days: 1 });
         inventory.push(dataset = geosVar.datasetBase);
     }
 
     const year = datetime.year;
     const month = datetime.toFormat('LL');
     const day = datetime.toFormat('dd');
+    const hour = datetime.toFormat('HH')
 
-    const inputFile = await downloadGEOSData(dataset, year, month, day);
-    const filename = datetime.toISO() + '.fp16';
-    // const filename = datetime.plus({ hours: f }).toISO() + '.fp16';
-    const outputFile = util.join(outputPath, filename);
+    for (let f = 0; f < forecastHours; f++) {
+        const inputFile = await downloadGEOSData(dataset, year, month, day, hour);
+        const filename = datetime.plus({ hours: f }).toISO() + '.fp16';
+        const outputFile = util.join(outputPath, filename);
 
-    util.log('Converting NETCDF to fp16', inputFile, outputFile);
-    await execFile('node', [script, inputFile, outputFile, geosVarName, geosVar.factor]);
-
-
+        util.log('Converting NETCDF to fp16', inputFile, outputFile);
+        await execFile('node', [script, inputFile, outputFile, geosVarName, geosVar.factor]);
+    }
 
     for (const prop in geosVar.datasetBase) dataset[prop] = geosVar.datasetBase[prop];
 
