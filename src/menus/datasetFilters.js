@@ -103,14 +103,14 @@ export const categoryFilters = {
            propertyFilters['wind'](name) ||
            propertyFilters['precipitation'](name);
   },
+  'gases & aerosols': name => {
+    return propertyFilters['ozone'](name);
+  },
   'oceans': name => {
     return propertyFilters['sea temperature'](name) ||
            propertyFilters['wave height'](name) ||
            propertyFilters['wave period'](name) ||
            propertyFilters['wave direction'](name);
-  },
-  'gases & aerosols': name => {
-    return propertyFilters['ozone'](name);
   },
   'other': name => {
     return propertyFilters['sunshine'](name);
