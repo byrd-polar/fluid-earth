@@ -31,6 +31,18 @@ export default Object.freeze({
       return row * data.width + col;
     },
   },
+  OSCAR: {
+    id: 2,
+    function: (data, lonLat) => {
+      const wRes = data.width / 360;
+      const hRes = (data.height - 1) / 180;
+
+      const col = Math.round((lonLat[0] + 360) * wRes) % data.width;
+      const row = Math.round((lonLat[1] + 90) * hRes);
+
+      return row * data.width + col;
+    },
+  },
 });
 
 // given a griddedData object and a lonLat, return the value at that point
