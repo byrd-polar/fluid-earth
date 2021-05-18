@@ -49,9 +49,7 @@
   $: if (!propertyOptions.includes(property)) property = propertyOptions[0];
   $: if (!levelOptions.includes(level)) level = levelOptions[0];
 
-  $: category, property, level, updateDatasets();
-
-  function updateDatasets() {
+  function updateDatasets(e) {
     let gCandidate = inventory.filter(d => d.colormap).find(d => {
       return categoryFilters[category](d.name) &&
              propertyFilters[property](d.name) &&
@@ -85,14 +83,25 @@
 <h2>Filters</h2>
 
 <h3>Category</h3>
-<ChipGroup options={categoryOptions} bind:selected={category}/>
+<ChipGroup
+  options={categoryOptions}
+  bind:selected={category}
+  on:select={updateDatasets}
+/>
 
 <h3>Property</h3>
-<ChipGroup options={propertyOptions} bind:selected={property}/>
-
+<ChipGroup
+  options={propertyOptions}
+  bind:selected={property}
+  on:select={updateDatasets}
+/>
 
 <h3>Level</h3>
-<ChipGroup options={levelOptions} bind:selected={level}/>
+<ChipGroup
+  options={levelOptions}
+  bind:selected={level}
+  on:select={updateDatasets}
+/>
 
 <h2>Settings</h2>
 

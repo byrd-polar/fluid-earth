@@ -1,9 +1,13 @@
 <script>
   import { tick } from 'svelte';
   import { modulo } from '../utility.js';
+  import { createEventDispatcher } from 'svelte';
 
   export let options = ['test option'];
   export let selected = options[0];
+
+  const dispatch = createEventDispatcher();
+  $: dispatch('select', { selected });
 
   let div;
 
