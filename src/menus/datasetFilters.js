@@ -1,3 +1,12 @@
+export const animationFilters = {
+  'wind': name => {
+    return name.startsWith('wind at');
+  },
+  'none': name => {
+    return true;
+  },
+};
+
 export const levelFilters = {
   'surface': name => {
     return name.includes('at 2 m above ground') ||
@@ -25,7 +34,8 @@ export const levelFilters = {
     return name.includes('at 10 mb');
   },
   'total column': name => {
-    return name.startsWith('total');
+    return name.startsWith('total') ||
+           name.includes('at 500 mb') && animationFilters['wind'](name);
   },
   // catch-all so that new datasets don't immediately crash application
   undefined: name => false,

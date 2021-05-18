@@ -319,6 +319,7 @@
 />
 <Menu bind:openedMenu menuName="Datasets" bind:advancedOptions>
   <Datasets
+    {date}
     {inventory}
     {MAX_TEXTURE_SIZE}
     bind:griddedDataset

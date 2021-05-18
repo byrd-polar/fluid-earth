@@ -1,12 +1,15 @@
 <script>
   import ChipGroup from '../components/ChipGroup.svelte';
-  import Toggle from 'svelte-toggle';
+  import { validDate } from '../utility.js';
+  import { tick } from 'svelte';
   import {
     categoryFilters,
     propertyFilters,
     levelFilters,
+    animationFilters,
   } from './datasetFilters.js';
 
+  export let date;
   export let inventory;
   export let MAX_TEXTURE_SIZE;
   export let griddedDataset;
@@ -16,41 +19,55 @@
 
   let griddedDatasets = inventory.filter(d => d.colormap)
   let particleDatasets = inventory.filter(d => d.particleDisplay);
-  let datasetNames = griddedDatasets.map(dataset => dataset.name);
+  let griddedNames = griddedDatasets.map(dataset => dataset.name);
 
   let categories = Object.keys(categoryFilters);
   let properties = Object.keys(propertyFilters);
   let levels = Object.keys(levelFilters);
+  let animations = Object.keys(animationFilters);
 
   let category;
   let property;
   let level;
+  let animation;
 
-  $: griddedDataset, updateFilterSelections();
+  $: griddedDataset, particlesShown, updateFilterSelections();
 
   function updateFilterSelections() {
     category = categories.find(c => categoryFilters[c](griddedDataset.name));
     property = properties.find(p => propertyFilters[p](griddedDataset.name));
     level = levels.find(l => levelFilters[l](griddedDataset.name));
+    animation = particlesShown ?
+      animations.find(a => animationFilters[a](particleDataset.name)) : 'none';
   }
 
   $: categoryOptions = categories.filter(key => key !== 'undefined');
   $: propertyOptions = properties.filter(key => {
-    return datasetNames.filter(categoryFilters[category]).find(name => {
+    return griddedNames.filter(categoryFilters[category]).find(name => {
       return propertyFilters[key](name);
     });
   });
   $: levelOptions = levels.filter(key => {
-    return datasetNames.filter(propertyFilters[property]).find(name => {
+    return griddedNames.filter(propertyFilters[property]).find(name => {
       return levelFilters[key](name);
+    });
+  });
+  $: animationOptions = animations.filter(key => {
+    if (key === 'none') return true;
+
+    return particleDatasets.filter(d => levelFilters[level](d.name)).find(d => {
+      return animationFilters[key](d.name) &&
+             validDate(particleDataset, date).getTime() === date.getTime();
     });
   });
 
   $: if (!propertyOptions.includes(property)) property = propertyOptions[0];
   $: if (!levelOptions.includes(level)) level = levelOptions[0];
 
-  function updateDatasets(e) {
-    let gCandidate = inventory.filter(d => d.colormap).find(d => {
+  async function updateDatasets(e) {
+    await tick();
+
+    let gCandidate = griddedDatasets.find(d => {
       return categoryFilters[category](d.name) &&
              propertyFilters[property](d.name) &&
              levelFilters[level](d.name);
@@ -58,24 +75,19 @@
     if (gCandidate) {
       griddedDataset = gCandidate;
     }
-    let pCandidate = inventory.filter(d => d.particleDisplay).find(d => {
-      return categoryFilters[category](d.name) &&
+
+    if (animation === 'none') {
+      particlesShown = false;
+      return;
+    } else {
+      particlesShown = true;
+    }
+    let pCandidate = particleDatasets.find(d => {
+      return animationFilters[animation](d.name) &&
              levelFilters[level](d.name);
     });
-    if (!pCandidate) {
-      pCandidate = inventory.filter(d => d.particleDisplay).find(d => {
-        return levelFilters[level](d.name);
-      });
-    }
-    if (!pCandidate && level === 'total column') {
-      pCandidate = inventory.filter(d => d.particleDisplay).find(d => {
-        return levelFilters['500 mb (cloud)'](d.name);
-      });
-    }
     if (pCandidate) {
       particleDataset = pCandidate;
-    } else {
-      particlesShown = false;
     }
   }
 </script>
@@ -103,15 +115,11 @@
   on:select={updateDatasets}
 />
 
-<h2>Settings</h2>
-
-<Toggle
-  bind:toggled={particlesShown}
-  label="streamlines"
-  toggledColor="var(--secondary-color)"
-  on="particle animation enabled"
-  off="particle animation disabled"
-  style="order: 2; margin-left: auto"
+<h3>Animation</h3>
+<ChipGroup
+  options={animationOptions}
+  bind:selected={animation}
+  on:select={updateDatasets}
 />
 
 {#if advancedOptions}
