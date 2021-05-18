@@ -76,12 +76,8 @@
       griddedDataset = gCandidate;
     }
 
-    if (animation === 'none') {
-      particlesShown = false;
-      return;
-    } else {
-      particlesShown = true;
-    }
+    particlesShown = (animation !== 'none');
+
     let pCandidate = particleDatasets.find(d => {
       return animationFilters[animation](d.name) &&
              levelFilters[level](d.name);
