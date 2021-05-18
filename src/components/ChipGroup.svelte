@@ -7,8 +7,6 @@
   export let selected = options[0];
 
   const dispatch = createEventDispatcher();
-  $: dispatch('select', { selected });
-
   let div;
 
   async function handleKeydown(e) {
@@ -26,6 +24,8 @@
     }
 
     selected = options[modulo(index, options.length)];
+    dispatch('select');
+
     await tick();
     div.querySelector('.selected').focus();
   }
@@ -34,7 +34,7 @@
 <div bind:this={div}>
   {#each options as option}
     <button
-      on:click={() => selected = option}
+      on:click={() => { selected = option; dispatch('select')}}
       class:selected={selected === option}
       on:keydown={handleKeydown}
       tabindex={selected === option ? 0 : -1}
