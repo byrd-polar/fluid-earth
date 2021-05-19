@@ -8,13 +8,16 @@ export const animationFilters = {
 };
 
 export const levelFilters = {
+  'mean sea level': name => {
+    return name.includes('mean sea level') ||
+           name.includes('wind at 10 m above ground');
+  },
   'surface': name => {
     return name.includes('at 2 m above ground') ||
            name.includes('at 10 m above ground') ||
            name.includes('at surface') ||
            name.includes('sea surface') ||
            name.includes('wave') ||
-           name.includes('sea level') ||
            name.startsWith('precipitation') ||
            name.startsWith('sunshine');
   },
@@ -54,7 +57,7 @@ export const propertyFilters = {
   'precipitation': name => {
     return name === 'precipitation in previous hour';
   },
-  'MSLP': name => {
+  'pressure': name => {
     return name === 'mean sea level pressure';
   },
   'CAPE': name => {
@@ -72,9 +75,6 @@ export const propertyFilters = {
   'geopotential height': name => {
     return name.startsWith('geopotential height');
   },
-  'sea temperature': name => {
-    return name === 'sea surface temperature';
-  },
   'wave height': name => {
     return name === 'significant wave height';
   },
@@ -83,6 +83,9 @@ export const propertyFilters = {
   },
   'wave direction': name => {
     return name === 'primary wave direction (from)';
+  },
+  'sea temperature': name => {
+    return name === 'sea surface temperature';
   },
   'sunshine': name => {
     return name === 'sunshine in previous hour';
@@ -95,11 +98,9 @@ export const categoryFilters = {
   'weather': name => {
     return propertyFilters['temperature'](name) ||
            propertyFilters['humidity'](name) ||
-           propertyFilters['MSLP'](name) ||
-           propertyFilters['CAPE'](name) ||
+           propertyFilters['pressure'](name) ||
            propertyFilters['precipitable water'](name) ||
            propertyFilters['cloud water'](name) ||
-           propertyFilters['geopotential height'](name) ||
            propertyFilters['wind'](name) ||
            propertyFilters['precipitation'](name);
   },
@@ -113,7 +114,9 @@ export const categoryFilters = {
            propertyFilters['wave direction'](name);
   },
   'other': name => {
-    return propertyFilters['sunshine'](name);
+    return propertyFilters['CAPE'](name) ||
+           propertyFilters['geopotential height'](name) ||
+           propertyFilters['sunshine'](name);
   },
   // catch-all so that new datasets don't immediately crash application
   undefined: name => false,
