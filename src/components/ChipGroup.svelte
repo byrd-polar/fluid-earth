@@ -25,18 +25,24 @@
       index--;
     }
 
-    selected = options[modulo(index, options.length)];
-    dispatch('select');
+    select(options[modulo(index, options.length)]);
 
     await tick();
     div.querySelector('.selected').focus();
+  }
+
+  function select(value) {
+    if (value === selected) return;
+
+    selected = value;
+    dispatch('select');
   }
 </script>
 
 <div bind:this={div}>
   {#each options as option, i}
     <button
-      on:click={() => { selected = option; dispatch('select')}}
+      on:click={() => select(option)}
       class:selected={selected === option}
       on:keydown={handleKeydown}
       tabindex={(selected === option || (i === 0 && noneSelected)) ? 0 : -1}
