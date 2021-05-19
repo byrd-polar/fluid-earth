@@ -64,8 +64,23 @@
     });
   });
 
-  $: if (!propertyOptions.includes(property)) property = propertyOptions[0];
-  $: if (!levelOptions.includes(level)) level = levelOptions[0];
+  // Set sub-filter to first option if there are no matching options after
+  // switching main filter. For example, if `propery` changes and the new
+  // property's `levelOptions` does not include the current `level`, set `level`
+  // to the first of these options.
+  let previousCategory, previousProperty;
+  $: {
+    if (category !== previousCategory && !propertyOptions.includes(property)) {
+      property = propertyOptions[0];
+    }
+    previousCategory = category;
+  }
+  $: {
+    if (property !== previousProperty && !levelOptions.includes(level)) {
+      level = levelOptions[0];
+    }
+    previousProperty = property;
+  }
 
   async function updateDatasets(e) {
     await tick();
