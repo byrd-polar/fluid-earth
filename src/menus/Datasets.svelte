@@ -5,7 +5,8 @@
   import {
     categoryFilters,
     propertyFilters,
-    levelFilters,
+    basicLevelFilters,
+    advancedLevelFilters,
     animationFilters,
   } from './datasetFilters.js';
 
@@ -21,9 +22,11 @@
   let particleDatasets = inventory.filter(d => d.particleDisplay);
   let griddedNames = griddedDatasets.map(dataset => dataset.name);
 
+  $: levelFilters = advancedOptions ? advancedLevelFilters : basicLevelFilters;
+
   let categories = Object.keys(categoryFilters);
   let properties = Object.keys(propertyFilters);
-  let levels = Object.keys(levelFilters);
+  $: levels = Object.keys(levelFilters);
   let animations = Object.keys(animationFilters);
 
   let category;
@@ -31,7 +34,7 @@
   let level;
   let animation;
 
-  $: griddedDataset, particlesShown, updateFilterSelections();
+  $: griddedDataset, particlesShown, advancedOptions, updateFilterSelections();
 
   function updateFilterSelections() {
     category = categories.find(c => categoryFilters[c](griddedDataset.name));

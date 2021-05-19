@@ -7,7 +7,35 @@ export const animationFilters = {
   },
 };
 
-export const levelFilters = {
+export const basicLevelFilters = {
+  'mean sea level': name => {
+    return name.includes('mean sea level') ||
+           name.includes('wind at 10 m above ground');
+  },
+  'surface': name => {
+    return name.includes('at 2 m above ground') ||
+           name.includes('at 10 m above ground') ||
+           name.includes('at surface') ||
+           name.includes('sea surface') ||
+           name.includes('wave') ||
+           name.startsWith('precipitation') ||
+           name.startsWith('sunshine');
+  },
+  'cloud': name => {
+    return name.includes('at 500 mb');
+  },
+  'cruise': name => {
+    return name.includes('at 200 mb');
+  },
+  'total column': name => {
+    return name.startsWith('total') ||
+           name.includes('at 500 mb') && animationFilters['wind'](name);
+  },
+  // catch-all so that new datasets don't immediately crash application
+  undefined: name => false,
+};
+
+export const advancedLevelFilters = {
   'mean sea level': name => {
     return name.includes('mean sea level') ||
            name.includes('wind at 10 m above ground');
