@@ -2,6 +2,7 @@
   import GriddedLegend from '../components/GriddedLegend.svelte';
   import StreamlinesLegend from '../components/StreamlinesLegend.svelte';
   import tooltip from '../tooltip.js';
+  import { fix24 } from '../utility.js';
 
   export let date;
   export let utc;
@@ -50,7 +51,9 @@
       tabindex="0"
     >
       <h3 class="date">{date.toLocaleDateString(undefined, dateOptions)}</h3>
-      <h3 class="time">{date.toLocaleTimeString(undefined, timeOptions)}</h3>
+      <h3 class="time">
+        {fix24(date.toLocaleTimeString(undefined, timeOptions))}
+      </h3>
     </section>
   </div>
   <div class="bottom">

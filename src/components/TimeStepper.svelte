@@ -4,6 +4,7 @@
   import ChevronLeft32 from "carbon-icons-svelte/lib/ChevronLeft32";
   import ChevronRight32 from "carbon-icons-svelte/lib/ChevronRight32";
   import SkipForward32 from "carbon-icons-svelte/lib/SkipForward32";
+  import { fix24 } from '../utility.js';
 
   export let dataset;
   export let date;
@@ -64,7 +65,7 @@
     <ChevronLeft32 />
   </Button>
   <span>
-    {date.toLocaleTimeString(undefined, timeOptions)}
+    {fix24(date.toLocaleTimeString(undefined, timeOptions))}
   </span>
   <Button
     action={() => stepDate(dataset.intervalInHours)}
