@@ -9,6 +9,8 @@
   const dispatch = createEventDispatcher();
   let div;
 
+  $: noneSelected = !options.some(option => selected === option);
+
   async function handleKeydown(e) {
     if (!['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
       return;
@@ -16,7 +18,7 @@
 
     e.preventDefault(); // prevent scrolling with up/down arrow keys
 
-    let index = options.findIndex(opt => selected === opt);
+    let index = noneSelected ? 0 : options.findIndex(opt => selected === opt);
     if (['ArrowRight', 'ArrowDown'].includes(e.key)) {
       index++;
     } else {
@@ -32,12 +34,12 @@
 </script>
 
 <div bind:this={div}>
-  {#each options as option}
+  {#each options as option, i}
     <button
       on:click={() => { selected = option; dispatch('select')}}
       class:selected={selected === option}
       on:keydown={handleKeydown}
-      tabindex={selected === option ? 0 : -1}
+      tabindex={(selected === option || (i === 0 && noneSelected)) ? 0 : -1}
     >
       {option}
     </button>
