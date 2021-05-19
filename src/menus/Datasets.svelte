@@ -58,7 +58,7 @@
   $: animationOptions = animations.filter(key => {
     if (key === 'none') return true;
 
-    return particleDatasets.filter(d => levelFilters[level](d.name)).find(d => {
+    return particleDatasets.find(d => {
       return animationFilters[key](d.name) &&
              validDate(particleDataset, date).getTime() === date.getTime();
     });
