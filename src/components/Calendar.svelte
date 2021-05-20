@@ -11,7 +11,7 @@
   $: minDate = griddedDataset.start;
   $: maxDate = griddedDataset.end;
 
-  let month = utc ?
+  $: month = utc ?
     new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth())) :
     new Date(date.getFullYear(), date.getMonth());
   $: prevMonth = utc ? getUTCMonth(month, -1) : getMonth(month, -1);
