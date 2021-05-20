@@ -28,6 +28,9 @@
     year: 'numeric',
   };
 
+  $: sameTzDate = utc ? sameUTCDate : sameDate;
+  $: setTzDate = utc ?  setUTCDate : setDate;
+
   function getMonth(month, offset) {
     let newMonth = clone(month);
     newMonth.setMonth(month.getMonth() + offset);
@@ -148,18 +151,22 @@
   {#each days as day}
     <button
       class="day"
-      class:selected={sameDate(day, date)}
-      class:not-in-month={day.getMonth() !== month.getMonth()}
-      on:click={() => { if (!sameDate(day, date)) setDate(day) }}
+      class:selected={sameTzDate(day, date)}
+      class:not-in-month={
+        utc ?
+        day.getUTCMonth() !== month.getUTCMonth() :
+        day.getMonth() !== month.getMonth()
+      }
+      on:click={() => { if (!sameTzDate(day, date)) setTzDate(day) }}
       disabled={
-        sameDate(day, date) ||
+        sameTzDate(day, date) ||
         (day < minDate || day > maxDate) &&
-        !sameDate(day, minDate) &&
-        !sameDate(day, maxDate)
+        !sameTzDate(day, minDate) &&
+        !sameTzDate(day, maxDate)
       }
       use:tooltip={{content: 'Set date'}}
     >
-      {day.getDate()}
+      {utc ? day.getUTCDate() : day.getDate()}
     </button>
   {/each}
 </div>
