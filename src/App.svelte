@@ -57,6 +57,9 @@
     validDate(griddedDataset, new Date()) :
     griddedDataset.lastForecast;
 
+  // always equal to date unless date is re-assigned in updateGriddedData
+  $: anchorDate = date;
+
   // see comment in onMount
   let updateGriddedData = () => {};
   let updateParticleData = () => {};
@@ -151,6 +154,12 @@
 
     updateGriddedData = async () => {
       griddedLoading = true;
+
+      // Ensure that original date is switched back to if switching to and back
+      // from a griddedDataset with different values from validDate
+      if (anchorDate.getTime() !== date.getTime()) {
+        date = anchorDate;
+      }
 
       let valid = validDate(griddedDataset, date);
       if (valid.getTime() !== date.getTime()) {
