@@ -9,3 +9,10 @@ export const mobile = readable(mediaQuery.matches, set => {
 
   return () => window.removeEventListener('resize', updateMobile);
 });
+
+export const currentDate = readable(new Date(), set => {
+
+  const interval = window.setInterval(() => set(new Date()), 1000);
+
+  return () => window.clearInterval(interval);
+});

@@ -3,12 +3,15 @@
   import Time24 from "carbon-icons-svelte/lib/Time24";
   import Shuffle24 from "carbon-icons-svelte/lib/Shuffle24";
   import { validDate } from '../utility.js';
+  import { currentDate } from '../stores.js';
 
   export let griddedDataset;
   export let date;
 
+  $: nowDate = validDate(griddedDataset, $currentDate);
+
   function now() {
-    date = validDate(griddedDataset, new Date());
+    date = nowDate;
   }
 
   function random() {
@@ -20,7 +23,7 @@
 </script>
 
 <div>
-  <Button action={now} flex>
+  <Button action={now} disabled={date.getTime() === nowDate.getTime()} flex>
     <span>now</span><Time24 />
   </Button>
   <Button action={random} flex secondary>

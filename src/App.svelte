@@ -28,6 +28,7 @@
 
   import Fetcher from './fetcher.js';
   import { validDate } from './utility.js';
+  import { currentDate } from './stores.js';
 
   import { onMount } from 'svelte';
   import { Float16Array } from '@petamoriken/float16';
@@ -54,7 +55,7 @@
   let griddedDataset = inventory.filter(d => d.colormap)[0];
   let particleDataset = inventory.filter(d => d.particleDisplay)[0];
   let date = __production__ ?
-    validDate(griddedDataset, new Date()) :
+    validDate(griddedDataset, $currentDate) :
     griddedDataset.lastForecast;
 
   // always equal to date unless date is re-assigned in updateGriddedData
