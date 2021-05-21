@@ -1,4 +1,5 @@
 <script>
+  import TimeJumper from '../components/TimeJumper.svelte';
   import Calendar from '../components/Calendar.svelte';
   import TimeStepper from '../components/TimeStepper.svelte';
   import RangeLoader from '../components/RangeLoader.svelte';
@@ -10,6 +11,12 @@
   export let particlesShown;
   export let advancedOptions;
 </script>
+
+<h2>Jump To</h2>
+<TimeJumper
+  {griddedDataset}
+  bind:date
+/>
 
 <h2>Calendar</h2>
 <Calendar
