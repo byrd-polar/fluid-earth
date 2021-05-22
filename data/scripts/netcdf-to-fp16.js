@@ -52,3 +52,6 @@ const float16 = new Transform({
 const output = createWriteStream(outputFile);
 
 netcdf.stdout.pipe(split2()).pipe(float16).pipe(output);
+
+netcdf.stderr.pipe(process.stderr);
+netcdf.on('exit', code => { if (code !== 0) process.exit(code) });

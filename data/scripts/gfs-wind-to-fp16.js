@@ -54,3 +54,8 @@ const output = createWriteStream(outputFile);
 cat.pipe(wind.stdin);
 wind.stdout.pipe(wgrib2.stdin)
 wgrib2.stdout.pipe(float16).pipe(output);
+
+wind.stderr.pipe(process.stderr);
+wgrib2.stderr.pipe(process.stderr);
+wind.on('exit', code => { if (code !== 0) process.exit(code) });
+wgrib2.on('exit', code => { if (code !== 0) process.exit(code) });

@@ -48,3 +48,6 @@ const float16 = new Transform({
 const output = createWriteStream(outputFile);
 
 wgrib2.stdout.pipe(float16).pipe(output);
+
+wgrib2.stderr.pipe(process.stderr);
+wgrib2.on('exit', code => { if (code !== 0) process.exit(code) });

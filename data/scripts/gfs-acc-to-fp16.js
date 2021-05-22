@@ -30,6 +30,11 @@ const args = [
 const wgrib2A = spawn('wgrib2', [inputFileA, ...args]);
 const wgrib2B = spawn('wgrib2', [inputFileB, ...args]);
 
+wgrib2A.stderr.pipe(process.stderr);
+wgrib2B.stderr.pipe(process.stderr);
+wgrib2A.on('exit', code => { if (code !== 0) process.exit(code) });
+wgrib2B.on('exit', code => { if (code !== 0) process.exit(code) });
+
 const buffersA = [];
 const buffersB = [];
 
