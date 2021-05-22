@@ -18,7 +18,7 @@ if (process.argv.length != 2 + 3 && process.argv.length != 2 + 4) {
   process.exit(1);
 }
 
-const inputFile = process.argv[2];
+const inputFile = process.argv[2].replace(/\\/g, '/');
 const outputFile = process.argv[3];
 const variable = process.argv[4];
 const factor = process.argv[5];
