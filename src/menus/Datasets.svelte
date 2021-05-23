@@ -100,7 +100,7 @@
       return animationFilters[animation](d.name) &&
              levelFilters[level](d.name);
     });
-    if (pCandidate) {
+    if (pCandidate && pCandidate !== particleDataset) {
       particleDataset = pCandidate;
     }
   }
