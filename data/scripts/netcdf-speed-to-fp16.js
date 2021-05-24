@@ -5,9 +5,7 @@
 
 import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';
-import { Transform } from 'stream';
 import { writeFile } from 'fs/promises';
-import { platform } from 'os';
 import split2 from 'split2';
 
 if (process.argv.length != 2 + 2) {
@@ -21,49 +19,38 @@ if (process.argv.length != 2 + 2) {
 const inputFile = process.argv[2];
 const outputFile = process.argv[3];
 
+async function getArr(inputFile, variable) {
+  const netcdf = spawn('ncdump', ['-v', variable, inputFile]);
 
-let inHeader = true;
+  const values = [];
+  let inHeader = true;
 
+  netcdf.stderr.pipe(process.stderr);
+  netcdf.on('exit', code => { if (code !== 0) process.exit(code) });
 
-const netcdfU = spawn('ncdump', ['-v', 'u', inputFile]);
-const buffersU = [];
-inHeader = true;
-for await (const chunk of netcdfU.stdout.pipe(split2())) {
-  const chunkAsString = chunk.toString();
-  if (inHeader) {
-    inHeader = chunkAsString !== ` u =`;
-    continue;
+  for await (const chunk of netcdf.stdout.pipe(split2())) {
+    const chunkAsString = chunk.toString();
+
+    if (inHeader) {
+      inHeader = chunkAsString !== ` ${variable} =`;
+      continue;
+    }
+
+    const chunkAsFloats =
+      chunkAsString.split(/[,;]/).slice(0, -1).map(x => parseFloat(x));
+    values.push(...chunkAsFloats);
   }
-  const chunkAsFloats = chunkAsString.split(/[,;]/).slice(0, -1).map(x => parseFloat(x));
-  const converted = new Float32Array(chunkAsFloats);
-  buffersU.push(Buffer.from(converted.buffer));
+  return values;
 }
-const arrU = new Float32Array(Buffer.concat(buffersU).buffer);
 
-const netcdfV = spawn('ncdump', ['-v', 'v', inputFile]);
-const buffersV = [];
-inHeader = true;
-for await (const chunk of netcdfV.stdout.pipe(split2())) {
-  const chunkAsString = chunk.toString();
-  if (inHeader) {
-    inHeader = chunkAsString !== ` v =`;
-    continue;
-  }
-  const chunkAsFloats = chunkAsString.split(/[,;]/).slice(0, -1).map(x => parseFloat(x));
-  const converted = new Float32Array(chunkAsFloats);
-  buffersV.push(Buffer.from(converted.buffer));
-}
-const arrV = new Float32Array(Buffer.concat(buffersV).buffer);
-
-
+const [arrU, arrV] =
+  await Promise.all(['u', 'v'].map(v => getArr(inputFile, v)));
 const data = new Float16Array(arrU.length);
 
 for (let i = 0; i < data.length; i++) {
-  // replace magic value for "missing" with -Infinity (to represent NaN, as
-  // GLSL doesn't always support NaN)
-  let valU = arrU[i] > 9.9989e20 ? NaN : arrU[i];
-  let valV = arrV[i] > 9.9989e20 ? NaN : arrV[i];
-  data[i] = isNaN(Math.hypot(valU, valV)) ? -Infinity : Math.hypot(valU, valV);
+  // replace NaNs with -Infinity (as GLSL doesn't always support NaN)
+  let val = Math.hypot(arrU[i], arrV[i]);
+  data[i] = isNaN(val) ? -Infinity : val;
 }
 
 await writeFile(outputFile, Buffer.from(data.buffer));
