@@ -1,4 +1,7 @@
 #!/bin/env node
+// Convert a NETCDF file with u and v variables to fp16
+//
+// Usage: node netcdf-speed-to-fp16.js <inputFile> <outputFile>
 
 import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';

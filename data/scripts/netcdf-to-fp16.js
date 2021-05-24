@@ -1,7 +1,7 @@
 #!/bin/env node
-// Convert a NETCDF file to fp16
+// Convert one variable of a NETCDF file to fp16
 //
-// Usage: node netcdf-to-fp16.js <inputFile> <outputFile> <variable>
+// Usage: node netcdf-to-fp16.js <inputFile> <outputFile> <variable> [<factor>]
 
 import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';
