@@ -20,7 +20,7 @@ const inputFileA = process.argv[2];
 const inputFileB = process.argv[3];
 const outputFile = process.argv[4];
 
-async function getArrs(inputFile) {
+async function getArr(inputFile) {
   const wgrib2 = spawn('wgrib2', [
     inputFile,
     '-inv', platform() === 'win32' ? 'NUL' : '/dev/null',
@@ -38,7 +38,7 @@ async function getArrs(inputFile) {
   return new Float32Array(Buffer.concat(buffers).buffer)
 }
 
-const [arrA, arrB] = await Promise.all([inputFileA, inputFileB].map(getArrs));
+const [arrA, arrB] = await Promise.all([inputFileA, inputFileB].map(getArr));
 const data = new Float16Array(arrA.length);
 
 for (let i = 0; i < data.length; i++) {
