@@ -20,30 +20,25 @@ const inputFileA = process.argv[2];
 const inputFileB = process.argv[3];
 const outputFile = process.argv[4];
 
-const args = [
-  '-inv', platform() === 'win32' ? 'NUL' : '/dev/null',
-  '-bin', '-',
-  '-no_header',
-  '-order', 'we:sn'
-];
+async function getArrs(inputFile) {
+  const wgrib2 = spawn('wgrib2', [
+    inputFile,
+    '-inv', platform() === 'win32' ? 'NUL' : '/dev/null',
+    '-bin', '-',
+    '-no_header',
+    '-order', 'we:sn'
+  ]);
+  wgrib2.stderr.pipe(process.stderr);
+  wgrib2.on('exit', code => { if (code !== 0) process.exit(code) });
 
-const wgrib2A = spawn('wgrib2', [inputFileA, ...args]);
-const wgrib2B = spawn('wgrib2', [inputFileB, ...args]);
+  const buffers = [];
 
-wgrib2A.stderr.pipe(process.stderr);
-wgrib2B.stderr.pipe(process.stderr);
-wgrib2A.on('exit', code => { if (code !== 0) process.exit(code) });
-wgrib2B.on('exit', code => { if (code !== 0) process.exit(code) });
+  for await (const chunk of wgrib2.stdout) buffers.push(chunk);
 
-const buffersA = [];
-const buffersB = [];
+  return new Float32Array(Buffer.concat(buffers).buffer)
+}
 
-for await (const chunk of wgrib2A.stdout) buffersA.push(chunk);
-for await (const chunk of wgrib2B.stdout) buffersB.push(chunk);
-
-const arrA = new Float32Array(Buffer.concat(buffersA).buffer);
-const arrB = new Float32Array(Buffer.concat(buffersB).buffer);
-
+const [arrA, arrB] = await Promise.all([inputFileA, inputFileB].map(getArrs));
 const data = new Float16Array(arrA.length);
 
 for (let i = 0; i < data.length; i++) {
