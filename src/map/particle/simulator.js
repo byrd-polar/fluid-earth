@@ -83,7 +83,7 @@ export default class ParticleSimulator {
   //
   // timeDelta: milliseconds passed since last step
   // rate: how many times faster than real-world speed particles should move at
-  step(timeDelta, rate) {
+  step(sharedUniforms, timeDelta, rate) {
     // switch rendering destination to our framebuffer
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.simB);
 
@@ -99,6 +99,7 @@ export default class ParticleSimulator {
       u_gridHeight: this._data.height,
       u_timeDelta: timeDelta,
       u_rate: rate,
+      ...sharedUniforms,
     });
     this._gl.enable(this._gl.BLEND);
 

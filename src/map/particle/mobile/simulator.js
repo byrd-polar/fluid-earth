@@ -47,7 +47,7 @@ export default class ParticleSimulatorMobile extends ParticleSimulator {
     this._framebuffers = this._createFramebuffers();
   }
 
-  step(timeDelta, rate) {
+  step(sharedUniforms, timeDelta, rate) {
     const unis = {
       u_particleLongitudes: this._textures.simA.longitudes,
       u_particleLatitudes: this._textures.simA.latitudes,
@@ -61,6 +61,7 @@ export default class ParticleSimulatorMobile extends ParticleSimulator {
       u_gridHeight: this._data.height,
       u_timeDelta: timeDelta,
       u_rate: rate,
+      ...sharedUniforms,
     };
 
     this._gl.disable(this._gl.BLEND);

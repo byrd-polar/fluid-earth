@@ -253,6 +253,7 @@
       }
       if (!particlesPaused) {
         particleSimulator.step(
+          sharedUniforms,
           Math.min(timeDelta, 100),
           particleDisplay.rate
         );
