@@ -50,7 +50,9 @@
     let tDiff = dates[index + steps] - dates[index];
     if (Number.isNaN(tDiff)) return '';
 
-    return prettyMilliseconds(tDiff, {verbose: true});
+    let pretty = prettyMilliseconds(tDiff, {verbose: true});
+
+    return tDiff > 0 ? `+${pretty}` : pretty;
   }
 
   const bigStep = 6;
