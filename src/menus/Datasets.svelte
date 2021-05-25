@@ -60,7 +60,7 @@
 
     return particleDatasets.find(d => {
       return animationFilters[key](d.name) &&
-             validDate(particleDataset, date).getTime() === date.getTime();
+             validDate(d, date).getTime() === date.getTime();
     });
   });
 

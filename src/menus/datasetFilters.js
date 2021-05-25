@@ -2,6 +2,9 @@ export const animationFilters = {
   'wind': name => {
     return name.startsWith('wind at');
   },
+  'currents': name => {
+    return name.includes('currents');
+  },
   'none': name => {
     return true;
   },
