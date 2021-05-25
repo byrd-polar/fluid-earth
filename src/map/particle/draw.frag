@@ -4,6 +4,7 @@
 precision mediump float;
 
 uniform vec4 u_color;
+uniform float u_opacitySpeedDecay;
 varying float v_clip;
 varying float v_speed;
 
@@ -12,5 +13,5 @@ void main() {
     discard;
   }
   gl_FragColor = u_color;
-  gl_FragColor.a *= 1.0 - pow(0.8, v_speed);
+  gl_FragColor.a *= 1.0 - pow(u_opacitySpeedDecay, v_speed);
 }

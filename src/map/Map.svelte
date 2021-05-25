@@ -248,6 +248,7 @@
           sharedUniforms,
           particleDisplay.size * (projection.particleSizeFactor || 1),
           particleDisplay.opacity,
+          particleDisplay.opacitySpeedDecay,
           particleDisplay.fade
         );
       }

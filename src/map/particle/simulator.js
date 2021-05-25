@@ -119,30 +119,29 @@ export default class ParticleSimulator {
   // size: any value > 0, diameter of particles in pixels at a zoom value of 1
   // and a canvas (drawing buffer) height of 1080 pixels.
   //
-  // opacity: from 0 to 1, how opaque the particles are
-  draw(sharedUniforms, size, opacity) {
+  // opacity: from 0 to 1, baseline for how see-through the particles are
+  //
+  // opacitySpeedDecay: from 0 to 1, how much speed affects opacity, with
+  // slower-moving particles having less opacity
+  draw(sharedUniforms, size, opacity, opacitySpeedDecay) {
     glDraw(this._gl, this._programs.draw, this._buffers.draw, {
       u_particlePositions: this._textures.simA,
       u_particleCountSqrt: Math.sqrt(this._count),
       u_size: size,
       u_color: [1, 1, 1, opacity],
+      u_opacitySpeedDecay: opacitySpeedDecay,
       ...sharedUniforms,
     }, this._gl.POINTS);
   }
 
   // render particles with trails to the screen
   //
-  // size: any value > 0, diameter of particles in pixels at a zoom value of 1
-  // and a canvas (drawing buffer) height of 1080 pixels.
-  //
-  // opacity: from 0 to 1, how opaque the particles initially are (will actually
-  // be higher than this value if new position overlaps old position, which is
-  // likely the case)
+  // size, opacity, opacitySpeedDecay: see this.draw()
   //
   // fade: from 0 to 1, what proportion of the opacity from the previous
   // drawWithTrails draw call should be maintained as the background for this
   // draw call
-  drawWithTrails(sharedUniforms, size, opacity, fade) {
+  drawWithTrails(sharedUniforms, size, opacity, opacitySpeedDecay, fade) {
     // first, draw previous background (slightly faded) to empty texture
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);
 
@@ -163,7 +162,7 @@ export default class ParticleSimulator {
     }
 
     // then, draw new particle positions on top of that
-    this.draw(sharedUniforms, size, opacity);
+    this.draw(sharedUniforms, size, opacity, opacitySpeedDecay);
 
     // finally, draw texture to screen
     twgl.bindFramebufferInfo(this._gl, null);

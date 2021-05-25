@@ -255,6 +255,7 @@ for (const level of ['10 m above ground'].concat(mbLevels)) {
         size: 0.8,
         rate: 50000,
         opacity: 0.4,
+        opacitySpeedDecay: 0.8,
         fade: 0.96
       },
       ...gfs0p25props,
