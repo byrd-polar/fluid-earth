@@ -1,136 +1,114 @@
 import * as util from './utility.js';
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon';
 import { mkdir } from 'fs/promises';
 import path from 'path';
 import { promisify } from 'util';
 import { execFile as _execFile } from 'child_process';
 const execFile = promisify(_execFile);
 
+const referenceDatetime = DateTime.fromISO('1992-10-05', {zone: 'utc'});
 
+const script = path.join('data', 'scripts', 'netcdf-to-fp16.js');
+const speedScript = path.join('data', 'scripts', 'netcdf-speed-to-fp16.js');
 
-function daysPast(dateTime){ // Calculates the number of days that have past since October 5, 1992.
-  var startDate = DateTime.utc(1992, 10, 5);
-  const date1utc = DateTime.utc(startDate.year, startDate.month, startDate.day);
-  const date2utc = DateTime.utc(dateTime.year, dateTime.month, dateTime.day);
-  var timeDifference = (date2utc - date1utc)/(1000*60*60*24);
-  return timeDifference;
-}
-
-const uOutputPath = path.join(util.OUTPUT_DIR, 'oscar-u-sea-surface-currents-velocity/');
-const vOutputPath = path.join(util.OUTPUT_DIR, 'oscar-v-sea-surface-currents-velocity/');
-const speedOutputPath = path.join(util.OUTPUT_DIR, 'oscar-sea-surface-currents-speed/');
-
-const velocityDatasetBase = {
-  name: "sea surface currents velocity",
+const uOutputPath = path.join(util.OUTPUT_DIR, 'oscar-u-velocity/');
+const vOutputPath = path.join(util.OUTPUT_DIR, 'oscar-v-velocity/');
+const datasetBase = {
+  name: 'ocean surface currents',
   uPath: util.browserPath(uOutputPath),
   vPath: util.browserPath(vOutputPath),
-  description: "ocean surface current velocity",
-  particleLifetime: 1000,
+  particleLifetime: 10000,
   particleCount: 100000,
   particleDisplay: {
     size: 0.8,
-    rate: 50000, // ????
+    rate: 250000,
     opacity: 0.4,
+    opacitySpeedDecay: 0.005,
     fade: 0.96
   },
   bytesPerFile: 1155362,
-  width: 400, // ????
-  height: 161, // ????
-  intervalInHours: 120, // ????
+  width: 1201,
+  height: 481,
+  intervalInHours: 'custom:OSCAR',
   projection: "OSCAR",
 };
+
+const sOutputPath = path.join(util.OUTPUT_DIR, 'oscar-speed/');
 const speedDatasetBase = {
-  name: 'sea surface currents speed',
-  path: util.browserPath(speedOutputPath),
+  name: 'ocean surface currents speed',
+  path: util.browserPath(sOutputPath),
   unit: 'm/s',
   originalUnit: 'm/s',
   domain: [0.0, 1.5],
   colormap: 'CURRENTS',
   bytesPerFile: 1155362,
-  width: 400, // ????
-  height: 161, // ????
-  intervalInHours: 120, // ????
+  width: 1201,
+  height: 481,
+  intervalInHours: 'custom:OSCAR',
   projection: 'OSCAR',
 };
 
-
-
 const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
 
-// Set up directories to receive output files.
+let dataset = inventory.find(d => d.vPath === datasetBase.vPath);
+let speedDataset = inventory.find(d => d.path === speedDatasetBase.path);
+let datetime;
+
+if (dataset) {
+  const year = DateTime.fromISO(dataset.end, {zone: 'utc'}).year;
+  const dates = validDates(year).concat(validDates(year + 1));
+  datetime = DateTime.fromJSDate(
+    dates.find(d => d > new Date(dataset.end)), {zone: 'utc'}
+  );
+
+} else {
+  datetime = referenceDatetime.plus({days: 7001}); // earliest available input
+
+  inventory.push(dataset = datasetBase);
+  inventory.push(speedDataset = speedDatasetBase);
+}
+
+const inputFile = await util.download(
+  'https://podaac-opendap.jpl.nasa.gov/' +
+  'opendap/allData/oscar/preview/L4/oscar_third_deg/' +
+  `oscar_vel${datetime.diff(referenceDatetime, 'days').days}.nc.gz`
+);
+
 await mkdir(uOutputPath, { mode: '775', recursive: true });
 await mkdir(vOutputPath, { mode: '775', recursive: true });
-await mkdir(speedOutputPath, { mode: '775', recursive: true });
+await mkdir(sOutputPath, { mode: '775', recursive: true });
 
-// Get an interval in days equaling 1/72nd of the current year.
-const thisYear = new Date().getUTCFullYear;
-const daysThisYear = ( (0 == thisYear % 4) && (0 != thisYear % 100) || (0 == thisYear % 400) ) ? 366 : 365;
-let interval = (daysThisYear/72);
+const uOutputFile = util.join(uOutputPath, datetime.toISO() + '.fp16');
+const vOutputFile = util.join(vOutputPath, datetime.toISO() + '.fp16');
+const sOutputFile = util.join(sOutputPath, datetime.toISO() + '.fp16');
 
-// Starting at Jan 1 this year, get an array of dates separated by that interval, expressed as days past October 5, 1992.
-let datetimes = [];
-let daysPastDatetimes = [];
-for(let i =0; i <= 71; i++){
-  let dt = DateTime.utc();
-  dt = dt.set({ month: 1, day: 1 });
-  dt = dt.plus({ day: (Math.floor(i*interval)) });
-  if (dt > DateTime.utc().minus({ day: 1 })) { break; } // Exclude today and future dates. (We exclude today because today's file will not yet be available.)
-  datetimes.push(dt);
-  daysPastDatetimes.push(daysPast(dt));
-}
-console.log(daysPastDatetimes);
+util.log('Converting OSCAR NetCDF to fp16', inputFile, uOutputFile);
+await execFile('node', [script, inputFile, uOutputFile, 'u']);
 
+util.log('Converting OSCAR NetCDF to fp16', inputFile, vOutputFile);
+await execFile('node', [script, inputFile, vOutputFile, 'v']);
 
-// Download and convert the most recent available file.
-let outputDt = datetimes[datetimes.length-1];
-let outputDaysPastDt = daysPastDatetimes[datetimes.length-1];
-const inputFile = await util.download('https://podaac-opendap.jpl.nasa.gov/opendap/allData/oscar/'+
-'preview/L4/oscar_third_deg/oscar_vel'+ outputDaysPastDt +'.nc.gz', true);
-const uOutputFile = util.join(uOutputPath, outputDt.toISODate() + 'T00_00_00.000Z.fp16');
-const vOutputFile = util.join(vOutputPath, outputDt.toISODate() + 'T00_00_00.000Z.fp16');
-const speedOutputFile = util.join(speedOutputPath, outputDt.toISODate() + 'T00_00_00.000Z.fp16');
+util.log('Converting OSCAR NetCDF to fp16', inputFile, sOutputFile);
+await execFile('node', [speedScript, inputFile, sOutputFile]);
 
-util.log('Converting netcdf to fp16', inputFile, 'u', uOutputFile);
-await execFile('node', ['data/scripts/netcdf-to-fp16.js', inputFile, uOutputFile, 'u']);
+for (const prop in datasetBase) dataset[prop] = datasetBase[prop];
+for (const prop in speedDatasetBase) speedDataset[prop] = speedDatasetBase[prop];
 
-util.log('Converting netcdf to fp16', inputFile, 'v', vOutputFile);
-await execFile('node', ['data/scripts/netcdf-to-fp16.js', inputFile, vOutputFile, 'v']);
-
-util.log('Converting netcdf grib to fp16', inputFile, speedOutputFile);
-await execFile('node', ['data/scripts/netcdf-speed-to-fp16.js', inputFile, speedOutputFile]);
-
-
-
-// Update the inventory.
-let dataset;
-let datetime;
-const now = DateTime.utc();
-
-dataset = inventory.find(d => d.uPath === velocityDatasetBase.uPath);
-if (dataset) {
-  datetime = DateTime.fromISO(dataset.end, {zone: 'utc'}).plus({day: 1}); // How often do we rerun?
-} else {
-  datetime = DateTime.utc(now.year, now.month, now.day).minus({days: 1}); // Why yesterday instead of today?
-  inventory.push(dataset = velocityDatasetBase);
-}
-for (const prop in velocityDatasetBase) dataset[prop] = velocityDatasetBase[prop];
 dataset.start = dataset.start ?? datetime;
+speedDataset.start = speedDataset.start ?? datetime;
 dataset.end = datetime;
-dataset.lastForecast = datetime;
-
-dataset = inventory.find(d => d.uPath === speedDatasetBase.path);
-if (dataset) {
-  datetime = DateTime.fromISO(dataset.end, {zone: 'utc'}).plus({day: 1}); // How often do we rerun?
-} else {
-  datetime = DateTime.utc(now.year, now.month, now.day).minus({days: 1}); // Why yesterday instead of today?
-  inventory.push(dataset = speedDatasetBase);
-}
-for (const prop in speedDatasetBase) dataset[prop] = speedDatasetBase[prop];
-dataset.start = dataset.start ?? datetime;
-dataset.end = datetime;
-dataset.lastForecast = datetime;
-
-
-
+speedDataset.end = datetime;
 
 await writeAndUnlockInventory(inventory);
+
+// Given a year, return the Dates that correspond to the OSCAR data that
+// will be available that year (72 Dates with 5 or 6 day gaps) in order from
+// earliest to latest
+export function validDates(year) {
+  let leapYear = ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
+
+  return Array.from({length: 72}, (_, i) => {
+    let day = Math.floor((leapYear ? 366 : 365) * i / 72);
+    return new Date(Date.UTC(year, 0, 1 + day));
+  });
+}
