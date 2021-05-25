@@ -1,3 +1,4 @@
+import { validOscarDates } from '../src/utility.js';
 import * as util from './utility.js';
 import { DateTime } from 'luxon';
 import { mkdir } from 'fs/promises';
@@ -56,7 +57,7 @@ let datetime;
 
 if (dataset) {
   const year = DateTime.fromISO(dataset.end, {zone: 'utc'}).year;
-  const dates = validDates(year).concat(validDates(year + 1));
+  const dates = validOscarDates(year).concat(validOscarDates(year + 1));
   datetime = DateTime.fromJSDate(
     dates.find(d => d > new Date(dataset.end)), {zone: 'utc'}
   );
@@ -100,15 +101,3 @@ dataset.end = datetime;
 speedDataset.end = datetime;
 
 await writeAndUnlockInventory(inventory);
-
-// Given a year, return the Dates that correspond to the OSCAR data that
-// will be available that year (72 Dates with 5 or 6 day gaps) in order from
-// earliest to latest
-export function validDates(year) {
-  let leapYear = ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
-
-  return Array.from({length: 72}, (_, i) => {
-    let day = Math.floor((leapYear ? 366 : 365) * i / 72);
-    return new Date(Date.UTC(year, 0, 1 + day));
-  });
-}

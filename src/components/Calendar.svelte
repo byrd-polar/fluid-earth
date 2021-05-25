@@ -67,7 +67,11 @@
 
   function setDate(day) {
     // set date (e.g. 2021-01-01) while preserving time (e.g. 8:00am)
-    date = validDate(griddedDataset, new Date(
+    date = getValidDate(day);
+  }
+
+  function getValidDate(day) {
+    return validDate(griddedDataset, new Date(
       day.getFullYear(),
       day.getMonth(),
       day.getDate(),
@@ -111,7 +115,11 @@
   }
 
   function setUTCDate(day) {
-    date = validDate(griddedDataset, new Date(Date.UTC(
+    date = getValidUTCDate(day);
+  }
+
+  function getValidUTCDate(day) {
+    return validDate(griddedDataset, new Date(Date.UTC(
       day.getUTCFullYear(),
       day.getUTCMonth(),
       day.getUTCDate(),
@@ -120,6 +128,12 @@
       date.getUTCSeconds(),
       date.getUTCMilliseconds()
     )));
+  }
+
+  function validDay(day) {
+    if (griddedDataset.intervalInHours <= 24) return true;
+
+    return sameTzDate(day, utc ? getValidUTCDate(day) : getValidDate(day));
   }
 </script>
 
@@ -160,6 +174,7 @@
       on:click={() => { if (!sameTzDate(day, date)) setTzDate(day) }}
       disabled={
         sameTzDate(day, date) ||
+        !validDay(day) ||
         (day < minDate || day > maxDate) &&
         !sameTzDate(day, minDate) &&
         !sameTzDate(day, maxDate)
