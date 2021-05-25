@@ -18,8 +18,7 @@ export const basicLevelFilters = {
   'surface': name => {
     return name.includes('at 2 m above ground') ||
            name.includes('at 10 m above ground') ||
-           name.includes('at surface') ||
-           name.includes('sea surface') ||
+           name.includes('surface') ||
            name.includes('wave') ||
            name.startsWith('precipitation') ||
            name.startsWith('sunshine');
@@ -46,8 +45,7 @@ export const advancedLevelFilters = {
   'surface': name => {
     return name.includes('at 2 m above ground') ||
            name.includes('at 10 m above ground') ||
-           name.includes('at surface') ||
-           name.includes('sea surface') ||
+           name.includes('surface') ||
            name.includes('wave') ||
            name.startsWith('precipitation') ||
            name.startsWith('sunshine');
@@ -121,6 +119,9 @@ export const propertyFilters = {
   'sunshine': name => {
     return name === 'sunshine in previous hour';
   },
+  'currents': name => {
+    return name.startsWith('ocean surface currents');
+  },
   // catch-all so that new datasets don't immediately crash application
   undefined: name => false,
 };
@@ -140,6 +141,7 @@ export const categoryFilters = {
   },
   'oceans': name => {
     return propertyFilters['sea temperature'](name) ||
+           propertyFilters['currents'](name) ||
            propertyFilters['wave height'](name) ||
            propertyFilters['wave period'](name) ||
            propertyFilters['wave direction'](name);
