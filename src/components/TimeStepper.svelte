@@ -4,7 +4,8 @@
   import ChevronLeft32 from "carbon-icons-svelte/lib/ChevronLeft32";
   import ChevronRight32 from "carbon-icons-svelte/lib/ChevronRight32";
   import SkipForward32 from "carbon-icons-svelte/lib/SkipForward32";
-  import { fix24 } from '../utility.js';
+  import { validOscarDates, fix24 } from '../utility.js';
+  import prettyMilliseconds from 'pretty-ms';
 
   export let dataset;
   export let date;
@@ -18,48 +19,57 @@
     timeZoneName: 'short',
   };
 
-  function stepDate(hours) {
-    if (utc) {
-      date = new Date(Date.UTC(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
-        date.getUTCHours() + hours,
-        date.getUTCMinutes(),
-        date.getUTCSeconds(),
-        date.getUTCMilliseconds()
-      ));
-      return;
+  $: validDates = getValidDates(dataset);
+  $: currentIndex = validDates.findIndex(d => d.getTime() === date.getTime());
+
+  function getValidDates(dataset) {
+    const dates = [];
+
+    if (dataset.intervalInHours === 'custom:OSCAR') {
+      let year = dataset.start.getUTCFullYear(); 
+      while (year <= dataset.end.getUTCFullYear()) {
+        dates.push(...validOscarDates(year));
+        year++;
+      }
+      return dates.filter(d => d >= dataset.start && d <= dataset.end);
     }
 
-    date = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      date.getHours() + hours,
-      date.getMinutes(),
-      date.getSeconds(),
-      date.getMilliseconds()
-    );
+    let t = dataset.start.getTime();
+    while (t <= dataset.end.getTime()) {
+      dates.push(new Date(t));
+      t += dataset.intervalInHours * 60 * 60 * 1000;
+    }
+    return dates;
+  }
+
+  function stepDate(steps) {
+    date = validDates[currentIndex + steps];
+  }
+
+  function prettyStepSize(dates, index, steps) {
+    let tDiff = dates[index + steps] - dates[index];
+    if (Number.isNaN(tDiff)) return '';
+
+    return prettyMilliseconds(tDiff, {verbose: true});
   }
 
   const bigStep = 6;
-  const msInHour = 60 * 60 * 1000;
+  const smolStep = 1;
 </script>
 
 <div>
   <Button
-    action={() => stepDate(-bigStep * dataset.intervalInHours)}
-    disabled={date.getTime() - bigStep * msInHour < dataset.start}
-    tip={`-${bigStep * dataset.intervalInHours} hours`}
+    action={() => stepDate(-bigStep)}
+    disabled={currentIndex - bigStep < 0}
+    tip={prettyStepSize(validDates, currentIndex, -bigStep)}
     flex
   >
     <SkipBack32 />
   </Button>
   <Button
-    action={() => stepDate(-dataset.intervalInHours)}
-    disabled={date <= dataset.start}
-    tip={`-${dataset.intervalInHours} hours`}
+    action={() => stepDate(-smolStep)}
+    disabled={currentIndex - smolStep < 0}
+    tip={prettyStepSize(validDates, currentIndex, -smolStep)}
     flex secondary
   >
     <ChevronLeft32 />
@@ -68,17 +78,17 @@
     {fix24(date.toLocaleTimeString(undefined, timeOptions))}
   </span>
   <Button
-    action={() => stepDate(dataset.intervalInHours)}
-    disabled={date >= dataset.end}
-    tip={`+${dataset.intervalInHours} hours`}
+    action={() => stepDate(smolStep)}
+    disabled={currentIndex + smolStep >= validDates.length}
+    tip={prettyStepSize(validDates, currentIndex, smolStep)}
     flex secondary
   >
     <ChevronRight32 />
   </Button>
   <Button
-    action={() => stepDate(bigStep * dataset.intervalInHours)}
-    disabled={date.getTime() + bigStep * msInHour > dataset.end}
-    tip={`+${bigStep * dataset.intervalInHours} hours`}
+    action={() => stepDate(bigStep)}
+    disabled={currentIndex + bigStep >= validDates.length}
+    tip={prettyStepSize(validDates, currentIndex, bigStep)}
     flex
   >
     <SkipForward32 />
