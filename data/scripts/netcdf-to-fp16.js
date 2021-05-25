@@ -47,7 +47,7 @@ const float16 = new Transform({
     const converted = new Float16Array(original);
     callback(null, Buffer.from(converted.buffer));
   }
- });
+});
 
 const output = createWriteStream(outputFile);
 

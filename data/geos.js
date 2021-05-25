@@ -23,6 +23,11 @@ const geosProps = {
     projection: 'GEOS',
 };
 
+const hoursForwardDefault = 30;
+const hoursForward00 = 240;
+const hoursForward12 = 120;
+
+
 const geosVars = [
     {
         dataDir: 'geos-sulfur-dioxide-surface-mass/',
@@ -92,37 +97,26 @@ async function findDataFromIndex(dataset, year, month, day, hour, forecast, inde
 
     return urlName;
 }
-async function downloadGEOSData(dataset, year, month, day, hour) {
 
-    var inputFileURL;
+
+
+
+async function downloadGEOSData(dataset, year, month, day, hour, datetime, hourShift) {
+
     const forecast = "inst1_2d_hwl_Nx";
-    const indexPageURL = 'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
-        `Y${year}/M${month}/D${day}/`; // base URL, as well as HTML index of data
+    const baseURL = 'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
+        `Y${year}/M${month}/D${day}/H${hour}/`;
 
-    if (dataset.filenamePrefix) { // attempt to use previous prefix 
-        console.log("GEOS: Attempting to find data using previous prefix...");
-        const prefix = dataset.filenamePrefix;
-        const attemptPrefixURL = `${prefix}.${forecast}.${year}${month}${day}_${hour}00z.nc4`
+    const nxtDatetime = datetime.plus({ hours: hourShift });
+    const nxt_year = nxtDatetime.year;
+    const nxt_month = nxtDatetime.toFormat('LL');
+    const nxt_day = nxtDatetime.toFormat('dd');
+    const nxt_hour = nxtDatetime.toFormat('HH')
 
-        let attemptPrefixFilename;
-        try {
-            attemptPrefixFilename = await util.download(indexPageURL + attemptPrefixURL, true);
-            // next line only runs if download is successful
-            inputFileURL = attemptPrefixURL;
-        } catch (error) {
-            console.log("Previous prefix did not work, searching the index instead.")
-            inputFileURL = await findDataFromIndex(dataset, year, month, day, hour, forecast, indexPageURL);
-        }
-    } else { // first run, find using index search
-        inputFileURL = await findDataFromIndex(dataset, year, month, day, hour, forecast, indexPageURL);
-    }
+    const forecastNameSyntax = `GEOS.fp.fcst.${forecast}.${year}${month}${day}_${hour} +
+        ${nxt_year}${nxt_month}${nxt_day}_${nxt_hour}00z.V01.nc4`;
 
-    // If previous prefix worked, the following code does nothing as it finds it in cache. Otherwise, downloads the data.
-    const inputFile = await util.download(
-        'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
-        `Y${year}/M${month}/D${day}/` + inputFileURL,
-        true
-    );
+    const inputFile = await util.download(baseURL + forecastNameSyntax, true);
 
     return inputFile;
 }
