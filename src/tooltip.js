@@ -12,30 +12,18 @@ tippy.setDefaultProps({
 export let tips = new Set();
 
 export default function tooltip(node, options) {
-  if (!options.content) return;
-
-  let tip;
-
-  function addTip() {
-    tip = tippy(node, options);
-    tips.add(tip);
-  }
-
-  function removeTip() {
-    tips.delete(tip);
-    tip.destroy();
-  }
-
-  addTip();
+  let tip = tippy(node, options);
+  if (!options.content) tip.hide();
+  tips.add(tip);
 
   return {
     update(newOptions) {
-      removeTip();
-      options = newOptions;
-      addTip();
+      tip.setProps(newOptions);
+      if (!newOptions.content) tip.hide();
     },
     destroy() {
-      removeTip();
+      tip.destroy();
+      tips.delete(tip);
     }
   };
 }
