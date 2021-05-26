@@ -20,7 +20,7 @@ const inputFile = process.argv[2];
 const outputFile = process.argv[3];
 
 async function getArr(inputFile, variable) {
-  const netcdf = spawn('ncdump', ['-v', variable, inputFile]);
+  const netcdf = spawn('ncdump', ['-v', variable, '-p', '9,17', inputFile]);
 
   const values = [];
   let inHeader = true;

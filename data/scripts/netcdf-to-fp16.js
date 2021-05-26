@@ -23,7 +23,7 @@ const outputFile = process.argv[3];
 const variable = process.argv[4];
 const factor = process.argv[5];
 
-const netcdf = spawn('ncdump', ['-v', variable, inputFile]);
+const netcdf = spawn('ncdump', ['-v', variable, '-p', '9,17', inputFile]);
 
 let inHeader = true;
 
