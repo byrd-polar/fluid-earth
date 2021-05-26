@@ -4,51 +4,41 @@
   import prettyBytes from 'pretty-bytes';
   import { tick } from 'svelte'
 
+  export let validDates;
   export let date;
   export let utc;
   export let fetcher;
   export let griddedDataset;
   export let particlesShown;
 
-  const msInHour = 60 * 60 * 1000;
 
-  $: dateOptions = {
-    timeZone: utc ? 'UTC' : undefined,
-    hour12: utc ? false : undefined,
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    timeZoneName: 'short',
-  }
+  let lockStartIndex = false;
 
   let timepoints = 10;
-  let interval = griddedDataset.intervalInHours;
-  $: timepointsMax = Math.max(
-    Math.floor(((griddedDataset.end - date) / (interval * msInHour)) + 1),
-    1
-  );
-  $: intervalMax = Math.max(
-    Math.floor(
-      (griddedDataset.end - date) /
-      ((timepoints-1) * griddedDataset.intervalInHours * msInHour)
-    ) * griddedDataset.intervalInHours,
-    griddedDataset.intervalInHours
-  );
+  let interval = 1;
+  let startIndex = 0;
+  let index = 0;
 
-  let start = date;
-  $: date, updateStart();
-  $: end = new Date(start.getTime() + (timepoints-1) * interval * msInHour);
+  $: updateStartIndex(date);
+  function updateStartIndex(date) {
+    if (!lockStartIndex) {
+      startIndex = validDates.findIndex(d => d.getTime() === date.getTime());
+    }
+  }
+
+  // Max values based on following relationship + algebra:
+  // startIndex + (timepoints-1) * interval <= validDates.length-1;
+  $: timepointsMax =
+    Math.floor((((validDates.length-1) - startIndex) / interval) + 1);
+  $: intervalMax = timepoints === 1 ?
+    1 :
+    Math.floor(((validDates.length-1) - startIndex) / (timepoints-1));
 
   let loading = false;
   let loaded = false;
 
-  $: start, timepoints, interval, griddedDataset, particlesShown,
+  $: startIndex, timepoints, interval, griddedDataset, particlesShown,
     loaded = false;
-
-  let baseDate = date;
-  let value = 0;
 
   async function loadRange(e) {
     e.preventDefault(); // don't reload page (but still do form validation)
@@ -63,7 +53,7 @@
 
     let fetches = [];
     for (let i = 0; i < timepoints; i++) {
-      let d = new Date(start.getTime() + i * interval * msInHour);
+      let d = validDates[startIndex + i * interval];
       fetches.push(fetcher.fetch(griddedDataset, d, 'range-loader', false));
     }
 
@@ -73,14 +63,13 @@
     if (results.every(r => r)) {
       particlesShown = false;
       await tick();
-      value = 0;
+      index = 0;
       loaded = true;
     }
   }
 
-  $: value, slideDate();
+  $: index, slideDate();
 
-  let lockStart = false;
   let init = true;
 
   async function slideDate() {
@@ -88,24 +77,37 @@
       init = false;
       return;
     }
-    lockStart = true;
+    lockStartIndex = true;
     await tick();
-    date = new Date(start.getTime() + value * interval * msInHour);
+    date = validDates[startIndex + index * interval];
     await tick();
-    lockStart = false;
+    lockStartIndex = false;
   }
 
-  function updateStart() {
-    if (!lockStart) start = date;
-  }
+  $: dateOptions = {
+    timeZone: utc ? 'UTC' : undefined,
+    hour12: utc ? false : undefined,
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    timeZoneName: 'short',
+  };
+
+  $: start = validDates[startIndex].toLocaleDateString(undefined, dateOptions);
+
+  $: endIndex = Math.max(startIndex, startIndex + (timepoints-1) * interval);
+  $: end = endIndex >= validDates.length ?
+    'Over the limit' :
+    validDates[endIndex].toLocaleDateString(undefined, dateOptions);
 
   $: loadSize = timepoints * griddedDataset.bytesPerFile;
 </script>
 
 <form on:submit={loadRange}>
   <p>
-    Start time:
-    <span>{start.toLocaleDateString(undefined, dateOptions)}</span>
+    Start time: <span>{start}</span>
   </p>
   <label for="range-timepoints">Number of timepoints:</label>
   <input
@@ -118,20 +120,19 @@
     disabled={loading}
     required
   />
-  <label for="range-inc">Interval (hours):</label>
+  <label for="range-inc">Interval (step size):</label>
   <input
     id="range-inc"
     type="number"
     bind:value={interval}
-    min={griddedDataset.intervalInHours}
+    min={1}
     max={intervalMax}
-    step={griddedDataset.intervalInHours}
-    disabled={loading || timepoints === 1}
+    step={1}
+    disabled={loading}
     required
   />
   <p>
-    End time:
-    <span>{end.toLocaleDateString(undefined, dateOptions)}</span>
+    End time: <span>{end}</span>
   </p>
 
   {#if !loaded}
@@ -143,7 +144,7 @@
       min={0}
       max={timepoints-1}
       step={1}
-      bind:value
+      bind:value={index}
       springValues={{ stiffness: 1, damping: 1 }}
       pips
     />

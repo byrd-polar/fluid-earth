@@ -4,10 +4,10 @@
   import ChevronLeft32 from "carbon-icons-svelte/lib/ChevronLeft32";
   import ChevronRight32 from "carbon-icons-svelte/lib/ChevronRight32";
   import SkipForward32 from "carbon-icons-svelte/lib/SkipForward32";
-  import { validOscarDates, fix24 } from '../utility.js';
+  import { fix24 } from '../utility.js';
   import prettyMilliseconds from 'pretty-ms';
 
-  export let dataset;
+  export let validDates;
   export let date;
   export let utc;
 
@@ -19,28 +19,7 @@
     timeZoneName: 'short',
   };
 
-  $: validDates = getValidDates(dataset);
   $: currentIndex = validDates.findIndex(d => d.getTime() === date.getTime());
-
-  function getValidDates(dataset) {
-    const dates = [];
-
-    if (dataset.intervalInHours === 'custom:OSCAR') {
-      let year = dataset.start.getUTCFullYear(); 
-      while (year <= dataset.end.getUTCFullYear()) {
-        dates.push(...validOscarDates(year));
-        year++;
-      }
-      return dates.filter(d => d >= dataset.start && d <= dataset.end);
-    }
-
-    let t = dataset.start.getTime();
-    while (t <= dataset.end.getTime()) {
-      dates.push(new Date(t));
-      t += dataset.intervalInHours * 60 * 60 * 1000;
-    }
-    return dates;
-  }
 
   function stepDate(steps) {
     date = validDates[currentIndex + steps];
