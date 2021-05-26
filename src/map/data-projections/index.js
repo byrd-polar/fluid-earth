@@ -34,11 +34,11 @@ export default Object.freeze({
   OSCAR: {
     id: 2,
     function: (data, lonLat) => {
-      const wRes = data.width / 360;
-      const hRes = (data.height - 1) / 180;
+      const wRes = (data.width - 1) / 400;
+      const hRes = (data.height - 1) / 160;
 
-      const col = Math.round((lonLat[0] + 360) * wRes) % data.width;
-      const row = Math.round((lonLat[1] + 90) * hRes);
+      const col = Math.round((lonLat[0] + 340) * wRes) % (wRes * 360);
+      const row = Math.round((-lonLat[1] + 80) * hRes);
 
       return row * data.width + col;
     },
@@ -49,7 +49,8 @@ export default Object.freeze({
 export function singleArrayDataGet(griddedData, lonLat) {
   const index = griddedData.projection.function(griddedData, lonLat);
   const value = griddedData.floatArray[index];
-  return value === Number.NEGATIVE_INFINITY ? NaN : value;
+  const nan = value === Number.NEGATIVE_INFINITY || value === undefined;
+  return nan ? NaN : value;
 }
 
 // given a particleData object and a lonLat, return the values at that point
@@ -59,5 +60,8 @@ export function pairedArrayDataGet(particleData, lonLat) {
     particleData.uVelocities[index],
     particleData.vVelocities[index],
   ];
-  return values.map(v => v === Number.NEGATIVE_INFINITY ? NaN : v);
+  return values.map(value => {
+    const nan = value === Number.NEGATIVE_INFINITY || value === undefined;
+    return nan ? NaN : value;
+  });
 }
