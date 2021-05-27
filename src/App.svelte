@@ -3,6 +3,7 @@
   import Navbar from './Navbar.svelte';
   import Drawer from './Drawer.svelte';
   import Menu from './Menu.svelte';
+  import Starfield from './Starfield.svelte';
 
   import Datasets from './menus/Datasets.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
@@ -415,7 +416,9 @@
     bind:d3geoProjection
     bind:MAX_TEXTURE_SIZE
   >
-    <div class="background" slot="background"></div>
+    <svelte:fragment slot="background">
+      <Starfield />
+    </svelte:fragment>
     <Controls
       {minZoom}
       {maxZoom}
@@ -461,9 +464,5 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-  }
-
-  div.background {
-    background-color: var(--primary-color-dark);
   }
 </style>
