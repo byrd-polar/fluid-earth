@@ -8,17 +8,18 @@
 
   let prng = prng_alea('Bag Raiders');
 
-  function boxShadowString(count) {
-    return Array.from({length: count}, () => {
-      let offsetX = prng() * 3 * 1080 - 1.5 * 1080;
-      let offsetY = prng() * 1080 - 0.5 * 1080;
-      let blur = prng() * 2;
+  let boxShadowString = Array.from({length: 1000}, () => {
+    let offsetX = prng() * 5 * 1080 - 2.5 * 1080;
+    let offsetY = prng() * 1080 - 0.5 * 1080;
+    let blur = prng() * 2;
+    let size = Math.exp(-3 * prng());
 
-      return `calc(${offsetX} * var(--base-unit)) ` +
-             `calc(${offsetY} * var(--base-unit)) ` +
-             `calc(${blur} * var(--base-unit)) white`;
-    }).join(',');
-  }
+    return `calc(${offsetX} * var(--base-unit)) ` +
+           `calc(${offsetY} * var(--base-unit)) ` +
+           `calc(${blur} * var(--base-unit)) ` +
+           `calc(${size} * var(--base-unit)) ` +
+           'white';
+  }).join(',');
 </script>
 
 <div
@@ -26,9 +27,7 @@
   style="--base-unit: {screenRatio}px"
   bind:clientHeight={elementHeight}
 >
-  <div class="bigg-star" style="box-shadow: {boxShadowString(10)}"></div>
-  <div class="medi-star" style="box-shadow: {boxShadowString(100)}"></div>
-  <div class="smol-star" style="box-shadow: {boxShadowString(1000)}"></div>
+  <div class="star" style="box-shadow: {boxShadowString}"></div>
 </div>
 
 <style>
@@ -39,23 +38,10 @@
     background-color: black;
   }
 
-  .field > * {
+  .star {
     position: absolute;
     border-radius: 50%;
-  }
-
-  .smol-star {
-    height: var(--base-unit);
-    width: var(--base-unit);
-  }
-
-  .medi-star {
-    height: calc(2 * var(--base-unit));
-    width: calc(2 * var(--base-unit));
-  }
-
-  .bigg-star {
-    height: calc(3 * var(--base-unit));
-    width: calc(3 * var(--base-unit));
+    height: 1px;
+    width: 1px;
   }
 </style>
