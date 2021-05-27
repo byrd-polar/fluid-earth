@@ -11,14 +11,14 @@
   let boxShadowString = Array.from({length: 1000}, () => {
     let offsetX = prng() * 5 * 1080 - 2.5 * 1080;
     let offsetY = prng() * 1080 - 0.5 * 1080;
-    let blur = prng() * 2;
     let size = Math.exp(-3 * prng());
+    let alpha = prng();
 
     return `calc(${offsetX} * var(--base-unit)) ` +
            `calc(${offsetY} * var(--base-unit)) ` +
-           `calc(${blur} * var(--base-unit)) ` +
+           '0 ' +
            `calc(${size} * var(--base-unit)) ` +
-           'white';
+           `rgba(255, 255, 255, ${alpha})`;
   }).join(',');
 </script>
 
