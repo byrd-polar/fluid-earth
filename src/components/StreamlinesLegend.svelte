@@ -1,6 +1,7 @@
 <script>
   import { capitalizeFirstLetter } from '../utility.js';
   import tooltip from '../tooltip.js';
+  import prng_alea from 'esm-seedrandom/esm/alea.mjs'
 
   export let particleDataset;
   export let particleDisplay;
@@ -17,6 +18,11 @@
 
     particlesPaused = !particlesPaused
   }
+
+  let prng = prng_alea('hmm is this better?');
+
+  const trailWidth = 5;
+  const trailHeight = 0.3;
 </script>
 
 <section
@@ -26,7 +32,23 @@
   tabindex="0"
 >
   <h3>{capitalizeFirstLetter(particleDataset.name)}</h3>
-  <div class:paused={particlesPaused}></div>
+  <div
+    class="legend"
+    class:paused={particlesPaused}
+    style="--trail-width: {trailWidth}em; --trail-height: {trailHeight}em"
+  >
+    {#each Array.from({length: 50 }) as _}
+      <div
+        class="particleTrail"
+        style="
+          left: {prng() * (32 + trailWidth) - trailWidth}em;
+          top: {prng() * (0.8 - trailHeight)}em;
+          animation-delay: -{prng() * 20}s
+        "
+      >
+      </div>
+    {/each}
+  </div>
   <span>
     {#if particlesPaused}
       particle animation paused
@@ -66,23 +88,30 @@
   }
 
   @keyframes slide {
-    from { background-position-x: 0; }
-    to   { background-position-x: 0.8em; }
+    from { transform: translate(calc(-32em - var(--trail-width)), 0); }
+    to { transform: translate(32em, 0); }
   }
 
-  div {
+  div.legend {
     height: 0.8em;
-
-    background-image:
-      radial-gradient(#ffffff88 0%, #ffffff88 60%, transparent 60%);
-    background-position: 0 -0.05em;
-    background-size: 0.8em 0.8em;
-    animation: slide 0.3s linear;
-    animation-iteration-count: infinite;
+    position: relative;
+    overflow: hidden;
+    background: rgba(0,0,0,0.2);
   }
 
-  div.paused {
+  div.legend.paused * {
     animation-play-state: paused;
+  }
+
+  div.particleTrail {
+    width: var(--trail-width);
+    height: var(--trail-height);
+    border-radius: calc(var(--trail-height) / 2);
+    background:
+      linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3));
+    position: absolute;
+    animation: slide 20s linear;
+    animation-iteration-count: infinite;
   }
 
   span {
