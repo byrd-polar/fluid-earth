@@ -94,7 +94,7 @@
   }
 
   @keyframes slide {
-    from { transform: translate(calc(0em - var(--trail-width)), 0); }
+    from { transform: translate(calc(-1 * var(--trail-width)), 0); }
     to { transform: translate(32em, 0); }
   }
 
