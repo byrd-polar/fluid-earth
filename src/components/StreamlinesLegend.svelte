@@ -19,10 +19,12 @@
     particlesPaused = !particlesPaused
   }
 
-  let prng = prng_alea('hmm is this better?');
+  let prng = prng_alea('Milankovitch');
 
+  const trailCount = 20;
   const trailWidth = 5;
   const trailHeight = 0.3;
+  const trailPeriod = 12;
 </script>
 
 <section
@@ -35,15 +37,19 @@
   <div
     class="legend"
     class:paused={particlesPaused}
-    style="--trail-width: {trailWidth}em; --trail-height: {trailHeight}em"
+    style="
+      --trail-width: {trailWidth}em;
+      --trail-height: {trailHeight}em;
+      --trail-period: {trailPeriod}s;
+      --trail-color: rgba(255, 255, 255, {info.opacity});
+    "
   >
-    {#each Array.from({length: 50 }) as _}
+    {#each Array.from({length: trailCount }) as _}
       <div
         class="particleTrail"
         style="
-          left: {prng() * (32 + trailWidth) - trailWidth}em;
           top: {prng() * (0.8 - trailHeight)}em;
-          animation-delay: -{prng() * 20}s
+          animation-delay: -{prng() * trailPeriod}s;
         "
       >
       </div>
@@ -88,7 +94,7 @@
   }
 
   @keyframes slide {
-    from { transform: translate(calc(-32em - var(--trail-width)), 0); }
+    from { transform: translate(calc(0em - var(--trail-width)), 0); }
     to { transform: translate(32em, 0); }
   }
 
@@ -96,7 +102,6 @@
     height: 0.8em;
     position: relative;
     overflow: hidden;
-    background: rgba(0,0,0,0.2);
   }
 
   div.legend.paused * {
@@ -108,9 +113,9 @@
     height: var(--trail-height);
     border-radius: calc(var(--trail-height) / 2);
     background:
-      linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3));
+      linear-gradient(to right, transparent, var(--trail-color));
     position: absolute;
-    animation: slide 20s linear;
+    animation: slide var(--trail-period) linear;
     animation-iteration-count: infinite;
   }
 
