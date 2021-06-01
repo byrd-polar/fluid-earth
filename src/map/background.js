@@ -15,6 +15,7 @@ export default class MapBackground {
     this._data = options.data;
     this._colormap = options.colormap;
     this._domain = options.domain;
+    this._baseColor = options.baseColor;
 
     // private variables (no setters)
     this._gl = gl;
@@ -54,6 +55,11 @@ export default class MapBackground {
 
   set domain(d) {
     this._domain = d;
+    this._dataNeedsRecolor = true;
+  }
+
+  set baseColor(b) {
+    this._baseColor = b;
     this._dataNeedsRecolor = true;
   }
 
@@ -191,6 +197,7 @@ export default class MapBackground {
       u_colormap: this._textures.colormap,
       u_colormapN: this._colormap.lut.length,
       u_domain: this._domain,
+      u_baseColor: this._baseColor.map((v, i) => i === 3 ? v : v / 255),
     });
 
     // switch rendering destination back to canvas

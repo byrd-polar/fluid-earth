@@ -7,6 +7,7 @@ uniform sampler2D u_data;
 uniform sampler2D u_colormap;
 uniform float u_colormapN;
 uniform vec2 u_domain;
+uniform vec4 u_baseColor;
 
 varying vec2 v_position;
 
@@ -16,7 +17,7 @@ void main() {
   // Check for -Infinities and use a consistent color for them
   // (not using NaN because of lack of support in some implementations)
   if (value < -1e99) {
-    gl_FragColor = vec4(0.15, 0.15, 0.15, 1); // greyish color
+    gl_FragColor = u_baseColor;
     return;
   }
 

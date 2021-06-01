@@ -26,13 +26,14 @@
   export let projection = projections.VERTICAL_PERSPECTIVE;
 
   export let griddedData = {
-    floatArray: new Float16Array([0]),
+    floatArray: new Float16Array([-Infinity]),
     width: 1,
     height: 1,
     projection: dataProjections.GFS,
   };
   export let griddedColormap = colormaps.VIRIDIS;
   export let griddedDomain = [0, 1];
+  export let griddedBaseColor = [38, 38, 38, 1]; // rgba greyish color
 
   export let particleData = {
     uVelocities: new Float16Array([0]),
@@ -99,6 +100,7 @@
   $: mapBackground.data = griddedData;
   $: mapBackground.colormap = griddedColormap;
   $: mapBackground.domain = griddedDomain;
+  $: mapBackground.baseColor = griddedBaseColor;
   $: mapBackground.vectorData = vectorData;
 
   let particleSimulator = {};
@@ -112,6 +114,7 @@
       griddedData,
       griddedColormap,
       griddedDomain,
+      griddedBaseColor,
       vectorData,
     backgroundNeedsRedraw = true;
 
@@ -158,6 +161,7 @@
       data: griddedData,
       colormap: griddedColormap,
       domain: griddedDomain,
+      baseColor: griddedBaseColor,
       vectorData: vectorData,
       webgl2: webgl2,
     });
