@@ -115,14 +115,9 @@
     particleData = emptyParticleData;
   }
   let particlesPaused = false;
-  let particleLifetime = 1000;
-  let particleCount = 1e5;
-  let particleDisplay = {
-    size: 0.8,
-    rate: 5e4,
-    opacity: 0.4,
-    fade: 0.96,
-  };
+  let particleLifetime = particleDataset.particleLifetime;
+  let particleCount = particleDataset.particleCount;
+  let particleDisplay = particleDataset.particleDisplay;
 
   let utc = false;
   let pins = [];

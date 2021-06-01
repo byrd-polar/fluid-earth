@@ -50,6 +50,7 @@
     size: 0.8,
     rate: 5e4,
     opacity: 0.4,
+    opacitySpeedDecay: 0.8,
     fade: 0.96,
   };
 
