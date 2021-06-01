@@ -42,7 +42,7 @@
     height: 1,
     projection: dataProjections.GFS,
   };
-  export let particlesShown = true;
+  export let particlesShown = false;
   export let particlesPaused = false;
   export let particleLifetime = 1000; // milliseconds
   export let particleCount = 1e5;
