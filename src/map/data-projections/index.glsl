@@ -26,6 +26,16 @@ void projectToTexture(
 
     textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
     textureCoord.x = mod(textureCoord.x, 1.0);
+  } else if (projection == 3) {
+
+    textureCoord = (lonLat + vec2(PI, PI_2)) / vec2(2.0 * PI, PI);
+
+    float xOffset = 0.5 / gridWidth;
+    float yScale = (gridHeight - 1.0) / gridHeight;
+
+    textureCoord.x = mod(textureCoord.x + xOffset, 1.0);
+    textureCoord.y = yScale * (textureCoord.y - 0.5) + 0.5;
+
   }
   // OSCAR
   else if (projection == 2) {

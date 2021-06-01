@@ -23,7 +23,7 @@ const geosProps = {
 };
 
 const hoursForecastStart = -2;
-const hoursForwardDefault = 2;
+const hoursForwardDefault = 2; // TODO change back to 30
 const hoursForward00 = 240;
 const hoursForward12 = 120;
 
