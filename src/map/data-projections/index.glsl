@@ -26,7 +26,9 @@ void projectToTexture(
 
     textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
     textureCoord.x = mod(textureCoord.x, 1.0);
-  } else if (projection == 3) {
+  } 
+  // GEOS
+  else if (projection == 3) {
 
     textureCoord = (lonLat + vec2(PI, PI_2)) / vec2(2.0 * PI, PI);
 
