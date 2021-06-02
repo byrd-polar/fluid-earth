@@ -8,6 +8,8 @@
   import RangeSlider from 'svelte-range-slider-pips';
   import Button from '../components/Button.svelte';
   import { clamp } from '../utility.js';
+  import colormaps, { types } from '../map/colormaps/';
+  import projections from '../map/projections/';
 
   export let minZoom;
   export let maxZoom;
@@ -30,6 +32,17 @@
     centerLatitude = clamp(centerLatitude + up - down, minLat, maxLat);
     centerLongitude = clamp(centerLongitude + right - left, minLong, maxLong);
   }
+
+  export let inventory;
+  export let MAX_TEXTURE_SIZE;
+  export let griddedDataset;
+  export let particleDataset;
+  export let griddedColormap;
+
+  let griddedDatasets = inventory.filter(d => d.colormap)
+  let particleDatasets = inventory.filter(d => d.particleDisplay);
+
+  export let projection;
 </script>
 
 <h2>Zoom Controls</h2>
@@ -127,6 +140,87 @@
   </div>
 </div>
 
+<h2>All Datasets</h2>
+
+<h3>Gridded</h3>
+{#each griddedDatasets as dataset}
+  <label>
+    <input
+      type="radio"
+      name="griddedDataset"
+      bind:group={griddedDataset}
+      value={dataset}
+      disabled={Math.max(dataset.width, dataset.height) > MAX_TEXTURE_SIZE}
+    >
+    {dataset.name}
+  </label>
+{/each}
+
+<h3>Particle</h3>
+{#each particleDatasets as dataset}
+  <label>
+    <input
+      type="radio"
+      name="particleDataset"
+      bind:group={particleDataset}
+      value={dataset}
+      disabled={Math.max(dataset.width, dataset.height) > MAX_TEXTURE_SIZE}
+    >
+    {dataset.name}
+  </label>
+{/each}
+
+<h2>About colormaps</h2>
+
+<p>
+Colormaps define how numerical values are converted to colors to display on the
+map.
+</p>
+<p>
+Perceptions of data are heavily influenced by the choice of colormap, so it is
+important for science communicators to select an appropriate colormap for their
+data. Toggle between the colormaps below to see how the same data looks when
+presented with different colors.
+</p>
+
+<h2>All Colormaps</h2>
+
+{#each [...types] as type}
+  <h3>{type}</h3>
+
+  {#each Object.values(colormaps).filter(map => map.type === type) as map}
+    <label>
+      <input
+        type="radio"
+        bind:group={griddedColormap}
+        value={map}
+      >
+      {map.name}
+    </label>
+  {/each}
+{/each}
+
+<h2>About projections</h2>
+<p>
+Map projections are the various ways of taking a three-dimensional globe and
+projecting it to the two-dimensional surface of a map.
+<p>
+This will always distort the globe in some way, so each projection has its
+tradeoffs and use cases.
+
+<h2>All Projections</h2>
+
+{#each Object.values(projections) as p}
+<label>
+  <input
+    type="radio"
+    bind:group={projection}
+    value={p}
+  >
+  {p.name}
+</label>
+{/each}
+
 <style>
   div.slider {
     display: flex;
@@ -161,4 +255,19 @@
   div.pan-controls > :global(:nth-child(4)) { grid-area: d; }
   div.pan-controls > :global(:nth-child(5)) { grid-area: e; }
   div.pan-controls > :global(:nth-child(6)) { grid-area: f; }
+
+  label {
+    padding: 0.25em 0;
+    display: block;
+    cursor: pointer;
+  }
+
+  label:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  h3 {
+    margin: 1em 0 0.25em;
+    font-size: 1em;
+  }
 </style>

@@ -12,7 +12,6 @@
 
   export let date;
   export let inventory;
-  export let MAX_TEXTURE_SIZE;
   export let griddedDataset;
   export let particleDataset;
   export let particlesShown;
@@ -136,49 +135,7 @@
   on:select={updateDatasets}
 />
 
-{#if advancedOptions}
-  <h2>All Datasets</h2>
-
-  <h3>Gridded</h3>
-  {#each griddedDatasets as dataset}
-    <label>
-      <input
-        type="radio"
-        name="griddedDataset"
-        bind:group={griddedDataset}
-        value={dataset}
-        disabled={Math.max(dataset.width, dataset.height) > MAX_TEXTURE_SIZE}
-      >
-      {dataset.name}
-    </label>
-  {/each}
-
-  <h3>Particle</h3>
-  {#each particleDatasets as dataset}
-    <label>
-      <input
-        type="radio"
-        name="particleDataset"
-        bind:group={particleDataset}
-        value={dataset}
-        disabled={Math.max(dataset.width, dataset.height) > MAX_TEXTURE_SIZE}
-      >
-      {dataset.name}
-    </label>
-  {/each}
-{/if}
-
 <style>
-  label {
-    padding: 0.25em 0;
-    display: block;
-    cursor: pointer;
-  }
-
-  label:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
   h3 {
     margin: 1em 0 0.25em;
     font-size: 1em;

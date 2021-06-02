@@ -9,8 +9,7 @@
   import TimeMachine from './menus/TimeMachine.svelte';
   import Locations from './menus/Locations.svelte';
   import MapProjections from './menus/MapProjections.svelte';
-  import Colormaps from './menus/Colormaps.svelte';
-  import Perspective from './menus/Perspective.svelte';
+  import DeveloperTools from './menus/DeveloperTools.svelte';
   import About from './menus/About.svelte';
   import Feedback from './menus/Feedback.svelte';
 
@@ -271,10 +270,9 @@
   import Grid24 from "carbon-icons-svelte/lib/Grid24";
   import Time24 from "carbon-icons-svelte/lib/Time24";
   import Globe24 from "carbon-icons-svelte/lib/Globe24";
-  import ColorPalette24 from "carbon-icons-svelte/lib/ColorPalette24";
-  import View24 from "carbon-icons-svelte/lib/View24";
   import Information24 from "carbon-icons-svelte/lib/Information24";
   import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
+  import Debug24 from "carbon-icons-svelte/lib/Debug24";
 
   const defaultMenus = [
     { name: 'Datasets', icon: Grid24 },
@@ -286,8 +284,7 @@
   ];
 
   const extraMenus = [
-    { name: 'Colormaps', icon: ColorPalette24 },
-    { name: 'Perspective', icon: View24 },
+    { name: 'Developer Tools', icon: Debug24 },
   ];
 
   $: menus = advancedOptions ? defaultMenus.concat(extraMenus) : defaultMenus;
@@ -327,7 +324,6 @@
   <Datasets
     {date}
     {inventory}
-    {MAX_TEXTURE_SIZE}
     bind:griddedDataset
     bind:particleDataset
     bind:particlesShown
@@ -344,13 +340,12 @@
     {advancedOptions}
   />
 </Menu>
-<Menu bind:openedMenu menuName="Map Projections" bind:advancedOptions>
+<Menu bind:openedMenu menuName="Map Projections">
   <MapProjections
     bind:projection
     bind:centerLongitude
     bind:centerLatitude
     bind:zoom
-    {advancedOptions}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Locations" flexbox>
@@ -372,13 +367,8 @@
   />
 </Menu>
 {#if advancedOptions}
-  <Menu bind:openedMenu menuName="Colormaps">
-    <Colormaps
-      bind:griddedColormap
-    />
-  </Menu>
-  <Menu bind:openedMenu menuName="Perspective">
-    <Perspective
+  <Menu bind:openedMenu menuName="Developer Tools">
+    <DeveloperTools
       {minZoom}
       {maxZoom}
       bind:zoom
@@ -388,6 +378,12 @@
       {maxLong}
       bind:centerLatitude
       bind:centerLongitude
+      {inventory}
+      {MAX_TEXTURE_SIZE}
+      bind:griddedDataset
+      bind:particleDataset
+      bind:griddedColormap
+      bind:projection
     />
   </Menu>
 {/if}

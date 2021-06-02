@@ -6,7 +6,6 @@
   export let centerLongitude;
   export let centerLatitude;
   export let zoom;
-  export let advancedOptions;
 
   let selectedViews = [
     {
@@ -64,35 +63,6 @@
   {/each}
 </div>
 
-<h2>About this menu</h2>
-
-<p>
-  Map projections are the various ways of taking a three-dimensional globe and
-  projecting it to the two-dimensional surface of a map.
-</p>
-<p>
-  This will always distort the globe in some way, so each projection has its
-  tradeoffs and use cases.
-</p>
-
-{#if advancedOptions}
-
-<h2>All Projections</h2>
-
-{#each Object.values(projections) as p}
-<label>
-  <input
-    type="radio"
-    bind:group={projection}
-    value={p}
-  >
-  {p.name}
-</label>
-{/each}
-
-{/if}
-
-
 <style>
   div {
     display: grid;
@@ -111,15 +81,5 @@
 
   span {
     margin-bottom: 0.5em;
-  }
-
-  label {
-    padding: 0.25em 0;
-    display: block;
-    cursor: pointer;
-  }
-
-  label:hover {
-    background-color: rgba(255, 255, 255, 0.05);
   }
 </style>
