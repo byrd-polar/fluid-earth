@@ -76,7 +76,7 @@
     toggleUnit();
   }
 
-  function formatTitle(griddedDataset, unit) {
+  function formatTitle(griddedDataset, unit, advancedOptions) {
     let name = griddedDataset.name;
     if (!advancedOptions) name = basicTranslate(name);
     return capitalizeFirstLetter(`${name} (${unit})`)
@@ -93,7 +93,7 @@
     placement: 'top',
   }}
 >
-  <h3>{formatTitle(griddedDataset, unit)}</h3>
+  <h3>{formatTitle(griddedDataset, unit, advancedOptions)}</h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"
     bind:clientWidth={svgScaleWidth}

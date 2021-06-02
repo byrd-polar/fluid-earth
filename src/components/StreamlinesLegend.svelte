@@ -27,7 +27,7 @@
   const trailHeight = 0.3;
   const trailPeriod = 12;
 
-  function formatTitle(particleDataset) {
+  function formatTitle(particleDataset, advancedOptions) {
     let name = particleDataset.name;
     if (!advancedOptions) name = basicTranslate(name);
     return capitalizeFirstLetter(name);
@@ -40,7 +40,7 @@
   use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
   tabindex="0"
 >
-  <h3>{formatTitle(particleDataset)}</h3>
+  <h3>{formatTitle(particleDataset, advancedOptions)}</h3>
   <div
     class="legend"
     class:paused={particlesPaused}
