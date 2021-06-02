@@ -6,7 +6,7 @@
 <h2>Introduction</h2>
 
 <p>
-  Help us improve FEVer by providing us with your feedback.
+  Help us improve Fluid Earth by providing us with your feedback.
   Tell us what you like or don't like, what works or doesn't work, what features
   you would like added, etc.
   Feedback from the community and educators has helped make this project a

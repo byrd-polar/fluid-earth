@@ -3,18 +3,18 @@
 
 <h2>The Project</h2>
 <p>
-Fluid Earth Viewer (FEVer) is an interactive web application that allows you to
-visualize current and past conditions of Earth's atmosphere and oceans.
+Fluid Earth is an interactive web application that allows you to visualize
+current and past conditions of Earth's atmosphere and oceans.
 <p>
-You can use FEVer to learn about the atmosphere and oceans by exploring the
-daily conditions in places where you live, work, and play or examining whole
-regions of the planet over years. In particular, FEVer provides hands-on
+You can use Fluid Earth to learn about the atmosphere and oceans by exploring
+the daily conditions in places where you live, work, and play or examining whole
+regions of the planet over years. In particular, Fluid Earth provides hands-on
 visualizations of conditions in polar regions, changes they are undergoing, and
 connections between polar regions and the rest of the planet. Built on an
-open-source application, FEVer is a vehicle for modern Earth science
+open-source application, Fluid Earth is a vehicle for modern Earth science
 communication, making information used by the scientific community accessible
-and engaging to everyone. FEVer is explorable 24 hours a day, 7 days a week
-using your computer, tablet, and smartphone.
+and engaging to everyone. Fluid Earth is explorable 24 hours a day, 7 days a
+week using your computer, tablet, or smartphone.
 <p>
 Our project team is working to remove obstacles to learning about our dynamic
 planet, Earth!
@@ -83,7 +83,7 @@ framework.
 
 <h2>Data Sources</h2>
 <p>
-FEVer utilizes an enormous amount of scientifically complex data, allowing you
+Fluid Earth utilizes an enormous amount of scientifically complex data, allowing you
 to explore the interconnectedness of weather and climate, including between
 polar regions and the rest of the planet.
 <p>

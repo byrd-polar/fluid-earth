@@ -281,7 +281,7 @@
     { name: 'Time Machine', icon: Time24 },
     { name: 'Map Projections', icon: Globe24 },
     { name: 'Locations', icon: Location24 },
-    { name: 'About FEVer', icon: Information24 },
+    { name: 'About', icon: Information24 },
     { name: 'Feedback', icon: RequestQuote24 },
   ];
 
@@ -363,7 +363,7 @@
     {griddedUnit}
   />
 </Menu>
-<Menu bind:openedMenu menuName="About FEVer">
+<Menu bind:openedMenu menuName="About">
   <About
   />
 </Menu>

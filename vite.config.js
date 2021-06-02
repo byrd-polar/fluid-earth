@@ -11,7 +11,7 @@ const windows = (platform() === 'win32');
 const commit = execSync('git rev-parse --short HEAD').toString().trim();
 const htmlComment = dedent`
   <!--
-    Fluid Earth Viewer 2 (FEV2r)
+    Fluid Earth (FEV2r)
     =====================================================================
     Commit:                                  ${commit}
     Generated:                               ${(new Date).toISOString()}

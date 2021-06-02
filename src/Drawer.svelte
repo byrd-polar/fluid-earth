@@ -58,8 +58,8 @@
 >
 <div class="wrapper">
   <header>
-    <h1>Fluid Earth Viewer 2</h1>
-    <p>From the FEVer Team at Byrd</p>
+    <h1>Fluid Earth</h1>
+    <p>From the Byrd Polar and Climate Research Center</p>
     <Button action={closeDrawer} full>
       Return to map
     </Button>
@@ -161,9 +161,8 @@
   }
 
   h1 {
-    font-size: 1.3em;
+    font-size: 1.8em;
     margin: 0 0 0.25em;
-    font-variant: small-caps;
     white-space: nowrap;
   }
 
