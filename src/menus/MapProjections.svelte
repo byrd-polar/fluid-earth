@@ -19,7 +19,7 @@
       image: '/images/ortho-white-bg.svg',
     },
     {
-      name: 'map',
+      name: 'wall map',
       function: () => {
         projection = projections.EQUIRECTANGULAR;
         centerLongitude = 0;
