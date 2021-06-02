@@ -19,6 +19,8 @@
   export let preferredUnits;
   export let particlesPaused;
 
+  export let advancedOptions;
+
   $: dateOptions = {
     timeZone: utc ? 'UTC' : undefined,
     weekday: 'long',
@@ -63,12 +65,14 @@
       {griddedDomain}
       bind:griddedUnit
       bind:preferredUnits
+      {advancedOptions}
     />
     {#if particlesShown}
       <StreamlinesLegend
         {particleDataset}
         {particleDisplay}
         bind:particlesPaused
+        {advancedOptions}
       />
     {/if}
   </div>

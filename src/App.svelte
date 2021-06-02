@@ -443,6 +443,7 @@
       {particlesShown}
       {particleDisplay}
       bind:particlesPaused
+      {advancedOptions}
     />
   </Map>
 </main>

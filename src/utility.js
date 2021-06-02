@@ -87,3 +87,9 @@ export function fix24(timeString) {
 
   return timeString;
 }
+
+// Translate dataset names into more basic terms
+export function basicTranslate(name) {
+  return name.replace('at 500 mb', 'at middle of atmosphere')
+             .replace('at 200 mb', 'near jet stream');
+}
