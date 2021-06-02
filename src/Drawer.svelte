@@ -80,7 +80,7 @@
     <a href="https://fever.byrd.osu.edu/">fever.byrd.osu.edu</a></p>
   </section>
   <footer>
-    <a href="https://bpcrc.osu.edu/">
+    <a href="https://byrd.osu.edu/">
       <img
         width="224"
         height="33"
@@ -205,6 +205,10 @@
 
   footer a:first-child, footer a:last-child {
     margin-right: 0;
+  }
+
+  footer a:nth-child(2) {
+    margin-left: -7.875px;
   }
 
   footer a > :global(*) {
