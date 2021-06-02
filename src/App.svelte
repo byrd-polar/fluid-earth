@@ -218,14 +218,19 @@
       particleLoading = false;
 
       particleAssignments = () => {
-        particleData = {
-          uVelocities: uArray,
-          vVelocities: vArray,
-          width: particleDataset.width,
-          height: particleDataset.height,
-          projection: particleDataset.projection,
-          get: lonLat => pairedArrayDataGet(particleData, lonLat),
-        };
+        if (
+          particleData.uVelocities !== uArray ||
+          particleData.vVelocities !== vArray
+        ) {
+          particleData = {
+            uVelocities: uArray,
+            vVelocities: vArray,
+            width: particleDataset.width,
+            height: particleDataset.height,
+            projection: particleDataset.projection,
+            get: lonLat => pairedArrayDataGet(particleData, lonLat),
+          };
+        }
 
         if (previousParticleDataset !== particleDataset) {
           particleLifetime = particleDataset.particleLifetime;

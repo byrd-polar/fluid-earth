@@ -85,11 +85,12 @@
   let projectionUniforms;
   $: u_griddedDataProjection = griddedData.projection.id;
   $: u_particleDataProjection = particleData.projection.id
+  $: u_projection = projection.id;
   $: projectionUniforms = {
     u_lon0: centerLongitude,
     u_lat0: centerLatitude,
     u_zoom: zoom,
-    u_projection: projection.id,
+    u_projection,
     u_griddedDataProjection,
     u_particleDataProjection,
   };
