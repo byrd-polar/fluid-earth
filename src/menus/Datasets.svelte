@@ -4,7 +4,8 @@
   import { tick } from 'svelte';
   import {
     categoryFilters,
-    propertyFilters,
+    basicPropertyFilters,
+    advancedPropertyFilters,
     basicLevelFilters,
     advancedLevelFilters,
     animationFilters,
@@ -21,10 +22,12 @@
   let particleDatasets = inventory.filter(d => d.particleDisplay);
   let griddedNames = griddedDatasets.map(dataset => dataset.name);
 
+  $: propertyFilters = advancedOptions ?
+    advancedPropertyFilters : basicPropertyFilters;
   $: levelFilters = advancedOptions ? advancedLevelFilters : basicLevelFilters;
 
   let categories = Object.keys(categoryFilters);
-  let properties = Object.keys(propertyFilters);
+  $: properties = Object.keys(propertyFilters);
   $: levels = Object.keys(levelFilters);
   let animations = Object.keys(animationFilters);
 
@@ -114,14 +117,14 @@
   on:select={updateDatasets}
 />
 
-<h3>Property</h3>
+<h3>Variable</h3>
 <ChipGroup
   options={propertyOptions}
   bind:selected={property}
   on:select={updateDatasets}
 />
 
-<h3>Level</h3>
+<h3>Height</h3>
 <ChipGroup
   options={levelOptions}
   bind:selected={level}

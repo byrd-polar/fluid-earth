@@ -29,7 +29,7 @@ export const basicLevelFilters = {
   'cruise': name => {
     return name.includes('at 200 mb');
   },
-  'total column': name => {
+  'entire atmosphere': name => {
     return name.startsWith('total') ||
            name.includes('at 500 mb') && animationFilters['wind'](name);
   },
@@ -65,7 +65,7 @@ export const advancedLevelFilters = {
   '10 mb (stratosphere)': name => {
     return name.includes('at 10 mb');
   },
-  'total column': name => {
+  'entire atmosphere': name => {
     return name.startsWith('total') ||
            name.includes('at 500 mb') && animationFilters['wind'](name);
   },
@@ -73,7 +73,7 @@ export const advancedLevelFilters = {
   undefined: name => false,
 };
 
-export const propertyFilters = {
+export const basicPropertyFilters = {
   'temperature': name => {
     return name.startsWith('temperature');
   },
@@ -89,9 +89,6 @@ export const propertyFilters = {
   'pressure': name => {
     return name === 'mean sea level pressure';
   },
-  'CAPE': name => {
-    return name.startsWith('convective available potential energy');
-  },
   'precipitable water': name => {
     return name.includes('precipitable water');
   },
@@ -101,17 +98,8 @@ export const propertyFilters = {
   'ozone': name => {
     return name.includes('ozone');
   },
-  'geopotential height': name => {
-    return name.startsWith('geopotential height');
-  },
   'wave height': name => {
     return name === 'significant wave height';
-  },
-  'wave period': name => {
-    return name === 'primary wave mean period';
-  },
-  'wave direction': name => {
-    return name === 'primary wave direction (from)';
   },
   'sea temperature': name => {
     return name === 'sea surface temperature';
@@ -126,30 +114,44 @@ export const propertyFilters = {
   undefined: name => false,
 };
 
+export const advancedPropertyFilters = {
+  ...basicPropertyFilters,
+  'CAPE': name => {
+    return name.startsWith('convective available potential energy');
+  },
+  'geopotential height': name => {
+    return name.startsWith('geopotential height');
+  },
+  'wave period': name => {
+    return name === 'primary wave mean period';
+  },
+  'wave direction': name => {
+    return name === 'primary wave direction (from)';
+  },
+};
+
 export const categoryFilters = {
   'weather': name => {
-    return propertyFilters['temperature'](name) ||
-           propertyFilters['humidity'](name) ||
-           propertyFilters['pressure'](name) ||
-           propertyFilters['precipitable water'](name) ||
-           propertyFilters['cloud water'](name) ||
-           propertyFilters['wind'](name) ||
-           propertyFilters['precipitation'](name);
+    return advancedPropertyFilters['temperature'](name) ||
+           advancedPropertyFilters['humidity'](name) ||
+           advancedPropertyFilters['pressure'](name) ||
+           advancedPropertyFilters['precipitable water'](name) ||
+           advancedPropertyFilters['cloud water'](name) ||
+           advancedPropertyFilters['wind'](name) ||
+           advancedPropertyFilters['precipitation'](name) ||
+           advancedPropertyFilters['CAPE'](name) ||
+           advancedPropertyFilters['geopotential height'](name) ||
+           advancedPropertyFilters['sunshine'](name);
   },
-  'gases & aerosols': name => {
-    return propertyFilters['ozone'](name);
+  'particles': name => {
+    return advancedPropertyFilters['ozone'](name);
   },
-  'oceans': name => {
-    return propertyFilters['sea temperature'](name) ||
-           propertyFilters['currents'](name) ||
-           propertyFilters['wave height'](name) ||
-           propertyFilters['wave period'](name) ||
-           propertyFilters['wave direction'](name);
-  },
-  'other': name => {
-    return propertyFilters['CAPE'](name) ||
-           propertyFilters['geopotential height'](name) ||
-           propertyFilters['sunshine'](name);
+  'ocean': name => {
+    return advancedPropertyFilters['sea temperature'](name) ||
+           advancedPropertyFilters['currents'](name) ||
+           advancedPropertyFilters['wave height'](name) ||
+           advancedPropertyFilters['wave period'](name) ||
+           advancedPropertyFilters['wave direction'](name);
   },
   // catch-all so that new datasets don't immediately crash application
   undefined: name => false,
