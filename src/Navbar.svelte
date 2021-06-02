@@ -33,7 +33,7 @@
 <div class="rail" bind:this={rail} use:overlayscroll>
 <nav>
   <IconButton
-    name="Menus"
+    name="Menus and Links"
     action={openDrawer}
   >
     <Menu24 />
