@@ -10,11 +10,11 @@ You can use Fluid Earth to learn about the atmosphere and oceans by exploring
 the daily conditions in places where you live, work, and play or examining whole
 regions of the planet over years. In particular, Fluid Earth provides hands-on
 visualizations of conditions in polar regions, changes they are undergoing, and
-connections between polar regions and the rest of the planet. Built on an
-open-source application, Fluid Earth is a vehicle for modern Earth science
-communication, making information used by the scientific community accessible
-and engaging to everyone. Fluid Earth is explorable 24 hours a day, 7 days a
-week using your computer, tablet, or smartphone.
+connections between polar regions and the rest of the planet. An open-source
+application, Fluid Earth is a vehicle for modern Earth science communication,
+making information used by the scientific community accessible and engaging to
+everyone. Fluid Earth is explorable 24 hours a day, 7 days a week using your
+computer, tablet, or smartphone.
 <p>
 Our project team is working to remove obstacles to learning about our dynamic
 planet, Earth!
