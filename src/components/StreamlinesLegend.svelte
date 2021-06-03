@@ -77,6 +77,7 @@
     cursor: pointer;
 
     margin-left: auto;
+    margin-top: auto;
   }
 
   section:focus, section:hover {
@@ -121,10 +122,11 @@
 
   span {
     font-size: 0.75rem;
-    min-height: 1.25rem;
+    height: 1.5rem;
 
-    display: block;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-top: 1px solid white;
   }
 </style>

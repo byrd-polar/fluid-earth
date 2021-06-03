@@ -93,6 +93,9 @@
 
 <style>
   section {
+    display: flex;
+    flex-direction: column;
+
     flex: 1;
     padding: 0.25rem 0.75rem;
     max-width: 32em;
@@ -103,6 +106,7 @@
     transition: background-color 0.25s ease 0s;
 
     margin-right: auto;
+    margin-top: auto;
   }
 
   section.canchange {
@@ -129,9 +133,11 @@
 
   svg {
     font-size: 0.75rem;
-    height: 1.25rem;
+    height: 1.5rem;
 
     overflow: visible;
     width: 100%;
+    margin-bottom: 0;
+    padding: 0;
   }
 </style>
