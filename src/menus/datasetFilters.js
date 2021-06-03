@@ -143,7 +143,7 @@ export const categoryFilters = {
            advancedPropertyFilters['geopotential height'](name) ||
            advancedPropertyFilters['sunshine'](name);
   },
-  'particles': name => {
+  'gases & aerosols': name => {
     return advancedPropertyFilters['ozone'](name);
   },
   'ocean': name => {
