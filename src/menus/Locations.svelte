@@ -73,16 +73,16 @@
 
 <h2>About this menu</h2>
 <p>
-Locations on the map can be marked with a pin. Hover over the pin or see the
-section below to view information about that location.
+Locations on the map can be marked. Hover over the marker or see the section
+below to view information about that location.
 <p>
-To mark a location with a pin, hold down the <b>left mouse button</b> on the
-map, or use the following search box.
+To mark a location, hold down the <b>left mouse button</b> on the map, or use
+the following search box.
 </p>
 
 <SearchBox {label} {placeholder} {loadData} {onSelect} />
 
-<h2>Pinned locations</h2>
+<h2>Marked locations</h2>
 <LocationsList
   bind:pins
   {griddedData}

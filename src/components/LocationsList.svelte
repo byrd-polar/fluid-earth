@@ -21,7 +21,7 @@
       <div class="wrapper">
         <IconButton
           action={() => moveTo(pin)}
-          name={'Fly to pin'}
+          name={'Fly to marker'}
           tipPlacement={'top'}
         >
           <PinIcon style="color: red" />
@@ -51,7 +51,7 @@
   </Button>
   </div>
 {:else if pins.length === 0}
-  <p transition:fade>There are currently no pinned locations.</p>
+  <p transition:fade>There are currently no marked locations.</p>
 {/if}
 
 <style>

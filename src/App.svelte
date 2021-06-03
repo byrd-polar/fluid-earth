@@ -283,7 +283,7 @@
     { name: 'Datasets', icon: Grid24 },
     { name: 'Time Machine', icon: Time24 },
     { name: 'Map Projections', icon: Globe24 },
-    { name: 'Locations', icon: Location24 },
+    { name: 'Location Markers', icon: Location24 },
     { name: 'About', icon: Information24 },
     { name: 'Feedback', icon: RequestQuote24 },
   ];
@@ -353,7 +353,7 @@
     bind:zoom
   />
 </Menu>
-<Menu bind:openedMenu menuName="Locations" flexbox>
+<Menu bind:openedMenu menuName="Location Markers" flexbox>
   <Locations
     bind:centerLongitude
     bind:centerLatitude

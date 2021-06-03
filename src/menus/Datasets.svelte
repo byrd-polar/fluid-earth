@@ -108,9 +108,9 @@
   }
 </script>
 
-<h2>Filters</h2>
+<h2>Filter by</h2>
 
-<h3>Category</h3>
+<h3>Topic</h3>
 <ChipGroup
   options={categoryOptions}
   bind:selected={category}
