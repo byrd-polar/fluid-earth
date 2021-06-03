@@ -37,9 +37,7 @@ const float16 = new Transform({
       return;
     }
 
-    const chunkAsFloats =
-      chunkAsString.split(/[,;]/).slice(0, -1).map(x => parseFloat(x));
-    let original = new Float32Array(chunkAsFloats);
+    let original = chunkAsString.split(/[,;]/).slice(0, -1).map(x => parseFloat(x));
 
     // allows for multiplication of values too small for 16-bit floats
     if (factor) original = original.map(v => v * factor);
