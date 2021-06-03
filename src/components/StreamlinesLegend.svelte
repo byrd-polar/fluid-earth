@@ -1,12 +1,11 @@
 <script>
-  import { capitalizeFirstLetter, basicTranslate } from '../utility.js';
+  import { capitalizeFirstLetter } from '../utility.js';
   import tooltip from '../tooltip.js';
   import prng_alea from 'esm-seedrandom/esm/alea.mjs'
 
   export let particleDataset;
   export let particleDisplay;
   export let particlesPaused;
-  export let advancedOptions;
 
   // updates when changing display independently of dataset (or after dataset
   // download completes)
@@ -26,12 +25,6 @@
   const trailWidth = 5;
   const trailHeight = 0.3;
   const trailPeriod = 12;
-
-  function formatTitle(particleDataset, advancedOptions) {
-    let name = particleDataset.name;
-    if (!advancedOptions) name = basicTranslate(name);
-    return capitalizeFirstLetter(name);
-  }
 </script>
 
 <section
@@ -40,7 +33,7 @@
   use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
   tabindex="0"
 >
-  <h3>{formatTitle(particleDataset, advancedOptions)}</h3>
+  <h3>{capitalizeFirstLetter(particleDataset.name)}</h3>
   <div
     class="legend"
     class:paused={particlesPaused}
