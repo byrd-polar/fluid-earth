@@ -128,7 +128,7 @@ for (const geosVar of geosVars) {
         const filename = datetime.plus({ hours: f }).toISO() + '.fp16';
         const outputFile = util.join(outputPath, filename);
 
-        util.log('Converting NETCDF to fp16', inputFile, outputFile);
+        util.log('Converting GEOS NetCDF to fp16', inputFile, outputFile);
         await execFile('node', [script, inputFile, outputFile, geosVarName, factor]);
     }
 
