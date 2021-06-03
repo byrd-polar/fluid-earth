@@ -22,18 +22,17 @@ const geosProps = {
 };
 
 const hoursForecastStart = -2;
-const hoursForwardDefault = 2; // TODO change back to 30
+const hoursForwardDefault = 30;
 const hoursForward00 = 240;
 const hoursForward12 = 120;
 
 const geosVars = [
     {
-        dataDir: 'geos-sulfur-dioxide-surface-mass/',
+        dataDir: 'geos-sulfur-dioxide-surface-mass-concentration/',
         varName: 'SO2SMASS',
         factor: 10e9,
         datasetBase: {
-            name: 'Sulfur Dioxide Surface Mass',
-            description: 'Sulfur Dioxide Surface Mass',
+            name: 'sulfur dioxide surface mass concentration',
             path: util.browserPath(outputPath),
             unit: 'ug/m^3',
             originalUnit: 'ug/m^3',
@@ -46,8 +45,7 @@ const geosVars = [
         dataDir: 'geos-carbon-monoxide-surface-concentration/',
         varName: 'COSC',
         datasetBase: {
-            name: 'Carbon Monoxide Surface Concentration',
-            description: 'Carbon Monoxide Surface Concentration',
+            name: 'carbon monoxide surface concentration',
             path: util.browserPath(outputPath),
             unit: 'ppm',
             originalUnit: 'ppm', // TODO: allow for PPB
@@ -61,8 +59,7 @@ const geosVars = [
         varName: 'DUSMASS',
         factor: 10e9,
         datasetBase: {
-            name: 'Dust Surface Mass Concentration',
-            description: 'Dust Surface Mass Concentration',
+            name: 'dust surface mass concentration',
             path: util.browserPath(outputPath),
             unit: 'ug/m^3',
             originalUnit: 'ug/m^3',
