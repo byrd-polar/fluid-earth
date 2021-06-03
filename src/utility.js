@@ -44,7 +44,7 @@ import Qty from 'js-quantities/esm';
 
 // Convert a value between units
 export function convert(value, datasetOrData, newUnit) {
-  if (!isFinite(value)) return value;
+  if (!isFinite(value) || datasetOrData.originalUnit === newUnit) return value;
 
   return Qty(`${value} ${datasetOrData.originalUnit}`).to(newUnit).scalar;
 }

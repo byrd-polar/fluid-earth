@@ -54,7 +54,8 @@
     }).join();
   }
 
-  $: unitList = preferredUnits[Qty(griddedDataset.unit).kind()];
+  $: qty = Qty.parse(griddedDataset.unit);
+  $: unitList = qty ? preferredUnits[qty.kind()] : null;
 
   function toggleUnit() {
     if (!unitList) return;

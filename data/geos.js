@@ -47,8 +47,8 @@ const geosVars = [
         datasetBase: {
             name: 'carbon monoxide surface concentration',
             path: util.browserPath(outputPath),
-            unit: 'ppm',
-            originalUnit: 'ppm', // TODO: allow for PPB
+            unit: 'ppbv',
+            originalUnit: 'ppbv',
             domain: [1, 1000],
             colormap: 'CO_SURFACE',
             ...geosProps
