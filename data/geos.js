@@ -5,7 +5,6 @@ import path from 'path';
 import { promisify } from 'util';
 import * as util from './utility.js';
 import fs from 'fs/promises';
-import DomParser from 'dom-parser';
 import { debug } from 'console';
 
 const script = path.join('data', 'scripts', 'netcdf-to-fp16.js');
