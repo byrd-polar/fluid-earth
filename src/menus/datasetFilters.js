@@ -110,6 +110,15 @@ export const basicPropertyFilters = {
   'currents': name => {
     return name.startsWith('ocean surface currents');
   },
+  'sulfur dioxide': name => {
+    return name.startsWith('sulfur dioxide');
+  },
+  'carbon monoxide': name => {
+    return name.startsWith('carbon monoxide');
+  },
+  'dust': name => {
+    return name.startsWith('dust');
+  },
   // catch-all so that new datasets don't immediately crash application
   undefined: name => false,
 };
@@ -144,7 +153,10 @@ export const categoryFilters = {
            advancedPropertyFilters['sunshine'](name);
   },
   'gases & aerosols': name => {
-    return advancedPropertyFilters['ozone'](name);
+    return advancedPropertyFilters['ozone'](name) ||
+           advancedPropertyFilters['sulfur dioxide'](name) ||
+           advancedPropertyFilters['carbon monoxide'](name) ||
+           advancedPropertyFilters['dust'](name);
   },
   'ocean': name => {
     return advancedPropertyFilters['sea temperature'](name) ||
