@@ -448,6 +448,7 @@
       {particlesShown}
       {particleDisplay}
       bind:particlesPaused
+      {simplifiedMode}
     />
   </Map>
 </main>

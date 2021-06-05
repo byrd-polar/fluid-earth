@@ -108,3 +108,29 @@ export function fix24(timeString) {
 
   return timeString;
 }
+
+// Translate dataset names into "plain english"
+export function simpleTranslate(name) {
+  const translations = {
+    'temperature at 2 m above ground'       : 'temperature near surface',
+    'temperature at 500 mb'                 : 'temperature at cloud level',
+    'temperature at 200 mb'                 : 'temperature at cruise level',
+    'relative humidity at 2 m above ground' : 'humidity near surface',
+    'relative humidity at 500 mb'           : 'humidity at cloud level',
+    'relative humidity at 200 mb'           : 'humidity at cruise level',
+    'mean sea level pressure'               : 'pressure at sea level',
+    'total precipitable water'              : 'precipitable water',
+    'total cloud water'                     : 'cloud water',
+    'total ozone'                           : 'ozone',
+    'significant wave height'               : 'wave height',
+    'wind speed at 10 m above ground'       : 'wind speed near surface',
+    'wind speed at 500 mb'                  : 'wind speed at cloud level',
+    'wind speed at 200 mb'                  : 'wind speed at cruise level',
+    'ocean surface currents speed'          : 'sea surface currents speed',
+    'wind at 10 m above ground'             : 'wind near surface',
+    'wind at 500 mb'                        : 'wind at cloud level',
+    'wind at 200 mb'                        : 'wind at cruise level',
+    'ocean surface currents'                : 'sea surface currents',
+  };
+  return translations[name] || name;
+}

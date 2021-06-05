@@ -3,7 +3,12 @@
   import { axisBottom } from 'd3-axis';
   import { scaleLinear } from 'd3-scale';
   import Qty from 'js-quantities/esm';
-  import { convert, prettyUnit, capitalizeFirstLetter } from '../utility.js';
+  import {
+    convert,
+    prettyUnit,
+    capitalizeFirstLetter,
+    simpleTranslate,
+  } from '../utility.js';
   import tooltip from '../tooltip.js';
 
   export let griddedDataset;
@@ -11,6 +16,7 @@
   export let griddedDomain;
   export let griddedUnit;
   export let preferredUnits;
+  export let simplifiedMode;
 
   let svgScale;
   let svgScaleWidth;
@@ -70,6 +76,12 @@
 
     toggleUnit();
   }
+
+  function formatTitle(griddedDataset, unit, simplifiedMode) {
+    let name = griddedDataset.name;
+    if (simplifiedMode) name = simpleTranslate(name);
+    return capitalizeFirstLetter(`${name} (${unit})`)
+  }
 </script>
 
 <section
@@ -82,9 +94,7 @@
     placement: 'top',
   }}
 >
-  <h3>
-    {capitalizeFirstLetter(`${griddedDataset.name} (${unit})`)}
-  </h3>
+  <h3>{formatTitle(griddedDataset, unit, simplifiedMode)}</h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"
     bind:clientWidth={svgScaleWidth}
