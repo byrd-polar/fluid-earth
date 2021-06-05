@@ -9,7 +9,7 @@
   import TimeMachine from './menus/TimeMachine.svelte';
   import Locations from './menus/Locations.svelte';
   import MapProjections from './menus/MapProjections.svelte';
-  import DeveloperTools from './menus/DeveloperTools.svelte';
+  import DeveloperOnlyTools from './menus/DeveloperOnlyTools.svelte';
   import About from './menus/About.svelte';
   import Feedback from './menus/Feedback.svelte';
 
@@ -289,9 +289,11 @@
     { name: 'Feedback', icon: RequestQuote24 },
   ];
 
-  const extraMenus = [
-    { name: 'Developer Tools', icon: Debug24 },
-  ];
+  if (!__production__) defaultMenus.push(
+    { name: 'Developer-Only Tools', icon: Debug24 }
+  );
+
+  const extraMenus = [];
 
   $: menus = advancedOptions ? defaultMenus.concat(extraMenus) : defaultMenus;
 </script>
@@ -372,9 +374,9 @@
   <Feedback
   />
 </Menu>
-{#if advancedOptions}
-  <Menu bind:openedMenu menuName="Developer Tools">
-    <DeveloperTools
+{#if !__production__}
+  <Menu bind:openedMenu menuName="Developer-Only Tools">
+    <DeveloperOnlyTools
       {minZoom}
       {maxZoom}
       bind:zoom

@@ -45,6 +45,13 @@
   export let projection;
 </script>
 
+<h2>Note about this menu</h2>
+
+<p>
+This menu does not exist in the production build. It is used as a debugging tool
+when adding new datasets/colormaps/projections and for experimenting with new
+user interface components.
+
 <h2>Zoom Controls</h2>
 
 <div class="slider">
