@@ -345,7 +345,6 @@
     {fetcher}
     {griddedDataset}
     bind:particlesShown
-    {advancedOptions}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Map Projections">
@@ -377,6 +376,10 @@
 {#if !__production__}
   <Menu bind:openedMenu menuName="Developer-Only Tools">
     <DeveloperOnlyTools
+      bind:date
+      {utc}
+      {fetcher}
+      bind:particlesShown
       {minZoom}
       {maxZoom}
       bind:zoom

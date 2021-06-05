@@ -28,6 +28,27 @@ export function validDate(dataset, date) {
   return clamp(d, dataset.start, dataset.end);
 }
 
+// Return a list of all the valid dates for a dataset
+export function getValidDates(dataset) {
+  const dates = [];
+
+  if (dataset.intervalInHours === 'custom:OSCAR') {
+    let year = dataset.start.getUTCFullYear();
+    while (year <= dataset.end.getUTCFullYear()) {
+      dates.push(...validOscarDates(year));
+      year++;
+    }
+    return dates.filter(d => d >= dataset.start && d <= dataset.end);
+  }
+
+  let t = dataset.start.getTime();
+  while (t <= dataset.end.getTime()) {
+    dates.push(new Date(t));
+    t += dataset.intervalInHours * 60 * 60 * 1000;
+  }
+  return dates;
+}
+
 // Given a year, return the Dates that correspond to the OSCAR data that
 // will be available that year (72 Dates with 5 or 6 day gaps) in order from
 // earliest to latest

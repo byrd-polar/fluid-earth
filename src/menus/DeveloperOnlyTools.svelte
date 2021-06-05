@@ -1,4 +1,14 @@
 <script>
+  import RangeLoader from '../components/RangeLoader.svelte';
+  import { getValidDates } from '../utility.js';
+
+  export let date;
+  export let utc;
+  export let fetcher;
+  export let particlesShown;
+
+  $: validDates = getValidDates(griddedDataset);
+
   import Add24 from "carbon-icons-svelte/lib/Add24";
   import Subtract24 from "carbon-icons-svelte/lib/Subtract24";
   import CaretLeftGlyph from "carbon-icons-svelte/lib/CaretLeftGlyph";
@@ -51,6 +61,16 @@
 This menu does not exist in the production build. It is used as a debugging tool
 when adding new datasets/colormaps/projections and for experimenting with new
 user interface components.
+
+<h2>Range Loader</h2>
+<RangeLoader
+  {validDates}
+  bind:date
+  {fetcher}
+  {griddedDataset}
+  bind:particlesShown
+  {utc}
+/>
 
 <h2>Zoom Controls</h2>
 
