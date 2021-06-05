@@ -30,7 +30,7 @@ export const basicLevelFilters = {
     return name.includes('at 200 mb');
   },
   'entire atmosphere': name => {
-    return name.startsWith('total') ||
+    return name.startsWith('total') && name !== 'total relative humidity' ||
            name.includes('at 500 mb') && animationFilters['wind'](name);
   },
   // catch-all so that new datasets don't immediately crash application
