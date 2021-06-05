@@ -47,9 +47,7 @@
   let openedMenu = null;
   let drawerOpen = false;
 
-  const storage = window.localStorage;
-  let advancedOptions = JSON.parse(storage.getItem('advancedOptions')) || false;
-  $: storage.setItem('advancedOptions', JSON.stringify(advancedOptions));
+  let simplifiedMode = false;
 
   const fetcher = new Fetcher();
   let griddedDataset = inventory.filter(d => d.colormap)[0];
@@ -280,7 +278,7 @@
   import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
   import Debug24 from "carbon-icons-svelte/lib/Debug24";
 
-  const defaultMenus = [
+  const basicMenus = [
     { name: 'Datasets', icon: Grid24 },
     { name: 'Time Machine', icon: Time24 },
     { name: 'Map Projections', icon: Globe24 },
@@ -289,13 +287,13 @@
     { name: 'Feedback', icon: RequestQuote24 },
   ];
 
-  if (!__production__) defaultMenus.push(
+  if (!__production__) basicMenus.push(
     { name: 'Developer-Only Tools', icon: Debug24 }
   );
 
   const extraMenus = [];
 
-  $: menus = advancedOptions ? defaultMenus.concat(extraMenus) : defaultMenus;
+  $: menus = simplifiedMode ? basicMenus: basicMenus.concat(extraMenus);
 </script>
 
 <div class="wrapper">
@@ -313,6 +311,7 @@
   bind:centerLatitude
   bind:centerLongitude
   bind:zoom
+  bind:simplifiedMode
   bind:pins
   {inventory}
   {minZoom}
@@ -328,17 +327,17 @@
   bind:openedMenu
   bind:drawerOpen
 />
-<Menu bind:openedMenu menuName="Datasets" bind:advancedOptions>
+<Menu bind:openedMenu menuName="Datasets" bind:simplifiedMode>
   <Datasets
     {date}
     {inventory}
     bind:griddedDataset
     bind:particleDataset
     bind:particlesShown
-    {advancedOptions}
+    {simplifiedMode}
   />
 </Menu>
-<Menu bind:openedMenu menuName="Time Machine" bind:advancedOptions>
+<Menu bind:openedMenu menuName="Time Machine">
   <TimeMachine
     bind:date
     {utc}

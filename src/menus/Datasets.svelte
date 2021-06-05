@@ -16,15 +16,15 @@
   export let griddedDataset;
   export let particleDataset;
   export let particlesShown;
-  export let advancedOptions;
+  export let simplifiedMode;
 
   let griddedDatasets = inventory.filter(d => d.colormap)
   let particleDatasets = inventory.filter(d => d.particleDisplay);
   let griddedNames = griddedDatasets.map(dataset => dataset.name);
 
-  $: propertyFilters = advancedOptions ?
-    advancedPropertyFilters : basicPropertyFilters;
-  $: levelFilters = advancedOptions ? advancedLevelFilters : basicLevelFilters;
+  $: propertyFilters = simplifiedMode ?
+    basicPropertyFilters : advancedPropertyFilters;
+  $: levelFilters = simplifiedMode ? basicLevelFilters : advancedLevelFilters;
 
   let categories = Object.keys(categoryFilters);
   $: properties = Object.keys(propertyFilters);
@@ -36,7 +36,7 @@
   let level;
   let animation;
 
-  $: griddedDataset, particlesShown, advancedOptions, updateFilterSelections();
+  $: griddedDataset, particlesShown, simplifiedMode, updateFilterSelections();
 
   function updateFilterSelections() {
     category = categories.find(c => categoryFilters[c](griddedDataset.name));

@@ -12,6 +12,7 @@
   export let centerLatitude;
   export let centerLongitude;
   export let zoom;
+  export let simplifiedMode;
   export let pins;
 
   export let inventory;
@@ -30,6 +31,7 @@
     lat:    centerLatitude.toFixed(2),
     lon:    centerLongitude.toFixed(2),
     zoom:   zoom.toFixed(2),
+    smode:  simplifiedMode,
     pins:   JSON.stringify(pins),
   };
   $: debouncedSetHashFromAppState(stateObj);
@@ -93,6 +95,11 @@
     val = parseFloat(hash.get('zoom'));
     if (!isNaN(val)) {
       zoom = clamp(val, minZoom, maxZoom);
+    }
+
+    val = hash.get('smode');
+    if (val === 'true' || val === 'false') {
+      simplifiedMode = (val === 'true');
     }
 
     try {
