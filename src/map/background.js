@@ -85,7 +85,7 @@ export default class MapBackground {
       let bufferInfo = this._buffers.vectors[name];
       if (bufferInfo !== undefined) {
         glDraw(this._gl, this._programs.vector, bufferInfo, {
-          u_color: color,
+          u_color: color.map((v, i) => i === 3 ? v : v / 255),
           ...sharedUniforms,
         }, this._gl.LINES);
       }

@@ -101,10 +101,10 @@
   let vectorData = { objects: {} };
   let vectorColors = {
     // update the following if sources for topology.json change
-    ne_50m_coastline: [1, 1, 1, 1],
-    ne_50m_lakes: [1, 1, 1, 1],
-    ne_50m_rivers_lake_centerlines: [1, 1, 1, 0.5],
-    ne_50m_graticules_10: [1, 1, 1, 0.1],
+    ne_50m_coastline: [255, 255, 255, 1],
+    ne_50m_lakes: [255, 255, 255, 1],
+    ne_50m_rivers_lake_centerlines: [255, 255, 255, 0.5],
+    ne_50m_graticules_10: [255, 255, 255, 0.1],
   };
 
   let particlesShown = true;
