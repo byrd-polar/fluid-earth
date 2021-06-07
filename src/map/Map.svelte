@@ -20,6 +20,9 @@
 
   import { Float16Array } from '@petamoriken/float16';
 
+  export { projections };
+  export { dataProjections };
+
   export let centerLongitude = 0; // in degrees
   export let centerLatitude = 0; // in degrees
   export let zoom = 1;
