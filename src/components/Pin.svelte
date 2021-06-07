@@ -7,7 +7,7 @@
 
   export let pins;
   export let pin;
-  export let d3geoProjection;
+  export let forwardProjectionFunction;
   export let griddedData;
   export let griddedUnit;
 
@@ -15,8 +15,10 @@
   let lonLat = [pin.longitude, pin.latitude];
   let hovering = false;
 
-  $: [x, y] = d3geoProjection(lonLat);
-  $: clip = clipped(d3geoProjection, lonLat);
+  let x = 0, y = 0;
+  $: point = forwardProjectionFunction(lonLat)
+  $: clip = point === null;
+  $: if (point) [x, y] = point;
   $: value = griddedData.get(lonLat);
 </script>
 

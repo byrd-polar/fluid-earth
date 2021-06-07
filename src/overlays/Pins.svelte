@@ -1,7 +1,7 @@
 <script>
   import Pin from '../components/Pin.svelte';
 
-  export let d3geoProjection;
+  export let forwardProjectionFunction;
   export let pins;
   export let griddedData;
   export let griddedUnit;
@@ -12,7 +12,7 @@
     <Pin
       bind:pins
       {pin}
-      {d3geoProjection}
+      {forwardProjectionFunction}
       {griddedData}
       {griddedUnit}
     />

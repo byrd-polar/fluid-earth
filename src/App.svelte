@@ -64,7 +64,8 @@
   let updateParticleData = () => {};
 
   let projection = projections.VERTICAL_PERSPECTIVE;
-  let d3geoProjection = projection.function;
+  let forwardProjectionFunction = projection.function;
+  let inverseProjectionFunction = projection.function.invert;
   let MAX_TEXTURE_SIZE = Infinity;
   let centerLongitude = -60;
   let centerLatitude = 30;
@@ -414,7 +415,8 @@
     {particleDisplay}
     {vectorData}
     {vectorColors}
-    bind:d3geoProjection
+    bind:forwardProjectionFunction
+    bind:inverseProjectionFunction
     bind:MAX_TEXTURE_SIZE
   >
     <svelte:fragment slot="background">
@@ -426,12 +428,12 @@
       bind:centerLongitude
       bind:centerLatitude
       bind:zoom
-      {d3geoProjection}
+      {inverseProjectionFunction}
       bind:pins
     />
     <Pins
       bind:pins
-      {d3geoProjection}
+      {forwardProjectionFunction}
       {griddedData}
       {griddedUnit}
     />

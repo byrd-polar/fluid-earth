@@ -11,7 +11,7 @@
   export let centerLatitude;
   export let zoom;
 
-  export let d3geoProjection;
+  export let inverseProjectionFunction;
   export let pins;
 
   let interactionSurfaceElement;
@@ -54,9 +54,10 @@
       .on('hold', e => {
         let rect = interactionSurfaceElement.getBoundingClientRect();
         let point = [e.clientX - rect.left, e.clientY - rect.top];
-        let [longitude, latitude] = d3geoProjection.invert(point);
+        let lonLat = inverseProjectionFunction(point);
 
-        if (reproj(d3geoProjection, point, [longitude, latitude])) {
+        if (lonLat) {
+          let [longitude, latitude] = lonLat;
           pins = [{ label: genericLabel(pins), longitude, latitude }, ...pins];
         }
       });

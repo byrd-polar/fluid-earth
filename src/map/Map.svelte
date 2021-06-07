@@ -14,7 +14,7 @@
   import ParticleSimulator from './particle/simulator.js';
   import ParticleSimulatorMobile from './particle/mobile/simulator.js';
 
-  import projections, { proj } from './projections/';
+  import projections, { proj, clipped, reproj } from './projections/';
   import dataProjections from './data-projections/';
 
   import { Float16Array } from '@petamoriken/float16';
@@ -71,7 +71,7 @@
 
   let clientWidth, clientHeight;
 
-  export let d3geoProjection;
+  let d3geoProjection = projection.function;
   let d3geoProjectionNeedsUpdate;
   // when following variables are updated, update
   $: projection,
@@ -81,6 +81,23 @@
       clientHeight,
       zoom,
     d3geoProjectionNeedsUpdate = true;
+
+  export let forwardProjectionFunction;
+  export let inverseProjectionFunction;
+
+  $: forwardProjectionFunction = lonLat => {
+    if (clipped(d3geoProjection, lonLat)) return null;
+
+    return d3geoProjection(lonLat);
+  };
+
+  $: inverseProjectionFunction = point => {
+    let lonLat = d3geoProjection.invert(point);
+
+    if (!reproj(d3geoProjection, point, lonLat)) return null;
+
+    return lonLat;
+  };
 
   export let MAX_TEXTURE_SIZE = Infinity;
 
