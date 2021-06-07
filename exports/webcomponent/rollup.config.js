@@ -5,8 +5,10 @@ import { terser } from 'rollup-plugin-terser';
 import dedent from 'dedent';
 
 const preamble = dedent`
-  /* Includes code from some of the following libraries:
-   * https://fev2r.netlify.app/legal/THIRD_PARTY */
+  /**
+   * Includes code from some of the following libraries:
+   * https://fev2r.netlify.app/legal/THIRD_PARTY
+   */
 `;
 
 export default {
