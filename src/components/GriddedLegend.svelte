@@ -55,9 +55,7 @@
   }
 
   function generateLut(colormap) {
-    return colormap.lut.map(colorArray => {
-      return `rgb(${colorArray.map(c => Math.round(255 * c)).join()})`;
-    }).join();
+    return colormap.lut.map(colorArray => `rgb(${colorArray.join()})`).join();
   }
 
   $: qty = Qty.parse(griddedDataset.unit);

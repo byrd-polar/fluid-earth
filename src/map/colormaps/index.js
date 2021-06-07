@@ -75,33 +75,32 @@ let colormaps = {
   ROCKET: {
     name: 'rocket',
     type: 'sequential (multi-hue)',
-    lut: rocket,
+    get lut() { return lutFromPython(rocket) }
   },
   MAKO: {
     name: 'mako',
     type: 'sequential (multi-hue)',
-    lut: mako,
+    get lut() { return lutFromPython(mako) }
   },
   FLARE: {
     name: 'flare',
     type: 'sequential (multi-hue)',
-    lut: flare,
+    get lut() { return lutFromPython(flare) }
   },
   CREST: {
     name: 'crest',
     type: 'sequential (multi-hue)',
-    lut: crest,
+    get lut() { return lutFromPython(crest) }
   },
   THERMAL: {
     name: 'thermal',
     type: 'sequential (multi-hue)',
-    lut: thermal,
+    get lut() { return lutFromPython(thermal) }
   },
   ICE: {
     name: 'ice',
     type: 'sequential (multi-hue)',
-    lut: thermal,
-    lut: ice,
+    get lut() { return lutFromPython(ice) }
   },
   WARM: {
     name: 'warm',
@@ -257,12 +256,12 @@ let colormaps = {
   VLAG: {
     name: 'vlag',
     type: 'diverging',
-    lut: vlag,
+    get lut() { return lutFromPython(vlag) }
   },
   ICEFIRE: {
     name: 'icefire',
     type: 'diverging',
-    lut: icefire,
+    get lut() { return lutFromPython(icefire) }
   },
   /////////////////////////////////////////////////////////////////////////////
   // Cyclical
@@ -295,7 +294,7 @@ let colormaps = {
   ALTERNATE_TEMP:{
     name: 'alternate_temp',
     type: 'FEVer 1 original',
-    get lut() { return convert(alternate_temp) }
+    lut: alternate_temp,
   },
 
   SEA_SURFACE_TEMP:{
@@ -385,27 +384,27 @@ for (let prop in colormaps) {
 
 export default Object.freeze(colormaps);
 
-function convert(oldArr) {
-  return oldArr.map(color => color.map(x => x / 255));
+function lutFromPython(pythonLut) {
+  return pythonLut.map(color => color.map(x => x * 255));
 }
 
 function lutFromD3(interpolationFunction) {
   return Array.from({ length: 256 }, (_, i) => {
     let c = color(interpolationFunction(i / 255));
-    return [c.r, c.g, c.b].map(x => x / 255);
+    return [c.r, c.g, c.b];
   });
 }
 
 function lutFromD3Scheme(scheme, kmax) {
   return scheme[kmax].map(hex => {
     let c = color(hex);
-    return [c.r, c.g, c.b].map(x => x / 255);
+    return [c.r, c.g, c.b];
   });
 }
 
 function lutFromEarthScale(scale, bounds) {
   return Array.from({ length: 256 }, (_, i) => {
     let val = bounds[0] + (i / 255) * (bounds[1] - bounds[0]);
-    return scale(val).map(x => x * 0.66 / 255);
+    return scale(val).map(x => x * 0.66);
   });
 }
