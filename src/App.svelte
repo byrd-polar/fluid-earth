@@ -147,7 +147,7 @@
     let particleAssignments = () => {};
     let initialLoad = true;
 
-    updateGriddedData = async () => {
+    updateGriddedData = async (griddedDataset) => {
       griddedLoading = true;
 
       // Ensure that original date is switched back to if switching to and back
@@ -198,7 +198,7 @@
       if (!particleLoading || initialLoad) assignVariables();
     };
 
-    updateParticleData = async () => {
+    updateParticleData = async (particleDataset, particlesShown) => {
       if (validDate(griddedDataset, date).getTime() !== date.getTime()) return;
 
       let valid = validDate(particleDataset, date);
@@ -264,8 +264,8 @@
     );
   });
 
-  $: date, griddedDataset, updateGriddedData();
-  $: date, particleDataset, particlesShown, updateParticleData();
+  $: date, updateGriddedData(griddedDataset);
+  $: date, updateParticleData(particleDataset, particlesShown);
 
   // Find new icons from: https://ibm.github.io/carbon-icons-svelte/
   //
