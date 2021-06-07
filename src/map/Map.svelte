@@ -14,7 +14,6 @@
   import ParticleSimulator from './particle/simulator.js';
   import ParticleSimulatorMobile from './particle/mobile/simulator.js';
 
-  import colormaps from './colormaps/';
   import projections, { proj } from './projections/';
   import dataProjections from './data-projections/';
 
@@ -34,7 +33,12 @@
     height: 1,
     projection: dataProjections.GFS,
   };
-  export let griddedColormap = colormaps.VIRIDIS;
+  export let griddedColormap = {
+    lut: [
+      [0, 0, 0],
+      [127, 127, 127],
+    ],
+  };
   export let griddedDomain = [0, 1];
   export let griddedBaseColor = [38, 38, 38, 1]; // rgba greyish color
 
