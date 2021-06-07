@@ -198,9 +198,7 @@
       if (!particleLoading || initialLoad) assignVariables();
     };
 
-    updateParticleData = async (particleDataset, particlesShown) => {
-      if (validDate(griddedDataset, date).getTime() !== date.getTime()) return;
-
+    updateParticleData = async (particleDataset) => {
       let valid = validDate(particleDataset, date);
       if (valid.getTime() !== date.getTime()) {
         particlesShown = false;
@@ -265,7 +263,7 @@
   });
 
   $: date, updateGriddedData(griddedDataset);
-  $: date, updateParticleData(particleDataset, particlesShown);
+  $: date, particlesShown, updateParticleData(particleDataset);
 
   // Find new icons from: https://ibm.github.io/carbon-icons-svelte/
   //
