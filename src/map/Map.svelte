@@ -338,4 +338,4 @@
   }
 </style>
 
-<svelte:options tag="fever-map"/>
+<svelte:options tag="earth-map"/>
