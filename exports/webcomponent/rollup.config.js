@@ -1,11 +1,17 @@
 import svelte from 'rollup-plugin-svelte';
 import glslify from 'rollup-plugin-glslify';
 import resolve from '@rollup/plugin-node-resolve';
+import { terser } from 'rollup-plugin-terser';
+import dedent from 'dedent';
+
+const preamble = dedent`
+  /* Includes code from some of the following libraries:
+   * https://fev2r.netlify.app/legal/THIRD_PARTY */
+`;
 
 export default {
   input: 'exports/webcomponent/main.js',
   output: {
-    sourcemap: true,
     format: 'iife',
     name: 'app',
     file: 'dist/webcomponent.js'
@@ -20,6 +26,12 @@ export default {
     resolve({
       browser: true,
       dedupe: ['svelte']
+    }),
+    terser({
+      format: {
+        comments: false,
+        preamble,
+      },
     }),
   ],
   onwarn(warning, warn) {
