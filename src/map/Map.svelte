@@ -86,6 +86,7 @@
     return lonLat;
   };
 
+  export let syncWithAnimationHook = () => {};
   export let MAX_TEXTURE_SIZE = Infinity;
 
   let mpcTestCanvas;
@@ -261,9 +262,24 @@
     previousHeight = clientHeight;
     previousPixelRatio = pixelRatio;
 
+    // limit update of d3geoProjection to the rate of the animation loop to keep
+    // pins in better sync with underlying webgl map
+    if (d3geoProjectionNeedsUpdate) {
+      d3geoProjection = proj(
+        projection,
+        centerLongitude,
+        centerLatitude,
+        clientWidth,
+        clientHeight,
+        zoom
+      );
+      d3geoProjectionNeedsUpdate = false;
+    }
+
     if (backgroundNeedsRedraw) {
       mapBackground.drawGriddedData(sharedUniforms);
       mapBackground.drawVectorData(sharedUniforms, vectorColors);
+      syncWithAnimationHook();
       backgroundNeedsRedraw = false;
     }
 
@@ -295,20 +311,6 @@
     if (particlesNeedClearing) {
       particleGl.clear(particleGl.COLOR_BUFFER_BIT);
       particlesNeedClearing = false;
-    }
-
-    // limit update of d3geoProjection to the rate of the animation loop to keep
-    // pins in better sync with underlying webgl map
-    if (d3geoProjectionNeedsUpdate) {
-      d3geoProjection = proj(
-        projection,
-        centerLongitude,
-        centerLatitude,
-        clientWidth,
-        clientHeight,
-        zoom
-      );
-      d3geoProjectionNeedsUpdate = false;
     }
 
     requestAnimationFrame(render);
