@@ -1,5 +1,4 @@
 <script>
-  import { updateAllWebglResolutions } from './map/Map.svelte';
   import { onMount } from 'svelte';
   import IconButton from './components/IconButton.svelte';
   import ArrowLeft24 from "carbon-icons-svelte/lib/ArrowLeft24";
@@ -38,13 +37,6 @@
   }
 
   let aside;
-  onMount(() => {
-    aside.addEventListener('transitionend', e => {
-      if (e.propertyName === 'margin-left') {
-        updateAllWebglResolutions();
-      }
-    });
-  });
 </script>
 
 <aside

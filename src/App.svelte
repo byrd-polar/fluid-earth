@@ -13,7 +13,7 @@
   import About from './menus/About.svelte';
   import Feedback from './menus/Feedback.svelte';
 
-  import Map, { updateAllWebglResolutions } from './map/Map.svelte';
+  import Map from './map/Map.svelte';
   import colormaps from './map/colormaps/';
   import projections from './map/projections/';
   import dataProjections, {
@@ -121,14 +121,10 @@
   let pins = [];
 
   onMount(async () => {
-    // workaround some race condition loading bugs
-    setTimeout(updateAllWebglResolutions, 0.5);
-
     // JS implementation of 100vh for mobile, see:
     // https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html
     window.addEventListener('resize', () => {
       document.body.style.height = `${window.innerHeight}px`;
-      updateAllWebglResolutions();
     });
 
     // Load topology (lines on globe) data completely first

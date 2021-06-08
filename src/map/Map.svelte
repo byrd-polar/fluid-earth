@@ -1,11 +1,3 @@
-<script context="module">
-  const updateWebglResolutionFunctions = new Set();
-
-  export function updateAllWebglResolutions() {
-    updateWebglResolutionFunctions.forEach(f => f());
-  }
-</script>
-
 <script>
   import { onMount } from 'svelte';
   import { resizeCanvasToDisplaySize } from 'twgl.js';
@@ -63,11 +55,6 @@
 
   export let vectorData = { objects: {} };
   export let vectorColors = {};
-
-  export const updateWebglResolution = force => {
-    updateResolution(backgroundGl, force);
-    updateResolution(particleGl, force);
-  };
 
   let clientWidth, clientHeight;
 
@@ -215,18 +202,15 @@
         new ParticleSimulator(particleGl, particleSimulatorOptions);
     }
 
-    updateWebglResolution(true);
-    updateWebglResolutionFunctions.add(updateWebglResolution);
+    updateResolution(backgroundGl, true);
+    updateResolution(particleGl, true);
 
     requestAnimationFrame(render);
-
-    return () => updateWebglResolutionFunctions.delete(updateWebglResolution);
   });
 
   // Main animation loop
   let previousTime;
-  let previousCanvasRatio;
-  let previousScreenRatio;
+  let previousWidth, previousHeight, resizing = false;
   function render(time) {
     let timeDelta = previousTime ? (time - previousTime) : 0;
     previousTime = time;
@@ -234,7 +218,7 @@
     // Update canvas and screen ratios every frame without updating resolution
     // for vastly improved performance (compared to also updating resolution
     // every frame) when opening side menus, but causes particle width to be
-    // slightly incorrect until updateWebglResolution is called.
+    // slightly incorrect until canvas dimensions stop changing.
     //
     // canvasRatio is aspect ratio (width / height) of the canvas
     // screenRatio is ratio of canvas height to our reference height
@@ -255,13 +239,21 @@
       ...projectionUniforms,
     };
 
-    if (canvasRatio !== previousCanvasRatio ||
-        screenRatio !== previousScreenRatio) {
-      previousCanvasRatio = canvasRatio;
-      previousScreenRatio = screenRatio;
+    if (clientWidth !== previousWidth || clientHeight !== previousHeight) {
       backgroundNeedsRedraw = true;
       trailsNeedsReset = true;
+      resizing = true;
+
+    } else if (resizing) {
+      resizing = false;
+      // dimensions have stopped changing each frame, so perform expensive
+      // resolution operations here
+      updateResolution(backgroundGl);
+      updateResolution(particleGl);
     }
+
+    previousWidth = clientWidth;
+    previousHeight = clientHeight;
 
     if (backgroundNeedsRedraw) {
       mapBackground.drawGriddedData(sharedUniforms);
