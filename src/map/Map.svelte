@@ -210,7 +210,7 @@
 
   // Main animation loop
   let previousTime;
-  let previousWidth, previousHeight, resizing = false;
+  let previousWidth, previousHeight, previousPixelRatio, resizing = false;
   function render(time) {
     let timeDelta = previousTime ? (time - previousTime) : 0;
     previousTime = time;
@@ -230,8 +230,9 @@
     // particleDisplay.size variable.
     clientWidth = backgroundCanvas.clientWidth;
     clientHeight = backgroundCanvas.clientHeight;
+    let pixelRatio = window.devicePixelRatio;
     let canvasRatio = clientWidth / clientHeight;
-    let screenRatio = window.devicePixelRatio * clientHeight / 1080;
+    let screenRatio = pixelRatio * clientHeight / 1080;
 
     let sharedUniforms = {
       u_canvasRatio: canvasRatio,
@@ -239,7 +240,11 @@
       ...projectionUniforms,
     };
 
-    if (clientWidth !== previousWidth || clientHeight !== previousHeight) {
+    if (
+      clientWidth !== previousWidth ||
+      clientHeight !== previousHeight ||
+      pixelRatio !== previousPixelRatio
+    ) {
       backgroundNeedsRedraw = true;
       trailsNeedsReset = true;
       resizing = true;
@@ -254,6 +259,7 @@
 
     previousWidth = clientWidth;
     previousHeight = clientHeight;
+    previousPixelRatio = pixelRatio;
 
     if (backgroundNeedsRedraw) {
       mapBackground.drawGriddedData(sharedUniforms);
