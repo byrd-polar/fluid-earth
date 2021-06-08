@@ -334,6 +334,12 @@
 </div>
 
 <style>
+  :host {
+    display: flex !important;
+    width: 300px;
+    height: 300px;
+  }
+
   div.layers {
     position: relative;
     flex: 1;
