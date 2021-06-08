@@ -63,7 +63,7 @@
       });
     interactionSurfaceElement.addEventListener('wheel', handleWheel);
 
-    // Workaround for pinch-to-zoom (gesturable move) not working on Firefox on
+    // Workaround for browser chrome hiding/appearing too eagerly on Firefox on
     // Android, disables zooming with wheel if Firefox on Android is detected
     let ua = navigator.userAgent;
     if (ua.includes("Firefox") && ua.includes("Android")) {
