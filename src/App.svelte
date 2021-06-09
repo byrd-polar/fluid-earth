@@ -67,8 +67,8 @@
   let forwardProjectionFunction = projection.function;
   let inverseProjectionFunction = projection.function.invert;
   let MAX_TEXTURE_SIZE = Infinity;
-  let centerLongitude = -60;
-  let centerLatitude = 30;
+  let centerLongitude = 360 * Math.random() - 180;
+  let centerLatitude = (180 / Math.PI) * Math.asin(2 * Math.random() - 1);
   let zoom = 1.5;
 
   let griddedData = {
