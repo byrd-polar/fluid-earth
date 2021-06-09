@@ -60,7 +60,7 @@ let colormaps = {
   MAGMA: {
     name: 'magma',
     type: 'sequential (multi-hue)',
-    get lut() { return lutFromD3(d3.interpolateMagma) }
+    get lut() { return lutFromEarthScale(temp, [193, 328]) }
   },
   PLASMA: {
     name: 'plasma',
