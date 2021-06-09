@@ -61,7 +61,9 @@
     if (key === 'none') return true;
 
     return particleDatasets.find(d => {
-      return animationFilters[key](d.name) && validCloseDate(d, date);
+      return levelFilters[level](d.name) &&
+        animationFilters[key](d.name) &&
+        validCloseDate(d, date);
     });
   });
 
