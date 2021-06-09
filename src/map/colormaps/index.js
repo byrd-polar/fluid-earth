@@ -205,6 +205,15 @@ let colormaps = {
     type: 'sequential (single-hue)',
     get lut() { return lutFromD3Scheme(d3.schemeReds, 9) }
   },
+  SUNSHINE: {
+    name: 'sunshine',
+    type: 'sequential (single-hue)',
+    get lut() {
+      let lut = lutFromD3Scheme(d3.schemeGreys, 9);
+      lut.reverse();
+      return lut.slice(0, 5);
+    }
+  },
   /////////////////////////////////////////////////////////////////////////////
   // Diverging
   /////////////////////////////////////////////////////////////////////////////

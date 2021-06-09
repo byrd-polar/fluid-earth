@@ -289,8 +289,8 @@ accumulation6hrGribs.push({
     name: 'sunshine in previous hour',
     unit: 'min',
     originalUnit: 's',
-    domain: [0, 7200],
-    colormap: 'GREYS_REVERSED',
+    domain: [0, 3600],
+    colormap: 'SUNSHINE',
     ...gfs0p25props,
   },
 });
