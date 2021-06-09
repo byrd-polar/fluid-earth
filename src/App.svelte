@@ -46,7 +46,7 @@
   let openedMenu = null;
   let drawerOpen = false;
 
-  let simplifiedMode = false;
+  let simplifiedMode = true;
 
   const fetcher = new Fetcher();
   let griddedDataset = inventory.filter(d => d.colormap)[0];

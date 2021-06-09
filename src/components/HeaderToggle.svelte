@@ -2,12 +2,18 @@
   import Toggle from "svelte-toggle";
 
   export let simplifiedMode;
+  $: advancedMode = !simplifiedMode;
+  $: if (simplifiedMode === advancedMode) updateMode();
+
+  function updateMode() {
+    simplifiedMode = !advancedMode;
+  }
 </script>
 
 <div>
   <Toggle
-    bind:toggled={simplifiedMode}
-    label="Simplified mode"
+    bind:toggled={advancedMode}
+    label="Advanced mode"
     toggledColor="var(--primary-color-light)"
     untoggledColor="#ABABAB"
     style="margin-left: auto"
