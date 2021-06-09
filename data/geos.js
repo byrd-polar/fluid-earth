@@ -69,7 +69,7 @@ const geosVars = [
         }
     }
 ]
-const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
+const [inventory, writeInventory] = await util.readPartialInventory('geos');
 
 async function downloadGEOSData(dataset, datetime, hourShift) {
 
@@ -149,4 +149,4 @@ for (const geosVar of geosVars) {
 
 }
 
-await writeAndUnlockInventory(inventory);
+await writeInventory(inventory);

@@ -1,5 +1,5 @@
 import { existsSync } from 'fs';
-import { readFile, writeFile } from 'fs/promises';
+import { readFile, writeFile } from 'atomically';
 import { platform } from 'os';
 import path from 'path';
 import { URL } from 'url';
@@ -9,6 +9,13 @@ import lockfile from 'proper-lockfile';
 export const CACHE_DIR = path.join('data', 'cache');
 export const OUTPUT_DIR = path.join('public', 'data');
 export const INVENTORY_FILE = path.join(OUTPUT_DIR, 'inventory.json');
+export const PARTIAL_INVENTORIES = Object.fromEntries([
+  'topology',
+  'gfs',
+  'geos',
+  'oscar',
+  'rtgssthr',
+].map(source => [source, path.join(OUTPUT_DIR, `inventory-${source}.json`)]));
 
 const windows = (platform() === 'win32');
 
@@ -92,21 +99,35 @@ export async function download(
   return filepath;
 }
 
-// read the inventory.json file and ensure only one caller can access it at a
-// time using a lockfile
+// read the partial inventory for a data source
 //
-// returns the inventory object and a callback for writing to the inventory
-// while releasing the lockfile
-export async function lockAndReadInventory() {
-  let release = await lockfile.lock(INVENTORY_FILE, { retries: 8 });
-  let inventory = JSON.parse(await readFile(INVENTORY_FILE, 'utf8'));
+// - source is the name of the data source (e.g. 'gfs')
+//
+// returns the partial inventory object and a callback for writing to the full
+// inventory, ensuring (hopefully!) that different processes running this
+// function do not cause data loss
+export async function readPartialInventory(source) {
+  let file = PARTIAL_INVENTORIES[source];
 
-  let writeAndUnlockInventory = async inventory => {
+  // prevent multiple concurrent runs of a specific data source
+  let releasePartialInventory = await lockfile.lock(file, { retries: 8 });
+  let partialInventory = JSON.parse(await readFile(file, 'utf8'));
+
+  let writeInventory = async partialInventory => {
+    await writeFile(file, JSON.stringify(partialInventory, null, 2));
+    await releasePartialInventory();
+
+    // merge all partial inventories together to recreate/update main inventory
+    let releaseInventory = await lockfile.lock(INVENTORY_FILE, { retries: 8 });
+    let inventory = [];
+    for (const file of Object.values(PARTIAL_INVENTORIES)) {
+      inventory.push(...JSON.parse(await readFile(file, 'utf8')));
+    }
     await writeFile(INVENTORY_FILE, JSON.stringify(inventory, null, 2));
-    release();
+    await releaseInventory();
   };
 
-  return [inventory, writeAndUnlockInventory];
+  return [partialInventory, writeInventory];
 }
 
 // check if a URL exists (without having to download the whole file)

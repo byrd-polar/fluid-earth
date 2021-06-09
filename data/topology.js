@@ -11,7 +11,7 @@ const urls = [
   base + '/50m_physical/ne_50m_coastline.shp',
 ];
 
-let [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
+const [inventory, writeInventory] = await util.readPartialInventory('topology');
 
 let files = await Promise.all(urls.map(async url => await util.download(url)));
 
@@ -31,4 +31,4 @@ dataset.path = util.browserPath(outputFile);
 dataset.lastUpdated = '2018-05-21';
 dataset.bytes = (await stat(outputFile)).size;
 
-await writeAndUnlockInventory(inventory);
+await writeInventory(inventory);

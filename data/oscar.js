@@ -49,7 +49,7 @@ const speedDatasetBase = {
   projection: 'OSCAR',
 };
 
-const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
+const [inventory, writeInventory] = await util.readPartialInventory('oscar');
 
 let dataset = inventory.find(d => d.vPath === datasetBase.vPath);
 let speedDataset = inventory.find(d => d.path === speedDatasetBase.path);
@@ -100,4 +100,4 @@ speedDataset.start = speedDataset.start ?? datetime;
 dataset.end = datetime;
 speedDataset.end = datetime;
 
-await writeAndUnlockInventory(inventory);
+await writeInventory(inventory);

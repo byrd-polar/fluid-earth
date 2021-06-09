@@ -296,7 +296,7 @@ accumulation6hrGribs.push({
 });
 
 
-const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
+const [inventory, writeInventory] = await util.readPartialInventory('gfs');
 const [datetime, system] = await getDatetimeAndSystem(inventory);
 
 const forecastHours = system === 'gdas' ? GDAS_FORECAST_HRS : GFS_FORECAST_HRS;
@@ -544,4 +544,4 @@ function fcstString(f) {
   return (f % 24 === 0 ? `0-${f/24} day` : `0-${f} hour`) + ' acc fcst';
 }
 
-await writeAndUnlockInventory(inventory);
+await writeInventory(inventory);

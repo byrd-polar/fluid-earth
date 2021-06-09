@@ -21,7 +21,7 @@ const datasetBase = {
   projection: 'RTGSSTHR',
 };
 
-const [inventory, writeAndUnlockInventory] = await util.lockAndReadInventory();
+const [inventory, writeInventory] = await util.readPartialInventory('rtgssthr');
 
 let dataset = inventory.find(d => d.path === datasetBase.path);
 let datetime;
@@ -57,4 +57,4 @@ dataset.start = dataset.start ?? datetime;
 dataset.end = datetime;
 dataset.lastForecast = datetime;
 
-await writeAndUnlockInventory(inventory);
+await writeInventory(inventory);

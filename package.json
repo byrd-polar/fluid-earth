@@ -28,6 +28,7 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-replace": "^2.4.2",
     "@sveltejs/vite-plugin-svelte": "*",
+    "atomically": "^1.7.0",
     "csv-parse": "^4.15.4",
     "dedent": "^0.7.0",
     "extract-zip": "^2.0.1",
