@@ -30,7 +30,7 @@ const simple = {
   'mean sea level':
     name => name.includes('mean sea level') ||
             name.includes('wind at 10 m above ground'),
-  'surface':
+  'ground':
     name => name.includes('at 2 m above ground') ||
             name.includes('at 10 m above ground') ||
             name.includes('surface') ||
