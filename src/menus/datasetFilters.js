@@ -95,20 +95,20 @@ export const basicPropertyFilters = {
   'cloud water': name => {
     return name.includes('cloud water');
   },
-  'ozone': name => {
-    return name.includes('ozone');
-  },
-  'wave height': name => {
-    return name === 'significant wave height';
-  },
-  'sea temperature': name => {
-    return name === 'sea surface temperature';
-  },
   'sunshine': name => {
     return name === 'sunshine in previous hour';
   },
   'currents': name => {
     return name.startsWith('ocean surface currents');
+  },
+  'sea temperature': name => {
+    return name === 'sea surface temperature';
+  },
+  'wave height': name => {
+    return name === 'significant wave height';
+  },
+  'ozone': name => {
+    return name.includes('ozone');
   },
   'sulfur dioxide': name => {
     return name.startsWith('sulfur dioxide');
