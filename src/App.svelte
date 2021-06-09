@@ -27,7 +27,7 @@
   import Controls from './overlays/Controls.svelte';
 
   import Fetcher from './fetcher.js';
-  import { validDate } from './utility.js';
+  import { validDate, validCloseDate } from './utility.js';
   import { currentDate } from './stores.js';
 
   import { onMount } from 'svelte';
@@ -195,8 +195,8 @@
     };
 
     updateParticleData = async (particleDataset) => {
-      let valid = validDate(particleDataset, date);
-      if (valid.getTime() !== date.getTime()) {
+      let valid = validCloseDate(particleDataset, date);
+      if (!valid) {
         particlesShown = false;
       }
 
@@ -205,7 +205,7 @@
       particleLoading = true;
 
       let [uArray, vArray] =
-        await fetcher.fetch(particleDataset, date, 'particle');
+        await fetcher.fetch(particleDataset, valid, 'particle');
 
       if (!uArray || !vArray) return;
 

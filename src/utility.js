@@ -28,6 +28,22 @@ export function validDate(dataset, date) {
   return clamp(d, dataset.start, dataset.end);
 }
 
+// Same as validDate, except returns null if the closest date is not "close
+// enough", i.e. too before dataset.start or too after dataset.end
+export function validCloseDate(dataset, date) {
+  let closest = validDate(dataset, date);
+
+  let maxDistance;
+  if (dataset.intervalInHours === 'custom:OSCAR') {
+    maxDistance =  6 * 24 * 60 * 60 * 1000;
+  } else {
+    maxDistance = dataset.intervalInHours * 60 * 60 * 1000;
+  }
+  if (Math.abs(closest - date) > maxDistance) return null;
+
+  return closest;
+}
+
 // Return a list of all the valid dates for a dataset
 export function getValidDates(dataset) {
   const dates = [];

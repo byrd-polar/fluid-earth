@@ -1,6 +1,6 @@
 <script>
   import ChipGroup from '../components/ChipGroup.svelte';
-  import { validDate } from '../utility.js';
+  import { validDate, validCloseDate } from '../utility.js';
   import { tick } from 'svelte';
   import {
     categoryFilters,
@@ -61,8 +61,7 @@
     if (key === 'none') return true;
 
     return particleDatasets.find(d => {
-      return animationFilters[key](d.name) &&
-             validDate(d, date).getTime() === date.getTime();
+      return animationFilters[key](d.name) && validCloseDate(d, date);
     });
   });
 
