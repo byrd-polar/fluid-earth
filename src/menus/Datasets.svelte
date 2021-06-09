@@ -68,10 +68,10 @@
   });
 
   // Set sub-filter to first option if there are no matching options after
-  // switching main filter. For example, if `propery` changes and the new
+  // switching main filter. For example, if `property` changes and the new
   // property's `levelOptions` does not include the current `level`, set `level`
   // to the first of these options.
-  let previousCategory, previousProperty;
+  let previousCategory, previousProperty, previousLevel;
   $: {
     if (category !== previousCategory && !propertyOptions.includes(property)) {
       property = propertyOptions[0];
@@ -83,6 +83,12 @@
       level = levelOptions[0];
     }
     previousProperty = property;
+  }
+  $: {
+    if (level !== previousLevel && !animationOptions.includes(animation)) {
+      animation = animationOptions[0];
+    }
+    previousLevel = level;
   }
 
   async function updateDatasets(e) {
