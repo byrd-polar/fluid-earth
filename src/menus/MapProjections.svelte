@@ -12,8 +12,8 @@
       name: 'globe',
       function: () => {
         projection = projections.VERTICAL_PERSPECTIVE;
-        centerLongitude = -60;
-        centerLatitude = 30;
+        centerLongitude = -75;
+        centerLatitude = 45;
         zoom = 1.5;
       },
       image: '/images/ortho-white-bg.svg',
