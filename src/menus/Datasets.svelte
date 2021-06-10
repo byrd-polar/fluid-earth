@@ -2,14 +2,11 @@
   import ChipGroup from '../components/ChipGroup.svelte';
   import { validDate, validCloseDate } from '../utility.js';
   import { tick } from 'svelte';
-  import {
-    categoryFilters,
-    basicPropertyFilters,
-    advancedPropertyFilters,
-    basicLevelFilters,
-    advancedLevelFilters,
-    animationFilters,
-  } from './datasetFilters.js';
+
+  import topicFilters from './filters/topics.js';
+  import variableFilters from './filters/variables.js';
+  import heightFilters from './filters/heights.js';
+  import animationFilters from './filters/animations.js';
 
   export let date;
   export let inventory;
@@ -21,97 +18,55 @@
   let griddedDatasets = inventory.filter(d => d.colormap)
   let particleDatasets = inventory.filter(d => d.particleDisplay);
   let griddedNames = griddedDatasets.map(dataset => dataset.name);
+  let particleNames = particleDatasets.map(dataset => dataset.name);
 
-  $: propertyFilters = simplifiedMode ?
-    basicPropertyFilters : advancedPropertyFilters;
-  $: levelFilters = simplifiedMode ? basicLevelFilters : advancedLevelFilters;
+  $: tFilters =     topicFilters[simplifiedMode ? 'simple' : 'normal'];
+  $: vFilters =  variableFilters[simplifiedMode ? 'simple' : 'normal'];
+  $: hFilters =    heightFilters[simplifiedMode ? 'simple' : 'normal'];
+  $: aFilters = animationFilters[simplifiedMode ? 'simple' : 'normal'];
 
-  let categories = Object.keys(categoryFilters);
-  $: properties = Object.keys(propertyFilters);
-  $: levels = Object.keys(levelFilters);
-  let animations = Object.keys(animationFilters);
+  $: topics     = Object.keys(tFilters);
+  $: variables  = Object.keys(vFilters);
+  $: heights    = Object.keys(hFilters);
+  $: animations = Object.keys(aFilters);
 
-  let category;
-  let property;
-  let level;
-  let animation;
-
-  $: griddedDataset, particlesShown, simplifiedMode, updateFilterSelections();
-
-  function updateFilterSelections() {
-    category = categories.find(c => categoryFilters[c](griddedDataset.name));
-    property = properties.find(p => propertyFilters[p](griddedDataset.name));
-    level = levels.find(l => levelFilters[l](griddedDataset.name));
-    animation = particlesShown ?
-      animations.find(a => animationFilters[a](particleDataset.name)) : 'none';
+  let topic, variable, height, animation;
+  $: update(griddedDataset, particleDataset, particlesShown, simplifiedMode);
+  function update(
+    griddedDataset, particleDataset, particlesShown, simplifiedMode
+  ) {
+    topic     =     topics.find(c => tFilters[c](griddedDataset.name));
+    variable  =  variables.find(v => vFilters[v](griddedDataset.name));
+    height    =    heights.find(h => hFilters[h](griddedDataset.name));
+    animation = animations.find(a => aFilters[a](
+      particlesShown ? particleDataset.name : ''
+    ));
   }
-
-  $: categoryOptions = categories.filter(key => key !== 'undefined');
-  $: propertyOptions = properties.filter(key => {
-    return griddedNames.filter(categoryFilters[category]).find(name => {
-      return propertyFilters[key](name);
-    });
+  $: topicOptions = topics;
+  $: variableOptions = variables.filter(v => {
+    let names = griddedNames.filter(tFilters[topic]);
+    return names.find(name => vFilters[v](name));
   });
-  $: levelOptions = levels.filter(key => {
-    return griddedNames.filter(propertyFilters[property]).find(name => {
-      return levelFilters[key](name);
-    });
+  $: heightOptions = heights.filter(h => {
+    let names = griddedNames.filter(vFilters[variable]);
+    return names.find(name => hFilters[h](name));
   });
-  $: animationOptions = animations.filter(key => {
-    if (key === 'none') return true;
-
-    return particleDatasets.find(d => {
-      return levelFilters[level](d.name) &&
-        animationFilters[key](d.name) &&
-        validCloseDate(d, date);
-    });
+  $: animationOptions = animations.filter(a => {
+    let names = particleNames.filter(hFilters[height]);
+    return names.find(name => aFilters[a](name));
   });
 
-  // Set sub-filter to first option if there are no matching options after
-  // switching main filter. For example, if `property` changes and the new
-  // property's `levelOptions` does not include the current `level`, set `level`
-  // to the first of these options.
-  let previousCategory, previousProperty, previousLevel;
-  $: {
-    if (category !== previousCategory && !propertyOptions.includes(property)) {
-      property = propertyOptions[0];
-    }
-    previousCategory = category;
-  }
-  $: {
-    if (property !== previousProperty && !levelOptions.includes(level)) {
-      level = levelOptions[0];
-    }
-    previousProperty = property;
-  }
-  $: {
-    if (level !== previousLevel && !animationOptions.includes(animation)) {
-      animation = animationOptions[0];
-    }
-    previousLevel = level;
-  }
-
-  async function updateDatasets(e) {
+  async function autoSelect() {
+    if (!variableOptions.includes(variable)) variable = variableOptions[0];
     await tick();
+    if (!heightOptions.includes(height)) height = heightOptions[0];
+    await tick();
+    if (!animationOptions.includes(animation)) animation = animationOptions[0];
+  }
 
-    let gCandidate = griddedDatasets.find(d => {
-      return categoryFilters[category](d.name) &&
-             propertyFilters[property](d.name) &&
-             levelFilters[level](d.name);
-    });
-    if (gCandidate) {
-      griddedDataset = gCandidate;
-    }
-
-    particlesShown = (animation !== 'none');
-
-    let pCandidate = particleDatasets.find(d => {
-      return animationFilters[animation](d.name) &&
-             levelFilters[level](d.name);
-    });
-    if (pCandidate && pCandidate !== particleDataset) {
-      particleDataset = pCandidate;
-    }
+  async function updateDatasets() {
+    await tick();
+    await autoSelect();
   }
 </script>
 
@@ -119,22 +74,22 @@
 
 <h3>Topic</h3>
 <ChipGroup
-  options={categoryOptions}
-  bind:selected={category}
+  options={topicOptions}
+  bind:selected={topic}
   on:select={updateDatasets}
 />
 
 <h3>Variable</h3>
 <ChipGroup
-  options={propertyOptions}
-  bind:selected={property}
+  options={variableOptions}
+  bind:selected={variable}
   on:select={updateDatasets}
 />
 
 <h3>Height</h3>
 <ChipGroup
-  options={levelOptions}
-  bind:selected={level}
+  options={heightOptions}
+  bind:selected={height}
   on:select={updateDatasets}
 />
 
