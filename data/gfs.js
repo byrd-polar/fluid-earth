@@ -249,14 +249,14 @@ for (const level of ['10 m above ground'].concat(mbLevels)) {
     level: level,
     datasetBase: {
       name: `wind at ${level}`,
-      particleLifetime: 1000,
+      particleLifetime: 2000,
       particleCount: 100000,
       particleDisplay: {
         size: 0.8,
-        rate: 50000,
-        opacity: 0.4,
+        rate: 25000,
+        opacity: 0.3,
         opacitySpeedDecay: 0.8,
-        fade: 0.96
+        fade: 0.98
       },
       ...gfs0p25props,
     },

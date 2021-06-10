@@ -19,13 +19,13 @@ const datasetBase = {
   uPath: util.browserPath(uOutputPath),
   vPath: util.browserPath(vOutputPath),
   particleLifetime: 10000,
-  particleCount: 100000,
+  particleCount: 300000,
   particleDisplay: {
-    size: 0.8,
-    rate: 250000,
-    opacity: 0.4,
+    size: 0.5,
+    rate: 150000,
+    opacity: 0.3,
     opacitySpeedDecay: 0.005,
-    fade: 0.96
+    fade: 0.98
   },
   bytesPerFile: 1155362,
   width: 1201,

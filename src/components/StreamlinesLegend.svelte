@@ -25,7 +25,7 @@
   const trailCount = 20;
   const trailWidth = 5;
   const trailHeight = 0.3;
-  const trailPeriod = 12;
+  const trailPeriod = 15;
 
   function formatTitle(particleDataset, simplifiedMode) {
     let name = particleDataset.name;
