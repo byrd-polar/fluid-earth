@@ -23,6 +23,8 @@ const normal = {
             variableFilters.normal['wave height'](name) ||
             variableFilters.normal['wave period'](name) ||
             variableFilters.normal['wave direction'](name),
+
+  undefined: () => false,
 };
 
 const simple = normal;

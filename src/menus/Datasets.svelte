@@ -42,7 +42,16 @@
       particlesShown ? particleDataset.name : ''
     ));
   }
-  $: topicOptions = topics;
+  $: gDataset = griddedDatasets.find(d => {
+    return tFilters[topic](d.name) &&
+           vFilters[variable](d.name) &&
+           hFilters[height](d.name);
+  });
+  $: pDataset = particleDatasets.find(d => {
+    return aFilters[animation](d.name) &&
+           hFilters[height](d.name);
+  });
+  $: topicOptions = topics.filter(t => t !== 'undefined');
   $: variableOptions = variables.filter(v => {
     let names = griddedNames.filter(tFilters[topic]);
     return names.find(name => vFilters[v](name));
@@ -52,10 +61,18 @@
     return names.find(name => hFilters[h](name));
   });
   $: animationOptions = animations.filter(a => {
-    let names = particleNames.filter(hFilters[height]);
-    return names.find(name => aFilters[a](name));
+    if (a === 'none') return true;
+
+    let datasets = particleDatasets.filter(d => hFilters[height](d.name));
+    return datasets.find(d => aFilters[a](d.name) && gDataset &&
+      validCloseDate(d, validDate(gDataset, date)));
   });
 
+  async function handleSelect() {
+    await tick();
+    await autoSelect();
+    updateDatasets();
+  }
   async function autoSelect() {
     if (!variableOptions.includes(variable)) variable = variableOptions[0];
     await tick();
@@ -63,10 +80,10 @@
     await tick();
     if (!animationOptions.includes(animation)) animation = animationOptions[0];
   }
-
-  async function updateDatasets() {
-    await tick();
-    await autoSelect();
+  function updateDatasets() {
+    if (gDataset && griddedDataset !== gDataset) griddedDataset = gDataset;
+    if (pDataset && particleDataset !== pDataset) particleDataset = pDataset;
+    particlesShown = (animation !== 'none');
   }
 </script>
 
@@ -76,28 +93,28 @@
 <ChipGroup
   options={topicOptions}
   bind:selected={topic}
-  on:select={updateDatasets}
+  on:select={handleSelect}
 />
 
 <h3>Variable</h3>
 <ChipGroup
   options={variableOptions}
   bind:selected={variable}
-  on:select={updateDatasets}
+  on:select={handleSelect}
 />
 
 <h3>Height</h3>
 <ChipGroup
   options={heightOptions}
   bind:selected={height}
-  on:select={updateDatasets}
+  on:select={handleSelect}
 />
 
 <h3>Animation</h3>
 <ChipGroup
   options={animationOptions}
   bind:selected={animation}
-  on:select={updateDatasets}
+  on:select={handleSelect}
 />
 
 <style>

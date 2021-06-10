@@ -22,6 +22,8 @@ const normal = {
   'entire atmosphere':
     name => name.startsWith('total') ||
             name.includes('at 500 mb') && name.startsWith('wind at'),
+
+  undefined: () => false,
 };
 
 const simple = {
@@ -42,6 +44,8 @@ const simple = {
   'entire atmosphere':
     name => name.startsWith('total') && name !== 'total relative humidity' ||
             name.includes('at 500 mb') && name.startsWith('wind at'),
+
+  undefined: () => false,
 };
 
 export default { normal, simple };

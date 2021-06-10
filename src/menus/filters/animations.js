@@ -5,6 +5,8 @@ const normal = {
     name => name.includes('currents'),
   'none':
     name => true,
+
+  undefined: () => false,
 };
 
 const simple = normal;

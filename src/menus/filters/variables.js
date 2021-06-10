@@ -37,6 +37,8 @@ const normal = {
     name => name === 'primary wave mean period',
   'wave direction':
     name => name === 'primary wave direction (from)',
+
+  undefined: () => false,
 };
 
 const simple = {
@@ -70,6 +72,8 @@ const simple = {
     name => name.startsWith('carbon monoxide'),
   'dust':
     name => name.startsWith('dust'),
+
+  undefined: () => false,
 };
 
 export default { normal, simple };
