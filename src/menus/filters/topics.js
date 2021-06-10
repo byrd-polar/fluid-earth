@@ -9,7 +9,6 @@ const normal = {
             variableFilters.normal['cloud water'](name) ||
             variableFilters.normal['wind'](name) ||
             variableFilters.normal['precipitation'](name) ||
-            variableFilters.normal['CAPE'](name) ||
             variableFilters.normal['geopotential height'](name) ||
             variableFilters.normal['sunshine'](name),
   'gases & aerosols':
@@ -21,8 +20,7 @@ const normal = {
     name => variableFilters.normal['sea temperature'](name) ||
             variableFilters.normal['currents'](name) ||
             variableFilters.normal['wave height'](name) ||
-            variableFilters.normal['wave period'](name) ||
-            variableFilters.normal['wave direction'](name),
+            variableFilters.normal['wave period'](name),
 
   undefined: () => false,
 };

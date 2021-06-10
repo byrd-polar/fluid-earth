@@ -29,14 +29,10 @@ const normal = {
     name => name.startsWith('carbon monoxide'),
   'dust':
     name => name.startsWith('dust'),
-  'CAPE':
-    name => name.startsWith('convective available potential energy'),
   'geopotential height':
     name => name.startsWith('geopotential height'),
   'wave period':
     name => name === 'primary wave mean period',
-  'wave direction':
-    name => name === 'primary wave direction (from)',
 
   undefined: () => false,
 };
