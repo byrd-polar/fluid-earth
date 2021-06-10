@@ -15,10 +15,10 @@ const normal = {
     name => name.includes('cloud water'),
   'sunshine':
     name => name === 'sunshine in previous hour',
-  'currents':
-    name => name.startsWith('ocean surface currents'),
   'sea temperature':
     name => name === 'sea surface temperature',
+  'currents':
+    name => name.startsWith('ocean surface currents'),
   'wave height':
     name => name === 'significant wave height',
   'ozone':
@@ -58,10 +58,10 @@ const simple = {
     name => name.includes('cloud water'),
   'sunshine':
     name => name === 'sunshine in previous hour',
-  'currents':
-    name => name.startsWith('ocean surface currents'),
   'sea temperature':
     name => name === 'sea surface temperature',
+  'currents':
+    name => name.startsWith('ocean surface currents'),
   'wave height':
     name => name === 'significant wave height',
   'ozone':

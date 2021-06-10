@@ -31,6 +31,14 @@
   $: animations = Object.keys(aFilters);
 
   let topic, variable, height, animation;
+
+  let previousTopic;
+  $: if (previousTopic !== topic) {
+    if (animation !== 'none') {
+      animation = (topic === 'ocean') ? 'currents' : 'wind';
+    }
+    previousTopic = topic;
+  }
   $: update(griddedDataset, particleDataset, particlesShown, simplifiedMode);
   function update(
     griddedDataset, particleDataset, particlesShown, simplifiedMode
