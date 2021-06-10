@@ -29,8 +29,12 @@
         <div class="text">
           <h3>{pin.label}</h3>
           <p>
-            {convert(values[i], griddedData, griddedUnit).toFixed(1)}
-            {prettyUnit(griddedUnit)}
+            {#if isNaN(values[i])}
+              No data
+            {:else}
+              {convert(values[i], griddedData, griddedUnit).toFixed(1)}
+              {prettyUnit(griddedUnit)}
+            {/if}
           </p>
           <p>{prettyLatLon(pin.latitude, pin.longitude)}</p>
         </div>
