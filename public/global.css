@@ -28,6 +28,11 @@ sup {
   line-height: 0;
 }
 
+h1 img {
+  vertical-align: text-bottom;
+  margin-right: 0.125em;
+}
+
 #splash {
   background-color: black;
   position: absolute;

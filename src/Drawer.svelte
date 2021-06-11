@@ -58,7 +58,10 @@
 >
 <div class="wrapper">
   <header>
-    <h1>Fluid Earth</h1>
+    <h1>
+      <img width="42" height="42" alt="logo" src="/images/logo.svg">
+      Fluid Earth
+    </h1>
     <p>From the Byrd Polar and Climate Research Center</p>
     <Button action={closeDrawer} full>
       Return to map
@@ -164,6 +167,10 @@
 
   header {
     padding: 1em 1em 0;
+  }
+
+  header img {
+    margin-left: -0.125em;
   }
 
   h1 {
