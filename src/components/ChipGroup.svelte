@@ -48,10 +48,10 @@
       on:keydown={handleKeydown}
       tabindex={(selected === option || (i === 0 && noneSelected)) ? 0 : -1}
     >
-      {option}
       {#if iconsMap[option]}
         <svelte:component this={iconsMap[option]} />
       {/if}
+      {option}
     </button>
   {/each}
 </div>
@@ -80,7 +80,7 @@
   }
 
   button > :global(svg) {
-    margin-left: 0.25em;
+    margin-right: 0.25em;
   }
 
   button:focus, button:hover {
