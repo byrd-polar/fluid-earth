@@ -73,7 +73,7 @@
   </section>
   <section class="info">
     <span class="line"></span>
-    <p>For educational use only.</p>
+    <p><strong>For educational use only.</strong></p>
     <p>Please consult official weather services for up-to-date information about
     severe weather events.</p>
     <p>You may visit the original
