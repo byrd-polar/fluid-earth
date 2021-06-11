@@ -30,12 +30,12 @@ const geosVars = [
     {
         dataDir: 'geos-sulfur-dioxide-surface/',
         varName: 'SO2SMASS',
-        factor: 10e9,
+        factor: 1e9,
         datasetBase: {
             name: 'sulfur dioxide at surface',
             path: util.browserPath(outputPath),
-            unit: 'ug/m^3',
-            originalUnit: 'ug/m^3',
+            unit: 'μg/m^3',
+            originalUnit: 'μg/m^3',
             domain: [0, 100],
             colormap: 'SO2_MASS',
             ...geosProps
@@ -57,12 +57,12 @@ const geosVars = [
     {
         dataDir: 'geos-dust-surface/',
         varName: 'DUSMASS',
-        factor: 10e9,
+        factor: 1e9,
         datasetBase: {
             name: 'dust at surface',
             path: util.browserPath(outputPath),
-            unit: 'ug/m^3',
-            originalUnit: 'ug/m^3',
+            unit: 'μg/m^3',
+            originalUnit: 'μg/m^3',
             domain: [0, 900],
             colormap: 'DUST_MASS',
             ...geosProps
