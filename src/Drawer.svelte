@@ -76,8 +76,14 @@
     <p>For educational use only.</p>
     <p>Please consult official weather services for up-to-date information about
     severe weather events.</p>
-    <p>Legacy site:
-    <a href="https://fever.byrd.osu.edu/">fever.byrd.osu.edu</a></p>
+    <p>You may visit the original
+    <a href="https://fever.byrd.osu.edu/">FEVer</a>,
+    and view the
+    <a href="https://fev2r.netlify.app/legal/THIRD_PARTY">open source licences</a>
+    for and
+    <a href="https://fev2r.netlify.app/legal/MODIFICATIONS">modifications</a>
+    to third-party libraries used on this site.
+    </p>
   </section>
   <footer>
     <a href="https://byrd.osu.edu/">
