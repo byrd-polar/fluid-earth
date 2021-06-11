@@ -5,6 +5,7 @@
 
   export let options = ['test option'];
   export let selected = options[0];
+  export let iconsMap = {};
 
   const dispatch = createEventDispatcher();
   let div;
@@ -48,6 +49,9 @@
       tabindex={(selected === option || (i === 0 && noneSelected)) ? 0 : -1}
     >
       {option}
+      {#if iconsMap[option]}
+        <svelte:component this={iconsMap[option]} />
+      {/if}
     </button>
   {/each}
 </div>
@@ -66,12 +70,17 @@
     padding: 0.25em 0.5em;
     margin: 0.25em 0.25em 0.25em 0;
     border-radius: 1em;
-    display: block;
+    display: flex;
+    align-items: center;
     cursor: pointer;
     background-color: rgba(29, 29, 29, 0.75);
     transition:
       background-color 0.25s ease 0s,
       filter 0.25s ease 0s;
+  }
+
+  button > :global(svg) {
+    margin-left: 0.25em;
   }
 
   button:focus, button:hover {

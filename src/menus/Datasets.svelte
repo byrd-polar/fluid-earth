@@ -7,6 +7,7 @@
   import variableFilters from './filters/variables.js';
   import heightFilters from './filters/heights.js';
   import animationFilters from './filters/animations.js';
+  import iconsMap from './filters/iconsMap.js';
 
   export let date;
   export let inventory;
@@ -102,6 +103,7 @@
   options={topicOptions}
   bind:selected={topic}
   on:select={handleSelect}
+  {iconsMap}
 />
 
 <h3>Variable</h3>
@@ -109,6 +111,7 @@
   options={variableOptions}
   bind:selected={variable}
   on:select={handleSelect}
+  {iconsMap}
 />
 
 <h3>Height</h3>
@@ -116,6 +119,7 @@
   options={heightOptions}
   bind:selected={height}
   on:select={handleSelect}
+  {iconsMap}
 />
 
 <h3>Animation</h3>
@@ -123,6 +127,7 @@
   options={animationOptions}
   bind:selected={animation}
   on:select={handleSelect}
+  {iconsMap}
 />
 
 <style>

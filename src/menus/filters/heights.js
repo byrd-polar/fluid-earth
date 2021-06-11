@@ -11,11 +11,11 @@ const normal = {
             name.startsWith('sunshine'),
   '850 mb':
     name => name.includes('at 850 mb'),
-  '500 mb (cloud)':
+  '500 mb':
     name => name.includes('at 500 mb'),
   '300 mb':
     name => name.includes('at 300 mb'),
-  '200 mb (cruise)':
+  '200 mb':
     name => name.includes('at 200 mb'),
   '10 mb (stratosphere)':
     name => name.includes('at 10 mb'),
