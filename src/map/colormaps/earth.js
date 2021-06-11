@@ -220,7 +220,7 @@ export const carbon_monoxide_surface = segmentedColorScale([
 ], 'log');
 
 export const dust_mass = segmentedColorScale([
-  [0.000,[100,75,30]],
+  [0.05,[100,75,30]],
   [0.05,[154,109,49]],
   [0.1, [175,120,55]],
   [0.5, [191,135,61]],
