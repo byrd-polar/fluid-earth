@@ -259,7 +259,7 @@
   }
 
   button.day {
-    background: var(--secondary-color);
+    background: var(--secondary-color-transparent);
     padding: 0;
     display: flex;
     justify-content: center;
@@ -274,7 +274,7 @@
 
   button.day:disabled {
     filter: brightness(50%);
-    background: var(--secondary-color);
+    background: var(--secondary-color-transparent);
     cursor: auto;
   }
 
