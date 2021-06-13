@@ -184,10 +184,12 @@ these libraries.
 
   summary {
     cursor: pointer;
+    border-bottom: 1px solid;
   }
 
-  h2 {
+  summary h2 {
     display: inline;
+    border-bottom: none;
   }
 
   dt {
