@@ -117,8 +117,4 @@ the following search box.
     font-size: 0.825em;
     padding: 0 0.5em;
   }
-
-  a {
-    color: var(--primary-color-light);
-  }
 </style>

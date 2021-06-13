@@ -1,6 +1,15 @@
 <!-- Note: this file intentionally omits optional closing html tags such as
 </p>, </dt>, and </dd> to reduce some of the tag clutter. -->
 
+<h2>Previous Version</h2>
+<p>
+This is the second major iteration of the Fluid Earth project. The previous
+version, <a href="https://fever.byrd.osu.edu"> Fluid Earth Viewer</a>, has
+weather data from earlier years and climate data that we are still working on
+adding to this new version, Fluid Earth. If you need to access this data, or
+really liked the previous version's look and feel, click the link above to get
+redirected.
+
 <h2>The Project</h2>
 <p>
 Fluid Earth is an interactive web application that allows you to visualize
@@ -22,8 +31,9 @@ planet, Earth!
 <h2>Our Sponsor</h2>
 <p>
 This project is sponsored by the U.S. National Science Foundation as an
-Exploratory Pathways project under the Advancing Informal STEM Learning (AISL)
-Program.
+Exploratory Pathways project under the <a
+href="https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=504793">Advancing
+Informal STEM Learning</a> (AISL) Program.
 
 <h2>The Team</h2>
 <p>
@@ -31,55 +41,62 @@ The team is comprised of multi-disciplinary researchers and educators from The
 Ohio State University committed to improving Earth Science and learning
 strategies in diverse education settings.
 <p>
-Members from OSU's Byrd Polar and Climate Research Center (BPCRC) bring their
-expertise in education and outreach, polar weather and climate, and computer
-information sciences. The team is also fortunate to have a member from OSU's
-School of Communication with a wealth of knowledge on user-testing and the
-effects and implications of new media technologies and virtual environments.
-Together, this team has extensive experience communicating with public audiences
-of all ages.
+Members from OSU's <a href="https://byrd.osu.edu/">Byrd Polar and Climate
+Research Center</a> (BPCRC) bring their expertise in education and outreach,
+polar weather and climate, and computer information sciences. The team is also
+fortunate to have a member from OSU's School of Communication with a wealth of
+knowledge on user-testing and the effects and implications of new media
+technologies and virtual environments. Together, this team has extensive
+experience communicating with public audiences of all ages.
+
 <dl>
   <dt>Jason Cervenec (PI)
   <dd><img src="/images/cervenec.png" height="100" width="100" loading="lazy"
            alt="portrait of Jason">
-  <dd>BPCRC Education &amp; Outreach Director
+  <dd><i>BPCRC Education &amp; Outreach Director</i>
   <dd>Oversees project and creation and field-testing of learning experiences
 
   <dt>Jesse Fox
   <dd><img src="/images/fox.png" height="100" width="100" loading="lazy"
            alt="portrait of Jesse">
-  <dd>School of Communication Associate Professor
+  <dd><i>School of Communication Associate Professor</i>
   <dd>Oversees user-testing and virtual environment settings
 
   <dt>Bidhyananda Yadav
   <dd><img src="/images/yadav.png" height="100" width="100" loading="lazy"
            alt="portrait of Bidhya">
-  <dd>BPCRC Research Associate
+  <dd><i>BPCRC Research Associate</i>
   <dd>Oversees code development and collaborates with J. Cervenec on
     field-testing and learning experiences
 
   <dt>Aaron Wilson
   <dd><img src="/images/wilson.png" height="100" width="100" loading="lazy"
            alt="portrait of Aaron">
-  <dd>BPCRC Senior Research Associate
+  <dd><i>BPCRC Senior Research Associate</i>
   <dd>Collaborates with B. Yadav on code development and with J. Cervenec on
     field-testing and learning experiences
 
   <dt>Michael Gravina
   <dd><img src="/images/gravina.png" height="100" width="100" loading="lazy"
            alt="portrait of Mike">
-  <dd>Front-End Developer
+  <dd><i>Front-End Developer</i>
   <dd>Collaborates with B. Yadav on code development and with J. Cervenec on
     field-testing and learning experiences
+
+  <dt>Em Zhan
+  <dd><img src="https://avatars.githubusercontent.com/u/47396035"
+           height="100" width="100" loading="lazy"
+           alt="portrait of Em">
+  <dd><i>Front-End and Full-Stack Developer</i>
+  <dd>Writes and maintains the code
 </dl>
+<div style="clear: both"></div>
 <p>
 In addition, the team depends on a talented group of undergraduates and Research
 Experience for Undergraduates (REU) students working at The Ohio State
 University to assist in design of the user interface, conducting of
 user-testing, and organization of data: Bingyu (Sophia) Li, Dingyu Hu, Ruiyang
-Chang, Joey Wong, Craig Bossley, Michael (Em) Zhan, Mimi Cai, and Adelyn Arens.
-Em Zhan is spearheading the reimplementation of FEVer in a WebGL-based
-framework.
+Chang, Joey Wong, Craig Bossley, Mimi Cai, and Adelyn Arens.
 
 <h2>Data Sources</h2>
 <p>
@@ -87,19 +104,23 @@ Fluid Earth utilizes an enormous amount of scientifically complex data, allowing
 to explore the interconnectedness of weather and climate, including between
 polar regions and the rest of the planet.
 <p>
-Data sets include:
+Data sources include:
 <dl>
   <dt>Weather
-  <dd>GFS (Global Forecast System)
+  <dd><a href="https://www.emc.ncep.noaa.gov/emc/pages/numerical_forecast_systems/gfs.php">
+    Global Forecast System</a> (GFS)
 
   <dt>Ocean Currents
-  <dd>OSCAR (Ocean Surface Current Analysis Real-time)
+  <dd><a href="https://www.esr.org/research/oscar/oscar-surface-currents/">
+    Ocean Surface Current Analysis Real-time</a> (OSCAR)
 
   <dt>Sea Surface Temperature
-  <dd>RTGSST (Real Time Global Sea Surface Temperature)
+  <dd><a href="https://www.nco.ncep.noaa.gov/pmb/products/sst/">
+    Real Time Global Sea Surface Temperature</a> (RTGSST)
 
-  <dt>Aerosols and Chemistry
-  <dd>GEOS-5 (Goddard Earth Observing System, Version 5)
+  <dt>Gases and Aerosols
+  <dd><a href="https://gmao.gsfc.nasa.gov/GEOS_systems/">
+    Goddard Earth Observing System</a> (GEOS)
 </dl>
 
 <h2>Terms of Use</h2>
@@ -128,12 +149,25 @@ relating to our site.
 <p>
 IF YOU DO NOT AGREE TO AND ACCEPT THESE TERMS OF USE YOU SHOULD NOT USE THE
 SOFTWARE.
+
+<h2>Third-party software libraries</h2>
+<p>
+Fluid Earth contains code from third-party libraries. We are very grateful to
+the authors of these libraries as this project would not be possible without
+their contributions to open-source.
+<p>
+As required, here are the
+<a href="https://fev2r.netlify.app/legal/THIRD_PARTY">licence texts</a> for
+and
+<a href="https://fev2r.netlify.app/legal/MODIFICATIONS">modifications</a> to
+these libraries.
 </p>
 
 <style>
   dt {
     font-weight: bold;
     clear: both;
+    margin-top: 1em;
   }
 
   dd {
@@ -143,6 +177,6 @@ SOFTWARE.
   img {
     float: right;
     border-radius: 50%;
-    margin: 0 1em 1em 1em;
+    margin: -1.5em 1em 1em 1em;
   }
 </style>

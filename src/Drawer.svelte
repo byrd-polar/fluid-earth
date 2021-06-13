@@ -62,7 +62,6 @@
       <img width="42" height="42" alt="logo" src="/images/logo.svg">
       Fluid Earth
     </h1>
-    <p>From the Byrd Polar and Climate Research Center</p>
     <Button action={closeDrawer} full>
       Return to map
     </Button>
@@ -79,14 +78,6 @@
     <p><strong>For educational use only.</strong></p>
     <p>Please consult official weather services for up-to-date information about
     severe weather events.</p>
-    <p>You may visit the original
-    <a href="https://fever.byrd.osu.edu/">FEVer</a>,
-    and view the
-    <a href="https://fev2r.netlify.app/legal/THIRD_PARTY">open source licences</a>
-    for and
-    <a href="https://fev2r.netlify.app/legal/MODIFICATIONS">modifications</a>
-    to third-party libraries used on this site.
-    </p>
   </section>
   <footer>
     <a href="https://byrd.osu.edu/">
@@ -175,7 +166,7 @@
 
   h1 {
     font-size: 1.8em;
-    margin: 0 0 0.25em;
+    margin: 0 0 0.5em;
     white-space: nowrap;
   }
 

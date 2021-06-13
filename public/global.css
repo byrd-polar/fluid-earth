@@ -25,6 +25,10 @@ body {
   height: 100%;
 }
 
+a {
+  color: var(--primary-color-light);
+}
+
 sup {
   line-height: 0;
 }
