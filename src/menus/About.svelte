@@ -1,7 +1,8 @@
 <!-- Note: this file intentionally omits optional closing html tags such as
 </p>, </dt>, and </dd> to reduce some of the tag clutter. -->
 
-<h2>Previous Version</h2>
+<details open>
+<summary><h2>Previous Version</h2></summary>
 <p>
 This is the second major iteration of the Fluid Earth project. The previous
 version, <a href="https://fever.byrd.osu.edu"> Fluid Earth Viewer</a>, has
@@ -9,8 +10,10 @@ weather data from earlier years and climate data that we are still working on
 adding to this new version, Fluid Earth. If you need to access this data, or
 really liked the previous version's look and feel, click the link above to get
 redirected.
+</details>
 
-<h2>The Project</h2>
+<details>
+<summary><h2>The Project</h2></summary>
 <p>
 Fluid Earth is an interactive web application that allows you to visualize
 current and past conditions of Earth's atmosphere and oceans.
@@ -27,15 +30,19 @@ computer, tablet, or smartphone.
 <p>
 Our project team is working to remove obstacles to learning about our dynamic
 planet, Earth!
+</details>
 
-<h2>Our Sponsor</h2>
+<details>
+<summary><h2>Our Sponsor</h2></summary>
 <p>
 This project is sponsored by the U.S. National Science Foundation as an
 Exploratory Pathways project under the <a
 href="https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=504793">Advancing
 Informal STEM Learning</a> (AISL) Program.
+</details>
 
-<h2>The Team</h2>
+<details>
+<summary><h2>The Team</h2></summary>
 <p>
 The team is comprised of multi-disciplinary researchers and educators from The
 Ohio State University committed to improving Earth Science and learning
@@ -97,8 +104,10 @@ Experience for Undergraduates (REU) students working at The Ohio State
 University to assist in design of the user interface, conducting of
 user-testing, and organization of data: Bingyu (Sophia) Li, Dingyu Hu, Ruiyang
 Chang, Joey Wong, Craig Bossley, Mimi Cai, and Adelyn Arens.
+</details>
 
-<h2>Data Sources</h2>
+<details>
+<summary><h2>Data Sources</h2></summary>
 <p>
 Fluid Earth utilizes an enormous amount of scientifically complex data, allowing you
 to explore the interconnectedness of weather and climate, including between
@@ -122,8 +131,10 @@ Data sources include:
   <dd><a href="https://gmao.gsfc.nasa.gov/GEOS_systems/">
     Goddard Earth Observing System</a> (GEOS)
 </dl>
+</details>
 
-<h2>Terms of Use</h2>
+<details>
+  <summary><h2>Terms of Use</h2></summary>
 <p>
 Copyright 2021 The Ohio State University
 <p>
@@ -149,8 +160,10 @@ relating to our site.
 <p>
 IF YOU DO NOT AGREE TO AND ACCEPT THESE TERMS OF USE YOU SHOULD NOT USE THE
 SOFTWARE.
+</details>
 
-<h2>Third-party software libraries</h2>
+<details>
+<summary><h2>Third-party libraries</h2></summary>
 <p>
 Fluid Earth contains code from third-party libraries. We are very grateful to
 the authors of these libraries as this project would not be possible without
@@ -161,9 +174,22 @@ As required, here are the
 and
 <a href="https://fev2r.netlify.app/legal/MODIFICATIONS">modifications</a> to
 these libraries.
-</p>
+</details>
 
 <style>
+  details {
+    margin-bottom: 1em;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  summary {
+    cursor: pointer;
+  }
+
+  h2 {
+    display: inline;
+  }
+
   dt {
     font-weight: bold;
     clear: both;
