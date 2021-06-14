@@ -1,6 +1,7 @@
 import { validOscarDates } from '../src/utility.js';
 import * as util from './utility.js';
 import { DateTime } from 'luxon';
+import { HTTPError } from 'got';
 import { mkdir } from 'fs/promises';
 import path from 'path';
 import { promisify } from 'util';
@@ -69,11 +70,24 @@ if (dataset) {
   inventory.push(speedDataset = speedDatasetBase);
 }
 
-const inputFile = await util.download(
-  'https://podaac-opendap.jpl.nasa.gov/' +
-  'opendap/allData/oscar/preview/L4/oscar_third_deg/' +
-  `oscar_vel${datetime.diff(referenceDatetime, 'days').days}.nc.gz`
-);
+let inputFile;
+try {
+  inputFile = await util.download(
+    'https://podaac-opendap.jpl.nasa.gov/' +
+    'opendap/allData/oscar/preview/L4/oscar_third_deg/' +
+    `oscar_vel${datetime.diff(referenceDatetime, 'days').days}.nc.gz`
+  );
+} catch (e) {
+  if (e instanceof HTTPError && e.response.statusCode === 404 &&
+      datetime < DateTime.now().plus({days: 3})) {
+
+    console.log(
+      '\nRun considered successful as file is not expected to exist yet.'
+    );
+    process.exit();
+  }
+  throw e;
+}
 
 await mkdir(uOutputPath, { mode: '775', recursive: true });
 await mkdir(vOutputPath, { mode: '775', recursive: true });
