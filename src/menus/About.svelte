@@ -170,9 +170,15 @@ the authors of these libraries as this project would not be possible without
 their contributions to open-source.
 <p>
 As required, here are the
-<a href="https://fev2r.netlify.app/legal/THIRD_PARTY">licence texts</a> for
-and
-<a href="https://fev2r.netlify.app/legal/MODIFICATIONS">modifications</a> to
+{#if __production__}
+  <a href="/legal/THIRD_PARTY">licence texts</a> for
+  and
+  <a href="/legal/MODIFICATIONS">modifications</a> to
+{:else}
+  <a href="https://fev2r.netlify.app/legal/THIRD_PARTY">licence texts</a> for
+  and
+  <a href="https://fev2r.netlify.app/legal/MODIFICATIONS">modifications</a> to
+{/if}
 these libraries.
 </details>
 
