@@ -120,6 +120,15 @@
   let utc = false;
   let pins = [];
 
+  $: {
+    // Set consistent units across datasets
+    let qty = Qty.parse(griddedDataset.unit);
+    let unitList = qty ? preferredUnits[qty.kind()] : null;
+    if (unitList) {
+      griddedDataset.unit = unitList[0];
+    }
+  }
+
   onMount(async () => {
     // JS implementation of 100vh for mobile, see:
     // https://chanind.github.io/javascript/2019/09/28/avoid-100vh-on-mobile-web.html
@@ -155,13 +164,6 @@
       let valid = validDate(griddedDataset, date);
       if (valid.getTime() !== date.getTime()) {
         date = valid;
-      }
-
-      // Set consistent units across datasets
-      let qty = Qty.parse(griddedDataset.unit);
-      let unitList = qty ? preferredUnits[qty.kind()] : null;
-      if (unitList && previousGriddedDataset !== griddedDataset) {
-        griddedDataset.unit = unitList[0];
       }
 
       let array = await fetcher.fetch(griddedDataset, date, 'gridded');
