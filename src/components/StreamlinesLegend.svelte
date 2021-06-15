@@ -3,16 +3,10 @@
   import tooltip from '../tooltip.js';
   import prng_alea from 'esm-seedrandom/esm/alea.mjs'
 
-  export let particleDataset;
+  export let name;
   export let particleDisplay;
   export let particlesPaused;
   export let simplifiedMode;
-
-  // updates when changing display independently of dataset (or after dataset
-  // download completes)
-  $: info = particleDisplay;
-  // updates immediately after selecting dataset instead of after download
-  $: info = particleDataset.particleDisplay;
 
   function handleKeydown(e) {
     if (!(e.code === 'Space' || e.code === 'Enter')) return;
@@ -27,8 +21,7 @@
   const trailHeight = 0.3;
   const trailPeriod = 15;
 
-  function formatTitle(particleDataset, simplifiedMode) {
-    let name = particleDataset.name;
+  function formatTitle(name, simplifiedMode) {
     if (simplifiedMode) name = simpleTranslate(name);
     return capitalizeFirstLetter(name);
   }
@@ -40,7 +33,7 @@
   use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
   tabindex="0"
 >
-  <h3>{formatTitle(particleDataset, simplifiedMode)}</h3>
+  <h3>{formatTitle(name, simplifiedMode)}</h3>
   <div
     class="legend"
     class:paused={particlesPaused}
@@ -48,7 +41,7 @@
       --trail-width: {trailWidth}em;
       --trail-height: {trailHeight}em;
       --trail-period: {trailPeriod}s;
-      --trail-color: rgba(255, 255, 255, {info.opacity});
+      --trail-color: rgba(255, 255, 255, {particleDisplay.opacity});
     "
   >
     {#each Array.from({length: trailCount }) as _}
@@ -66,7 +59,7 @@
     {#if particlesPaused}
       particle animation paused
     {:else}
-      {info.rate.toLocaleString()} times faster than actual
+      {particleDisplay.rate.toLocaleString()} times faster than actual
     {/if}
   </span>
 </section>

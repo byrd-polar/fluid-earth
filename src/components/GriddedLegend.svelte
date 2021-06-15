@@ -11,7 +11,8 @@
   } from '../utility.js';
   import tooltip from '../tooltip.js';
 
-  export let griddedDataset;
+  export let name;
+  export let originalUnit;
   export let griddedColormap;
   export let griddedDomain;
   export let griddedUnit;
@@ -21,44 +22,25 @@
   let svgScale;
   let svgScaleWidth;
 
-  // first $: statement in each group updates immediately after selecting
-  // dataset instead of after download
-
-  // second $: statment in each group updates when changing values independently
-  // of dataset (or after dataset download completes)
-
-  $: createAxis(
-    svgScale, svgScaleWidth, griddedDataset.domain, griddedDataset.unit);
-  $: createAxis2(svgScale, griddedDomain, griddedUnit);
-
-  $: cssLut = generateLut(griddedDataset.colormap);
+  $: createAxis(svgScale, svgScaleWidth, griddedDomain, griddedUnit);
   $: cssLut = generateLut(griddedColormap);
 
-  $: unit = prettyUnit(griddedDataset.unit);
-  $: unit = prettyUnit(griddedUnit);
-
-  function createAxis(elem, width, domain, unit) {
+  function createAxis(elem, width, domain, griddedUnit) {
     if (!elem) return;
 
     let axis = axisBottom(
       scaleLinear()
-        .domain(domain.map(v => convert(v, griddedDataset, unit)))
+        .domain(domain.map(v => convert(v, originalUnit, griddedUnit)))
         .range([-0.5, width - 0.5])
     );
     d3.select(elem).call(axis);
-  }
-
-  // version of createAxis that doesn't get reactively called when svgScaleWidth
-  // changes, prevents potential griddedDataset and unit mismatch in convert
-  function createAxis2(elem, domain, unit) {
-    createAxis(elem, svgScaleWidth, domain, unit);
   }
 
   function generateLut(colormap) {
     return colormap.lut.map(colorArray => `rgb(${colorArray.join()})`).join();
   }
 
-  $: qty = Qty.parse(griddedDataset.unit);
+  $: qty = Qty.parse(originalUnit);
   $: unitList = qty ? preferredUnits[qty.kind()] : null;
 
   function toggleUnit() {
@@ -75,10 +57,9 @@
     toggleUnit();
   }
 
-  function formatTitle(griddedDataset, unit, simplifiedMode) {
-    let name = griddedDataset.name;
+  function formatTitle(name, griddedUnit, simplifiedMode) {
     if (simplifiedMode) name = simpleTranslate(name);
-    return capitalizeFirstLetter(`${name} (${unit})`)
+    return capitalizeFirstLetter(`${name} (${prettyUnit(griddedUnit)})`)
   }
 </script>
 
@@ -92,7 +73,7 @@
     placement: 'top',
   }}
 >
-  <h3>{formatTitle(griddedDataset, unit, simplifiedMode)}</h3>
+  <h3>{formatTitle(name, griddedUnit, simplifiedMode)}</h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"
     bind:clientWidth={svgScaleWidth}

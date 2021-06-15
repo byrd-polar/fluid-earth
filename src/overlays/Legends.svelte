@@ -42,6 +42,23 @@
 
     utc = !utc
   }
+
+  // Update the legends when datasets change instead of waiting for when the
+  // data has been fully downloaded. Requires that the variables being updated
+  // in the `eagerlyUpdate` function are NOT bound to the Legends component.
+
+  $: griddedDataset, eagerlyUpdateGriddedLegend();
+  $: particleDataset, eagerlyUpdateParticleLegend();
+
+  function eagerlyUpdateGriddedLegend() {
+    griddedColormap = griddedDataset.colormap;
+    griddedDomain = griddedDataset.domain;
+    griddedUnit = griddedDataset.unit;
+  }
+
+  function eagerlyUpdateParticleLegend() {
+    particleDisplay = particleDataset.particleDisplay;
+  }
 </script>
 
 <div class="wrapper">
@@ -60,7 +77,8 @@
   </div>
   <div class="bottom">
     <GriddedLegend
-      {griddedDataset}
+      name={griddedDataset.name}
+      originalUnit={griddedDataset.originalUnit}
       {griddedColormap}
       {griddedDomain}
       bind:griddedUnit
@@ -69,7 +87,7 @@
     />
     {#if particlesShown}
       <StreamlinesLegend
-        {particleDataset}
+        name={particleDataset.name}
         {particleDisplay}
         bind:particlesPaused
         {simplifiedMode}

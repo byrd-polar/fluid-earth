@@ -13,6 +13,7 @@
   export let moveTo;
 
   $: values = pins.map(pin => griddedData.get([pin.longitude, pin.latitude]));
+  $: originalUnit = griddedData.originalUnit;
 </script>
 
 <ul>
@@ -32,7 +33,7 @@
             {#if isNaN(values[i])}
               No data
             {:else}
-              {convert(values[i], griddedData, griddedUnit).toFixed(1)}
+              {convert(values[i], originalUnit, griddedUnit).toFixed(1)}
               {prettyUnit(griddedUnit)}
             {/if}
           </p>

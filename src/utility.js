@@ -80,10 +80,10 @@ export function validOscarDates(year) {
 import Qty from 'js-quantities/esm';
 
 // Convert a value between units
-export function convert(value, datasetOrData, newUnit) {
-  if (!isFinite(value) || datasetOrData.originalUnit === newUnit) return value;
+export function convert(value, originalUnit, newUnit) {
+  if (!isFinite(value) || originalUnit === newUnit) return value;
 
-  return Qty(`${value} ${datasetOrData.originalUnit}`).to(newUnit).scalar;
+  return Qty(`${value} ${originalUnit}`).to(newUnit).scalar;
 }
 
 // Make a pretty string for a unit from the 'js-quantities' library

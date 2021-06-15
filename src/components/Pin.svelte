@@ -51,7 +51,7 @@
         {#if isNaN(value)}
           No data
         {:else}
-          {convert(value, griddedData, griddedUnit).toFixed(1)}
+          {convert(value, griddedData.originalUnit, griddedUnit).toFixed(1)}
           {prettyUnit(griddedUnit)}
         {/if}
       </strong><br>
