@@ -146,6 +146,7 @@
     padding: 0.25rem 0.75rem 0;
     margin: 0;
     pointer-events: auto;
+    z-index: 1;
   }
 
   h3.time {
