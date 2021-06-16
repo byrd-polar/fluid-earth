@@ -97,6 +97,14 @@ export function prettyUnit(unit) {
   }
 }
 
+// Find an acceptable value for griddedUnit
+export function validUnit(compatibleUnit, preferredUnits) {
+  let qty = Qty.parse(compatibleUnit);
+  let unitList = qty ? preferredUnits[qty.kind()] : null;
+
+  return unitList ? unitList[0] : compatibleUnit;
+}
+
 // Calculate a generic pin label for an object in the `pins` array
 export function genericLabel(pins) {
   let genericPins = pins.filter(pin => pin.label.match(/Location [0-9]+/));

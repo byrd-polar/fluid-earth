@@ -2,7 +2,7 @@
   import GriddedLegend from '../components/GriddedLegend.svelte';
   import StreamlinesLegend from '../components/StreamlinesLegend.svelte';
   import tooltip from '../tooltip.js';
-  import { fix24 } from '../utility.js';
+  import { validUnit, fix24 } from '../utility.js';
 
   export let date;
   export let utc;
@@ -54,6 +54,7 @@
     griddedColormap = griddedDataset.colormap;
     griddedDomain = griddedDataset.domain;
     griddedUnit = griddedDataset.unit;
+    griddedUnit = validUnit(griddedDataset.unit, preferredUnits);
   }
 
   function eagerlyUpdateParticleLegend() {
@@ -81,7 +82,7 @@
       originalUnit={griddedDataset.originalUnit}
       {griddedColormap}
       {griddedDomain}
-      bind:griddedUnit
+      {griddedUnit}
       bind:preferredUnits
       {simplifiedMode}
     />

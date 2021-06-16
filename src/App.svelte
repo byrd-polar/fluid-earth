@@ -27,12 +27,11 @@
   import Controls from './overlays/Controls.svelte';
 
   import Fetcher from './fetcher.js';
-  import { validDate, validCloseDate } from './utility.js';
+  import { validDate, validCloseDate, validUnit } from './utility.js';
   import { currentDate } from './stores.js';
 
   import { onMount } from 'svelte';
   import { Float16Array } from '@petamoriken/float16';
-  import Qty from 'js-quantities/esm';
 
   export let inventory;
 
@@ -81,13 +80,14 @@
   };
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
-  let griddedUnit = griddedDataset.unit;
   let preferredUnits = {
     speed: ['km/h', 'm/s', 'kn', 'mph'],
     temperature: ['tempC', 'tempF', 'tempK'],
     pressure: ['hPa', 'mmHg', 'inHg'],
     length: ['m', 'ft'],
   };
+  // Keep griddedUnit in sync with underlying griddedData
+  $: griddedUnit = validUnit(griddedData.originalUnit, preferredUnits);
 
   const emptyParticleData = {
     uVelocities: new Float16Array([0]),
@@ -120,14 +120,6 @@
   let utc = false;
   let pins = [];
 
-  $: {
-    // Set consistent units across datasets
-    let qty = Qty.parse(griddedDataset.unit);
-    let unitList = qty ? preferredUnits[qty.kind()] : null;
-    if (unitList) {
-      griddedDataset.unit = unitList[0];
-    }
-  }
 
   onMount(async () => {
     // JS implementation of 100vh for mobile, see:
@@ -185,7 +177,7 @@
         if (previousGriddedDataset !== griddedDataset) {
           griddedDomain = griddedDataset.domain;
           griddedColormap = griddedDataset.colormap;
-          griddedUnit = griddedDataset.unit;
+          griddedUnit = validUnit(griddedDataset.unit, preferredUnits);
 
           previousGriddedDataset = griddedDataset;
         }
@@ -441,7 +433,7 @@
       {particleDataset}
       {griddedColormap}
       {griddedDomain}
-      bind:griddedUnit
+      {griddedUnit}
       bind:preferredUnits
       {particlesShown}
       {particleDisplay}

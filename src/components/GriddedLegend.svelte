@@ -47,7 +47,7 @@
     if (!unitList) return;
 
     unitList.push(unitList.shift()); // rotate list
-    griddedUnit = unitList[0];
+    preferredUnits = preferredUnits;
   }
 
   // simulate html button functionality
