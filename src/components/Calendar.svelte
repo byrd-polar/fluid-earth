@@ -206,6 +206,7 @@
     font-size: 1.2em;
     border-radius: 4px;
     overflow: hidden;
+    margin-top: 0.5em;
   }
 
   div.header {

@@ -1,6 +1,7 @@
 <script>
   import TimeJumper from '../components/TimeJumper.svelte';
   import Calendar from '../components/Calendar.svelte';
+  import ChipGroup from '../components/ChipGroup.svelte';
   import { getValidDates } from '../utility.js';
 
   export let date;
@@ -16,7 +17,11 @@
   bind:date
 />
 
-<h2>Calendar</h2>
+<h2>Datetime Picker</h2>
+<ChipGroup
+  options={['Years', 'Months', 'Days', 'Hours']}
+  expand
+/>
 <Calendar
   {griddedDataset}
   bind:date

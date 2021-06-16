@@ -6,6 +6,7 @@
   export let options = ['test option'];
   export let selected = options[0];
   export let iconsMap = {};
+  export let expand = false;
 
   const dispatch = createEventDispatcher();
   let div;
@@ -45,6 +46,7 @@
     <button
       on:click={() => select(option)}
       class:selected={selected === option}
+      class:expand
       on:keydown={handleKeydown}
       tabindex={(selected === option || (i === 0 && noneSelected)) ? 0 : -1}
     >
@@ -76,6 +78,12 @@
     transition:
       background-color 0.25s ease 0s,
       filter 0.25s ease 0s;
+  }
+
+  button.expand {
+    flex: 1;
+    display: flex;
+    justify-content: center;
   }
 
   button > :global(svg) {
