@@ -22,9 +22,12 @@
   <link rel='stylesheet' href='/global.css'>
   <script>
     function showError(message) {
+      let messageElement = document.querySelector('.errmsg');
+      if (messageElement === null) return;
+
       document.querySelector('.sk-swing').setAttribute('hidden', '');
-      document.querySelector('.errmsg').removeAttribute('hidden');
-      document.querySelector('.errmsg').append(message);
+      messageElement.removeAttribute('hidden');
+      messageElement.append(message);
     }
     window.addEventListener('error', e => showError(e.message));
     window.addEventListener('unhandledrejection', e => showError(e.reason));
