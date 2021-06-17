@@ -14,6 +14,7 @@
   export let griddedDataset;
   export let griddedColormap;
   export let griddedDomain;
+  export let griddedScale;
   export let griddedUnit;
 
   export let preferredUnits;
@@ -53,6 +54,7 @@
   function eagerlyUpdateGriddedLegend() {
     griddedColormap = griddedDataset.colormap;
     griddedDomain = griddedDataset.domain;
+    griddedScale = griddedDataset.scale;
     griddedUnit = griddedDataset.unit;
     griddedUnit = validUnit(griddedDataset.unit, preferredUnits);
   }
@@ -82,6 +84,7 @@
       originalUnit={griddedDataset.originalUnit}
       {griddedColormap}
       {griddedDomain}
+      {griddedScale}
       {griddedUnit}
       bind:preferredUnits
       {simplifiedMode}

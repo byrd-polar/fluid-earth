@@ -80,6 +80,7 @@
   };
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
+  let griddedScale = griddedDataset.scale;
   let preferredUnits = {
     speed: ['km/h', 'm/s', 'kn', 'mph'],
     temperature: ['tempC', 'tempF', 'tempK'],
@@ -176,6 +177,7 @@
 
         if (previousGriddedDataset !== griddedDataset) {
           griddedDomain = griddedDataset.domain;
+          griddedScale = griddedDataset.scale;
           griddedColormap = griddedDataset.colormap;
           griddedUnit = validUnit(griddedDataset.unit, preferredUnits);
 
@@ -395,6 +397,7 @@
     {griddedData}
     {griddedColormap}
     {griddedDomain}
+    {griddedScale}
     {particleData}
     {particlesShown}
     {particlesPaused}
@@ -433,6 +436,7 @@
       {particleDataset}
       {griddedColormap}
       {griddedDomain}
+      {griddedScale}
       {griddedUnit}
       bind:preferredUnits
       {particlesShown}

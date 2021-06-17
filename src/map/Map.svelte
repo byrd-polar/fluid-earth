@@ -32,6 +32,7 @@
     ],
   };
   export let griddedDomain = [0, 1];
+  export let griddedScale = 'linear';
   export let griddedBaseColor = [38, 38, 38, 1]; // rgba greyish color
 
   export let particleData = {
@@ -114,6 +115,7 @@
   $: mapBackground.data = griddedData;
   $: mapBackground.colormap = griddedColormap;
   $: mapBackground.domain = griddedDomain;
+  $: mapBackground.scale = griddedScale;
   $: mapBackground.baseColor = griddedBaseColor;
   $: mapBackground.vectorData = vectorData;
 
@@ -128,6 +130,7 @@
       griddedData,
       griddedColormap,
       griddedDomain,
+      griddedScale,
       griddedBaseColor,
       vectorData,
     backgroundNeedsRedraw = true;
@@ -175,6 +178,7 @@
       data: griddedData,
       colormap: griddedColormap,
       domain: griddedDomain,
+      scale: griddedScale,
       baseColor: griddedBaseColor,
       vectorData: vectorData,
       webgl2: webgl2,

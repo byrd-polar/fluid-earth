@@ -1,7 +1,7 @@
 <script>
   import * as d3 from 'd3-selection';
   import { axisBottom } from 'd3-axis';
-  import { scaleLinear } from 'd3-scale';
+  import { scaleLinear, scaleLog } from 'd3-scale';
   import Qty from 'js-quantities/esm';
   import {
     convert,
@@ -15,6 +15,7 @@
   export let originalUnit;
   export let griddedColormap;
   export let griddedDomain;
+  export let griddedScale;
   export let griddedUnit;
   export let preferredUnits;
   export let simplifiedMode;
@@ -28,8 +29,9 @@
   function createAxis(elem, width, domain, griddedUnit) {
     if (!elem) return;
 
+    let scale = griddedScale === 'log' ? scaleLog : scaleLinear;
     let axis = axisBottom(
-      scaleLinear()
+      scale()
         .domain(domain.map(v => convert(v, originalUnit, griddedUnit)))
         .range([-0.5, width - 0.5])
     );

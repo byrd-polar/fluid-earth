@@ -15,6 +15,7 @@ export default class MapBackground {
     this._data = options.data;
     this._colormap = options.colormap;
     this._domain = options.domain;
+    this._scale = options.scale;
     this._baseColor = options.baseColor;
 
     // private variables (no setters)
@@ -55,6 +56,11 @@ export default class MapBackground {
 
   set domain(d) {
     this._domain = d;
+    this._dataNeedsRecolor = true;
+  }
+
+  set scale(s) {
+    this._scale = s;
     this._dataNeedsRecolor = true;
   }
 
@@ -186,8 +192,8 @@ export default class MapBackground {
     };
   }
 
-  // using the selected colormap and domain, draw a texture that represents the
-  // (gridded) data
+  // draw a texture that represents the (gridded) data using the selected
+  // colormap, domain, and scale type
   _mapDataToColors() {
     // switch rendering destination to our framebuffer
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.gridded);
@@ -197,6 +203,7 @@ export default class MapBackground {
       u_colormap: this._textures.colormap,
       u_colormapN: this._colormap.lut.length,
       u_domain: this._domain,
+      u_scale: this._scale === 'log' ? 1 : 0,
       u_baseColor: this._baseColor.map((v, i) => i === 3 ? v : v / 255),
     });
 

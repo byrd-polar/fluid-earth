@@ -7,6 +7,7 @@ uniform sampler2D u_data;
 uniform sampler2D u_colormap;
 uniform float u_colormapN;
 uniform vec2 u_domain;
+uniform int u_scale;
 uniform vec4 u_baseColor;
 
 varying vec2 v_position;
@@ -21,7 +22,18 @@ void main() {
     return;
   }
 
-  float t = clamp((value - u_domain.x) / (u_domain.y - u_domain.x), 0.0, 1.0);
+  float t;
+
+  // linear
+  if (u_scale == 0) {
+    t = (value - u_domain.x) / (u_domain.y - u_domain.x);
+  }
+  // logarithmic
+  else if (u_scale == 1) {
+    t = (log(value) - log(u_domain.x)) / (log(u_domain.y) - log(u_domain.x));
+  }
+
+  t = clamp(t, 0.0, 1.0);
 
   // Converts t value to actual texture coordinate by offseting so that instead
   // of this alignment...
