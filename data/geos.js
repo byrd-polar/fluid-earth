@@ -36,8 +36,9 @@ const geosVars = [
             path: util.browserPath(outputPath),
             unit: 'μg/m^3',
             originalUnit: 'μg/m^3',
-            domain: [0, 100],
-            colormap: 'SO2_MASS',
+            domain: [0.00001, 100],
+            scale: 'log',
+            colormap: 'CIVIDIS',
             ...geosProps
         }
     },
@@ -64,7 +65,7 @@ const geosVars = [
             unit: 'μg/m^3',
             originalUnit: 'μg/m^3',
             domain: [0, 900],
-            colormap: 'DUST_MASS',
+            colormap: 'YL_OR_BR_REVERSED',
             ...geosProps
         }
     }
