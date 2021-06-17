@@ -38,6 +38,12 @@ h1 img {
   margin-right: 0.125em;
 }
 
+.errmsg {
+  width: 80%;
+  text-align: center;
+  margin-top: 0;
+}
+
 #splash {
   background-color: black;
   position: absolute;

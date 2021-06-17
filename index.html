@@ -20,6 +20,15 @@
   <meta name="theme-color" content="#173e41">
 
   <link rel='stylesheet' href='/global.css'>
+  <script>
+    function showError(message) {
+      document.querySelector('.sk-swing').setAttribute('hidden', '');
+      document.querySelector('.errmsg').removeAttribute('hidden');
+      document.querySelector('.errmsg').append(message);
+    }
+    window.addEventListener('error', e => showError(e.message));
+    window.addEventListener('unhandledrejection', e => showError(e.reason));
+  </script>
   <script defer type="module" src='/src/main.js'></script>
 </head>
 <body>
@@ -28,11 +37,16 @@
       <img width="42" height="42" alt="logo" src="/images/logo.svg">
       Fluid Earth
     </h1>
-    <div class="sk-swing">
+    <noscript>This app requires JavaScript.</noscript>
+    <div class="sk-swing" hidden>
       <div class="sk-swing-dot"></div>
       <div class="sk-swing-dot"></div>
     </div>
+    <p class="errmsg" hidden></p>
   </div>
+  <script>
+    document.querySelector('.sk-swing').removeAttribute('hidden');
+  </script>
 </body>
 </html>
 <!-- insert build and license info -->
