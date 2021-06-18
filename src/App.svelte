@@ -8,7 +8,7 @@
   import Datasets from './menus/Datasets.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
   import Locations from './menus/Locations.svelte';
-  import MapProjections from './menus/MapProjections.svelte';
+  import Projections from './menus/Projections.svelte';
   import DeveloperOnlyTools from './menus/DeveloperOnlyTools.svelte';
   import About from './menus/About.svelte';
   import Feedback from './menus/Feedback.svelte';
@@ -262,18 +262,18 @@
   // Not using { Icon } import syntax for significantly faster build times, see
   // https://github.com/IBM/carbon-icons-svelte#direct-import-recommended
   import Location24 from "carbon-icons-svelte/lib/Location24";
-  import Grid24 from "carbon-icons-svelte/lib/Grid24";
+  import ChartLineSmooth24 from "carbon-icons-svelte/lib/ChartLineSmooth24";
   import Time24 from "carbon-icons-svelte/lib/Time24";
-  import Globe24 from "carbon-icons-svelte/lib/Globe24";
+  import ChoroplethMap24 from "carbon-icons-svelte/lib/ChoroplethMap24";
   import Information24 from "carbon-icons-svelte/lib/Information24";
   import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
   import Debug24 from "carbon-icons-svelte/lib/Debug24";
 
   const basicMenus = [
-    { name: 'Datasets', icon: Grid24 },
+    { name: 'Datasets', icon: ChartLineSmooth24 },
     { name: 'Time Machine', icon: Time24 },
-    { name: 'Map Projections', icon: Globe24 },
-    { name: 'Location Markers', icon: Location24 },
+    { name: 'Projections', icon: ChoroplethMap24 },
+    { name: 'Markers', icon: Location24 },
     { name: 'About', icon: Information24 },
     { name: 'Feedback', icon: RequestQuote24 },
   ];
@@ -337,15 +337,15 @@
     bind:particlesShown
   />
 </Menu>
-<Menu bind:openedMenu menuName="Map Projections">
-  <MapProjections
+<Menu bind:openedMenu menuName="Projections">
+  <Projections
     bind:projection
     bind:centerLongitude
     bind:centerLatitude
     bind:zoom
   />
 </Menu>
-<Menu bind:openedMenu menuName="Location Markers" flexbox>
+<Menu bind:openedMenu menuName="Markers" flexbox>
   <Locations
     bind:centerLongitude
     bind:centerLatitude
