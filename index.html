@@ -22,15 +22,19 @@
   <link rel='stylesheet' href='/global.css'>
   <script>
     function showError(message) {
-      let messageElement = document.querySelector('.errmsg');
+      var messageElement = document.querySelector('.errmsg');
       if (messageElement === null) return;
 
       document.querySelector('.sk-swing').setAttribute('hidden', '');
       messageElement.removeAttribute('hidden');
-      messageElement.append(message);
+      messageElement.innerText = message;
     }
-    window.addEventListener('error', e => showError(e.message));
-    window.addEventListener('unhandledrejection', e => showError(e.reason));
+    window.addEventListener('error', function (e) {
+      return showError(e.message);
+    });
+    window.addEventListener('unhandledrejection', function (e) {
+      return showError(e.reason);
+    });
   </script>
   <script defer type="module" src='/src/main.js'></script>
 </head>
