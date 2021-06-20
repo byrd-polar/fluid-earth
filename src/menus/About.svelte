@@ -103,7 +103,7 @@ In addition, the team depends on a talented group of undergraduates and Research
 Experience for Undergraduates (REU) students working at The Ohio State
 University to assist in design of the user interface, conducting of
 user-testing, and organization of data: Bingyu (Sophia) Li, Dingyu Hu, Ruiyang
-Chang, Joey Wong, Craig Bossley, Mimi Cai, and Adelyn Arens.
+Chang, Joey Wong, Craig Bossley, Mimi Cai, Adelyn Arens, and Daniel Hamilton.
 </details>
 
 <details>
