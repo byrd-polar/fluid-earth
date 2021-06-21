@@ -28,7 +28,7 @@
 
   import Fetcher from './fetcher.js';
   import { validDate, validCloseDate, validUnit } from './utility.js';
-  import { currentDate } from './stores.js';
+  import { currentDate, mobile } from './stores.js';
 
   import { onMount } from 'svelte';
   import { Float16Array } from '@petamoriken/float16';
@@ -393,7 +393,7 @@
     {projection}
     {centerLongitude}
     {centerLatitude}
-    {zoom}
+    zoom={$mobile ? zoom / 2 : zoom}
     {griddedData}
     {griddedColormap}
     {griddedDomain}

@@ -3,6 +3,7 @@
   import interact from 'interactjs';
   import { reproj } from '../map/projections/';
   import { clamp, modulo, genericLabel } from '../utility.js';
+  import { mobile } from '../stores.js';
 
   export let minZoom;
   export let maxZoom;
@@ -26,7 +27,7 @@
   // make performing the 'hold' gesture on high ppi devices possible
   interact.pointerMoveTolerance(5);
 
-  const PAN_FACTOR = 0.25;
+  $: panFactor = ($mobile ? 0.5 : 0.25) / zoom / screenRatio;
 
   onMount(() => {
     interact(interactionSurfaceElement)
@@ -34,8 +35,8 @@
         inertia: true,
         listeners: {
           move (e) {
-            let lon = centerLongitude - PAN_FACTOR * e.dx / zoom / screenRatio;
-            let lat = centerLatitude + PAN_FACTOR * e.dy / zoom / screenRatio;
+            let lon = centerLongitude - panFactor * e.dx;
+            let lat = centerLatitude + panFactor * e.dy;
             centerLongitude = modulo(lon, 360, -180);
             centerLatitude = clamp(lat, -90, 90);
           },
