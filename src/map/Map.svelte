@@ -17,6 +17,7 @@
   export let centerLongitude = 0; // in degrees
   export let centerLatitude = 0; // in degrees
   export let zoom = 1;
+  export let portraitBasedZoom = false;
   export let projection = projections.VERTICAL_PERSPECTIVE;
 
   export let griddedData = {
@@ -88,6 +89,7 @@
   };
 
   export let syncWithAnimationHook = () => {};
+  export let canvasRatio = 1;
   export let MAX_TEXTURE_SIZE = Infinity;
 
   let mpcTestCanvas;
@@ -102,7 +104,6 @@
   $: projectionUniforms = {
     u_lon0: centerLongitude,
     u_lat0: centerLatitude,
-    u_zoom: zoom,
     u_projection,
     u_griddedDataProjection,
     u_particleDataProjection,
@@ -127,6 +128,7 @@
   let backgroundNeedsRedraw;
   // when following variables are updated, redraw
   $: projectionUniforms,
+      zoom,
       griddedData,
       griddedColormap,
       griddedDomain,
@@ -138,6 +140,7 @@
   let trailsNeedsReset;
   // when following variables are updated, reset
   $: projectionUniforms,
+      zoom,
       particleData,
       particleCount,
       particleLifetime,
@@ -235,13 +238,15 @@
     // particleDisplay.size variable.
     clientWidth = backgroundCanvas.clientWidth;
     clientHeight = backgroundCanvas.clientHeight;
+    canvasRatio = clientWidth / clientHeight;
     let pixelRatio = window.devicePixelRatio;
-    let canvasRatio = clientWidth / clientHeight;
     let screenRatio = pixelRatio * clientHeight / 1080;
+    let computedZoom = (portraitBasedZoom ? canvasRatio : 1) * zoom;
 
     let sharedUniforms = {
       u_canvasRatio: canvasRatio,
       u_screenRatio: screenRatio,
+      u_zoom: computedZoom,
       ...projectionUniforms,
     };
 
@@ -275,7 +280,7 @@
         centerLatitude,
         clientWidth,
         clientHeight,
-        zoom
+        computedZoom,
       );
       d3geoProjectionNeedsUpdate = false;
     }

@@ -11,6 +11,7 @@
   export let centerLongitude;
   export let centerLatitude;
   export let zoom;
+  export let canvasRatio;
 
   export let inverseProjectionFunction;
   export let pins;
@@ -27,7 +28,7 @@
   // make performing the 'hold' gesture on high ppi devices possible
   interact.pointerMoveTolerance(5);
 
-  $: panFactor = ($mobile ? 0.5 : 0.25) / zoom / screenRatio;
+  $: panFactor = 0.25 / zoom / screenRatio / ($mobile ? canvasRatio : 1);
 
   onMount(() => {
     interact(interactionSurfaceElement)

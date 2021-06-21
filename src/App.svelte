@@ -65,6 +65,7 @@
   let projection = projections.VERTICAL_PERSPECTIVE;
   let forwardProjectionFunction = projection.function;
   let inverseProjectionFunction = projection.function.invert;
+  let canvasRatio = 1;
   let MAX_TEXTURE_SIZE = Infinity;
   let centerLongitude = 360 * Math.random() - 180;
   let centerLatitude = (180 / Math.PI) * Math.asin(2 * Math.random() - 1);
@@ -393,7 +394,8 @@
     {projection}
     {centerLongitude}
     {centerLatitude}
-    zoom={$mobile ? zoom / 2 : zoom}
+    {zoom}
+    portraitBasedZoom={$mobile}
     {griddedData}
     {griddedColormap}
     {griddedDomain}
@@ -408,6 +410,7 @@
     {vectorColors}
     bind:forwardProjectionFunction
     bind:inverseProjectionFunction
+    bind:canvasRatio
     bind:MAX_TEXTURE_SIZE
   >
     <svelte:fragment slot="background">
@@ -419,6 +422,7 @@
       bind:centerLongitude
       bind:centerLatitude
       bind:zoom
+      {canvasRatio}
       {inverseProjectionFunction}
       bind:pins
     />
