@@ -8,6 +8,7 @@
   import About from './menus/About.svelte';
   import Datasets from './menus/Datasets.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
+  import Timelapse from './menus/Timelapse.svelte';
   import Locations from './menus/Locations.svelte';
   import Projections from './menus/Projections.svelte';
   import DeveloperOnlyTools from './menus/DeveloperOnlyTools.svelte';
@@ -274,6 +275,7 @@
   import Location24 from "carbon-icons-svelte/lib/Location24";
   import ChartLineSmooth24 from "carbon-icons-svelte/lib/ChartLineSmooth24";
   import Calendar24 from "carbon-icons-svelte/lib/Calendar24";
+  import DataPlayer24 from "carbon-icons-svelte/lib/DataPlayer24";
   import ChoroplethMap24 from "carbon-icons-svelte/lib/ChoroplethMap24";
   import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
   import Debug24 from "carbon-icons-svelte/lib/Debug24";
@@ -282,6 +284,7 @@
     { name: 'Help & About', icon: Help24 },
     { name: 'Datasets', icon: ChartLineSmooth24 },
     { name: 'Time Machine', icon: Calendar24 },
+    { name: 'Timelapse', icon: DataPlayer24 },
     { name: 'Projections', icon: ChoroplethMap24 },
     { name: 'Markers', icon: Location24 },
     { name: 'Feedback', icon: RequestQuote24 },
@@ -346,6 +349,16 @@
     bind:date
     {utc}
     {griddedDataset}
+  />
+</Menu>
+<Menu bind:openedMenu menuName="Timelapse">
+  <Timelapse
+    {fetcher}
+    {utc}
+    {simplifiedMode}
+    {griddedDataset}
+    bind:date
+    bind:particlesShown
   />
 </Menu>
 <Menu bind:openedMenu menuName="Projections">
