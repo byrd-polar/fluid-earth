@@ -5,12 +5,12 @@
   import Menu from './Menu.svelte';
   import Starfield from './Starfield.svelte';
 
+  import About from './menus/About.svelte';
   import Datasets from './menus/Datasets.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
   import Locations from './menus/Locations.svelte';
   import Projections from './menus/Projections.svelte';
   import DeveloperOnlyTools from './menus/DeveloperOnlyTools.svelte';
-  import About from './menus/About.svelte';
   import Feedback from './menus/Feedback.svelte';
 
   import Map from './map/Map.svelte';
@@ -262,20 +262,20 @@
   //
   // Not using { Icon } import syntax for significantly faster build times, see
   // https://github.com/IBM/carbon-icons-svelte#direct-import-recommended
+  import Help24 from "carbon-icons-svelte/lib/Help24";
   import Location24 from "carbon-icons-svelte/lib/Location24";
   import ChartLineSmooth24 from "carbon-icons-svelte/lib/ChartLineSmooth24";
-  import Time24 from "carbon-icons-svelte/lib/Time24";
+  import Calendar24 from "carbon-icons-svelte/lib/Calendar24";
   import ChoroplethMap24 from "carbon-icons-svelte/lib/ChoroplethMap24";
-  import Information24 from "carbon-icons-svelte/lib/Information24";
   import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
   import Debug24 from "carbon-icons-svelte/lib/Debug24";
 
   const basicMenus = [
+    { name: 'Help & About', icon: Help24 },
     { name: 'Datasets', icon: ChartLineSmooth24 },
-    { name: 'Time Machine', icon: Time24 },
+    { name: 'Time Machine', icon: Calendar24 },
     { name: 'Projections', icon: ChoroplethMap24 },
     { name: 'Markers', icon: Location24 },
-    { name: 'About', icon: Information24 },
     { name: 'Feedback', icon: RequestQuote24 },
   ];
 
@@ -319,6 +319,10 @@
   bind:openedMenu
   bind:drawerOpen
 />
+<Menu bind:openedMenu menuName="Help & About">
+  <About
+  />
+</Menu>
 <Menu bind:openedMenu menuName="Datasets" bind:simplifiedMode>
   <Datasets
     {date}
@@ -354,10 +358,6 @@
     bind:pins
     {griddedData}
     {griddedUnit}
-  />
-</Menu>
-<Menu bind:openedMenu menuName="About">
-  <About
   />
 </Menu>
 <Menu bind:openedMenu menuName="Feedback">
