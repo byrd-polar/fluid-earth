@@ -3,7 +3,7 @@
   import StreamlinesLegend from '../components/StreamlinesLegend.svelte';
   import SimpleStreamLegend from '../components/SimpleStreamlinesLegend.svelte';
   import tooltip from '../tooltip.js';
-  import { validUnit, fix24 } from '../utility.js';
+  import { validUnit, fix24, simplifyDataset } from '../utility.js';
 
   export let date;
   export let utc;
@@ -49,15 +49,19 @@
   // data has been fully downloaded. Requires that the variables being updated
   // in the `eagerlyUpdate` function are NOT bound to the Legends component.
 
-  $: griddedDataset, preferredUnits, eagerlyUpdateGriddedLegend();
+  $: griddedDataset, preferredUnits, simplifiedMode,
+    eagerlyUpdateGriddedLegend();
   $: particleDataset, eagerlyUpdateParticleLegend();
 
   function eagerlyUpdateGriddedLegend() {
-    griddedColormap = griddedDataset.colormap;
-    griddedDomain = griddedDataset.domain;
-    griddedScale = griddedDataset.scale;
-    griddedUnit = griddedDataset.unit;
-    griddedUnit = validUnit(griddedDataset.unit, preferredUnits);
+    let newDataset = griddedDataset;
+    if (simplifiedMode) newDataset = simplifyDataset(griddedDataset);
+
+    griddedColormap = newDataset.colormap;
+    griddedDomain = newDataset.domain;
+    griddedScale = newDataset.scale;
+    griddedUnit = newDataset.unit;
+    griddedUnit = validUnit(newDataset.unit, preferredUnits);
   }
 
   function eagerlyUpdateParticleLegend() {

@@ -158,3 +158,84 @@ export function simpleTranslate(name) {
   };
   return translations[name] || name;
 }
+
+import variableFilters from './menus/filters/variables.js';
+import colormaps from './map/colormaps/';
+
+// Return a copy of the dataset with the original colormaps/scales/domains from
+// the old Fluid Earth Viewer
+export function simplifyDataset(griddedDataset) {
+  const simplifiedDatasets = {
+    'temperature' : {
+      colormap: colormaps.TEMP,
+      scale: 'linear',
+      domain: [273.15 - 80, 273.15 + 55],
+    },
+    'wind': {
+      colormap: colormaps.WIND,
+      scale: 'linear',
+      domain: [0, 100],
+    },
+    'precipitation': {
+      colormap: colormaps.PRECIP_6H,
+      scale: 'linear',
+      domain: [0, 25],
+    },
+    'pressure': {
+      colormap: colormaps.MEAN_SEA_LEVEL_PRESSURE,
+      scale: 'linear',
+      domain: [96, 105],
+    },
+    'water in atmosphere': {
+      colormap: colormaps.TOTAL_PRECIP,
+      scale: 'linear',
+      domain: [0, 70],
+    },
+    'water in clouds': {
+      colormap: colormaps.TOTAL_CLOUD,
+      scale: 'linear',
+      domain: [0.0, 1.0],
+    },
+    'sea temperature': {
+      colormap: colormaps.SEA_SURFACE_TEMP,
+      scale: 'linear',
+      domain: [273.15 - 1.8, 273.15 + 31.5],
+    },
+    'currents': {
+      colormap: colormaps.CURRENTS,
+      scale: 'linear',
+      domain: [0.0, 1.5],
+    },
+    'ozone': {
+      colormap: colormaps.COLUMN_OZONE,
+      scale: 'linear',
+      domain: [200, 600],
+    },
+    'sulfur dioxide': {
+      colormap: colormaps.SO2_MASS,
+      scale: 'linear',
+      domain: [0, 100],
+    },
+    'carbon monoxide': {
+      colormap: colormaps.CO_SURFACE,
+      scale: 'linear',
+      domain: [1, 1000],
+    },
+    'dust': {
+      colormap: colormaps.DUST_MASS,
+      scale: 'linear',
+      domain: [0, 900],
+    },
+  };
+
+  let dataset = {};
+  let variable = Object.keys(variableFilters.simple).find(key => {
+    return variableFilters.simple[key](griddedDataset.name);
+  });
+  let simplifiedDataset = simplifiedDatasets[variable];
+
+  for (const prop in griddedDataset) dataset[prop] = griddedDataset[prop];
+  for (const prop in simplifiedDataset) dataset[prop] = simplifiedDataset[prop];
+
+  return dataset;
+}

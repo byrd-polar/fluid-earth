@@ -312,7 +312,7 @@ let colormaps = {
     get lut() { return lutFromEarthScale(sea_surface_temp, [271.35, 304.65]) }
   },
 
-  PERCIP_6H:{
+  PRECIP_6H:{
     name: 'precip_6h',
     type: 'FEVer 1 original',
     get lut() { return lutFromEarthScale(precip_6h, [0, 150]) }

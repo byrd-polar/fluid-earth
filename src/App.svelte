@@ -27,7 +27,10 @@
   import Controls from './overlays/Controls.svelte';
 
   import Fetcher from './fetcher.js';
-  import { validDate, validCloseDate, validUnit } from './utility.js';
+  import {
+    validDate, validCloseDate, validUnit,
+    simplifyDataset,
+  } from './utility.js';
   import { currentDate, mobile } from './stores.js';
 
   import { onMount } from 'svelte';
@@ -176,13 +179,16 @@
           get: lonLat => singleArrayDataGet(griddedData, lonLat),
         };
 
-        if (previousGriddedDataset !== griddedDataset) {
-          griddedDomain = griddedDataset.domain;
-          griddedScale = griddedDataset.scale;
-          griddedColormap = griddedDataset.colormap;
-          griddedUnit = validUnit(griddedDataset.unit, preferredUnits);
+        let newDataset = griddedDataset;
+        if (simplifiedMode) newDataset = simplifyDataset(griddedDataset);
 
-          previousGriddedDataset = griddedDataset;
+        if (previousGriddedDataset !== newDataset) {
+          griddedDomain = newDataset.domain;
+          griddedScale = newDataset.scale;
+          griddedColormap = newDataset.colormap;
+          griddedUnit = validUnit(newDataset.unit, preferredUnits);
+
+          previousGriddedDataset = newDataset;
         }
       };
 
@@ -255,7 +261,7 @@
     );
   });
 
-  $: date, updateGriddedData(griddedDataset);
+  $: date, simplifiedMode, updateGriddedData(griddedDataset);
   $: date, particlesShown, updateParticleData(particleDataset);
 
   // Find new icons from: https://ibm.github.io/carbon-icons-svelte/
