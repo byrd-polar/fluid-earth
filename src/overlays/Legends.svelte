@@ -1,6 +1,7 @@
 <script>
   import GriddedLegend from '../components/GriddedLegend.svelte';
   import StreamlinesLegend from '../components/StreamlinesLegend.svelte';
+  import SimpleStreamLegend from '../components/SimpleStreamlinesLegend.svelte';
   import tooltip from '../tooltip.js';
   import { validUnit, fix24 } from '../utility.js';
 
@@ -90,12 +91,19 @@
       {simplifiedMode}
     />
     {#if particlesShown}
-      <StreamlinesLegend
-        name={particleDataset.name}
-        {particleDisplay}
-        bind:particlesPaused
-        {simplifiedMode}
-      />
+      {#if simplifiedMode}
+        <SimpleStreamLegend
+          name={particleDataset.name}
+          {particleDisplay}
+          bind:particlesPaused
+        />
+      {:else}
+        <StreamlinesLegend
+          name={particleDataset.name}
+          {particleDisplay}
+          bind:particlesPaused
+        />
+      {/if}
     {/if}
   </div>
 </div>

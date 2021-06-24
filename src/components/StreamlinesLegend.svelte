@@ -1,12 +1,11 @@
 <script>
-  import { capitalizeFirstLetter, simpleTranslate } from '../utility.js';
+  import { capitalizeFirstLetter } from '../utility.js';
   import tooltip from '../tooltip.js';
   import prng_alea from 'esm-seedrandom/esm/alea.mjs'
 
   export let name;
   export let particleDisplay;
   export let particlesPaused;
-  export let simplifiedMode;
 
   function handleKeydown(e) {
     if (!(e.code === 'Space' || e.code === 'Enter')) return;
@@ -20,11 +19,6 @@
   const trailWidth = 5;
   const trailHeight = 0.3;
   const trailPeriod = 15;
-
-  function formatTitle(name, simplifiedMode) {
-    if (simplifiedMode) name = simpleTranslate(name);
-    return capitalizeFirstLetter(name);
-  }
 </script>
 
 <section
@@ -33,7 +27,7 @@
   use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
   tabindex="0"
 >
-  <h3>{formatTitle(name, simplifiedMode)}</h3>
+  <h3>{capitalizeFirstLetter(name)}</h3>
   <div
     class="legend"
     class:paused={particlesPaused}
