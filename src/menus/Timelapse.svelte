@@ -8,8 +8,12 @@
   export let griddedDataset;
   export let date;
   export let particlesShown;
+  export let openedMenu;
+
+  let pause, playerActive;
 
   $: validDates = getValidDates(griddedDataset);
+  $: if (openedMenu === 'Time Machine') pause();
 </script>
 
 <h2>Playlist</h2>
@@ -21,6 +25,8 @@
   {griddedDataset}
   bind:date
   bind:particlesShown
+  bind:active={playerActive}
+  bind:pause
 />
 
 

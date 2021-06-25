@@ -15,6 +15,7 @@
 
   export let date;
   export let particlesShown;
+  export let active = false;
 
   $: dateOptions = {
     timeZone: utc ? 'UTC' : undefined,
@@ -34,14 +35,15 @@
   let value = 0;
 
   $: value, slideDate();
-  $: griddedDataset, particlesShown, handlePause();
+  $: griddedDataset, particlesShown, pause();
 
-  async function handlePlay() {
+  async function play() {
     particlesOriginallyShown = particlesShown;
     particlesShown = false;
 
     await tick();
 
+    active = true;
     playing = true;
     loading = true;
 
@@ -70,12 +72,13 @@
     timeoutID = window.setTimeout(loopDate, time);
   }
 
-  function handlePause() {
+  export function pause() {
     if (!playing) return;
 
     if (loading) fetcher.abort('player');
 
     window.clearTimeout(timeoutID);
+    active = false;
     playing = false;
     if (!particlesShown) particlesShown = particlesOriginallyShown;
   }
@@ -85,18 +88,20 @@
   }
 
   function handleStart() {
-    handlePause();
+    pause();
+    active = true;
     particlesOriginallyShown = particlesShown;
     particlesShown = false;
   }
 
   function handleStop() {
     particlesShown = particlesOriginallyShown;
+    active = false;
   }
 </script>
 
 <div>
-  <button on:click={playing ? handlePause : handlePlay}>
+  <button on:click={playing ? pause : play}>
     {#if playing}
       <Pause />
     {:else}
