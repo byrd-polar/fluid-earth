@@ -4,6 +4,7 @@
   import RangeSlider from 'svelte-range-slider-pips';
   import { capitalizeFirstLetter, simpleTranslate } from '../utility.js';
   import prettyMilliseconds from 'pretty-ms';
+  import { tick } from 'svelte';
 
   export let fetcher;
   export let validDates;
@@ -33,14 +34,16 @@
   let value = 0;
 
   $: value, slideDate();
-  $: griddedDataset, handlePause();
+  $: griddedDataset, particlesShown, handlePause();
 
   async function handlePlay() {
-    playing = true;
-    loading = true;
-
     particlesOriginallyShown = particlesShown;
     particlesShown = false;
+
+    await tick();
+
+    playing = true;
+    loading = true;
 
     let fetches = [];
     for (const d of validDates) {
@@ -74,7 +77,7 @@
 
     window.clearTimeout(timeoutID);
     playing = false;
-    particlesShown = particlesOriginallyShown;
+    if (!particlesShown) particlesShown = particlesOriginallyShown;
   }
 
   function slideDate() {
