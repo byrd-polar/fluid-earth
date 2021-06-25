@@ -152,9 +152,13 @@ export function simpleTranslate(name) {
 import variableFilters from './menus/filters/variables.js';
 import colormaps from './map/colormaps/';
 
+const dsCache = new Map();
+
 // Return a copy of the dataset with the original colormaps/scales/domains from
 // the old Fluid Earth Viewer
 export function simplifyDataset(griddedDataset) {
+  if (dsCache.has(griddedDataset)) return dsCache.get(griddedDataset);
+
   const simplifiedDatasets = {
     'temperature' : {
       colormap: colormaps.TEMP,
@@ -226,6 +230,8 @@ export function simplifyDataset(griddedDataset) {
 
   for (const prop in griddedDataset) dataset[prop] = griddedDataset[prop];
   for (const prop in simplifiedDataset) dataset[prop] = simplifiedDataset[prop];
+
+  dsCache.set(griddedDataset, dataset);
 
   return dataset;
 }
