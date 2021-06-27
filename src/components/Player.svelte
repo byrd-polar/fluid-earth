@@ -1,6 +1,8 @@
 <script>
   import Pause from 'carbon-icons-svelte/lib/PauseFilled32';
   import Play from 'carbon-icons-svelte/lib/PlayFilled32';
+  import Repeat from 'carbon-icons-svelte/lib/Repeat20';
+  import RepeatOne from 'carbon-icons-svelte/lib/RepeatOne20';
   import RangeSlider from 'svelte-range-slider-pips';
   import { capitalizeFirstLetter, simpleTranslate } from '../utility.js';
   import prettyMilliseconds from 'pretty-ms';
@@ -33,6 +35,7 @@
   let particlesOriginallyShown = particlesShown;
   let timeoutID;
   let value = 0;
+  let repeat = false;
 
   $: value, slideDate();
   $: griddedDataset, particlesShown, pause();
@@ -66,6 +69,10 @@
     } else {
       value++;
       if (value === validDates.length - 1) {
+        if (!repeat) {
+          pause();
+          return;
+        }
         time = 1000;
       }
     }
@@ -101,7 +108,7 @@
 </script>
 
 <div>
-  <button on:click={playing ? pause : play}>
+  <button on:click={playing ? pause : play} class="play">
     {#if playing}
       <Pause />
     {:else}
@@ -127,13 +134,20 @@
     --range-pip-active="gray"
     range="min" float pips
   />
+  <button class="repeat" on:click={() => repeat = !repeat}>
+    {#if repeat}
+      <RepeatOne style="color: var(--primary-color-light" />
+    {:else}
+      <Repeat />
+    {/if}
+  </button>
 </div>
 
 <style>
   div {
     display: grid;
     height: 100px;
-    grid-template-columns: 100px 1fr;
+    grid-template-columns: 100px 1fr min-content;
     grid-template-rows: min-content 1fr min-content;
     margin-bottom: 1em;
 
@@ -144,40 +158,44 @@
   button {
     all: unset;
     -webkit-tap-highlight-color: transparent;
-    transition: filter 0.25s ease 0s;
-    box-sizing: border-box;
     color: white;
-    padding: 0.5em 1em;
-    background-color: var(--primary-color);
-    cursor: pointer;
-    grid-row: 1 / span 3;
-    background: var(--primary-color);
-
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+  }
+
+  button.play {
+    transition: filter 0.25s ease 0s;
+    box-sizing: border-box;
+    padding: 0.5em 1em;
+    background-color: var(--primary-color);
+    grid-row: 1 / span 3;
+    background: var(--primary-color);
+
     border-radius: 0.5em 0 0 0.5em;
   }
 
-  button:focus, button:hover {
+  button.play:focus, button.play:hover {
     filter: brightness(125%);
   }
 
-  button:disabled {
+  button.play:disabled {
     cursor: auto;
     background-color: rgba(0, 0, 0, 0.88);
     color: rgba(255, 255, 255, 0.58);
     filter: none;
   }
 
-  button :global(svg) {
+  button.play :global(svg) {
     width: 48px;
     height: 48px;
     transition: transform 0.25s ease 0s;
   }
 
 
-  button:focus-visible :global(svg), button:hover :global(svg) {
+  button.play:focus-visible :global(svg),
+  button.play:hover :global(svg) {
     transform: scale(1.2);
   }
 
@@ -195,6 +213,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    grid-column: 2 / span 2;
   }
 
   div :global(.rangeSlider) {
@@ -203,5 +222,20 @@
 
   div :global(.rangeSlider .rangeHandle) {
     outline: none;
+  }
+
+  button.repeat {
+    border-radius: 50%;
+    height: 2em;
+    width: 2em;
+    margin: 0.25em 0.25em 0.25em 0;
+  }
+
+  button.repeat:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  button.repeat:focus {
+    background-color: rgba(255, 255, 255, 0.15);
   }
 </style>
