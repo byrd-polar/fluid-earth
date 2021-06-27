@@ -122,7 +122,10 @@
       const d = validDates[v];
       return d.toLocaleString(undefined, { hour: 'numeric' });
     }}
-    float pips
+    --range-range="var(--primary-color-light)"
+    --range-pip="gray"
+    --range-pip-active="gray"
+    range="min" float pips
   />
 </div>
 
@@ -196,5 +199,9 @@
 
   div :global(.rangeSlider) {
     margin-bottom: 1em;
+  }
+
+  div :global(.rangeSlider .rangeHandle) {
+    outline: none;
   }
 </style>
