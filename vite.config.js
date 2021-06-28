@@ -1,5 +1,5 @@
 import replace from '@rollup/plugin-replace';
-import svelte from '@sveltejs/vite-plugin-svelte'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
 import glslify from 'rollup-plugin-glslify';
 import license from 'rollup-plugin-license';
 
