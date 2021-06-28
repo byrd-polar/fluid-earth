@@ -370,6 +370,7 @@
   <Feedback
   />
 </Menu>
+<!-- svelte-ignore missing-declaration -->
 {#if !__production__}
   <Menu bind:openedMenu menuName="Developer-Only Tools">
     <DeveloperOnlyTools

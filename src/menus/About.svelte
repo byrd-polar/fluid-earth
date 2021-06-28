@@ -170,6 +170,7 @@ the authors of these libraries as this project would not be possible without
 their contributions to open-source.
 <p>
 As required, here are the
+<!-- svelte-ignore missing-declaration -->
 {#if __production__}
   <a href="/legal/THIRD_PARTY">licence texts</a> for
   and

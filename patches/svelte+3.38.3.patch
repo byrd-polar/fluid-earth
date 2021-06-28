@@ -1,0 +1,17 @@
+diff --git a/node_modules/svelte/compiler.mjs b/node_modules/svelte/compiler.mjs
+index 0fc3e2d..f528738 100644
+--- a/node_modules/svelte/compiler.mjs
++++ b/node_modules/svelte/compiler.mjs
+@@ -29878,12 +29878,6 @@ function process_component_options(component, nodes) {
+                                 message: "tag name must be two or more words joined by the '-' character"
+                             });
+                         }
+-                        if (tag && !component.compile_options.customElement) {
+-                            component.warn(attribute, {
+-                                code: 'missing-custom-element-compile-options',
+-                                message: "The 'tag' option is used when generating a custom element. Did you forget the 'customElement: true' compile option?"
+-                            });
+-                        }
+                         component_options.tag = tag;
+                         break;
+                     }
