@@ -14,7 +14,7 @@ const execFile = promisify(_execFile);
 // https://www.weather.gov/media/notification/pdf2/scn21-32nomad_changes.pdf
 const throttle = pThrottle({
   limit: 111,
-  interval: 60 * 1000,
+  interval: 65 * 1000,
   strict: true,
 });
 const throttled = throttle(got);
