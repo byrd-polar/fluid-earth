@@ -216,6 +216,9 @@
   let previousTime;
   let previousWidth, previousHeight, previousPixelRatio, resizing = false;
   function render(time) {
+    // Avoid hot module reloading throwing (recoverable) error in development
+    if (!__production__ && !backgroundCanvas) return;
+
     let timeDelta = previousTime ? (time - previousTime) : 0;
     previousTime = time;
 

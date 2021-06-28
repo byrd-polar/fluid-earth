@@ -254,11 +254,13 @@
 
     // fade out and remove splash screen from public/index.html after loading
     const splashElement = document.getElementById('splash');
-    splashElement.classList.add('faded');
-    setTimeout(
-      () => splashElement.remove(),
-      1000 * parseFloat(getComputedStyle(splashElement)['transitionDuration'])
-    );
+    if (splashElement) {
+      splashElement.classList.add('faded');
+      setTimeout(
+        () => splashElement.remove(),
+        1000 * parseFloat(getComputedStyle(splashElement)['transitionDuration'])
+      );
+    }
   });
 
   $: date, simplifiedMode, updateGriddedData(griddedDataset);
@@ -343,9 +345,7 @@
   <TimeMachine
     bind:date
     {utc}
-    {fetcher}
     {griddedDataset}
-    bind:particlesShown
   />
 </Menu>
 <Menu bind:openedMenu menuName="Projections">

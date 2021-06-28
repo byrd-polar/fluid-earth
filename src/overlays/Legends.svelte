@@ -98,7 +98,6 @@
       {#if simplifiedMode}
         <SimpleStreamLegend
           name={particleDataset.name}
-          {particleDisplay}
           bind:particlesPaused
         />
       {:else}
