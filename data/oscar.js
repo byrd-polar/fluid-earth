@@ -79,7 +79,7 @@ try {
   );
 } catch (e) {
   if (e instanceof HTTPError && e.response.statusCode === 404 &&
-      datetime < DateTime.now().plus({days: 3})) {
+      DateTime.now() < datetime.plus({days: 3})) {
 
     console.log(
       '\nRun considered successful as file is not expected to exist yet.'
