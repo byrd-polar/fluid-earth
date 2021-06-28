@@ -98,15 +98,11 @@
   let particleCanvas;
 
   let projectionUniforms;
-  $: u_griddedDataProjection = griddedData.projection.id;
-  $: u_particleDataProjection = particleData.projection.id
   $: u_projection = projection.id;
   $: projectionUniforms = {
     u_lon0: centerLongitude,
     u_lat0: centerLatitude,
     u_projection,
-    u_griddedDataProjection,
-    u_particleDataProjection,
   };
 
   let backgroundGl;
@@ -137,7 +133,7 @@
       vectorData,
     backgroundNeedsRedraw = true;
 
-  let trailsNeedsReset;
+  let trailsNeedReset;
   // when following variables are updated, reset
   $: projectionUniforms,
       zoom,
@@ -145,7 +141,7 @@
       particleCount,
       particleLifetime,
       particleDisplay,
-    trailsNeedsReset = true;
+    trailsNeedReset = true;
 
   let particlesNeedClearing = false;
   $: if (!particlesShown) {
@@ -247,6 +243,8 @@
       u_canvasRatio: canvasRatio,
       u_screenRatio: screenRatio,
       u_zoom: computedZoom,
+      u_griddedDataProjection: griddedData.projection.id,
+      u_particleDataProjection: particleData.projection.id,
       ...projectionUniforms,
     };
 
@@ -256,7 +254,7 @@
       pixelRatio !== previousPixelRatio
     ) {
       backgroundNeedsRedraw = true;
-      trailsNeedsReset = true;
+      trailsNeedReset = true;
       resizing = true;
 
     } else if (resizing) {
@@ -293,10 +291,10 @@
     }
 
     if (particlesShown) {
-      if (trailsNeedsReset) {
+      if (trailsNeedReset) {
         particleSimulator.resetTrails();
       }
-      if (!particlesPaused || (particlesPaused && trailsNeedsReset)) {
+      if (!particlesPaused || (particlesPaused && trailsNeedReset)) {
         particleSimulator.drawWithTrails(
           sharedUniforms,
           particleDisplay.size * (projection.particleSizeFactor || 1),
@@ -312,8 +310,8 @@
           particleDisplay.rate
         );
       }
-      if (trailsNeedsReset) {
-        trailsNeedsReset = false;
+      if (trailsNeedReset) {
+        trailsNeedReset = false;
       }
     }
 
@@ -330,7 +328,7 @@
     if (resizeCanvasToDisplaySize(gl.canvas, ratio) || force) {
       gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
       backgroundNeedsRedraw = true;
-      trailsNeedsReset = true;
+      trailsNeedReset = true;
     }
   }
 </script>
