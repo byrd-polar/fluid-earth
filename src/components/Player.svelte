@@ -18,6 +18,7 @@
   export let date;
   export let particlesShown;
   export let active = false;
+  export let fps = 5;
 
   $: dateOptions = {
     timeZone: utc ? 'UTC' : undefined,
@@ -36,6 +37,9 @@
   let timeoutID;
   let value = 0;
   let repeat = false;
+
+  $: maxValue = validDates.length - 1;
+  $: time = 1000 / fps;
 
   $: value, slideDate();
   $: griddedDataset, particlesShown, pause();
@@ -58,25 +62,26 @@
     let results = await Promise.all(fetches);
     loading = false;
 
-    if (results.every(r => r)) loopDate();
+    if (results.every(r => r)) {
+      if (value === maxValue) value = 0;
+      timeoutID = window.setTimeout(loopDate, time);
+    }
   }
 
   function loopDate() {
-    let time = 200;
-    if (value >= validDates.length - 1) {
+    let t = time;
+    value = value + 1;
+
+    if (value === maxValue) t = 1000;
+    if (value > maxValue) {
       value = 0;
-      time = 1000;
-    } else {
-      value++;
-      if (value === validDates.length - 1) {
-        if (!repeat) {
-          pause();
-          return;
-        }
-        time = 1000;
+      if (!repeat) {
+        pause();
+        return;
       }
     }
-    timeoutID = window.setTimeout(loopDate, time);
+
+    timeoutID = window.setTimeout(loopDate, t);
   }
 
   export function pause() {
