@@ -1,4 +1,4 @@
-import { validOscarDates } from '../src/utility.js';
+import { validOscarDates } from '../src/oscar.js';
 import * as util from './utility.js';
 import { DateTime } from 'luxon';
 import { HTTPError } from 'got';
