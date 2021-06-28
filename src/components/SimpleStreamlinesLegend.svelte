@@ -5,7 +5,6 @@
   import tooltip from '../tooltip.js';
 
   export let name;
-  export let particleDisplay;
   export let particlesPaused;
 
   function handleKeydown(e) {

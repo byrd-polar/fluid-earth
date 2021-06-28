@@ -6,9 +6,7 @@
 
   export let date;
   export let utc;
-  export let fetcher;
   export let griddedDataset;
-  export let particlesShown;
 
   $: validDates = getValidDates(griddedDataset);
 </script>

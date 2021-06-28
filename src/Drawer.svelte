@@ -170,11 +170,6 @@
     white-space: nowrap;
   }
 
-  header p {
-    font-size: 0.9em;
-    margin-top: 0.25em;
-  }
-
   span.line {
     display: block;
     width: 100%;
