@@ -42,7 +42,7 @@
   $: time = 1000 / fps;
 
   $: value, slideDate();
-  $: griddedDataset, particlesShown, pause();
+  $: validDates, particlesShown, pause();
 
   async function play() {
     particlesOriginallyShown = particlesShown;
@@ -63,7 +63,7 @@
     loading = false;
 
     if (results.every(r => r)) {
-      if (value === maxValue) value = 0;
+      if (value >= maxValue) value = 0;
       timeoutID = window.setTimeout(loopDate, time);
     }
   }

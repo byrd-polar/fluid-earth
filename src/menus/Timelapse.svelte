@@ -1,5 +1,6 @@
 <script>
   import Player from '../components/Player.svelte';
+  import RangeSettings from '../components/RangeSettings.svelte';
   import { getValidDates } from '../utility.js';
 
   export let fetcher;
@@ -11,8 +12,8 @@
   export let openedMenu;
 
   let pause, playerActive;
+  let validDates = getValidDates(griddedDataset);
 
-  $: validDates = getValidDates(griddedDataset);
   $: if (openedMenu === 'Time Machine') pause();
 </script>
 
@@ -29,11 +30,15 @@
   bind:pause
 />
 
-
 <details>
   <summary><h2>Settings</h2></summary>
-  <p>Use the Datasets and Time Machine menus to change the variable displayed
-  and the starting date, respectively.</p>
+  <RangeSettings
+    {date}
+    {utc}
+    {playerActive}
+    {griddedDataset}
+    bind:validDates
+  />
 </details>
 
 <style>
