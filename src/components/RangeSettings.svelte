@@ -13,8 +13,10 @@
 
   $: date, updateStart();
 
-  $: validDates = getValidDates(griddedDataset)
-    .filter(d => d >= start)
+  $: datesAfterStart = getValidDates(griddedDataset)
+    .filter(d => d >= start);
+
+  $: validDates = datesAfterStart
     .filter((_, i) => i % interval === 0)
     .slice(0, timepoints);
 
@@ -52,6 +54,7 @@
     type="number"
     bind:value={timepoints}
     min={2}
+    max={Math.max(datesAfterStart.length, 2)}
     step={1}
   >
   <label for="range-interval">Interval (step size):</label>
@@ -60,6 +63,7 @@
     type="number"
     bind:value={interval}
     min={1}
+    max={Math.max(datesAfterStart.length - 1, 1)}
     step={1}
   />
   <p>
