@@ -11,7 +11,7 @@
   export let particlesShown;
   export let openedMenu;
 
-  let pause, playerActive;
+  let pause, playerActive, fps;
   let validDates = getValidDates(griddedDataset);
 
   $: if (openedMenu === 'Time Machine') pause();
@@ -28,6 +28,7 @@
   bind:particlesShown
   bind:active={playerActive}
   bind:pause
+  {fps}
 />
 
 <details>
@@ -38,6 +39,7 @@
     {playerActive}
     {griddedDataset}
     bind:validDates
+    bind:fps
   />
 </details>
 

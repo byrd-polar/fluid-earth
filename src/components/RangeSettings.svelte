@@ -7,6 +7,7 @@
   export let playerActive;
   export let griddedDataset;
   export let validDates;
+  export let fps = 5;
 
   let start = date, timepoints = 10, interval = 1;
 
@@ -64,6 +65,14 @@
   <p>
     End time: <span>{end.toLocaleDateString(undefined, dateOptions)}</span>
   </p>
+  <label for="range-fps">Frames per second:</label>
+  <input
+    id="range-fps"
+    type="number"
+    bind:value={fps}
+    min={1}
+    step={1}
+  />
 </div>
 
 <p>These settings will load <b>{prettyBytes(loadSize)}</b> into memory.</p>
