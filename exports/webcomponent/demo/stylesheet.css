@@ -1,0 +1,36 @@
+
+a, a:visited {
+    color: white;
+}
+
+body {
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+    font-family: sans-serif;
+    color: white;
+}
+
+.earth {
+    margin: 2em;
+    width: 400px;
+    height: 400px;
+    border-radius: 0.5em;
+    outline-style: solid;
+    outline-width: 2px;
+    outline-color: grey;
+    background-color: black;
+}
+
+#markers {
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0; /* create separate stacking context for markers */
+}
+
+#markers a {
+  pointer-events: auto;
+  background-color: black;
+  position: absolute;
+  display: none;
+}

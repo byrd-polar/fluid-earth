@@ -93,6 +93,13 @@ npm run build:app
 
 You can run the newly built app with `npm run preview`.
 
+## Web component
+
+Fluid Earth comes with a lightweight web component which can be included in
+webpage contexts where the full application is not needed. Refer to the
+[documentation](exports/webcomponent/README.md) for more info on using the
+web component.
+
 ## Terms of Use
 
 The Terms of Use are specified [here](LICENSE) +
