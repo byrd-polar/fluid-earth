@@ -37,6 +37,10 @@
   let timeoutID;
   let value = 0;
   let repeat = false;
+  // used to enforce that updates to `date` from outside this component pause it
+  let sliding = false, syncingValueWithDate = false;
+
+  $: date, handleDateUpdate();
 
   $: maxValue = validDates.length - 1;
   $: time = 1000 / fps;
@@ -63,7 +67,7 @@
     loading = false;
 
     if (results.every(r => r)) {
-      if (value >= maxValue) value = 0;
+      if (value >= maxValue || value < 0) value = 0;
       timeoutID = window.setTimeout(loopDate, time);
     }
   }
@@ -84,7 +88,7 @@
     timeoutID = window.setTimeout(loopDate, t);
   }
 
-  export function pause() {
+  function pause() {
     if (!playing) return;
 
     if (loading) fetcher.abort('player');
@@ -95,8 +99,26 @@
     if (!particlesShown) particlesShown = particlesOriginallyShown;
   }
 
-  function slideDate() {
+  async function slideDate() {
+    if (syncingValueWithDate) return;
+
+    sliding = true;
+    await tick();
     date = validDates[value];
+    await tick();
+    sliding = false;
+  }
+
+  async function handleDateUpdate() {
+    if (sliding) return;
+
+    pause();
+
+    syncingValueWithDate = true;
+    await tick();
+    value = validDates.findIndex(d => d.getTime() === date.getTime());
+    await tick();
+    syncingValueWithDate = false;
   }
 
   function handleStart() {

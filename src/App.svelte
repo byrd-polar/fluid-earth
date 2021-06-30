@@ -359,7 +359,6 @@
     {griddedDataset}
     bind:date
     bind:particlesShown
-    {openedMenu}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Projections">
