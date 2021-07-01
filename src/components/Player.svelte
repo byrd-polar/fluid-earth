@@ -17,7 +17,8 @@
 
   export let date;
   export let particlesShown;
-  export let active = false;
+  // used to enforce that updates to `date` from outside this component pause it
+  export let sliding = false;
   export let fps = 5;
 
   $: dateOptions = {
@@ -37,8 +38,7 @@
   let timeoutID;
   let value = 0;
   let repeat = false;
-  // used to enforce that updates to `date` from outside this component pause it
-  let sliding = false, syncingValueWithDate = false;
+  let syncingValueWithDate = false;
 
   $: date, handleDateUpdate();
 
@@ -54,7 +54,6 @@
 
     await tick();
 
-    active = true;
     playing = true;
     loading = true;
 
@@ -94,7 +93,6 @@
     if (loading) fetcher.abort('player');
 
     window.clearTimeout(timeoutID);
-    active = false;
     playing = false;
     if (!particlesShown) particlesShown = particlesOriginallyShown;
   }
@@ -123,14 +121,12 @@
 
   function handleStart() {
     pause();
-    active = true;
     particlesOriginallyShown = particlesShown;
     particlesShown = false;
   }
 
   function handleStop() {
     particlesShown = particlesOriginallyShown;
-    active = false;
   }
 </script>
 

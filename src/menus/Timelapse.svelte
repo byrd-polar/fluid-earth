@@ -23,7 +23,7 @@
   {griddedDataset}
   bind:date
   bind:particlesShown
-  bind:active={playerActive}
+  bind:sliding={playerActive}
   {fps}
 />
 
