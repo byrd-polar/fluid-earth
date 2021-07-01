@@ -1,6 +1,8 @@
+<html lang="en">
 <head>
-    <title>Fluid Earth web component demo</title>
     <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <title>Fluid Earth web component demo</title>
 </head>
 
 
@@ -13,13 +15,13 @@
     	
     	<!-- The markers div displays icons and links at specific locations on the globe. -->
       <div id="markers">
-        <a href="https://en.wikipedia.org/wiki/Windhoek" lon="17.1" lat="-22.6">
+        <a href="https://en.wikipedia.org/wiki/Windhoek" data-lon="17.1" data-lat="-22.6">
           Windhoek, Namibia
         </a>
-        <a href="https://en.wikipedia.org/wiki/Greenwich" lon="0.0" lat="51.5">
+        <a href="https://en.wikipedia.org/wiki/Greenwich" data-lon="0.0" data-lat="51.5">
           Greenwich, England
         </a>
-        <a href="https://en.wikipedia.org/wiki/Kathmandu" lon="85.32" lat="27.2">
+        <a href="https://en.wikipedia.org/wiki/Kathmandu" data-lon="85.32" data-lat="27.2">
           Kathmandu, Nepal
         </a>
       </div>
@@ -71,7 +73,7 @@
 
 
 <!-- Set up globe and interaction surface components. -->
-<script src='./webcomponent.js'></script>
+<script src='../../dist/webcomponent.js'></script>
 <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
 
 <script>
@@ -87,7 +89,7 @@
   function positionmarkers() {
     let markers = [...document.querySelectorAll('#markers a')];
     for (const pin of markers) {
-      let lonLat = [pin.getAttribute('lon'), pin.getAttribute('lat')];
+      let lonLat = [pin.getAttribute('data-lon'), pin.getAttribute('data-lat')];
       let point = earthMap.forwardProjectionFunction(lonLat);
       if (point) {
         pin.style.display = 'block';
