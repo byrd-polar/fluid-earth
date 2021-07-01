@@ -71,7 +71,7 @@
     }
   }
 
-  function loopDate() {
+  async function loopDate() {
     let t = time;
     value = value + 1;
 
@@ -79,6 +79,7 @@
     if (value > maxValue) {
       value = 0;
       if (!repeat) {
+        await tick();
         pause();
         return;
       }
