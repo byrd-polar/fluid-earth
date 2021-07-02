@@ -184,7 +184,7 @@ simpleGribs.push({
     unit: 'm',
     originalUnit: 'm',
     domain: [0, 12],
-    colormap: 'COOL',
+    colormap: 'GN_BU_REVERSED',
     ...gfs0p25props,
   },
 });
