@@ -80,6 +80,7 @@
     width: 1,
     height: 1,
     originalUnit: griddedDataset.originalUnit,
+    unit : griddedDataset.unit,
     projection: dataProjections.GFS,
     get: lonLat => NaN,
   };
@@ -93,7 +94,7 @@
     length: ['m', 'ft'],
   };
   // Keep griddedUnit in sync with underlying griddedData
-  $: griddedUnit = validUnit(griddedData.originalUnit, preferredUnits);
+  $: griddedUnit = validUnit(griddedData.unit, preferredUnits);
 
   const emptyParticleData = {
     uVelocities: new Float16Array([0]),
@@ -176,6 +177,7 @@
           width: griddedDataset.width,
           height: griddedDataset.height,
           originalUnit: griddedDataset.originalUnit,
+          unit : griddedDataset.unit,
           projection: griddedDataset.projection,
           get: lonLat => singleArrayDataGet(griddedData, lonLat),
         };
