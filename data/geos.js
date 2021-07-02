@@ -50,8 +50,8 @@ const geosVars = [
             path: util.browserPath(outputPath),
             unit: 'ppbv',
             originalUnit: 'ppbv',
-            domain: [1, 1000],
-            colormap: 'CO_SURFACE',
+            domain: [0, 1000],
+            colormap: 'ROCKET_REVERSED',
             ...geosProps
         }
     },

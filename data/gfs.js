@@ -95,8 +95,8 @@ simpleGribs.push({
     name: 'mean sea level pressure',
     unit: 'hPa',
     originalUnit: 'kPa',
-    domain: [96, 105],
-    colormap: 'MEAN_SEA_LEVEL_PRESSURE',
+    domain: [95, 105],
+    colormap: 'RD_BU_REVERSED',
     ...gfs0p25props,
   },
 });
@@ -124,7 +124,7 @@ simpleGribs.push({
     unit: 'kg/m^2',
     originalUnit: 'kg/m^2',
     domain: [0, 70],
-    colormap: 'TOTAL_PRECIP',
+    colormap: 'MAKO_REVERSED',
     ...gfs0p25props,
   },
 });

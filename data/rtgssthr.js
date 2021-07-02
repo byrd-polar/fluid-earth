@@ -13,7 +13,7 @@ const datasetBase = {
   unit: 'tempC',
   originalUnit: 'tempK',
   domain: [273.15 - 1.8, 273.15 + 31.5],
-  colormap: 'SEA_SURFACE_TEMP',
+  colormap: 'THERMAL',
   bytesPerFile: 18662400,
   width: 4320,
   height: 2160,
