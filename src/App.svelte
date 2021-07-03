@@ -90,7 +90,7 @@
   let preferredUnits = {
     speed: ['km/h', 'm/s', 'kn', 'mph'],
     temperature: ['tempC', 'tempF', 'tempK'],
-    pressure: ['hPa', 'mmHg', 'inHg'],
+    pressure: ['hPa', 'atm', 'mmHg', 'inHg'],
     length: ['m', 'ft'],
   };
   // Keep griddedUnit in sync with underlying griddedData
