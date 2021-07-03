@@ -17,8 +17,8 @@
     .filter(d => d >= start);
 
   $: validDates = datesAfterStart
-    .filter((_, i) => i % interval === 0)
-    .slice(0, timepoints);
+    .filter((_, i) => i % (interval || 1) === 0)
+    .slice(0, (timepoints || 2));
 
   $: end = validDates[validDates.length - 1];
 

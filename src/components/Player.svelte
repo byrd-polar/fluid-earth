@@ -43,7 +43,7 @@
   $: date, handleDateUpdate();
 
   $: maxValue = validDates.length - 1;
-  $: time = 1000 / fps;
+  $: time = 1000 / (fps || 1);
 
   $: value, slideDate();
   $: validDates, particlesShown, pause();
