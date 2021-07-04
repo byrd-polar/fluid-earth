@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -93,8 +94,8 @@
       let point = earthMap.forwardProjectionFunction(lonLat);
       if (point) {
         pin.style.display = 'block';
-        pin.style.left = point[0];
-        pin.style.top = point[1];
+        pin.style.left = `${point[0]}px`;
+        pin.style.top = `${point[1]}px`;
       } else {
         pin.style.display = 'none';
       }
