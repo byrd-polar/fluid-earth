@@ -1,7 +1,7 @@
 <script>
   import { capitalizeFirstLetter } from '../utility.js';
   import tooltip from '../tooltip.js';
-  import prng_alea from 'esm-seedrandom/esm/alea.mjs'
+  import { prng_alea } from 'esm-seedrandom/esm/'
 
   export let name;
   export let particleDisplay;

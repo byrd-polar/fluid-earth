@@ -1,5 +1,5 @@
 <script>
-  import prng_alea from 'esm-seedrandom/esm/alea.mjs'
+  import { prng_alea } from 'esm-seedrandom/esm/'
 
   // For ensuring size and position of stars is properly relative to actual size
   // of rendered map; see the screenRatio variable in Map.svelte for details

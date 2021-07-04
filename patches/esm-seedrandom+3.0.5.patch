@@ -1,0 +1,13 @@
+diff --git a/node_modules/esm-seedrandom/package.json b/node_modules/esm-seedrandom/package.json
+index 99e77b2..7a0914a 100644
+--- a/node_modules/esm-seedrandom/package.json
++++ b/node_modules/esm-seedrandom/package.json
+@@ -11,7 +11,7 @@
+     "type": "git",
+     "url": "git://github.com/shanewholloway/js-esm-seedrandom.git"
+   },
+-  "author": [
++  "contributors": [
+     "David Bau",
+     "Shane Holloway"
+   ],

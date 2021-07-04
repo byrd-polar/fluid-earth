@@ -59,7 +59,7 @@
     "d3-scale-chromatic": "^3.0.0",
     "d3-selection": "^3.0.0",
     "debounce": "^1.2.1",
-    "esm-seedrandom": "^3.0.5",
+    "esm-seedrandom": "github:shanewholloway/js-esm-seedrandom",
     "focus-trap": "^6.5.1",
     "interactjs": "^1.10.11",
     "js-quantities": "^1.7.6",
