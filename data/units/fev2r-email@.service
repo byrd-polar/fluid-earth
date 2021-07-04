@@ -1,5 +1,5 @@
 [Unit]
-Description=Send email to the Fluid Earth 2 developers about the status of %i
+Description=Send email to the Fluid Earth developers about the status of %i
 
 [Service]
 Type=oneshot
