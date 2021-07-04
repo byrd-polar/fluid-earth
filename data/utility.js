@@ -110,7 +110,7 @@ export async function readPartialInventory(source) {
   let file = PARTIAL_INVENTORIES[source];
 
   // prevent multiple concurrent runs of a specific data source
-  let releasePartialInventory = await lockfile.lock(file, { retries: 8 });
+  let releasePartialInventory = await lockfile.lock(file);
   let partialInventory = JSON.parse(await readFile(file, 'utf8'));
 
   let writeInventory = async partialInventory => {
