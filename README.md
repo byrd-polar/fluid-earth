@@ -3,12 +3,12 @@
 The successor to [FEVer](https://fever.byrd.osu.edu), making use of of
 [WebGL](https://en.wikipedia.org/wiki/WebGL). Codenamed `FEV2r`.
 
-## Preview
+## Visit site
 
 [https://fev2r.netlify.app/](https://fev2r.netlify.app/)
 
-Note: this site is built from the `preview` branch and may not reflect the
-latest changes on the `master` branch.
+Note: this site is built from the `production` branch and may not reflect the
+latest changes on the `main` branch.
 
 ## About
 
@@ -72,7 +72,7 @@ Pull from upstream (i.e. the repository at
 [https://code.osu.edu/BPCRC/outreach/fev2r.git](https://code.osu.edu/BPCRC/outreach/fev2r.git))...
 
 ```bash
-git pull <URL or name of upstream remote> master
+git pull <URL or name of upstream remote> main
 ```
 
 ...then ensure any changes to the dependencies and data are applied:

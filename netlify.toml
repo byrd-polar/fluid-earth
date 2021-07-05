@@ -1,7 +1,7 @@
 [build]
   publish = "dist/"
   command = "npm run build:app"
-  ignore = "[[ $HEAD == master ]]"
+  ignore = "[[ $HEAD == main ]]"
 
 [build.environment]
   NODE_VERSION = "14"
