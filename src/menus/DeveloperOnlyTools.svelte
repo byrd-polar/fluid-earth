@@ -34,7 +34,6 @@
   }
 
   export let inventory;
-  export let MAX_TEXTURE_SIZE;
   export let griddedDataset;
   export let particleDataset;
   export let griddedColormap;
@@ -157,7 +156,6 @@ user interface components.
       name="griddedDataset"
       bind:group={griddedDataset}
       value={dataset}
-      disabled={Math.max(dataset.width, dataset.height) > MAX_TEXTURE_SIZE}
     >
     {dataset.name}
   </label>
@@ -171,7 +169,6 @@ user interface components.
       name="particleDataset"
       bind:group={particleDataset}
       value={dataset}
-      disabled={Math.max(dataset.width, dataset.height) > MAX_TEXTURE_SIZE}
     >
     {dataset.name}
   </label>

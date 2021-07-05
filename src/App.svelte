@@ -70,7 +70,6 @@
   let forwardProjectionFunction = projection.function;
   let inverseProjectionFunction = projection.function.invert;
   let canvasRatio = 1;
-  let MAX_TEXTURE_SIZE = Infinity;
   let centerLongitude = 360 * Math.random() - 180;
   let centerLatitude = (180 / Math.PI) * Math.asin(2 * Math.random() - 1);
   let zoom = 1.5;
@@ -399,7 +398,6 @@
       bind:centerLatitude
       bind:centerLongitude
       {inventory}
-      {MAX_TEXTURE_SIZE}
       bind:griddedDataset
       bind:particleDataset
       bind:griddedColormap
@@ -429,7 +427,6 @@
     bind:forwardProjectionFunction
     bind:inverseProjectionFunction
     bind:canvasRatio
-    bind:MAX_TEXTURE_SIZE
   >
     <svelte:fragment slot="background">
       <Starfield />

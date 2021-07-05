@@ -109,7 +109,7 @@
   let particleGl;
 
   let mapBackground = {};
-  $: mapBackground.data = griddedData;
+  $: mapBackground.data = splitIfNeeded(griddedData);
   $: mapBackground.colormap = griddedColormap;
   $: mapBackground.domain = griddedDomain;
   $: mapBackground.scale = griddedScale;
@@ -333,6 +333,27 @@
       backgroundNeedsRedraw = true;
       trailsNeedReset = true;
     }
+  }
+
+  const arrayCache = new Map();
+
+  function splitIfNeeded(griddedData) {
+    if (griddedData.width <= MAX_TEXTURE_SIZE ||
+        griddedData.width % 2 !== 0) return griddedData;
+
+    let array;
+    if (arrayCache.has(griddedData.floatArray)) {
+      array = arrayCache.get(griddedData.floatArray);
+    } else {
+      array = griddedData.floatArray.filter((_, i) => i % 2 === 0);
+      arrayCache.set(griddedData.floatArray, array);
+    }
+
+    return {
+      ...griddedData,
+      floatArray: array,
+      width: griddedData.width / 2,
+    };
   }
 </script>
 
