@@ -1,13 +1,31 @@
+diff --git a/node_modules/esm-seedrandom/LICENSE b/node_modules/esm-seedrandom/LICENSE
+index 561dff2..486c72e 100644
+--- a/node_modules/esm-seedrandom/LICENSE
++++ b/node_modules/esm-seedrandom/LICENSE
+@@ -1,6 +1,6 @@
+-
+ Copyright 2020 Shane Holloway. (ES Module port)
+ Copyright 2019 David Bau.
++Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
+ 
+ Permission is hereby granted, free of charge, to any person obtaining
+ a copy of this software and associated documentation files (the
+@@ -20,4 +20,3 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-
 diff --git a/node_modules/esm-seedrandom/package.json b/node_modules/esm-seedrandom/package.json
-index 99e77b2..7a0914a 100644
+index 99e77b2..470dae8 100644
 --- a/node_modules/esm-seedrandom/package.json
 +++ b/node_modules/esm-seedrandom/package.json
-@@ -11,7 +11,7 @@
+@@ -11,7 +11,8 @@
      "type": "git",
      "url": "git://github.com/shanewholloway/js-esm-seedrandom.git"
    },
 -  "author": [
 +  "contributors": [
++    "Johannes Baagøe <baagoe@baagoe.org>",
      "David Bau",
      "Shane Holloway"
    ],
