@@ -371,7 +371,7 @@
     bind:zoom
   />
 </Menu>
-<Menu bind:openedMenu menuName="Markers" flexbox>
+<Menu bind:openedMenu menuName="Markers">
   <Locations
     bind:centerLongitude
     bind:centerLatitude

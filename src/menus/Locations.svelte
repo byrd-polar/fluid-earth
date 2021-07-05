@@ -69,8 +69,6 @@
   }
 </script>
 
-<div>
-
 <h2>About this menu</h2>
 <p>
 Locations on the map can be marked. Hover over the marker or see the section
@@ -89,32 +87,3 @@ the following search box.
   {griddedUnit}
   {moveTo}
 />
-
-</div>
-<footer>
-<p>
-  Data from
-  "<a href="https://simplemaps.com/data/world-cities">
-  Basic World Cities Database v1.73</a>" by
-  <a href="https://simplemaps.com">Pareto Software, LLC</a>, used under
-  <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-  / Text reformatted from original
-</p>
-</footer>
-
-<style>
-  h2:first-child {
-    margin-top: 0;
-  }
-
-  div {
-    margin-bottom: 2em;
-  }
-
-  footer {
-    border-top: 1px solid white;
-    margin-top: auto;
-    font-size: 0.825em;
-    padding: 0 0.5em;
-  }
-</style>
