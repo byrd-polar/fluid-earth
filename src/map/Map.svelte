@@ -345,7 +345,8 @@
     if (arrayCache.has(griddedData.floatArray)) {
       array = arrayCache.get(griddedData.floatArray);
     } else {
-      array = griddedData.floatArray.filter((_, i) => i % 2 === 0);
+      array = new Uint16Array(griddedData.floatArray.buffer)
+        .filter((_, i) => i % 2 === 0);
       arrayCache.set(griddedData.floatArray, array);
     }
 
