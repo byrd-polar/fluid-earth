@@ -12,15 +12,3 @@
   to = "https://fever.byrd.osu.edu/fev2r-data-3/:splat"
   status = 200
   force = true
-
-[[redirects]]
-  from = "/stats/js/script.js"
-  to = "https://plausible.io/js/plausible.hash.js"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/stats/api/event"
-  to = "https://plausible.io/api/event"
-  status = 202
-  force = true
