@@ -38,7 +38,7 @@
   <script>
     function showError(message) {
       var messageElement = document.querySelector('.errmsg');
-      if (messageElement === null) return;
+      if (messageElement === null || messageElement.innerText) return;
 
       document.querySelector('.sk-swing').setAttribute('hidden', '');
       messageElement.removeAttribute('hidden');
