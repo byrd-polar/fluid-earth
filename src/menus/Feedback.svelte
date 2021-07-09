@@ -70,6 +70,8 @@
       <a href="mailto:gravina.2@osu.edu">gravina.2@osu.edu</a> with your
       feedback instead.
       <p>Thank you, and apologies for the inconvenience.
+
+      <!-- svelte-ignore missing-declaration -->
       {#if !__production__}
         <p><strong>NOTE:</strong> Form submission is only expected to work when
         hosted on Netlify. (This note is not visible in production.)
