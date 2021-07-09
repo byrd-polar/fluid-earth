@@ -5,7 +5,7 @@ The successor to [FEVer](https://fever.byrd.osu.edu), making use of of
 
 ## Visit site
 
-[https://fev2r.netlify.app/](https://fev2r.netlify.app/)
+[https://fluid-earth.byrd.osu.edu/](https://fluid-earth.byrd.osu.edu/)
 
 Note: this site is built from the `production` branch and may not reflect the
 latest changes on the `main` branch.

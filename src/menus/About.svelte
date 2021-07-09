@@ -176,9 +176,9 @@ As required, here are the
   and
   <a href="/legal/MODIFICATIONS">modifications</a> to
 {:else}
-  <a href="https://fev2r.netlify.app/legal/THIRD_PARTY">licence texts</a> for
+  <a href="https://fluid-earth.byrd.osu.edu/legal/THIRD_PARTY">licence texts</a> for
   and
-  <a href="https://fev2r.netlify.app/legal/MODIFICATIONS">modifications</a> to
+  <a href="https://fluid-earth.byrd.osu.edu/legal/MODIFICATIONS">modifications</a> to
 {/if}
 these libraries.
 <p>

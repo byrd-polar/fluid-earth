@@ -7,7 +7,7 @@ import dedent from 'dedent';
 const preamble = dedent`
   /**
    * Includes code from some of the following libraries:
-   * https://fev2r.netlify.app/legal/THIRD_PARTY
+   * https://fluid-earth.byrd.osu.edu/legal/THIRD_PARTY
    */
 `;
 
