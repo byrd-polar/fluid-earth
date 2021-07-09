@@ -17,7 +17,8 @@
     });
 
     formSubmitted = true;
-    formSubmittedSuccessfully = res.ok;
+    formSubmittedSuccessfully =
+      res.ok && window.location.hostname !== 'fluid-earth.byrd.osu.edu';
 
     if (!formSubmittedSuccessfully) console.error(res);
   }
