@@ -44,12 +44,8 @@
       messageElement.removeAttribute('hidden');
       messageElement.innerText = message;
     }
-    window.addEventListener('error', function (e) {
-      return showError(e.message);
-    });
-    window.addEventListener('unhandledrejection', function (e) {
-      return showError(e.reason);
-    });
+    window.addEventListener('error', function (e) { showError(e.message) });
+    window.addEventListener('unhandledrejection', function (e) { showError(e.reason) });
   </script>
   <script defer type="module" src='/src/main.js'></script>
 </head>
