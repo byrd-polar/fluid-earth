@@ -1,6 +1,26 @@
 <script>
   import Button from '../components/Button.svelte';
+  import { onMount } from 'svelte';
+  import { fade } from 'svelte/transition';
 
+  let form, formSubmittedSuccessfully;
+  let formSubmitted = false;
+
+  onMount(() => form.addEventListener('submit', handleSubmit));
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    let res = await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)),
+    });
+
+    formSubmitted = true;
+    formSubmittedSuccessfully = res.ok;
+
+    if (!formSubmittedSuccessfully) console.error(res);
+  }
 </script>
 
 <h2>Introduction</h2>
@@ -22,7 +42,7 @@
   form in public/form.html
 -->
 
-<form name="feedback" method="POST" data-netlify="true">
+<form name="feedback" method="POST" data-netlify="true" bind:this={form}>
   <input type="hidden" name="form-name" value="feedback" />
   <label>
     Name: <input type="text" name="name" autocomplete="off"/>
@@ -36,8 +56,27 @@
   <label class="msg">
     Message: <textarea name="message"></textarea>
   </label>
-  <Button type="submit">Submit Feedback</Button>
+  {#if !formSubmitted}
+    <Button type="submit">Submit Feedback</Button>
+  {/if}
 </form>
+
+{#if formSubmitted}
+  <p transition:fade>
+    {#if formSubmittedSuccessfully}
+      Form submitted successfully. Thank you for your feedback!
+    {:else}
+      There was a problem with submitting the form; please email
+      <a href="mailto:gravina.2@osu.edu">gravina.2@osu.edu</a> with your
+      feedback instead.
+      <p>Thank you, and apologies for the inconvenience.
+      {#if !__production__}
+        <p><strong>NOTE:</strong> Form submission is only expected to work when
+        hosted on Netlify. (This note is not visible in production.)
+      {/if}
+    {/if}
+  </p>
+{/if}
 
 <style>
   form {
