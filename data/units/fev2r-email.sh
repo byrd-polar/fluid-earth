@@ -16,7 +16,7 @@ Please ssh into $(hostname) and run the following commands:
 
 To investigate the cause of the issue, run the following command:
 
-    journalctl -u "$1" $(systemctl show -p MainPID "$1" | sed 's/Main/_/g')
+    journalctl -u "$1" $(systemctl show -p ExecMainPID "$1" | sed 's/ExecMain/_/g')
 
 and type a capital "G" to jump to the end of the page.
 MAIL
