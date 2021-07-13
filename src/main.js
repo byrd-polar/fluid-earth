@@ -1,3 +1,4 @@
+import 'globalthis/auto'; // polyfill globalThis for ky
 import ky from 'ky';
 import App from './App.svelte';
 import colormaps from './map/colormaps/';
