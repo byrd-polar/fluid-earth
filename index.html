@@ -34,8 +34,14 @@
   <meta property="twitter:title" content="Fluid Earth">
 
   <link rel="stylesheet" href="/global.css">
-  <script defer data-domain="fluid-earth.byrd.osu.edu" src="https://plausible.io/js/plausible.hash.js"></script>
   <script>
+    if (window.location.hostname === 'fluid-earth.byrd.osu.edu') {
+      let stats = document.createElement('script');
+      stats.setAttribute('defer', '');
+      stats.setAttribute('data-domain', 'fluid-earth.byrd.osu.edu');
+      stats.setAttribute('src', 'https://plausible.io/js/plausible.hash.js');
+      document.querySelector('head').appendChild(stats);
+    }
     function showError(message) {
       var messageElement = document.querySelector('.errmsg');
       if (messageElement === null || messageElement.innerText) return;
