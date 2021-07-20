@@ -1,8 +1,8 @@
-diff --git a/node_modules/vite/dist/node/chunks/dep-11db14da.js b/node_modules/vite/dist/node/chunks/dep-11db14da.js
-index 823d880..1820e8e 100644
---- a/node_modules/vite/dist/node/chunks/dep-11db14da.js
-+++ b/node_modules/vite/dist/node/chunks/dep-11db14da.js
-@@ -4325,6 +4325,10 @@ function copyDir(srcDir, destDir) {
+diff --git a/node_modules/vite/dist/node/chunks/dep-f2b4ca46.js b/node_modules/vite/dist/node/chunks/dep-f2b4ca46.js
+index 875b021..4cc97b0 100644
+--- a/node_modules/vite/dist/node/chunks/dep-f2b4ca46.js
++++ b/node_modules/vite/dist/node/chunks/dep-f2b4ca46.js
+@@ -4328,6 +4328,10 @@ function copyDir(srcDir, destDir) {
          const destFile = path__default.resolve(destDir, file);
          const stat = fs__default.statSync(srcFile);
          if (stat.isDirectory()) {

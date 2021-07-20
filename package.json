@@ -25,8 +25,8 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.0.0",
-    "@rollup/plugin-replace": "^2.4.2",
+    "@rollup/plugin-node-resolve": "^13.0.2",
+    "@rollup/plugin-replace": "^3.0.0",
     "@sveltejs/vite-plugin-svelte": "*",
     "atomically": "^1.7.0",
     "csv-parse": "^4.16.0",
@@ -40,13 +40,13 @@
     "p-throttle": "^4.1.1",
     "patch-package": "^6.4.7",
     "proper-lockfile": "^4.1.2",
-    "rollup": "^2.53.1",
+    "rollup": "^2.53.2",
     "rollup-plugin-glslify": "^1.2.0",
     "rollup-plugin-license": "^2.5.0",
     "rollup-plugin-svelte": "^7.1.0",
     "split2": "^3.2.2",
     "svelte": "^3.38.3",
-    "vite": "^2.4.2"
+    "vite": "^2.4.3"
   },
   "dependencies": {
     "@okrad/svelte-progressbar": "^1.11.2",

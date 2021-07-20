@@ -81,7 +81,10 @@ function commentHtml() {
     transformIndexHtml(html) {
       return html
         .replace('<!-- insert build and license info -->', htmlComment)
-        .replace('  \n<script', '  <script'); // fix built-in transform spacing
+        // fix built-in transform spacing
+        .replace('  \n  <script', '  <script')
+        .replace(/    <link/g, '  <link')
+        .replace('  </head>', '</head>');
     }
   };
 }
