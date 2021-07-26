@@ -1,8 +1,8 @@
 diff --git a/node_modules/carbon-icons-svelte/lib/LocationHeartFilled32/LocationHeartFilled32.svelte b/node_modules/carbon-icons-svelte/lib/LocationHeartFilled32/LocationHeartFilled32.svelte
-index 7894eb46..e65d641b 100644
+index 6d0794ae..8995b989 100644
 --- a/node_modules/carbon-icons-svelte/lib/LocationHeartFilled32/LocationHeartFilled32.svelte
 +++ b/node_modules/carbon-icons-svelte/lib/LocationHeartFilled32/LocationHeartFilled32.svelte
-@@ -34,7 +34,7 @@
+@@ -35,7 +35,7 @@
    {style}
    {id}
    {...attributes}>

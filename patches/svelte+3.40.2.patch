@@ -1,0 +1,14 @@
+diff --git a/node_modules/svelte/compiler.mjs b/node_modules/svelte/compiler.mjs
+index 3d940ff..d0c0cb4 100644
+--- a/node_modules/svelte/compiler.mjs
++++ b/node_modules/svelte/compiler.mjs
+@@ -30961,9 +30961,6 @@ function process_component_options(component, nodes) {
+                         if (tag && !/^[a-zA-Z][a-zA-Z0-9]*-[a-zA-Z0-9-]+$/.test(tag)) {
+                             return component.error(attribute, compiler_errors.invalid_tag_property);
+                         }
+-                        if (tag && !component.compile_options.customElement) {
+-                            component.warn(attribute, compiler_warnings.missing_custom_element_compile_options);
+-                        }
+                         component_options.tag = tag;
+                         break;
+                     }
