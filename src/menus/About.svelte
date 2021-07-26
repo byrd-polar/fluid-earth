@@ -2,6 +2,15 @@
 </p>, </dt>, and </dd> to reduce some of the tag clutter. -->
 
 <details open>
+<summary><h2>Video Tutorial</h2></summary>
+<iframe
+  src="https://player.vimeo.com/video/579263200"
+  title="Quick tutorial video for Fluid Earth"
+  allowfullscreen
+></iframe>
+</details>
+
+<details open>
 <summary><h2>Previous Version</h2></summary>
 <p>
 This is the second major iteration of the Fluid Earth project. The previous
@@ -204,6 +213,13 @@ with text reformatted from original.
   summary h2 {
     display: inline;
     border-bottom: none;
+  }
+
+  iframe {
+    all: unset;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-top: 1em;
   }
 
   dt {
