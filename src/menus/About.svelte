@@ -2,7 +2,7 @@
 </p>, </dt>, and </dd> to reduce some of the tag clutter. -->
 
 <details open>
-<summary><h2>Video Tutorial</h2></summary>
+<summary><h2>Tutorial Video</h2></summary>
 <iframe
   src="https://player.vimeo.com/video/579263200"
   title="Quick tutorial video for Fluid Earth"
