@@ -45,12 +45,12 @@
     "rollup-plugin-license": "^2.5.0",
     "rollup-plugin-svelte": "^7.1.0",
     "split2": "^3.2.2",
-    "svelte": "^3.40.2",
-    "vite": "^2.4.3"
+    "svelte": "^3.41.0",
+    "vite": "^2.4.4"
   },
   "dependencies": {
     "@okrad/svelte-progressbar": "^1.11.2",
-    "@petamoriken/float16": "^2.0.0",
+    "@petamoriken/float16": "^3.0.0",
     "carbon-icons-svelte": "^10.36.0",
     "d3-axis": "^3.0.0",
     "d3-geo": "^3.0.1",
