@@ -1,7 +1,7 @@
 # Fluid Earth
 
 The successor to [FEVer](https://fever.byrd.osu.edu), making use of of
-[WebGL](https://en.wikipedia.org/wiki/WebGL). Codenamed `FEV2r`.
+[WebGL](https://en.wikipedia.org/wiki/WebGL). Codenamed `fev2r`.
 
 ## Visit site
 
@@ -46,7 +46,7 @@ Install the dependencies...
 
 ```bash
 git clone <URL of this repo>
-cd fev2r
+cd fluid-earth
 npm install
 ```
 
@@ -69,7 +69,7 @@ automatically reload with your changes.
 ### Updating local development environment
 
 Pull from upstream (i.e. the repository at
-[https://code.osu.edu/BPCRC/outreach/fev2r.git](https://code.osu.edu/BPCRC/outreach/fev2r.git))...
+[https://github.com/byrd-polar/fluid-earth](https://github.com/byrd-polar/fluid-earth))...
 
 ```bash
 git pull <URL or name of upstream remote> main

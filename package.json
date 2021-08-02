@@ -1,9 +1,9 @@
 {
-  "name": "FEV2r",
+  "name": "fluid-earth",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zqianem/fev2r.git"
+    "url": "https://github.com/byrd-polar/fluid-earth.git"
   },
   "license": "MIT",
   "type": "module",

@@ -105,7 +105,7 @@
     <a href="https://twitter.com/ByrdPolar">
       <LogoTwitter32 aria-label="Twitter" />
     </a>
-    <a href="https://github.com/zqianem/fev2r">
+    <a href="https://github.com/byrd-polar/fluid-earth">
       <LogoGithub32 aria-label="Github" />
     </a>
   </footer>

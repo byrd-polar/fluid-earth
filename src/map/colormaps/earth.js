@@ -1,5 +1,5 @@
-// Modified from original by Julien P. Nicolas (FEVer 1), plus additional
-// changes for FEV2r integration
+// Modified from original by Julien P. Nicolas (FEVer), plus additional changes
+// for fev2r integration
 //
 // Source: https://github.com/cambecc/earth/blob/master/public/libs/earth/1.0.0/
 // License information under 'earth' entry in VENDORED
