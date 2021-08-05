@@ -13,16 +13,19 @@ export default Object.freeze({
     name: 'equirectangular',
     id: 0,
     function: d3.geoEquirectangular(),
+    translateY: true,
   },
   MERCATOR: {
     name: 'Mercator',
     id: 1,
     function: d3.geoMercator(),
+    translateY: true,
   },
   EQUAL_EARTH: {
     name: 'Equal Earth',
     id: 2,
     function: d3.geoEqualEarth(),
+    translateY: true,
   },
   ORTHOGRAPHIC: {
     name: 'orthographic',
@@ -54,10 +57,14 @@ export function proj(
   clientHeight,    // height   "   "      "     "   "     "   "  "
   zoom,            // scale at which the map is zoomed in
 ) {
+  let scale = clientHeight * zoom / Math.PI;
+  let yTranslate = projection.translateY ? scale * centerLatitude / 90 : 0;
+  let yRotate = projection.translateY ? 0 : -centerLatitude;
+
   let f = projection.function
-    .scale(clientHeight * zoom / Math.PI)
-    .translate([clientWidth / 2, clientHeight / 2])
-    .rotate([-centerLongitude, -centerLatitude, 0])
+    .scale(scale)
+    .translate([clientWidth / 2, clientHeight / 2 + yTranslate])
+    .rotate([-centerLongitude, yRotate, 0]);
 
   // special case for vertical perspective projection, based on the constant in
   // ./vertical-perspective/forward.glsl

@@ -12,8 +12,18 @@ void invertProject(
     in vec2 lonLat0,
     out vec2 lonLat,
     in float zoom,
-    in int projection
+    in int projection,
+    in bool translateY
 ) {
+  float yTranslate = 0.0;
+
+  if (translateY) {
+    yTranslate = lonLat0.y / radians(90.0);
+    lonLat0.y = 0.0;
+  }
+
+  displayCoord.y += yTranslate;
+
   if (projection == 0) {
     p0(displayCoord, lonLat0, lonLat);
   } else if (projection == 1) {

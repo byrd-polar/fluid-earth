@@ -13,8 +13,16 @@ void forwardProject(
     in vec2 lonLat,
     out bool clip,
     in float zoom,
-    in int projection
+    in int projection,
+    in bool translateY
 ) {
+  float yTranslate = 0.0;
+
+  if (translateY) {
+    yTranslate = lonLat0.y / radians(90.0);
+    lonLat0.y = 0.0;
+  }
+
   if (projection == 0) {
     p0(displayCoord, lonLat0, lonLat, clip);
   } else if (projection == 1) {
@@ -28,4 +36,6 @@ void forwardProject(
   } else if (projection == 5) {
     p5(displayCoord, lonLat0, lonLat, clip);
   }
+
+  displayCoord.y -= yTranslate;
 }

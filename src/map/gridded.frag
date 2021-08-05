@@ -10,6 +10,7 @@ uniform float u_lon0;
 uniform float u_lat0;
 uniform float u_zoom;
 uniform int u_projection;
+uniform bool u_translateY;
 uniform int u_griddedDataProjection;
 uniform bool u_offsetGridded;
 
@@ -44,7 +45,8 @@ void main() {
       lonLat0,
       lonLat,
       u_zoom,
-      u_projection
+      u_projection,
+      u_translateY
   );
 
   // don't render points with lonLat out of range

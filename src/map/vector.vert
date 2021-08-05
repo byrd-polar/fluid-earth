@@ -9,6 +9,7 @@ uniform float u_lon0;
 uniform float u_lat0;
 uniform float u_zoom;
 uniform int u_projection;
+uniform bool u_translateY;
 
 varying float v_clip;
 
@@ -27,7 +28,8 @@ void main() {
       lonLat,
       clip,
       u_zoom,
-      u_projection
+      u_projection,
+      u_translateY
   );
 
   // determines if fragment shader should not render line to avoid lines

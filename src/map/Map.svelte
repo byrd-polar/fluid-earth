@@ -98,11 +98,11 @@
   let particleCanvas;
 
   let projectionUniforms;
-  $: u_projection = projection.id;
   $: projectionUniforms = {
     u_lon0: centerLongitude,
     u_lat0: centerLatitude,
-    u_projection,
+    u_projection: projection.id,
+    u_translateY: projection.translateY,
   };
 
   let backgroundGl;
