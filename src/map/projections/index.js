@@ -31,11 +31,13 @@ export default Object.freeze({
     name: 'orthographic',
     id: 3,
     function: d3.geoOrthographic(),
+    starfield: true,
   },
   VERTICAL_PERSPECTIVE: {
     name: 'vertical perspective',
     id: 4,
     function: d4.geoSatellite(),
+    starfield: true,
   },
   STEREOGRAPHIC: {
     name: 'stereographic',

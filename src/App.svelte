@@ -429,7 +429,7 @@
     bind:canvasRatio
   >
     <svelte:fragment slot="background">
-      <Starfield />
+      <Starfield hidden={!projection.starfield} />
     </svelte:fragment>
     <Controls
       {minZoom}

@@ -1,6 +1,8 @@
 <script>
   import { prng_alea } from 'esm-seedrandom/esm/'
 
+  export let hidden;
+
   // For ensuring size and position of stars is properly relative to actual size
   // of rendered map; see the screenRatio variable in Map.svelte for details
   let elementHeight = 1080;
@@ -26,6 +28,7 @@
   class="field"
   style="--base-unit: {screenRatio}px"
   bind:clientHeight={elementHeight}
+  class:hidden
 >
   <div class="star" style="box-shadow: {boxShadowString}"></div>
 </div>
@@ -43,5 +46,9 @@
     border-radius: 50%;
     height: 1px;
     width: 1px;
+  }
+
+  .hidden > .star {
+    display: none;
   }
 </style>
