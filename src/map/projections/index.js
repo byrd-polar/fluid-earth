@@ -60,7 +60,8 @@ export function proj(
   zoom,            // scale at which the map is zoomed in
 ) {
   let scale = clientHeight * zoom / Math.PI;
-  let yTranslate = projection.translateY ? scale * centerLatitude / 90 : 0;
+  let radians = Math.PI / 180;
+  let yTranslate = projection.translateY ? scale * centerLatitude * radians : 0;
   let yRotate = projection.translateY ? 0 : -centerLatitude;
 
   let f = projection.function

@@ -19,7 +19,7 @@ void forwardProject(
   float yTranslate = 0.0;
 
   if (translateY) {
-    yTranslate = lonLat0.y / radians(90.0);
+    yTranslate = lonLat0.y;
     lonLat0.y = 0.0;
   }
 
