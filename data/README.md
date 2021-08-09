@@ -21,13 +21,13 @@ All inventory files are a JSON array of `datasets`. There are three types of
 `datasets`, differentiated by their keys, Extra keys not listed here may exist
 for ease of programming on the backend and are ignored by the frontend.
 
-#### Keys shared by all `datasets`
+#### Shared by all `datasets`
 
 key | value type | meaning | example
 --- | ---------- | ------- | -------
 `name` | string | a short phrase fully describing the data | `"temperature at 2 m above ground"`
 
-#### Keys shared by particle and gridded `datasets`
+#### Shared by particle and gridded `datasets`
 
 key | value type | meaning | example
 --- | ---------- | ------- | -------
@@ -40,7 +40,7 @@ key | value type | meaning | example
 `end` |
 `lastForecast` |
 
-#### Gridded `datasets`
+#### Gridded `datasets` only
 
 key | value type | meaning | example
 --- | ---------- | ------- | -------
@@ -50,7 +50,7 @@ key | value type | meaning | example
 `domain` |
 `colormap` |
 
-#### Particle `datasets`
+#### Particle `datasets` only
 
 key | value type | meaning | example
 --- | ---------- | ------- | -------
@@ -66,7 +66,7 @@ key | value type | meaning | example
 `particleDisplay.fade` |
 `particleDisplay.fade` |
 
-#### Topology `datasets`
+#### Topology `datasets` only
 
 key | value type | meaning | example
 --- | ---------- | ------- | -------
