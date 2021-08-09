@@ -1,4 +1,4 @@
-import tippy, { animateFill } from 'tippy.js';
+import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css'; // for styling
 
 tippy.setDefaultProps({
