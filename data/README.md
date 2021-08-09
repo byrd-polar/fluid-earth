@@ -17,19 +17,20 @@ contained in `public/data/inventory.json`.
 
 ### Inventory files(`.json`)
 
-All inventory files are a JSON array of `dataset`s. There are three types of
-`dataset`s, differentiated by their keys, Extra keys not listed here may exist
+All inventory files are a JSON array of `datasets`. There are three types of
+`datasets`, differentiated by their keys, Extra keys not listed here may exist
 for ease of programming on the backend and are ignored by the frontend.
 
-#### Keys shared by all `dataset`s
+#### Keys shared by all `datasets`
 
 key | value type | meaning | example
 --- | ---------- | ------- | -------
 `name` | string | a short phrase fully describing the data | `"temperature at 2 m above ground"`
 
-#### Keys shared by particle and gridded `dataset`s
+#### Keys shared by particle and gridded `datasets`
 
 key | value type | meaning | example
+--- | ---------- | ------- | -------
 `bytesPerFile` |
 `width` |
 `height` |
@@ -39,7 +40,7 @@ key | value type | meaning | example
 `end` |
 `lastForecast` |
 
-#### Gridded `dataset`s
+#### Gridded `datasets`
 
 key | value type | meaning | example
 --- | ---------- | ------- | -------
@@ -49,7 +50,7 @@ key | value type | meaning | example
 `domain` |
 `colormap` |
 
-#### Particle `dataset`s
+#### Particle `datasets`
 
 key | value type | meaning | example
 --- | ---------- | ------- | -------
@@ -65,7 +66,7 @@ key | value type | meaning | example
 `particleDisplay.fade` |
 `particleDisplay.fade` |
 
-#### Topology `dataset`s
+#### Topology `datasets`
 
 key | value type | meaning | example
 --- | ---------- | ------- | -------
