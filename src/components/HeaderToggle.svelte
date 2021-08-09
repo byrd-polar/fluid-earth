@@ -1,5 +1,7 @@
 <script>
   import Toggle from "svelte-toggle";
+  import { onMount } from 'svelte';
+  import tooltip from  '../tooltip.js';
 
   export let simplifiedMode;
   $: advancedMode = !simplifiedMode;
@@ -8,9 +10,27 @@
   function updateMode() {
     simplifiedMode = !advancedMode;
   }
+
+  let wrapper;
+  onMount(() => tooltip(wrapper.querySelector('button'), {
+    interactive: true,
+    aria: {
+      content: 'auto',
+    },
+    content: `
+    <p>Advanced mode has:
+    <ul>
+      <li>additional dataset variables and heights
+      <li>perceptually uniform colormaps
+      <li>more technical language and legends
+    </ul>
+    `,
+    allowHTML: true,
+    placement: 'bottom-start',
+  }).destroy);
 </script>
 
-<div>
+<div bind:this={wrapper}>
   <Toggle
     bind:toggled={advancedMode}
     label={`Advanced mode ${simplifiedMode ? 'off' : 'on'}`}
@@ -65,5 +85,18 @@
 
   div :global(button:focus::after) {
     background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  div :global(div[id^=tippy-] p) {
+    margin: 0.25em 0.5em 0.5em;
+  }
+
+  div :global(div[id^=tippy-] ul) {
+    padding-left: 1.25em;
+    margin: 0.25em;
+  }
+
+  div :global(div[id^=tippy-] li) {
+    margin: 0.25em 0;
   }
 </style>
