@@ -58,16 +58,7 @@ key | value type | meaning | example
 `vPath` | path string | absolute path of `v` velocity data directory | `"/data/gfs-0p25-v-wind-velocity-10-m-above-ground/"`
 `particleLifetime` | float | how long, in milliseconds, before a particle is relocated on map | `2000`
 `particleCount` | integer | total number of particles simulated at any time | `1e5`
-`particleDisplay` | object (see rows below) | various ways to affect particle (trail) rendering | ```
-{
-  "size": 0.8,
-  "rate": 25000,
-  "opacity": 0.3,
-  "opacitySpeedDecay": 0.8,
-  "fade": 0.98
-}
-```
-(see rows below)
+`particleDisplay` | object (see rows below) | various ways to affect particle (trail) rendering | `{...}` (see rows below)
 `particleDisplay.size` | float | at 1 zoom, diameter of the particle in CSS pixels | `0.8`
 `particleDisplay.rate` | float | how many times faster than reality the particles move across the globe | `25000`
 `particleDisplay.opacity` | float | from 0 to 1, a base for opaque the particles are | `0.3`
