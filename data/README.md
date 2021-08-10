@@ -34,7 +34,7 @@ key | value type | meaning | example
 `bytesPerFile` | integer | size of each `.fp16` file in data directory | `2076480`
 `width` | integer | horizontal/longitude dimension of data | `1440`
 `height` | integer | vertical/latitude dimension of data | `721`
-`intervalInHours` | integer or `custom:*` string | number of hours between each data file | `1` or `"custom:OSCAR"`
+`intervalInHours` | integer or `custom:*` string | hours between each data file (see `/src/utility.js`) | `1` or `"custom:OSCAR"`
 `projection` | `dataProjection` string (see `/src/map/data-projections/index.js`) | conversion bewteen row/col and lat/lon | `"GFS"`
 `start` | ISO date string | filename, excluding `.fp16` extension, of earliest data | `"2021-07-03T12:00:00.000Z"`
 `end` | ISO date string | filename, excluding `.fp16` extension, of most future data | `"2021-07-03T21:00:00.000Z"`
