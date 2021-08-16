@@ -60,7 +60,6 @@
     griddedColormap = newDataset.colormap;
     griddedDomain = newDataset.domain;
     griddedScale = newDataset.scale;
-    griddedUnit = newDataset.unit;
     griddedUnit = validUnit(newDataset.unit, preferredUnits);
   }
 
