@@ -92,7 +92,7 @@
     pressure: ['hPa', 'atm', 'mmHg', 'inHg'],
     length: ['m', 'ft'],
   };
-  // Keep griddedUnit in sync with underlying griddedData
+  // Keep griddedUnit in sync with griddedData, not griddedDataset
   $: griddedUnit = validUnit(griddedData.unit, preferredUnits);
 
   const emptyParticleData = {
@@ -188,7 +188,6 @@
           griddedDomain = newDataset.domain;
           griddedScale = newDataset.scale;
           griddedColormap = newDataset.colormap;
-          griddedUnit = validUnit(newDataset.unit, preferredUnits);
 
           previousGriddedDataset = newDataset;
         }

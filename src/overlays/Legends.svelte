@@ -49,7 +49,7 @@
   // data has been fully downloaded. Requires that the variables being updated
   // in the `eagerlyUpdate` function are NOT bound to the Legends component.
 
-  $: griddedDataset, preferredUnits, simplifiedMode,
+  $: griddedDataset, preferredUnits, simplifiedMode, griddedUnit,
     eagerlyUpdateGriddedLegend();
   $: particleDataset, eagerlyUpdateParticleLegend();
 
