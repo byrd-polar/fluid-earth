@@ -66,9 +66,6 @@ export default ({ _, mode }) => {
       terserOptions: {
         format: { comments: false },
       },
-      cleanCssOptions: {
-        level: { 1: { specialComments: false }},
-      },
       chunkSizeWarningLimit: 600,
       sourcemap: true,
     },
