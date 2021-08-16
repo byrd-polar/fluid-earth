@@ -73,7 +73,11 @@ import Qty from 'js-quantities/esm';
 export function convert(value, originalUnit, newUnit) {
   if (!isFinite(value) || originalUnit === newUnit) return value;
 
-  return Qty(`${value} ${originalUnit}`).to(newUnit).scalar;
+  try {
+    return Qty(`${value} ${originalUnit}`).to(newUnit).scalar;
+  } catch {
+    return NaN;
+  }
 }
 
 // Make a pretty string for a unit from the 'js-quantities' library
