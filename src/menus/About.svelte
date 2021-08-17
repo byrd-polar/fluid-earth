@@ -19,6 +19,7 @@ weather data from earlier years and climate data that we are still working on
 adding to this new version, Fluid Earth. If you need to access this data, or
 really liked the previous version's look and feel, click the link above to get
 redirected.
+<a href="https://u.osu.edu/fever/">Blog</a>
 </details>
 
 <details>
