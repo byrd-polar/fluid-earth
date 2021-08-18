@@ -37,6 +37,7 @@ application, Fluid Earth is a vehicle for modern Earth science communication,
 making information used by the scientific community accessible and engaging to
 everyone. Fluid Earth is explorable 24 hours a day, 7 days a week using your
 computer, tablet, or smartphone.
+<a href="https://vimeo.com/showcase/5395248">Fluid Earth Collection</a>
 <p>
 Our project team is working to remove obstacles to learning about our dynamic
 planet, Earth!
