@@ -32,9 +32,28 @@
     }
     #markers a {
       pointer-events: auto;
-      background-color: black;
       position: absolute;
       display: none;
+    }
+    #markers a div {
+      
+      background-color: rgba(0,0,0,.30);
+      padding: 2px 4px;
+      border-radius: 7px;
+      float: right;
+      outline: groove white;
+      margin: 5px;
+    }
+    #markers a:hover {
+        box-shadow: 0px 0px 2px black;
+    }
+    .binoculars {
+        width: 28px;
+        height: 28px;
+        vertical-align: middle;
+      margin: 5px;
+      -webkit_filter: drop-shadow(3px 3px 5px #222);
+      filter: drop-shadow(3px 3x 5px #222);
     }
   </style>
 </head>
@@ -48,13 +67,17 @@
   <!-- The markers div displays icons and links at specific locations on the globe. -->
   <div id="markers">
     <a href="https://en.wikipedia.org/wiki/Windhoek" data-lon="17.1" data-lat="-22.6">
-      Windhoek, Namibia
+      
+      <img class="binoculars" src=./binoculars.png>
+      <div>Windhoek, Namibia</div>
     </a>
-    <a href="https://en.wikipedia.org/wiki/Greenwich" data-lon="0.0" data-lat="51.5">
-      Greenwich, England
+    <a href="https://en.wikipedia.org/wiki/Greenwich" data-lon="0.0" data-lat="51.5"> 
+      <img class="binoculars" src=./binoculars.png>
+      <div>Greenwich, England</div>
     </a>
     <a href="https://en.wikipedia.org/wiki/Kathmandu" data-lon="85.32" data-lat="27.2">
-      Kathmandu, Nepal
+      <img class="binoculars" src=./binoculars.png>
+      <div>Kathmandu, Nepal</div>
     </a>
   </div>
 </earth-map>
