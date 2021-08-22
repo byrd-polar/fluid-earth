@@ -83,9 +83,11 @@
     projection: dataProjections.GFS,
     get: lonLat => NaN,
   };
+  let griddedName = griddedDataset.name;
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
   let griddedScale = griddedDataset.scale;
+  let griddedOriginalUnit = griddedDataset.originalUnit;
   let preferredUnits = {
     speed: ['km/h', 'm/s', 'kn', 'mph'],
     temperature: ['tempC', 'tempF', 'tempK'],
@@ -118,6 +120,7 @@
   $: if (!particlesShown) {
     particleData = emptyParticleData;
   }
+  let particleName = particleDataset.name;
   let particlesPaused = false;
   let particleLifetime = particleDataset.particleLifetime;
   let particleCount = particleDataset.particleCount;
@@ -126,6 +129,32 @@
   let utc = false;
   let pins = [];
 
+  let previousGriddedDataset, previousParticleDataset;
+
+  function setGriddedVariables(dataset, simplifiedMode) {
+    dataset = simplifiedMode ? simplifyDataset(dataset) : dataset;
+    if (previousGriddedDataset === dataset) return;
+
+    griddedName = dataset.name;
+    griddedDomain = dataset.domain;
+    griddedScale = dataset.scale;
+    griddedColormap = dataset.colormap;
+    griddedOriginalUnit = dataset.originalUnit;
+    griddedUnit = validUnit(dataset.unit, preferredUnits);
+
+    previousGriddedDataset = dataset;
+  }
+
+  function setParticleVariables(dataset) {
+    if (previousParticleDataset === dataset) return;
+
+    particleName = dataset.name;
+    particleLifetime = dataset.particleLifetime;
+    particleCount = dataset.particleCount;
+    particleDisplay = dataset.particleDisplay;
+
+    previousParticleDataset = dataset;
+  }
 
   onMount(async () => {
     // JS implementation of 100vh for mobile, see:
@@ -138,12 +167,13 @@
     let topologyDataset = inventory.find(d => d.name === 'topology')
     vectorData = await fetcher.fetch(topologyDataset);
 
+    setGriddedVariables(griddedDataset, simplifiedMode);
+    setParticleVariables(particleDataset);
+
     // Methods for updating gridded and particle data in response to date or
     // dataset changes. Defined here so that they aren't triggered multiple
     // times during the initial mount due to a Svelte bug with bindings.
 
-    let previousGriddedDataset = null;
-    let previousParticleDataset = null;
     let griddedLoading = false;
     let particleLoading = false;
     let griddedAssignments = () => {};
@@ -181,16 +211,9 @@
           get: lonLat => singleArrayDataGet(griddedData, lonLat),
         };
 
-        let newDataset = griddedDataset;
-        if (simplifiedMode) newDataset = simplifyDataset(griddedDataset);
-
-        if (previousGriddedDataset !== newDataset) {
-          griddedDomain = newDataset.domain;
-          griddedScale = newDataset.scale;
-          griddedColormap = newDataset.colormap;
-
-          previousGriddedDataset = newDataset;
-        }
+        setGriddedVariables(
+          simplifiedMode ? simplifyDataset(griddedDataset) : griddedDataset
+        );
       };
 
       // wait until complementary particle dataset is finished loading before
@@ -230,13 +253,7 @@
           };
         }
 
-        if (previousParticleDataset !== particleDataset) {
-          particleLifetime = particleDataset.particleLifetime;
-          particleCount = particleDataset.particleCount;
-          particleDisplay = particleDataset.particleDisplay;
-
-          previousParticleDataset = particleDataset;
-        }
+        setParticleVariables(particleDataset);
       };
 
       // wait until complementary gridded dataset is finished loading before
@@ -450,13 +467,14 @@
     <Legends
       {date}
       bind:utc
-      {griddedDataset}
-      {particleDataset}
+      {griddedName}
       {griddedColormap}
       {griddedDomain}
       {griddedScale}
+      {griddedOriginalUnit}
       {griddedUnit}
       bind:preferredUnits
+      {particleName}
       {particlesShown}
       {particleDisplay}
       bind:particlesPaused

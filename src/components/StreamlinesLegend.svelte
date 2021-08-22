@@ -3,7 +3,7 @@
   import tooltip from '../tooltip.js';
   import { prng_alea } from 'esm-seedrandom/esm/'
 
-  export let name;
+  export let particleName;
   export let particleDisplay;
   export let particlesPaused;
 
@@ -27,7 +27,7 @@
   use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
   tabindex="0"
 >
-  <h3>{capitalizeFirstLetter(name)}</h3>
+  <h3>{capitalizeFirstLetter(particleName)}</h3>
   <div
     class="legend"
     class:paused={particlesPaused}

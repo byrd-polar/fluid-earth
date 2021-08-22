@@ -11,11 +11,11 @@
   } from '../utility.js';
   import tooltip from '../tooltip.js';
 
-  export let name;
-  export let originalUnit;
+  export let griddedName;
   export let griddedColormap;
   export let griddedDomain;
   export let griddedScale;
+  export let griddedOriginalUnit;
   export let griddedUnit;
   export let preferredUnits;
   export let simplifiedMode;
@@ -32,7 +32,7 @@
     let scale = griddedScale === 'log' ? scaleLog : scaleLinear;
     let axis = axisBottom(
       scale()
-        .domain(domain.map(v => convert(v, originalUnit, griddedUnit)))
+        .domain(domain.map(v => convert(v, griddedOriginalUnit, griddedUnit)))
         .range([-0.5, width - 0.5])
     );
     d3.select(elem).call(axis);
@@ -42,7 +42,7 @@
     return colormap.lut.map(colorArray => `rgb(${colorArray.join()})`).join();
   }
 
-  $: qty = Qty.parse(originalUnit);
+  $: qty = Qty.parse(griddedOriginalUnit);
   $: unitList = qty ? preferredUnits[qty.kind()] : null;
 
   function toggleUnit() {
@@ -75,7 +75,7 @@
     placement: 'top',
   }}
 >
-  <h3>{formatTitle(name, griddedUnit, simplifiedMode)}</h3>
+  <h3>{formatTitle(griddedName, griddedUnit, simplifiedMode)}</h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"
     bind:clientWidth={svgScaleWidth}

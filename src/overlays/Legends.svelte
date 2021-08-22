@@ -8,14 +8,15 @@
   export let date;
   export let utc;
 
+  export let particleName;
   export let particlesShown;
-  export let particleDataset;
   export let particleDisplay;
 
-  export let griddedDataset;
+  export let griddedName;
   export let griddedColormap;
   export let griddedDomain;
   export let griddedScale;
+  export let griddedOriginalUnit;
   export let griddedUnit;
 
   export let preferredUnits;
@@ -44,28 +45,6 @@
 
     utc = !utc
   }
-
-  // Update the legends when datasets change instead of waiting for when the
-  // data has been fully downloaded. Requires that the variables being updated
-  // in the `eagerlyUpdate` function are NOT bound to the Legends component.
-
-  $: griddedDataset, preferredUnits, simplifiedMode, griddedUnit,
-    eagerlyUpdateGriddedLegend();
-  $: particleDataset, eagerlyUpdateParticleLegend();
-
-  function eagerlyUpdateGriddedLegend() {
-    let newDataset = griddedDataset;
-    if (simplifiedMode) newDataset = simplifyDataset(griddedDataset);
-
-    griddedColormap = newDataset.colormap;
-    griddedDomain = newDataset.domain;
-    griddedScale = newDataset.scale;
-    griddedUnit = validUnit(newDataset.unit, preferredUnits);
-  }
-
-  function eagerlyUpdateParticleLegend() {
-    particleDisplay = particleDataset.particleDisplay;
-  }
 </script>
 
 <div class="wrapper">
@@ -84,24 +63,24 @@
   </div>
   <div class="bottom">
     <GriddedLegend
-      name={griddedDataset.name}
-      originalUnit={griddedDataset.originalUnit}
+      {griddedName}
       {griddedColormap}
       {griddedDomain}
       {griddedScale}
       {griddedUnit}
+      {griddedOriginalUnit}
       bind:preferredUnits
       {simplifiedMode}
     />
     {#if particlesShown}
       {#if simplifiedMode}
         <SimpleStreamLegend
-          name={particleDataset.name}
+          {particleName}
           bind:particlesPaused
         />
       {:else}
         <StreamlinesLegend
-          name={particleDataset.name}
+          {particleName}
           {particleDisplay}
           bind:particlesPaused
         />

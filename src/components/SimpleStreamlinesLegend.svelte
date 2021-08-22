@@ -4,7 +4,7 @@
   import { capitalizeFirstLetter, simpleTranslate } from '../utility.js';
   import tooltip from '../tooltip.js';
 
-  export let name;
+  export let particleName;
   export let particlesPaused;
 
   function handleKeydown(e) {
@@ -20,7 +20,7 @@
   use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
   tabindex="0"
 >
-  <h3>{capitalizeFirstLetter(simpleTranslate(name))}</h3>
+  <h3>{capitalizeFirstLetter(simpleTranslate(particleName))}</h3>
   <!-- Classes instead of if/else to avoid losing focus on Android Chrome -->
   <Play class={!particlesPaused ? 'hidden' : undefined} />
   <Pause class={particlesPaused ? 'hidden' : undefined} />
