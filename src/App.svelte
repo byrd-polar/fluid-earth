@@ -130,8 +130,10 @@
   let pins = [];
 
   let previousGriddedDataset, previousParticleDataset;
+  let currentlySetGriddedDataset;
 
   function setGriddedVariables(dataset, simplifiedMode) {
+    currentlySetGriddedDataset = dataset;
     dataset = simplifiedMode ? simplifyDataset(dataset) : dataset;
     if (previousGriddedDataset === dataset) return;
 
@@ -155,6 +157,14 @@
 
     previousParticleDataset = dataset;
   }
+
+  function applyMode(simplifiedMode) {
+    if (!currentlySetGriddedDataset) return;
+
+    setGriddedVariables(currentlySetGriddedDataset, simplifiedMode);
+  }
+
+  $: applyMode(simplifiedMode);
 
   onMount(async () => {
     // JS implementation of 100vh for mobile, see:
@@ -279,7 +289,7 @@
     }
   });
 
-  $: date, simplifiedMode, updateGriddedData(griddedDataset);
+  $: date, updateGriddedData(griddedDataset);
   $: date, particlesShown, updateParticleData(particleDataset);
 
   // Find new icons from: https://ibm.github.io/carbon-icons-svelte/
