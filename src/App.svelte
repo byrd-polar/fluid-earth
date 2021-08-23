@@ -211,9 +211,7 @@
           get: lonLat => singleArrayDataGet(griddedData, lonLat),
         };
 
-        setGriddedVariables(
-          simplifiedMode ? simplifyDataset(griddedDataset) : griddedDataset
-        );
+        setGriddedVariables(griddedDataset, simplifiedMode);
       };
 
       // wait until complementary particle dataset is finished loading before
