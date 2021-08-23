@@ -1,8 +1,8 @@
 diff --git a/node_modules/svelte/compiler.mjs b/node_modules/svelte/compiler.mjs
-index 7698451..fdaa7a8 100644
+index 6d64471..2e63a1d 100644
 --- a/node_modules/svelte/compiler.mjs
 +++ b/node_modules/svelte/compiler.mjs
-@@ -31111,9 +31111,6 @@ function process_component_options(component, nodes) {
+@@ -31138,9 +31138,6 @@ function process_component_options(component, nodes) {
                          if (tag && !/^[a-zA-Z][a-zA-Z0-9]*-[a-zA-Z0-9-]+$/.test(tag)) {
                              return component.error(attribute, compiler_errors.invalid_tag_property);
                          }
