@@ -32,6 +32,7 @@
 
   onMount(() => {
     interact(interactionSurfaceElement)
+      .styleCursor(false)
       .draggable({
         inertia: true,
         listeners: {
@@ -88,5 +89,9 @@
   div {
     touch-action: none;
     pointer-events: auto;
+  }
+
+  div:active {
+    cursor: grabbing;
   }
 </style>
