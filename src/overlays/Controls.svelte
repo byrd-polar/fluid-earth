@@ -21,10 +21,11 @@
 
   // For ensuring scale of gestures is properly relative to actual size of
   // rendered map; see the screenRatio variable in Map.svelte for details
-  let elementHeight = 1080;
-  $: screenRatio = elementHeight / 1080;
-  $: computedZoom = (portraitBasedZoom ? canvasRatio : 1) * zoom;
-  $: panFactor = 0.25 / computedZoom / screenRatio;
+  function getPanFactor(e) {
+    let screenRatio = e.target.clientHeight / 1080;
+    let computedZoom = (portraitBasedZoom ? canvasRatio : 1) * zoom;
+    return 0.25 / computedZoom / screenRatio;
+  }
 
   // make performing the 'hold' gesture on high ppi devices possible
   interact.pointerMoveTolerance(5);
@@ -36,6 +37,7 @@
         inertia: true,
         listeners: {
           move (e) {
+            let panFactor = getPanFactor(e);
             let lon = centerLongitude - panFactor * e.dx;
             let lat = centerLatitude + panFactor * e.dy;
             centerLongitude = modulo(lon, 360, -180);
@@ -81,7 +83,6 @@
 
 <div
   bind:this={interactionSurfaceElement}
-  bind:clientHeight={elementHeight}
 ></div>
 
 <style>
