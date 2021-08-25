@@ -73,6 +73,7 @@
   let centerLongitude = 360 * Math.random() - 180;
   let centerLatitude = (180 / Math.PI) * Math.asin(2 * Math.random() - 1);
   let zoom = 1.5;
+  $: portraitBasedZoom = $mobile;
 
   let griddedData = {
     floatArray: new Float16Array([-Infinity]),
@@ -435,7 +436,7 @@
     {centerLongitude}
     {centerLatitude}
     {zoom}
-    portraitBasedZoom={$mobile}
+    {portraitBasedZoom}
     {griddedData}
     {griddedColormap}
     {griddedDomain}
@@ -461,6 +462,7 @@
       bind:centerLongitude
       bind:centerLatitude
       bind:zoom
+      {portraitBasedZoom}
       {canvasRatio}
       {inverseProjectionFunction}
       bind:pins

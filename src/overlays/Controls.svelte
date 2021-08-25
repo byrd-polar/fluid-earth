@@ -3,7 +3,6 @@
   import interact from 'interactjs';
   import { reproj } from '../map/projections/';
   import { clamp, modulo, genericLabel } from '../utility.js';
-  import { mobile } from '../stores.js';
 
   export let minZoom;
   export let maxZoom;
@@ -11,24 +10,24 @@
   export let centerLongitude;
   export let centerLatitude;
   export let zoom;
+  export let portraitBasedZoom;
   export let canvasRatio;
 
   export let inverseProjectionFunction;
   export let pins;
 
   let interactionSurfaceElement;
-  let screenRatio; // ratio of element height to our reference height
   let baseScale;
 
   // For ensuring scale of gestures is properly relative to actual size of
   // rendered map; see the screenRatio variable in Map.svelte for details
   let elementHeight = 1080;
   $: screenRatio = elementHeight / 1080;
+  $: computedZoom = (portraitBasedZoom ? canvasRatio : 1) * zoom;
+  $: panFactor = 0.25 / computedZoom / screenRatio;
 
   // make performing the 'hold' gesture on high ppi devices possible
   interact.pointerMoveTolerance(5);
-
-  $: panFactor = 0.25 / zoom / screenRatio / ($mobile ? canvasRatio : 1);
 
   onMount(() => {
     interact(interactionSurfaceElement)
