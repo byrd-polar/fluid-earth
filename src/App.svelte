@@ -129,6 +129,7 @@
 
   let utc = false;
   let pins = [];
+  let cursor = null;
 
   let previousGriddedDataset, previousParticleDataset;
   let currentlySetGriddedDataset;
@@ -466,9 +467,11 @@
       {canvasRatio}
       {inverseProjectionFunction}
       bind:pins
+      bind:cursor
     />
     <Pins
       bind:pins
+      {cursor}
       {forwardProjectionFunction}
       {griddedData}
       {griddedUnit}

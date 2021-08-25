@@ -15,9 +15,11 @@
 
   export let inverseProjectionFunction;
   export let pins;
+  export let cursor;
 
   let interactionSurfaceElement;
   let baseScale;
+  let mouseEvent;
 
   // For ensuring scale of gestures is properly relative to actual size of
   // rendered map; see the screenRatio variable in Map.svelte for details
@@ -25,6 +27,16 @@
     let screenRatio = e.target.clientHeight / 1080;
     let computedZoom = (portraitBasedZoom ? canvasRatio : 1) * zoom;
     return 0.25 / computedZoom / screenRatio;
+  }
+
+  // Get lon-lat coordinates of mouse/tap from event
+  function getLocation(e, inverseProjectionFunction) {
+    if (!e) return null;
+
+    let rect = e.target.getBoundingClientRect();
+    let point = [e.clientX - rect.left, e.clientY - rect.top];
+    let lonLat = inverseProjectionFunction(point);
+    return lonLat ? { longitude: lonLat[0], latitude: lonLat[1] } : null;
   }
 
   // make performing the 'hold' gesture on high ppi devices possible
@@ -56,13 +68,10 @@
         }
       })
       .on('hold', e => {
-        let rect = interactionSurfaceElement.getBoundingClientRect();
-        let point = [e.clientX - rect.left, e.clientY - rect.top];
-        let lonLat = inverseProjectionFunction(point);
+        let location = getLocation(e, inverseProjectionFunction);
 
-        if (lonLat) {
-          let [longitude, latitude] = lonLat;
-          pins = [{ label: genericLabel(pins), longitude, latitude }, ...pins];
+        if (location) {
+          pins = [{ label: genericLabel(pins), ...location }, ...pins];
         }
       });
     interactionSurfaceElement.addEventListener('wheel', handleWheel);
@@ -79,10 +88,19 @@
     let z = zoom - 0.25 * Math.sign(e.deltaY);
     zoom = clamp(z, minZoom, maxZoom);
   }
+
+  function handleMouse(e) {
+    mouseEvent = e.type === 'mouseleave' ? null : e;
+  }
+
+  $: cursor = getLocation(mouseEvent, inverseProjectionFunction);
 </script>
 
 <div
   bind:this={interactionSurfaceElement}
+  on:mousemove={handleMouse}
+  on:mouseenter={handleMouse}
+  on:mouseleave={handleMouse}
 ></div>
 
 <style>
