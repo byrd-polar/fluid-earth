@@ -475,6 +475,8 @@
       {forwardProjectionFunction}
       {griddedData}
       {griddedUnit}
+      {griddedDomain}
+      {griddedColormap}
     />
     <Loading {fetcher} />
     <Legends
