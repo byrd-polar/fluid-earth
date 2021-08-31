@@ -90,7 +90,9 @@
   }
 
   function handleMouse(e) {
-    mouseEvent = e.type === 'mouseleave' ? null : e;
+    if (e.pointerType === 'touch') return;
+
+    mouseEvent = e.type === 'pointerleave' ? null : e;
   }
 
   $: cursor = getLocation(mouseEvent, inverseProjectionFunction);
@@ -98,9 +100,9 @@
 
 <div
   bind:this={interactionSurfaceElement}
-  on:mousemove={handleMouse}
-  on:mouseenter={handleMouse}
-  on:mouseleave={handleMouse}
+  on:pointermove={handleMouse}
+  on:pointerenter={handleMouse}
+  on:pointerleave={handleMouse}
 ></div>
 
 <style>
