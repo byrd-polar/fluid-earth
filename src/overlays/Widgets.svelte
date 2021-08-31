@@ -1,8 +1,11 @@
 <script>
+  import NotificationMessage from '../components/NotificationMessage.svelte';
   import TimeDisplay from '../components/TimeDisplay.svelte';
   import GriddedLegend from '../components/GriddedLegend.svelte';
   import StreamlinesLegend from '../components/StreamlinesLegend.svelte';
   import SimpleStreamLegend from '../components/SimpleStreamlinesLegend.svelte';
+
+  export let openedMenu;
 
   export let date;
   export let utc;
@@ -26,6 +29,9 @@
 
 <div class="wrapper">
   <div class="top" >
+    <NotificationMessage
+      bind:openedMenu
+    />
     <TimeDisplay
       {date}
       bind:utc
@@ -82,8 +88,7 @@
   }
 
   div.top {
-    flex-direction: column;
-    align-items: flex-end;
+    align-items: flex-start;
   }
 
   div.bottom {
@@ -92,6 +97,11 @@
   }
 
   @media (max-width: 36rem) {
+    div.top {
+      flex-wrap: wrap-reverse;
+      align-items: flex-end;
+    }
+
     div.bottom :global(h3) {
       font-size: 0.875em;
     }

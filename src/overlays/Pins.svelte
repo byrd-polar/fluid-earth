@@ -79,6 +79,6 @@
     border-radius: 0.5em;
     font-size: 0.9em;
     white-space: nowrap;
-    filter: drop-shadow(0 0 0.25em black);
+    filter: drop-shadow(0 0 0.125em black);
   }
 </style>

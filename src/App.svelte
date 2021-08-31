@@ -23,7 +23,7 @@
   } from './map/data-projections/';
 
   import Pins from './overlays/Pins.svelte';
-  import Legends from './overlays/Legends.svelte';
+  import Widgets from './overlays/Widgets.svelte';
   import Loading from './overlays/Loading.svelte';
   import Controls from './overlays/Controls.svelte';
 
@@ -479,7 +479,8 @@
       {griddedColormap}
     />
     <Loading {fetcher} />
-    <Legends
+    <Widgets
+      bind:openedMenu
       {date}
       bind:utc
       {griddedName}
