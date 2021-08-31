@@ -12,3 +12,51 @@ index 6d64471..2e63a1d 100644
                          component_options.tag = tag;
                          break;
                      }
+diff --git a/node_modules/svelte/internal/index.mjs b/node_modules/svelte/internal/index.mjs
+index 5247035..825ab82 100644
+--- a/node_modules/svelte/internal/index.mjs
++++ b/node_modules/svelte/internal/index.mjs
+@@ -685,40 +685,9 @@ function is_crossorigin() {
+     return crossorigin;
+ }
+ function add_resize_listener(node, fn) {
+-    const computed_style = getComputedStyle(node);
+-    if (computed_style.position === 'static') {
+-        node.style.position = 'relative';
+-    }
+-    const iframe = element('iframe');
+-    iframe.setAttribute('style', 'display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; ' +
+-        'overflow: hidden; border: 0; opacity: 0; pointer-events: none; z-index: -1;');
+-    iframe.setAttribute('aria-hidden', 'true');
+-    iframe.tabIndex = -1;
+-    const crossorigin = is_crossorigin();
+-    let unsubscribe;
+-    if (crossorigin) {
+-        iframe.src = "data:text/html,<script>onresize=function(){parent.postMessage(0,'*')}</script>";
+-        unsubscribe = listen(window, 'message', (event) => {
+-            if (event.source === iframe.contentWindow)
+-                fn();
+-        });
+-    }
+-    else {
+-        iframe.src = 'about:blank';
+-        iframe.onload = () => {
+-            unsubscribe = listen(iframe.contentWindow, 'resize', fn);
+-        };
+-    }
+-    append(node, iframe);
+-    return () => {
+-        if (crossorigin) {
+-            unsubscribe();
+-        }
+-        else if (unsubscribe && iframe.contentWindow) {
+-            unsubscribe();
+-        }
+-        detach(iframe);
+-    };
++    const ro = new ResizeObserver(fn);
++    ro.observe(node);
++    return () => ro.disconnect();
+ }
+ function toggle_class(element, name, toggle) {
+     element.classList[toggle ? 'add' : 'remove'](name);
