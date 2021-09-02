@@ -483,6 +483,9 @@
       bind:openedMenu
       {date}
       bind:utc
+      bind:zoom
+      {minZoom}
+      {maxZoom}
       {griddedName}
       {griddedColormap}
       {griddedDomain}

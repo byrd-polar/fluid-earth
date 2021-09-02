@@ -1,19 +1,41 @@
 <script>
-  import Add from 'carbon-icons-svelte/lib/Add24';
-  import Subtract from 'carbon-icons-svelte/lib/Subtract24';
+  import ZoomIn from 'carbon-icons-svelte/lib/ZoomIn24';
+  import ZoomOut from 'carbon-icons-svelte/lib/ZoomOut24';
+  import { tweened } from 'svelte/motion';
+  import { cubicOut } from 'svelte/easing';
+  import { clamp } from '../utility.js';
+  import tooltip from '../tooltip.js';
 
-  function zoomIn() {
-    console.log('in');
-  }
+  export let zoom;
+  export let minZoom;
+  export let maxZoom;
 
-  function zoomOut() {
-    console.log('out');
+  let zoomTweened = tweened(zoom);
+  $: zoom = $zoomTweened;
+
+  function smoothZoom(zoomIn) {
+    let newZoom = zoomIn ? zoom * 2 : zoom / 2;
+    zoomTweened = tweened(zoom, {
+      duration: 500,
+      easing: cubicOut,
+    });
+    zoomTweened.set(clamp(newZoom, minZoom, maxZoom));
   }
 </script>
 
 <div class="sidedock">
-  <button on:click={zoomIn}><Add /></button>
-  <button on:click={zoomOut}><Subtract /></button>
+  <button
+    on:click={() => smoothZoom(true)}
+    use:tooltip={{content: 'Zoom in', placement: 'left'}}
+  >
+    <ZoomIn />
+  </button>
+  <button
+    on:click={() => smoothZoom(false)}
+    use:tooltip={{content: 'Zoom out', placement: 'left'}}
+  >
+    <ZoomOut />
+  </button>
 </div>
 
 <style>

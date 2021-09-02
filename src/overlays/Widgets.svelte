@@ -12,6 +12,10 @@
   export let date;
   export let utc;
 
+  export let zoom;
+  export let minZoom;
+  export let maxZoom;
+
   export let particleName;
   export let particlesShown;
   export let particleDisplay;
@@ -41,6 +45,9 @@
   </div>
   {#if !$mobile}
     <SideControls
+      bind:zoom
+      {minZoom}
+      {maxZoom}
     />
   {/if}
   <div class="bottom">
