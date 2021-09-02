@@ -37,6 +37,7 @@
 <style>
   div.wrapper {
     padding: 0.75rem;
+    height: 0; /* avoid influencing position of overlay side controls */
   }
 
   section {
@@ -59,6 +60,7 @@
     all: unset;
     background: inherit;
     padding: 0.5em;
+    transition: filter 0.25s ease 0s;
   }
 
   button:focus, button:hover {
@@ -72,6 +74,7 @@
 
   @media (max-width: 36rem) {
     div.wrapper {
+      height: auto;
       width: 100%;
       display: flex;
       justify-content: center;

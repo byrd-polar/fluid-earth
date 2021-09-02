@@ -55,7 +55,7 @@
 <style>
   div.rail {
     z-index: 2;
-    background: #202124;
+    background: var(--secondary-color-dark);
     overflow: auto;
     box-shadow:
       2px 0 1px -1px rgba(0,0,0,.2),

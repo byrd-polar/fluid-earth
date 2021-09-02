@@ -9,6 +9,7 @@ html {
   --primary-color-light: #378D95;
   --secondary-color: rgba(66, 66, 77);
   --secondary-color-transparent: rgba(66, 66, 77, 0.8);
+  --secondary-color-dark: #202124;
   --input-color: rgba(70,70,70,0.8);
   --input-color-opaque: #464646;
   --range-handle: var(--primary-color-light);

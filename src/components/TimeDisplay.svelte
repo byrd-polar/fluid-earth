@@ -64,6 +64,7 @@
     padding: 0.25rem 0.75rem 0;
     margin: 0;
     pointer-events: auto;
+    white-space: nowrap;
   }
 
   h3.time {

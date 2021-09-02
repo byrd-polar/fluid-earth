@@ -1,9 +1,11 @@
 <script>
   import Notification from '../components/Notification.svelte';
   import TimeDisplay from '../components/TimeDisplay.svelte';
+  import SideControls from '../components/SideControls.svelte';
   import GriddedLegend from '../components/GriddedLegend.svelte';
   import StreamlinesLegend from '../components/StreamlinesLegend.svelte';
   import SimpleStreamLegend from '../components/SimpleStreamlinesLegend.svelte';
+  import { mobile } from '../stores.js';
 
   export let openedMenu;
 
@@ -37,6 +39,10 @@
       bind:utc
     />
   </div>
+  {#if !$mobile}
+    <SideControls
+    />
+  {/if}
   <div class="bottom">
     <GriddedLegend
       {griddedName}
@@ -82,6 +88,7 @@
 
   div.wrapper {
     flex-direction: column;
+    justify-content: space-between;
     color: white;
     pointer-events: none;
     user-select: none;
@@ -89,10 +96,10 @@
 
   div.top {
     align-items: flex-start;
+    justify-content: end;
   }
 
   div.bottom {
-    margin-top: auto;
     flex-wrap: wrap-reverse;
   }
 
