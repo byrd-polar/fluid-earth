@@ -1,7 +1,7 @@
 <script>
   import Pin from '../components/Pin.svelte';
   import { convert, prettyUnit } from '../utility.js';
-  import { scaleSequential } from 'd3-scale';
+  import { scaleSequential, scaleSequentialLog } from 'd3-scale';
   import { interpolateRgbBasis } from 'd3-interpolate';
   import { color } from 'd3-color';
   import { hex } from 'wcag-contrast';
@@ -12,11 +12,13 @@
   export let griddedData;
   export let griddedUnit;
   export let griddedDomain;
+  export let griddedScale;
   export let griddedColormap;
 
   let lonLat, point, value, x, y, bgColor, textColor, span;
 
-  $: valueToColor = scaleSequential(
+  $: scaleFn = griddedScale === 'log' ? scaleSequentialLog : scaleSequential;
+  $: valueToColor = scaleFn(
     griddedDomain,
     interpolateRgbBasis(griddedColormap.lut.map(c => {
       return `rgb(${c.map(v => Math.round(v)).join(',')})`;

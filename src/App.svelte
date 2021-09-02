@@ -476,6 +476,7 @@
       {griddedData}
       {griddedUnit}
       {griddedDomain}
+      {griddedScale}
       {griddedColormap}
     />
     <Loading {fetcher} />
