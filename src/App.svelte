@@ -22,10 +22,10 @@
     pairedArrayDataGet,
   } from './map/data-projections/';
 
-  import Pins from './overlays/Pins.svelte';
+  import Queries from './overlays/Queries.svelte';
   import Widgets from './overlays/Widgets.svelte';
   import Loading from './overlays/Loading.svelte';
-  import Controls from './overlays/Controls.svelte';
+  import Surface from './overlays/Surface.svelte';
 
   import Fetcher from './fetcher.js';
   import {
@@ -457,7 +457,7 @@
     <svelte:fragment slot="background">
       <Starfield hidden={!projection.starfield} />
     </svelte:fragment>
-    <Controls
+    <Surface
       {minZoom}
       {maxZoom}
       bind:centerLongitude
@@ -469,7 +469,7 @@
       bind:pins
       bind:cursor
     />
-    <Pins
+    <Queries
       bind:pins
       {cursor}
       {forwardProjectionFunction}

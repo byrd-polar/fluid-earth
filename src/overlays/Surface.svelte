@@ -19,7 +19,7 @@
 
   let interactionSurfaceElement;
   let baseScale;
-  let mouseEvent;
+  let pointerEvent;
 
   // For ensuring scale of gestures is properly relative to actual size of
   // rendered map; see the screenRatio variable in Map.svelte for details
@@ -29,7 +29,7 @@
     return 0.25 / computedZoom / screenRatio;
   }
 
-  // Get lon-lat coordinates of mouse/tap from event
+  // Get lon-lat coordinates of pointer from event
   function getLocation(e, inverseProjectionFunction) {
     if (!e) return null;
 
@@ -89,20 +89,20 @@
     zoom = clamp(z, minZoom, maxZoom);
   }
 
-  function handleMouse(e) {
+  function handlePointer(e) {
     if (e.pointerType === 'touch') return;
 
-    mouseEvent = e.type === 'pointerleave' ? null : e;
+    pointerEvent = e.type === 'pointerleave' ? null : e;
   }
 
-  $: cursor = getLocation(mouseEvent, inverseProjectionFunction);
+  $: cursor = getLocation(pointerEvent, inverseProjectionFunction);
 </script>
 
 <div
   bind:this={interactionSurfaceElement}
-  on:pointermove={handleMouse}
-  on:pointerenter={handleMouse}
-  on:pointerleave={handleMouse}
+  on:pointermove={handlePointer}
+  on:pointerenter={handlePointer}
+  on:pointerleave={handlePointer}
 ></div>
 
 <style>

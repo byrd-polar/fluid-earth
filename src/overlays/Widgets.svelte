@@ -1,5 +1,5 @@
 <script>
-  import NotificationMessage from '../components/NotificationMessage.svelte';
+  import Notification from '../components/Notification.svelte';
   import TimeDisplay from '../components/TimeDisplay.svelte';
   import GriddedLegend from '../components/GriddedLegend.svelte';
   import StreamlinesLegend from '../components/StreamlinesLegend.svelte';
@@ -29,7 +29,7 @@
 
 <div class="wrapper">
   <div class="top" >
-    <NotificationMessage
+    <Notification
       bind:openedMenu
     />
     <TimeDisplay
