@@ -39,8 +39,8 @@
 
   export let inventory;
 
-  const minZoom = 0.5;
-  const maxZoom = 15;
+  const minZoom = 0.375;
+  const maxZoom = 24;
 
   const minLat = -90;
   const maxLat = 90;
