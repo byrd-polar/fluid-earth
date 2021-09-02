@@ -75,7 +75,7 @@ try {
   inputFile = await util.download(
     'https://podaac-opendap.jpl.nasa.gov/' +
     'opendap/allData/oscar/preview/L4/oscar_third_deg/' +
-    `oscar_vel${datetime.diff(referenceDatetime, 'days').days}.nc.gz`
+    `oscar_vel${datetime.diff(referenceDatetime, 'days').days}.nc.gz.nc4`
   );
 } catch (e) {
   if (e instanceof HTTPError && e.response.statusCode === 404 &&
