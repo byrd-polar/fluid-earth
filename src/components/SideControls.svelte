@@ -1,7 +1,7 @@
 <script>
   import ZoomIn from 'carbon-icons-svelte/lib/ZoomIn24';
   import ZoomOut from 'carbon-icons-svelte/lib/ZoomOut24';
-  import { tweened } from 'svelte/motion';
+  import Tweener from '../tweener.js';
   import { cubicOut } from 'svelte/easing';
   import { clamp } from '../utility.js';
   import tooltip from '../tooltip.js';
@@ -10,16 +10,14 @@
   export let minZoom;
   export let maxZoom;
 
-  let zoomTweened = tweened(zoom);
-  $: zoom = $zoomTweened;
+  let tweener = new Tweener(z => zoom = z, {
+    duration: 500,
+    easing: cubicOut,
+  });
 
   function smoothZoom(zoomIn) {
     let newZoom = zoomIn ? zoom * 2 : zoom / 2;
-    zoomTweened = tweened(zoom, {
-      duration: 500,
-      easing: cubicOut,
-    });
-    zoomTweened.set(clamp(newZoom, minZoom, maxZoom));
+    tweener.tween(zoom, clamp(newZoom, minZoom, maxZoom));
   }
 </script>
 
