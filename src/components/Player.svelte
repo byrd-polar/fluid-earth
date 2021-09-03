@@ -181,7 +181,6 @@
 
   button {
     all: unset;
-    -webkit-tap-highlight-color: transparent;
     color: white;
     display: flex;
     align-items: center;

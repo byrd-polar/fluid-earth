@@ -215,7 +215,6 @@ with text reformatted from original.
 <style>
   details {
     margin-bottom: 1em;
-    -webkit-tap-highlight-color: transparent;
   }
 
   summary {

@@ -218,7 +218,6 @@
   div.scrim {
     z-index: 9999;
     background-color: black;
-    -webkit-tap-highlight-color: transparent;
     width: 100%;
     height: 100%;
     position: absolute;

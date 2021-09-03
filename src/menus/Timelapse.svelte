@@ -42,7 +42,6 @@
 <style>
   details {
     margin-bottom: 1em;
-    -webkit-tap-highlight-color: transparent;
   }
 
   summary {

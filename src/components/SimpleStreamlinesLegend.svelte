@@ -31,7 +31,6 @@
     padding: 0.25rem 0.75rem;
     pointer-events: auto;
     border-radius: 4px;
-    -webkit-tap-highlight-color: transparent;
     transition: background-color 0.25s ease 0s;
     cursor: pointer;
 

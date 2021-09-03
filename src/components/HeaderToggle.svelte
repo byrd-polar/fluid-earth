@@ -50,10 +50,6 @@
     color: white;
   }
 
-  div :global(button) {
-    -webkit-tap-highlight-color: transparent;
-  }
-
   div :global(button::after) {
     position: absolute;
     content: "";

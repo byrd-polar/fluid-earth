@@ -188,7 +188,6 @@
 
 <style>
   button {
-    -webkit-tap-highlight-color: transparent;
     transition: filter 0.25s ease 0s;
     margin: 0;
     border: 0;

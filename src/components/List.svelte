@@ -13,7 +13,6 @@
 <style>
   button {
     all: unset;
-    -webkit-tap-highlight-color: transparent;
     box-sizing: border-box;
     display: block;
     width: 100%;

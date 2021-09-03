@@ -65,7 +65,6 @@
 
   button {
     all: unset;
-    -webkit-tap-highlight-color: transparent;
     border: gray 2px solid;
     padding: 0.25em 0.5em;
     margin: 0.25em 0.25em 0.25em 0;

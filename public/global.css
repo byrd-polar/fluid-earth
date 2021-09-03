@@ -5,6 +5,7 @@ html {
   height: 100%;
   overflow: hidden;
   line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
   --primary-color: #173e41;
   --primary-color-light: #378D95;
   --secondary-color: rgba(66, 66, 77);
@@ -28,6 +29,7 @@ body {
 
 a {
   color: var(--primary-color-light);
+  -webkit-tap-highlight-color: initial;
 }
 
 sup {
