@@ -5,6 +5,7 @@ import path from 'path';
 import { URL } from 'url';
 import got from 'got';
 import lockfile from 'proper-lockfile';
+import { useBrotli } from './scripts/fileCompression.js';
 
 export const CACHE_DIR = path.join('data', 'cache');
 export const OUTPUT_DIR = path.join('public', 'data');
@@ -16,6 +17,7 @@ export const PARTIAL_INVENTORIES = Object.fromEntries([
   'oscar',
   'rtgssthr',
 ].map(source => [source, path.join(OUTPUT_DIR, `inventory-${source}.json`)]));
+export const fileExt = useBrotli ? '.fp16.br' : '.fp16.gz';
 
 const windows = (platform() === 'win32');
 

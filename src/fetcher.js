@@ -36,6 +36,9 @@ export default class Fetcher {
     let url = __fev2r_api__ + dataset.path;
     if (date) {
       url += date.toISOString() + '.fp16';
+      if ((await ky.head(url, {throwHttpErrors: false})).status === 404) {
+        url += __use_brotli__ ? '.br' : '.gz';
+      }
     }
 
     // workaround for ':' being an illegal character for filenames on Windows,

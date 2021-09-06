@@ -3,7 +3,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 import glslify from 'rollup-plugin-glslify';
 import license from 'rollup-plugin-license';
 
-import { platform } from 'os';
+import { platform, hostname } from 'os';
 import { execSync } from 'child_process';
 import dedent from 'dedent';
 
@@ -33,6 +33,11 @@ export default ({ _, mode }) => {
       // Allow environments (e.g. Cloudflare Pages) to specify a custom prefix
       // for fetcher.js requests
       __fev2r_api__: JSON.stringify(process.env.FEV2R_API ?? ''),
+      // Whether to look for '.fp16.br' or '.fp16.gz' (default) compressed files
+      __use_brotli__: JSON.stringify(
+        process.env.FEV2R_USE_BROTLI === 'true' ||
+        hostname() === 'fever.byrd.osu.edu'
+      ),
       // Plugin option to avoid assignment errors
       preventAssignment: true,
     }),
