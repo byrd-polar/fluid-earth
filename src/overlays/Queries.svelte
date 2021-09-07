@@ -81,6 +81,6 @@
     border-radius: 0.5em;
     font-size: 0.9em;
     white-space: nowrap;
-    filter: drop-shadow(0 0 0.125em black);
+    border: 1px solid rgba(0, 0, 0, 0.5);
   }
 </style>
