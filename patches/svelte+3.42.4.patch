@@ -1,8 +1,8 @@
 diff --git a/node_modules/svelte/compiler.mjs b/node_modules/svelte/compiler.mjs
-index 6d64471..2e63a1d 100644
+index 2d0c894..d9ddc60 100644
 --- a/node_modules/svelte/compiler.mjs
 +++ b/node_modules/svelte/compiler.mjs
-@@ -31138,9 +31138,6 @@ function process_component_options(component, nodes) {
+@@ -31140,9 +31140,6 @@ function process_component_options(component, nodes) {
                          if (tag && !/^[a-zA-Z][a-zA-Z0-9]*-[a-zA-Z0-9-]+$/.test(tag)) {
                              return component.error(attribute, compiler_errors.invalid_tag_property);
                          }
@@ -13,7 +13,7 @@ index 6d64471..2e63a1d 100644
                          break;
                      }
 diff --git a/node_modules/svelte/internal/index.mjs b/node_modules/svelte/internal/index.mjs
-index 5247035..825ab82 100644
+index 8a03c09..66edd66 100644
 --- a/node_modules/svelte/internal/index.mjs
 +++ b/node_modules/svelte/internal/index.mjs
 @@ -685,40 +685,9 @@ function is_crossorigin() {
