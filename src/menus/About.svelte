@@ -121,8 +121,8 @@ In addition, the team depends on a talented group of undergraduates and Research
 Experience for Undergraduates (REU) students working at The Ohio State
 University to assist in designing the user interface, conducting user-testing,
 organizing data, and producing tutorials: Bingyu (Sophia) Li, Dingyu Hu, Ruiyang
-Chang, Joey Wong, Craig Bossley, Mimi Cai, Adelyn Arens, Daniel Hamilton, and
-Shaniqwa Martin.
+Chang, Joey Wong, Craig Bossley, Mimi Cai, Adelyn Arens, Devan Agrawal, Daniel
+Hamilton, and Shaniqwa Martin.
 <p>
 Finally, we'd like to thank the following people from the BPCRC for their
 technical expertise in support of the project: Tom Kassebaum and Pam Theodotou.
