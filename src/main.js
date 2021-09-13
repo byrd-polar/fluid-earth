@@ -31,8 +31,10 @@ import dataProjections from './map/data-projections/';
     }
   }
 
-  new App({
+  window.App = new App({
     target: document.body,
     props: { inventory },
   });
+
+  window.colormaps = colormaps;
 })();

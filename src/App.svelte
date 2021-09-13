@@ -1,3 +1,5 @@
+<svelte:options accessors={true}/>
+
 <script>
   import Hash from './Hash.svelte';
   import Navbar from './Navbar.svelte';
@@ -85,9 +87,9 @@
     get: lonLat => NaN,
   };
   let griddedName = griddedDataset.name;
-  let griddedColormap = griddedDataset.colormap;
-  let griddedDomain = griddedDataset.domain;
-  let griddedScale = griddedDataset.scale;
+  export let griddedColormap = griddedDataset.colormap;
+  export let griddedDomain = griddedDataset.domain;
+  export let griddedScale = griddedDataset.scale || 'linear';
   let griddedOriginalUnit = griddedDataset.originalUnit;
   let preferredUnits = {
     speed: ['km/h', 'm/s', 'kn', 'mph'],
@@ -109,7 +111,7 @@
   let particleData = emptyParticleData;
 
   let vectorData = { objects: {} };
-  let vectorColors = {
+  export let vectorColors = {
     // update the following if sources for topology.json change
     ne_50m_coastline: [255, 255, 255, 1],
     ne_50m_lakes: [255, 255, 255, 1],
@@ -123,9 +125,9 @@
   }
   let particleName = particleDataset.name;
   let particlesPaused = false;
-  let particleLifetime = particleDataset.particleLifetime;
-  let particleCount = particleDataset.particleCount;
-  let particleDisplay = particleDataset.particleDisplay;
+  export let particleLifetime = particleDataset.particleLifetime;
+  export let particleCount = particleDataset.particleCount;
+  export let particleDisplay = particleDataset.particleDisplay;
 
   let utc = false;
   let pins = [];
