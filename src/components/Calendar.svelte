@@ -166,15 +166,12 @@
     <button
       class="day"
       class:selected={sameTzDate(day, date)}
-      class:not-in-month={
-        utc ?
-        day.getUTCMonth() !== month.getUTCMonth() :
-        day.getMonth() !== month.getMonth()
-      }
       on:click={() => { if (!sameTzDate(day, date)) setTzDate(day) }}
       disabled={
         sameTzDate(day, date) ||
         !validDay(day) ||
+        utc && day.getUTCMonth() !== month.getUTCMonth() ||
+        !utc && day.getMonth() !== month.getMonth() ||
         (day < minDate || day > maxDate) &&
         !sameTzDate(day, minDate) &&
         !sameTzDate(day, maxDate)
@@ -266,10 +263,6 @@
     align-items: center;
     font-size: inherit;
     cursor: pointer;
-  }
-
-  button.day.not-in-month {
-    color: darkgrey;
   }
 
   button.day:disabled {
