@@ -66,6 +66,7 @@
   div.pin {
     position: absolute;
     pointer-events: auto;
+    will-change: left, top;
   }
 
   div.pin.clip {
