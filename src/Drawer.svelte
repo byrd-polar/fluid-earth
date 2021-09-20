@@ -14,6 +14,7 @@
   export let menus;
   export let openedMenu;
   export let drawerOpen;
+  export let displayMode;
 
   let drawer, scrim, focusTrap;
   onMount(() => focusTrap = createFocusTrap([drawer, scrim], {
@@ -46,6 +47,23 @@
   function handleKeydown(e) {
     if (e.key === 'Escape') {
       closeDrawer();
+    }
+  }
+
+  $: links = drawer ? drawer.querySelectorAll('a') : [];
+
+  $: if (displayMode) {
+    for (let link of links) {
+      link.setAttribute('data-href', link.getAttribute('href'));
+      link.removeAttribute('href');
+    }
+  } else {
+    for (let link of links) {
+      let href = link.getAttribute('data-href');
+      if (href) {
+        link.setAttribute('href', href);
+        link.removeAttribute('date-href');
+      }
     }
   }
 </script>

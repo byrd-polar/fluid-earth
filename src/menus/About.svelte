@@ -1,6 +1,33 @@
 <!-- Note: this file intentionally omits optional closing html tags such as
 </p>, </dt>, and </dd> to reduce some of the tag clutter. -->
 
+<script>
+  export let displayMode;
+
+  let content;
+  $: links = content ? content.querySelectorAll('a') : [];
+
+  $: if (displayMode) {
+    for (let link of links) {
+      let href = link.getAttribute('href');
+      link.textContent = `${link.textContent} [${href}]`
+      link.removeAttribute('href');
+    }
+  } else {
+    for (let link of links) {
+      let [text, href] = link.textContent.split(/ \[|\]/);
+      if (href) {
+        link.textContent = text;
+        link.setAttribute('href', href);
+      }
+    }
+  }
+</script>
+
+<div bind:this={content}>
+
+{#if !displayMode}
+
 <details open>
 <summary><h2>Tutorial Video</h2></summary>
 <iframe
@@ -21,7 +48,9 @@ really liked the previous version's look and feel, click the link above to get
 redirected.
 </details>
 
-<details>
+{/if}
+
+<details open={displayMode}>
 <summary><h2>The Project</h2></summary>
 <p>
 Fluid Earth is an interactive web application that allows you to visualize
@@ -211,6 +240,8 @@ Basic World Cities Database v1.73</a>" by
 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
 with text reformatted from original.
 </details>
+
+</div>
 
 <style>
   details {

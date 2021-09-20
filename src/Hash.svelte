@@ -13,6 +13,7 @@
   export let centerLongitude;
   export let zoom;
   export let simplifiedMode;
+  export let displayMode;
   export let pins;
 
   export let inventory;
@@ -32,6 +33,7 @@
     lon:    centerLongitude.toFixed(2),
     zoom:   zoom.toFixed(2),
     smode:  simplifiedMode,
+    dmode:  displayMode,
     pins:   JSON.stringify(pins),
   };
   $: debouncedSetHashFromAppState(stateObj);
@@ -100,6 +102,11 @@
     val = hash.get('smode');
     if (val === 'true' || val === 'false') {
       simplifiedMode = (val === 'true');
+    }
+
+    val = hash.get('dmode');
+    if (val === 'true' || val === 'false') {
+      displayMode = (val === 'true');
     }
 
     try {

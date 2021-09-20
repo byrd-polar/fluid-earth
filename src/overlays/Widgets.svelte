@@ -31,12 +31,14 @@
   export let particlesPaused;
 
   export let simplifiedMode;
+  export let displayMode;
 </script>
 
 <div class="wrapper">
   <div class="top" >
     <Notification
       bind:openedMenu
+      {displayMode}
     />
     <TimeDisplay
       {date}

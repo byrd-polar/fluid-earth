@@ -27,6 +27,8 @@
   import Loading from './overlays/Loading.svelte';
   import Surface from './overlays/Surface.svelte';
 
+  import InactivityReload from './components/InactivityReload.svelte';
+
   import Fetcher from './fetcher.js';
   import {
     validDate, validCloseDate, validUnit,
@@ -51,6 +53,7 @@
   let drawerOpen = false;
 
   let simplifiedMode = true;
+  let displayMode = false;
 
   const fetcher = new Fetcher();
   let griddedDataset = inventory.filter(d => d.colormap)[0];
@@ -342,6 +345,7 @@
   bind:centerLongitude
   bind:zoom
   bind:simplifiedMode
+  bind:displayMode
   bind:pins
   {inventory}
   {minZoom}
@@ -356,9 +360,11 @@
   {menus}
   bind:openedMenu
   bind:drawerOpen
+  {displayMode}
 />
 <Menu bind:openedMenu menuName="Help & About">
   <About
+    {displayMode}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Datasets" bind:simplifiedMode>
@@ -499,10 +505,12 @@
       {particleDisplay}
       bind:particlesPaused
       {simplifiedMode}
+      {displayMode}
     />
   </Map>
 </main>
 </div>
+<InactivityReload {displayMode} />
 
 <style>
   div.wrapper {
