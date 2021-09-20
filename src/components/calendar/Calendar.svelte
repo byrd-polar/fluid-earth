@@ -28,6 +28,11 @@
       picker.selectedDate(boxDate, date),
     );
   }
+
+  function boxDateEnabled(boxDate) {
+    return picker.boxDateSelected(boxDate, selectedDate(boxDate)) &&
+           picker.boxDateEnabled(boxDate, headerDate);
+  }
 </script>
 
 <div class="calendar">
@@ -55,7 +60,7 @@
       class="box"
       class:selected={picker.boxDateSelected(boxDate, date)}
       on:click={() => selectDate(boxDate)}
-      disabled={!picker.boxDateSelected(boxDate, selectedDate(boxDate))}
+      disabled={!boxDateEnabled(boxDate)}
       use:tooltip={{content: `Set ${picker.boxUnit}`}}
     >
       {picker.formatBox(boxDate)}
