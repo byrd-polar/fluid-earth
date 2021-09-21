@@ -3,12 +3,15 @@
   import RightArrow from 'carbon-icons-svelte/lib/ChevronRight32';
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
+
   import * as dayPicker from './dayPicker.js';
+  import * as dayPickerUTC from './dayPickerUTC.js';
 
   export let date;
   export let griddedDataset;
+  export let utc;
 
-  let picker = dayPicker;
+  $: picker = utc ? dayPickerUTC : dayPicker;
 
   $: headerDate = picker.headerDate(date);
   $: prevHeaderDate = picker.prevHeaderDate(headerDate);

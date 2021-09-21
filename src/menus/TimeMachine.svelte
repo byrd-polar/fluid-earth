@@ -21,6 +21,7 @@
 <Calendar
   {griddedDataset}
   bind:date
+  {utc}
 />
 
 <svelte:options immutable={true} />
