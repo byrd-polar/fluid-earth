@@ -22,18 +22,19 @@
   function selectDate(boxDate) {
     if (picker.boxDateSelected(boxDate, date)) return;
 
-    date = selectedDate(boxDate);
+    date = selectedDate(boxDate, griddedDataset);
   }
 
-  function selectedDate(boxDate) {
+  function selectedDate(boxDate, griddedDataset) {
     return validDate(
       griddedDataset,
       picker.selectedDate(boxDate, date),
     );
   }
 
-  function boxDateEnabled(boxDate) {
-    return picker.boxDateSelected(boxDate, selectedDate(boxDate)) &&
+  function boxDateEnabled(boxDate, griddedDataset) {
+    let wouldBeSelectedDate = selectedDate(boxDate, griddedDataset);
+    return picker.boxDateSelected(boxDate, wouldBeSelectedDate) &&
            picker.boxDateEnabled(boxDate, headerDate);
   }
 </script>
@@ -63,7 +64,7 @@
       class="box"
       class:selected={picker.boxDateSelected(boxDate, date)}
       on:click={() => selectDate(boxDate)}
-      disabled={!boxDateEnabled(boxDate)}
+      disabled={!boxDateEnabled(boxDate, griddedDataset)}
       use:tooltip={{content: `Set ${picker.boxUnit}`}}
     >
       {picker.formatBox(boxDate)}
