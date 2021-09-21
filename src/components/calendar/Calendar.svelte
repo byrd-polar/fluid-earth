@@ -1,17 +1,28 @@
 <script>
   import LeftArrow from 'carbon-icons-svelte/lib/ChevronLeft32';
   import RightArrow from 'carbon-icons-svelte/lib/ChevronRight32';
+  import ChipGroup from '../ChipGroup.svelte';
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
 
   import * as dayPicker from './dayPicker.js';
   import * as dayPickerUTC from './dayPickerUTC.js';
 
+  import * as monthPicker from './monthPicker.js';
+
   export let date;
   export let griddedDataset;
   export let utc;
 
-  $: picker = utc ? dayPickerUTC : dayPicker;
+  const options = ['months', 'days'];
+  let pickerMode = 'days';
+
+  $: pickers = {
+    days: utc ? dayPickerUTC : dayPicker,
+    months: monthPicker,
+  };
+
+  $: picker = pickers[pickerMode];
 
   $: headerDate = picker.headerDate(date);
   $: prevHeaderDate = picker.prevHeaderDate(headerDate);
@@ -39,7 +50,15 @@
   }
 </script>
 
-<div class="calendar">
+<ChipGroup {options} bind:selected={pickerMode} />
+
+<div
+  class="calendar"
+  style="
+    --cols: {picker.boxDimensions[0]};
+    --rows: {picker.boxDimensions[1]};
+  "
+>
   <div class="header">
     <button
       on:click={() => headerDate = prevHeaderDate}
@@ -59,7 +78,7 @@
       <RightArrow />
     </button>
   </div>
-  {#each boxDates as boxDate}
+  {#each boxDates as boxDate (boxDate.getTime() + pickerMode)}
     <button
       class="box"
       class:selected={picker.boxDateSelected(boxDate, date)}
@@ -86,8 +105,11 @@
   }
 
   div.calendar {
+    height: 412px;
+    margin-top: 0.5em;
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-rows: min-content repeat(var(--rows), 1fr);
     gap: 1px;
     font-size: 1.2em;
     border-radius: 4px;
@@ -95,7 +117,7 @@
   }
 
   div.header {
-    grid-column-start: span 7;
+    grid-column-start: span var(--cols);
     background: var(--primary-color);
     display: flex;
   }
@@ -126,23 +148,6 @@
     cursor: auto;
   }
 
-  div.days-of-week {
-    grid-column-start: span 7;
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 1px;
-    background: var(--primary-color);
-  }
-
-  div.days-of-week > div {
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 2em;
-    font-size: 0.8em;
-  }
-
   button.box {
     background: var(--secondary-color-transparent);
     padding: 0;
@@ -162,11 +167,5 @@
   button.box.selected {
     filter: none;
     background: var(--primary-color-light);
-  }
-
-  button.box::before {
-    content: '';
-    float: left;
-    padding-bottom: 100%;
   }
 </style>
