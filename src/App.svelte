@@ -309,23 +309,16 @@
   import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
   import Debug24 from "carbon-icons-svelte/lib/Debug24";
 
-  const basicMenus = [
+  $: menus = [
     { name: 'Help & About', icon: Help24 },
     { name: 'Datasets', icon: ChartLineSmooth24 },
     { name: 'Time Machine', icon: Calendar24 },
     { name: 'Timelapse', icon: DataPlayer24 },
     { name: 'Projections', icon: ChoroplethMap24 },
-    { name: 'Markers', icon: Location24 },
-    { name: 'Feedback', icon: RequestQuote24 },
-  ];
-
-  if (!__production__) basicMenus.push(
-    { name: 'Developer-Only Tools', icon: Debug24 }
-  );
-
-  const extraMenus = [];
-
-  $: menus = simplifiedMode ? basicMenus: basicMenus.concat(extraMenus);
+    kioskMode ? null : { name: 'Markers', icon: Location24 },
+    kioskMode ? null : { name: 'Feedback', icon: RequestQuote24 },
+    __production__ ? null : { name: 'Developer-Only Tools', icon: Debug24 },
+  ].filter(m => m !== null);
 </script>
 
 <div class="wrapper">
@@ -401,20 +394,22 @@
     bind:zoom
   />
 </Menu>
-<Menu bind:openedMenu menuName="Markers">
-  <Locations
-    bind:centerLongitude
-    bind:centerLatitude
-    bind:zoom
-    bind:pins
-    {griddedData}
-    {griddedUnit}
-  />
-</Menu>
-<Menu bind:openedMenu menuName="Feedback">
-  <Feedback
-  />
-</Menu>
+{#if !kioskMode}
+  <Menu bind:openedMenu menuName="Markers">
+    <Locations
+      bind:centerLongitude
+      bind:centerLatitude
+      bind:zoom
+      bind:pins
+      {griddedData}
+      {griddedUnit}
+    />
+  </Menu>
+  <Menu bind:openedMenu menuName="Feedback">
+    <Feedback
+    />
+  </Menu>
+{/if}
 <!-- svelte-ignore missing-declaration -->
 {#if !__production__}
   <Menu bind:openedMenu menuName="Developer-Only Tools">
@@ -473,6 +468,7 @@
       {inverseProjectionFunction}
       bind:pins
       bind:cursor
+      {kioskMode}
     />
     <Queries
       bind:pins
@@ -483,6 +479,7 @@
       {griddedDomain}
       {griddedScale}
       {griddedColormap}
+      {kioskMode}
     />
     <Loading {fetcher} />
     <Widgets

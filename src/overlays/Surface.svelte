@@ -17,6 +17,8 @@
   export let pins;
   export let cursor;
 
+  export let kioskMode;
+
   let interactionSurfaceElement;
   let baseScale;
   let pointerEvent;
@@ -70,7 +72,7 @@
       .on('hold', e => {
         let location = getLocation(e, inverseProjectionFunction);
 
-        if (location) {
+        if (location && !kioskMode) {
           pins = [{ label: genericLabel(pins), ...location }, ...pins];
         }
       });

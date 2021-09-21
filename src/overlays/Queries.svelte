@@ -15,6 +15,8 @@
   export let griddedScale;
   export let griddedColormap;
 
+  export let kioskMode;
+
   let lonLat, point, value, x, y, bgColor, textColor, span;
 
   $: scaleFn = griddedScale === 'log' ? scaleSequentialLog : scaleSequential;
@@ -40,15 +42,17 @@
 </script>
 
 <div>
-  {#each pins as pin (pin)}
-    <Pin
-      bind:pins
-      {pin}
-      {forwardProjectionFunction}
-      {griddedData}
-      {griddedUnit}
-    />
-  {/each}
+  {#if !kioskMode}
+    {#each pins as pin (pin)}
+      <Pin
+        bind:pins
+        {pin}
+        {forwardProjectionFunction}
+        {griddedData}
+        {griddedUnit}
+      />
+    {/each}
+  {/if}
   {#if cursor}
     <span
       bind:this={span}
