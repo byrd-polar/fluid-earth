@@ -1,12 +1,12 @@
 <script>
-  export let displayMode;
+  export let kioskMode;
 
   const minutesBeforeReload = 5;
   const resetEvents = ['pointermove', 'keydown', 'scroll'];
 
   let timeout;
 
-  $: if (displayMode) {
+  $: if (kioskMode) {
     restartTimer();
     resetEvents.forEach(e => document.addEventListener(e, restartTimer));
   } else {
@@ -24,7 +24,7 @@
   }
 
   function reloadPage() {
-    window.history.replaceState(null, '', '#dmode=true');
+    window.history.replaceState(null, '', '#kmode=true');
     window.location.reload();
   }
 </script>

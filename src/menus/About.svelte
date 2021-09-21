@@ -2,12 +2,12 @@
 </p>, </dt>, and </dd> to reduce some of the tag clutter. -->
 
 <script>
-  export let displayMode;
+  export let kioskMode;
 
   let content;
   $: links = content ? content.querySelectorAll('a') : [];
 
-  $: if (displayMode) {
+  $: if (kioskMode) {
     for (let link of links) {
       let href = link.getAttribute('href');
       link.textContent = `${link.textContent} [${href}]`
@@ -26,7 +26,7 @@
 
 <div bind:this={content}>
 
-{#if !displayMode}
+{#if !kioskMode}
 
 <details open>
 <summary><h2>Tutorial Video</h2></summary>
@@ -50,7 +50,7 @@ redirected.
 
 {/if}
 
-<details open={displayMode}>
+<details open={kioskMode}>
 <summary><h2>The Project</h2></summary>
 <p>
 Fluid Earth is an interactive web application that allows you to visualize

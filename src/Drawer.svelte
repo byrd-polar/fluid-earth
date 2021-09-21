@@ -14,7 +14,7 @@
   export let menus;
   export let openedMenu;
   export let drawerOpen;
-  export let displayMode;
+  export let kioskMode;
 
   let drawer, scrim, focusTrap;
   onMount(() => focusTrap = createFocusTrap([drawer, scrim], {
@@ -52,7 +52,7 @@
 
   $: links = drawer ? drawer.querySelectorAll('a') : [];
 
-  $: if (displayMode) {
+  $: if (kioskMode) {
     for (let link of links) {
       link.setAttribute('data-href', link.getAttribute('href'));
       link.removeAttribute('href');

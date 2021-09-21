@@ -4,7 +4,7 @@
   import { mobile } from '../stores.js';
 
   export let openedMenu;
-  export let displayMode;
+  export let kioskMode;
 
   let dismissed = false;
 
@@ -12,7 +12,7 @@
     openedMenu = 'Help & About';
   }
 
-  $: if (openedMenu === 'Help & About' || displayMode) {
+  $: if (openedMenu === 'Help & About' || kioskMode) {
     dismiss();
   }
 

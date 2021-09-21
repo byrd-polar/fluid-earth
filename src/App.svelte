@@ -4,6 +4,7 @@
   import Drawer from './Drawer.svelte';
   import Menu from './Menu.svelte';
   import Starfield from './Starfield.svelte';
+  import Kiosk from './Kiosk.svelte';
 
   import About from './menus/About.svelte';
   import Datasets from './menus/Datasets.svelte';
@@ -26,8 +27,6 @@
   import Widgets from './overlays/Widgets.svelte';
   import Loading from './overlays/Loading.svelte';
   import Surface from './overlays/Surface.svelte';
-
-  import InactivityReload from './components/InactivityReload.svelte';
 
   import Fetcher from './fetcher.js';
   import {
@@ -53,7 +52,7 @@
   let drawerOpen = false;
 
   let simplifiedMode = true;
-  let displayMode = false;
+  let kioskMode = false;
 
   const fetcher = new Fetcher();
   let griddedDataset = inventory.filter(d => d.colormap)[0];
@@ -345,7 +344,7 @@
   bind:centerLongitude
   bind:zoom
   bind:simplifiedMode
-  bind:displayMode
+  bind:kioskMode
   bind:pins
   {inventory}
   {minZoom}
@@ -360,11 +359,11 @@
   {menus}
   bind:openedMenu
   bind:drawerOpen
-  {displayMode}
+  {kioskMode}
 />
 <Menu bind:openedMenu menuName="Help & About">
   <About
-    {displayMode}
+    {kioskMode}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Datasets" bind:simplifiedMode>
@@ -505,12 +504,12 @@
       {particleDisplay}
       bind:particlesPaused
       {simplifiedMode}
-      {displayMode}
+      {kioskMode}
     />
   </Map>
 </main>
 </div>
-<InactivityReload {displayMode} />
+<Kiosk {kioskMode} />
 
 <style>
   div.wrapper {
