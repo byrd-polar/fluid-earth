@@ -3,24 +3,24 @@ import { clone } from './utility.js';
 export const headerUnit = 'month';
 
 export function headerDate(date) {
-  return new Date(
+  return new Date(Date.UTC(
     date.getUTCFullYear(),
     date.getUTCMonth(),
-  );
+  ));
 }
 
 export function nextHeaderDate(headerDate) {
-  return new Date(
+  return new Date(Date.UTC(
     headerDate.getUTCFullYear(),
     headerDate.getUTCMonth() + 1,
-  );
+  ));
 }
 
 export function prevHeaderDate(headerDate) {
-  return new Date(
+  return new Date(Date.UTC(
     headerDate.getUTCFullYear(),
     headerDate.getUTCMonth() - 1,
-  );
+  ));
 }
 
 export function formatHeader(headerDate) {
@@ -52,7 +52,7 @@ export function boxDateSelected(boxDate, date) {
 }
 
 export function selectedDate(boxDate, date) {
-  return new Date(
+  return new Date(Date.UTC(
     boxDate.getUTCFullYear(),
     boxDate.getUTCMonth(),
     boxDate.getUTCDate(),
@@ -60,7 +60,7 @@ export function selectedDate(boxDate, date) {
     date.getUTCMinutes(),
     date.getUTCSeconds(),
     date.getUTCMilliseconds(),
-  );
+  ));
 }
 
 export function formatBox(boxDate) {
