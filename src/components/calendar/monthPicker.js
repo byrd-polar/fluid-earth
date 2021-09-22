@@ -48,10 +48,13 @@ export function boxDateSelected(boxDate, date) {
 }
 
 export function selectedDate(boxDate, date) {
+  let d = new Date(boxDate.getFullYear(), boxDate.getMonth() + 1, 0);
+  let daysInMonth = d.getDate();
+
   return new Date(
     boxDate.getFullYear(),
     boxDate.getMonth(),
-    date.getDate(),
+    Math.min(date.getDate(), daysInMonth),
     date.getHours(),
     date.getMinutes(),
     date.getSeconds(),
