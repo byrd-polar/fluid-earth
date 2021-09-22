@@ -5,27 +5,24 @@
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
 
-  import * as hourPicker from './hourPicker.js';
-  import * as hourPickerUTC from './hourPickerUTC.js';
-
-  import * as dayPicker from './dayPicker.js';
-  import * as dayPickerUTC from './dayPickerUTC.js';
-
   import * as monthPicker from './monthPicker.js';
   import * as monthPickerUTC from './monthPickerUTC.js';
+  import * as dayPicker from './dayPicker.js';
+  import * as dayPickerUTC from './dayPickerUTC.js';
+  import * as hourPicker from './hourPicker.js';
+  import * as hourPickerUTC from './hourPickerUTC.js';
 
   export let date;
   export let griddedDataset;
   export let utc;
 
-  const options = ['months', 'days', 'hours'];
   let pickerMode = 'days';
-
   $: pickers = {
-    hours:  utc ? hourPickerUTC  : hourPicker,
-    days:   utc ? dayPickerUTC   : dayPicker,
     months: utc ? monthPickerUTC : monthPicker,
+    days:   utc ? dayPickerUTC   : dayPicker,
+    hours:  utc ? hourPickerUTC  : hourPicker,
   };
+  $: options = Object.keys(pickers);
 
   $: picker = pickers[pickerMode];
 
