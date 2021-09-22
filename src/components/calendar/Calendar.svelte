@@ -82,7 +82,7 @@
       <RightArrow />
     </button>
   </div>
-  {#each boxDates as boxDate (boxDate.getTime() + pickerMode)}
+  {#each boxDates as boxDate, i (pickerMode + i)}
     <button
       class="box"
       class:selected={picker.boxDateSelected(boxDate, date)}
