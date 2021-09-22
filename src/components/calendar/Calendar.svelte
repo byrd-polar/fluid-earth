@@ -48,15 +48,19 @@
     return picker.boxDateSelected(boxDate, wouldBeSelectedDate) &&
            picker.boxDateEnabled(boxDate, headerDate);
   }
+
+  let width;
 </script>
 
 <ChipGroup {options} bind:selected={pickerMode} />
 
 <div
+  bind:clientWidth={width}
   class="calendar"
   style="
     --cols: {picker.boxDimensions[0]};
     --rows: {picker.boxDimensions[1]};
+    --width: {width}px;
   "
 >
   <div class="header">
@@ -105,11 +109,12 @@
   }
 
   div.calendar {
-    height: 412px;
+    --header-height: 3.8rem;
     margin-top: 0.5em;
     display: grid;
     grid-template-columns: repeat(var(--cols), 1fr);
-    grid-template-rows: min-content repeat(var(--rows), 1fr);
+    grid-template-rows: var(--header-height) repeat(var(--rows), 1fr);
+    height: calc(var(--header-height) + var(--width) * 6 / 7); /* square days */
     gap: 1px;
     font-size: 1.2em;
     border-radius: 4px;
@@ -117,6 +122,7 @@
   }
 
   div.header {
+    height: var(--header-height);
     grid-column-start: span var(--cols);
     background: var(--primary-color);
     display: flex;
