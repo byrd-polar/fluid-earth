@@ -9,6 +9,7 @@
   import * as dayPickerUTC from './dayPickerUTC.js';
 
   import * as monthPicker from './monthPicker.js';
+  import * as monthPickerUTC from './monthPickerUTC.js';
 
   export let date;
   export let griddedDataset;
@@ -18,8 +19,8 @@
   let pickerMode = 'days';
 
   $: pickers = {
-    days: utc ? dayPickerUTC : dayPicker,
-    months: monthPicker,
+    days:   utc ? dayPickerUTC   : dayPicker,
+    months: utc ? monthPickerUTC : monthPicker,
   };
 
   $: picker = pickers[pickerMode];
