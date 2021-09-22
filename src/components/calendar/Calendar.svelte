@@ -5,6 +5,9 @@
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
 
+  import * as hourPicker from './hourPicker.js';
+  import * as hourPickerUTC from './hourPickerUTC.js';
+
   import * as dayPicker from './dayPicker.js';
   import * as dayPickerUTC from './dayPickerUTC.js';
 
@@ -15,10 +18,11 @@
   export let griddedDataset;
   export let utc;
 
-  const options = ['months', 'days'];
+  const options = ['months', 'days', 'hours'];
   let pickerMode = 'days';
 
   $: pickers = {
+    hours:  utc ? hourPickerUTC  : hourPicker,
     days:   utc ? dayPickerUTC   : dayPicker,
     months: utc ? monthPickerUTC : monthPicker,
   };
