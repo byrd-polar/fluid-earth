@@ -1,7 +1,6 @@
 <script>
   import TimeJumper from '../components/TimeJumper.svelte';
   import Calendar from '../components/calendar/Calendar.svelte';
-  import TimeStepper from '../components/TimeStepper.svelte';
   import { getValidDates } from '../utility.js';
 
   export let date;
