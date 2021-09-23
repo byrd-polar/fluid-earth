@@ -42,12 +42,14 @@
   }
 
   function selectedDate(boxDate, griddedDataset) {
+    let oscarMonthFilter = d => {
+      return utc ? d.getUTCMonth() === boxDate.getUTCMonth() :
+                   d.getMonth() === boxDate.getMonth();
+    };
     return validDate(
       griddedDataset,
       picker.selectedDate(boxDate, date),
-      // following filter applied to OSCAR dataset only
-      d => utc ? d.getUTCMonth() === boxDate.getUTCMonth() :
-                 d.getMonth() === boxDate.getMonth(),
+      pickerMode === 'months' ? oscarMonthFilter : undefined,
     );
   }
 
