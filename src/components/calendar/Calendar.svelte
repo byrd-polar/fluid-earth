@@ -90,6 +90,7 @@
   {#each boxDates as boxDate, i (pickerMode + i)}
     <button
       class="box"
+      class:hour={pickerMode === 'hours'}
       class:selected={picker.boxDateSelected(boxDate, date)}
       on:click={() => selectDate(boxDate)}
       disabled={!boxDateEnabled(boxDate, griddedDataset)}
@@ -167,6 +168,10 @@
     align-items: center;
     font-size: inherit;
     cursor: pointer;
+  }
+
+  button.box.hour {
+    font-size: 16px;
   }
 
   button.box:disabled {
