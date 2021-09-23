@@ -5,6 +5,8 @@
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
 
+  import * as yearPicker from './yearPicker.js';
+  import * as yearPickerUTC from './yearPickerUTC.js';
   import * as monthPicker from './monthPicker.js';
   import * as monthPickerUTC from './monthPickerUTC.js';
   import * as dayPicker from './dayPicker.js';
@@ -18,6 +20,7 @@
 
   let pickerMode = 'days';
   $: pickers = {
+    years:  utc ? yearPickerUTC  : yearPicker,
     months: utc ? monthPickerUTC : monthPicker,
     days:   utc ? dayPickerUTC   : dayPicker,
     hours:  utc ? hourPickerUTC  : hourPicker,
