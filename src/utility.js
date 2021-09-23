@@ -9,14 +9,14 @@ export function modulo(x, y, offset=0) {
 }
 
 // Returns the closest valid date from the dataset relative to the given date
-export function validDate(dataset, date) {
+export function validDate(dataset, date, oscarFilter=(() => true)) {
   if (dataset.intervalInHours === 'custom:OSCAR') {
     let year = date.getUTCFullYear();
     let candidates = [
       ...validOscarDates(year - 1),
       ...validOscarDates(year),
       ...validOscarDates(year + 1),
-    ];
+    ].filter(oscarFilter);
     // not at all an efficient search, optimize this part if it becomes an issue
     candidates.sort((d1, d2) => Math.abs(date - d1) - Math.abs(date - d2));
     return clamp(candidates[0], dataset.start, dataset.end);

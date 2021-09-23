@@ -45,6 +45,9 @@
     return validDate(
       griddedDataset,
       picker.selectedDate(boxDate, date),
+      // following filter applied to OSCAR dataset only
+      d => utc ? d.getUTCMonth() === boxDate.getUTCMonth() :
+                 d.getMonth() === boxDate.getMonth(),
     );
   }
 
