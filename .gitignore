@@ -7,3 +7,6 @@
 
 # Local Netlify folder
 .netlify
+
+# Environmental variables loaded with dotenv
+.env

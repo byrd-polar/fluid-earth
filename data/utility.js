@@ -102,6 +102,68 @@ export async function download(
   return filepath;
 }
 
+// downloads a file from Copernicus Climate Data Store if it doesn't already
+// exist in cache
+//
+// - name is the name of the CDS dataset
+// - request is an object indicating which part of the dataset to download
+// - key is the CDS API name:password combination specific to each CDS account,
+// found at https://cds.climate.copernicus.eu/api-how-to after logging in
+//
+// returns a Promise that resolves to the path where file was saved to
+export async function downloadCDS(name, request, key) {
+  let baseURL = 'https://cds.climate.copernicus.eu/api/v2';
+  let resourceURL = `${baseURL}/resources/${name}`;
+  let filename = `${name}+${jsonToFilename(request)}`;
+  let filepath = path.join(CACHE_DIR, filename);
+  let [username, password] = key.split(':');
+  let auth = {username, password};
+
+  if (existsSync(filepath)) {
+    log('Exists in cache, not re-downloading', [], filepath);
+    return filepath;
+  }
+
+  try {
+    log('Queuing', resourceURL, []);
+    let response = await got.post(resourceURL, {
+      json: request,
+      ...auth,
+    }).json();
+    let taskURL = `${baseURL}/tasks/${response.request_id}`;
+
+    log('Waiting in queue', taskURL, []);
+    let sleepTime = 1e3;
+    let reply = await got(taskURL, auth).json();
+    while(['queued', 'running'].includes(reply.state)) {
+      await new Promise(r => setTimeout(r, sleepTime));
+      sleepTime = Math.min(sleepTime * 1.5, 120e3);
+      reply = await got(taskURL, auth).json();
+    }
+    if (reply.state !== 'completed') {
+      throw reply.error;
+    }
+    let downloadURL = reply.location.startsWith('https://') ?
+      reply.location : `${baseURL}/${reply.location}`;
+
+    log('Downloading', downloadURL, filepath);
+    let res = await got(downloadURL, auth);
+    await writeFile(filepath, res.rawBody);
+
+  } catch(err) {
+    log('Failed to download', resourceURL, err);
+    throw err;
+  }
+  return filepath;
+}
+
+function jsonToFilename(obj) {
+  let filename = JSON.stringify(obj);
+  if (!windows) return filename;
+
+  return filename.replace(/:/g, '_' ).replace(/"/g, "'");
+}
+
 // read the partial inventory for a data source
 //
 // - source is the name of the data source (e.g. 'gfs')
