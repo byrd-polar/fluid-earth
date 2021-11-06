@@ -96,6 +96,11 @@
     temperature: ['tempC', 'tempF', 'tempK'],
     pressure: ['hPa', 'atm', 'mmHg', 'inHg'],
     length: ['m', 'ft'],
+    area_density: [
+      '0.01 Mg/m^2', // cm of rainfall
+      '0.0254 Mg/m^2', // inches of rainfall
+      'kg/m^2',
+    ],
   };
   // Keep griddedUnit in sync with griddedData, not griddedDataset
   $: griddedUnit = validUnit(griddedData.unit, preferredUnits);
