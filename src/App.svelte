@@ -97,8 +97,8 @@
     pressure: ['hPa', 'atm', 'mmHg', 'inHg'],
     length: ['m', 'ft'],
     area_density: [
-      '0.0254 Mg/m^2', // inches of rainfall
       '0.01 Mg/m^2', // cm of rainfall
+      '0.0254 Mg/m^2', // inches of rainfall
       'kg/m^2',
     ],
   };
