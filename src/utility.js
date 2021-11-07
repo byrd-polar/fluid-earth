@@ -83,7 +83,7 @@ export function prettyUnit(unit) {
     case 'tempC': return '°C';
     case 'tempF': return '°F';
     case '0.0254 Mg/m^2': return 'in';
-    case '0.01 Mg/m^2': return 'cm'
+    case '0.01 Mg/m^2': return 'cm';
     // using Unicode instead of <sup> mainly because of text-shadow issues
     default: return unit.replace('^2', '²').replace('^3', '³');
   }
