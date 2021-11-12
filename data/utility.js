@@ -89,7 +89,10 @@ export async function download(
   } else {
     log('Downloading', url, filepath);
     try {
-      let res = await downloadFn(url, { headers: headers });
+      let res = await downloadFn(url, {
+        headers: headers,
+        timeout: { request: 8 * 60_000 }, // give up after 8 minutes
+      });
       await writeFile(filepath, res.rawBody);
     } catch(err) {
       console.log(`Failed to download... ${url}\n=> ${err}`);
