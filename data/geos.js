@@ -21,10 +21,8 @@ const geosProps = {
     projection: 'GEOS',
 };
 
-const hoursForecastStart = -2;
-const hoursForwardDefault = 30;
-const hoursForward00 = 240;
-const hoursForward12 = 120;
+const hoursForecastStart = 0;
+const hoursForwardDefault = 23;
 
 const geosVars = [
     {
@@ -81,8 +79,8 @@ async function downloadGEOSData(dataset, datetime, hourShift) {
     const day = datetime.toFormat('dd');
     const hour = datetime.toFormat('HH');
 
-    const baseURL = 'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/forecast/' +
-        `Y${year}/M${month}/D${day}/H${hour}/`;
+    const baseURL = 'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/das/' +
+        `Y${year}/M${month}/D${day}/`;
 
     const nxtDatetime = datetime.plus({ hours: hourShift });
     const nxt_year = nxtDatetime.year;
@@ -90,8 +88,8 @@ async function downloadGEOSData(dataset, datetime, hourShift) {
     const nxt_day = nxtDatetime.toFormat('dd');
     const nxt_hour = nxtDatetime.toFormat('HH')
 
-    const forecastNameSyntax = `GEOS.fp.fcst.${forecast}.${year}${month}${day}_${hour}+` +
-        `${nxt_year}${nxt_month}${nxt_day}_${nxt_hour}00.V01.nc4`;
+    const forecastNameSyntax = `f5271_fp.${forecast}.` +
+        `${nxt_year}${nxt_month}${nxt_day}_${nxt_hour}00z.nc4`;
 
     const inputFile = await util.download(baseURL + forecastNameSyntax);
 
@@ -108,7 +106,7 @@ for (const geosVar of geosVars) {
     let datetime;
 
     if (dataset) {
-        datetime = DateTime.fromISO(dataset.lastForecast, { zone: 'utc' }).plus({ hour: geosVar.datasetBase.forecastIntervalInHours });
+        datetime = DateTime.fromISO(dataset.lastForecast, { zone: 'utc' }).plus({ hour: 24 });
     } else {
         const now = DateTime.utc();
         datetime = DateTime.utc(now.year, now.month, now.day).minus({ hours: 18 });
@@ -119,11 +117,7 @@ for (const geosVar of geosVars) {
     const hour = datetime.toFormat('HH');
 
     var forecastHours = hoursForwardDefault;
-    if (hour == "00") {
-        forecastHours = hoursForward00;
-    } else if (hour == "12") {
-        forecastHours = hoursForward12;
-    }
+
     for (let f = hoursForecastStart; f <= forecastHours; f++) {
         const inputFile = await downloadGEOSData(dataset, datetime, f);
         const filename = datetime.plus({ hours: f }).toISO() + '.fp16';
