@@ -3,7 +3,7 @@ import { readFile, writeFile } from 'atomically';
 import { platform } from 'os';
 import path from 'path';
 import { URL } from 'url';
-import got from 'got';
+import _got from 'got';
 import lockfile from 'proper-lockfile';
 
 export const CACHE_DIR = path.join('data', 'cache');
@@ -17,6 +17,7 @@ export const PARTIAL_INVENTORIES = Object.fromEntries([
   'rtgssthr',
 ].map(source => [source, path.join(OUTPUT_DIR, `inventory-${source}.json`)]));
 
+const got = _got.extend({ timeout: { request: 8 * 60_000 }}); // give up after 8 minutes
 const windows = (platform() === 'win32');
 
 // join paths with ISO dates in a safe way for windows
@@ -89,10 +90,7 @@ export async function download(
   } else {
     log('Downloading', url, filepath);
     try {
-      let res = await downloadFn(url, {
-        headers: headers,
-        timeout: { request: 8 * 60_000 }, // give up after 8 minutes
-      });
+      let res = await downloadFn(url, { headers });
       await writeFile(filepath, res.rawBody);
     } catch(err) {
       console.log(`Failed to download... ${url}\n=> ${err}`);
