@@ -7,7 +7,6 @@ import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';
 import { Transform } from 'stream';
 import { createWriteStream } from 'fs';
-import { platform } from 'os';
 import split2 from 'split2';
 
 if (process.argv.length != 2 + 3 && process.argv.length != 2 + 4) {
