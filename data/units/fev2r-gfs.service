@@ -6,3 +6,4 @@ OnFailure=fev2r-email@%n.service
 Type=oneshot
 WorkingDirectory=/export/data/fev2r/repository
 ExecStart=/usr/bin/npm run data:gfs
+TimeoutStartSec=2h 50min
