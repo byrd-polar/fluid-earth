@@ -7,7 +7,7 @@ import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';
 import { Transform } from 'stream';
 import { createReadStream, createWriteStream } from 'fs';
-import { mkdtemp } from 'fs/promises';
+import { mkdtemp, rm } from 'fs/promises';
 import { join } from 'path';
 import { tmpdir } from 'os';
 
@@ -52,5 +52,6 @@ const float16 = new Transform({
 function convert(tmpFile) {
   const tmp = createReadStream(tmpFile);
   const output = createWriteStream(outputFile);
-  tmp.pipe(float16).pipe(output);
+  tmp.pipe(float16).pipe(output)
+    .on('close', () => rm(tmpDir, {recursive: true}));
 }
