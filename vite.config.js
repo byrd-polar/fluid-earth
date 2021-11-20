@@ -3,30 +3,39 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 import glslify from 'rollup-plugin-glslify';
 import license from 'rollup-plugin-license';
 
+import { promisify } from 'util';
+import { exec as _exec } from 'child_process';
+const exec = promisify(_exec);
 import {
   access, appendFile, copyFile, readdir, readFile, writeFile
 } from 'fs/promises';
 import { platform } from 'os';
-import { execSync } from 'child_process';
 import dedent from 'dedent';
 
-const windows = (platform() === 'win32');
-const commit = execSync('git rev-parse --short HEAD').toString().trim();
-const htmlComment = dedent`
-  <!--
-    Fluid Earth (fev2r)
-    =====================================================================
-    Commit:                                  ${commit}
-    Generated:                               ${(new Date).toISOString()}
-    License:                                 /legal/LICENSE
-    Licenses of third-party libraries:       /legal/THIRD_PARTY
-    Modifications to third-party libraries:  /legal/MODIFICATIONS
-  -->
-`;
 
 // https://vitejs.dev/config/
 export default async ({ _, mode }) => {
   const production = mode === 'production';
+
+  const commit = await (async () => {
+    try {
+      return (await exec('git rev-parse --short HEAD')).stdout.trim();
+    } catch {
+      return '???????';
+    }
+  })();
+
+  const htmlComment = dedent`
+    <!--
+      Fluid Earth (fev2r)
+      =====================================================================
+      Commit:                                  ${commit}
+      Generated:                               ${(new Date).toISOString()}
+      License:                                 /legal/LICENSE
+      Licenses of third-party libraries:       /legal/THIRD_PARTY
+      Modifications to third-party libraries:  /legal/MODIFICATIONS
+    -->
+  `;
 
   // If local data files don't exist, use the remote ones
   const dataProxy = await (async () => {
@@ -45,7 +54,7 @@ export default async ({ _, mode }) => {
       // Set initial date based on forecast instead of current time
       __using_local_data_files__: JSON.stringify(!dataProxy),
       // Fix local file paths for dev environments on Windows
-      __windows__: JSON.stringify(windows),
+      __windows__: JSON.stringify(platform() === 'win32'),
       // Allow environments (e.g. Cloudflare Pages) to specify a custom prefix
       // for fetcher.js requests
       __fev2r_api__: JSON.stringify(process.env.FEV2R_API ?? ''),
@@ -59,7 +68,7 @@ export default async ({ _, mode }) => {
       compress: production,
     }),
     // Add build and license info to index.html
-    commentHtml(),
+    commentHtml(htmlComment),
   ];
 
   const productionOnlyPlugins = [
@@ -113,11 +122,11 @@ export default async ({ _, mode }) => {
   };
 }
 
-function commentHtml() {
+function commentHtml(text) {
   return {
     transformIndexHtml(html) {
       return html
-        .replace('<!-- insert build and license info -->', htmlComment)
+        .replace('<!-- insert build and license info -->', text)
         // fix built-in transform spacing
         .replace('  \n  <script', '  <script')
         .replace(/    <link/g, '  <link')
