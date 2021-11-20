@@ -3,6 +3,9 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 import glslify from 'rollup-plugin-glslify';
 import license from 'rollup-plugin-license';
 
+import {
+  appendFile, copyFile, readdir, readFile, writeFile
+} from 'fs/promises';
 import { platform } from 'os';
 import { execSync } from 'child_process';
 import dedent from 'dedent';
@@ -22,7 +25,7 @@ const htmlComment = dedent`
 `;
 
 // https://vitejs.dev/config/
-export default ({ _, mode }) => {
+export default async ({ _, mode }) => {
   const production = mode === 'production';
   const plugins = [
     replace({
@@ -44,7 +47,6 @@ export default ({ _, mode }) => {
     }),
     // Add build and license info to index.html
     commentHtml(),
-
   ];
 
   const productionOnlyPlugins = [
@@ -58,6 +60,23 @@ export default ({ _, mode }) => {
     copyLicenseAndPatches(),
   ];
 
+  // Optionally enable https for local dev, install
+  // https://github.com/FiloSottile/mkcert and run
+  //
+  //  mkcert -install; mkcert localhost
+  //
+  // in the same directory as this config to generate the certificates below
+  const https = await (async () => {
+    try {
+      return {
+        key: await readFile('./localhost-key.pem'),
+        cert: await readFile('./localhost.pem'),
+      };
+    } catch {
+      return false;
+    }
+  })();
+
   return {
     build: {
       rollupOptions: {
@@ -70,6 +89,7 @@ export default ({ _, mode }) => {
       sourcemap: true,
     },
     plugins,
+    server: { https },
   };
 }
 
@@ -85,10 +105,6 @@ function commentHtml() {
     }
   };
 }
-
-import {
-  appendFile, copyFile, readdir, readFile, writeFile
-} from 'fs/promises';
 
 function copyLicenseAndPatches() {
   return {
