@@ -57,7 +57,7 @@
   const fetcher = new Fetcher();
   let griddedDataset = inventory.filter(d => d.colormap)[0];
   let particleDataset = inventory.filter(d => d.particleDisplay)[0];
-  let date = __production__ ?
+  let date = (__production__ || !__using_local_data_files__) ?
     validDate(griddedDataset, $currentDate) :
     griddedDataset.lastForecast;
 

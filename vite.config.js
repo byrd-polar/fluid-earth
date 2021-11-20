@@ -4,7 +4,7 @@ import glslify from 'rollup-plugin-glslify';
 import license from 'rollup-plugin-license';
 
 import {
-  appendFile, copyFile, readdir, readFile, writeFile
+  access, appendFile, copyFile, readdir, readFile, writeFile
 } from 'fs/promises';
 import { platform } from 'os';
 import { execSync } from 'child_process';
@@ -27,10 +27,23 @@ const htmlComment = dedent`
 // https://vitejs.dev/config/
 export default async ({ _, mode }) => {
   const production = mode === 'production';
+
+  // If local data files don't exist, use the remote ones
+  const dataProxy = await (async () => {
+    try {
+      await access('./public/data');
+      return false;
+    } catch {
+      return { '/data': 'https://fluid-earth.byrd.osu.edu' };
+    }
+  })();
+
   const plugins = [
     replace({
-      // Set date to closest time in production
+      // Hide developer-only tools in production
       __production__: JSON.stringify(production),
+      // Set initial date based on forecast instead of current time
+      __using_local_data_files__: JSON.stringify(!dataProxy),
       // Fix local file paths for dev environments on Windows
       __windows__: JSON.stringify(windows),
       // Allow environments (e.g. Cloudflare Pages) to specify a custom prefix
@@ -89,7 +102,14 @@ export default async ({ _, mode }) => {
       sourcemap: true,
     },
     plugins,
-    server: { https },
+    server: {
+      // some files only exist in prod build; proxy them as not to break links
+      proxy: {
+        '/legal': 'https://fluid-earth.byrd.osu.edu',
+        ...dataProxy,
+      },
+      https,
+    },
   };
 }
 

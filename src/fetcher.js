@@ -39,8 +39,7 @@ export default class Fetcher {
     }
 
     // workaround for ':' being an illegal character for filenames on Windows,
-    // __windows__ will be replaced by rollup
-    if (__windows__) {
+    if (__using_local_data_files__ && __windows__) {
       url = url.replace(/:/g, '_');
     }
 
