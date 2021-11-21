@@ -45,7 +45,7 @@ const inputFile = await util.download(
 );
 await mkdir(outputPath, { mode: '775', recursive: true });
 
-const outputFile = util.join(outputPath, datetime.toISO() + '.fp16');
+const outputFile = util.join(outputPath, datetime.toISO() + '.fp16.br');
 
 util.log('Converting GFS grib to fp16', inputFile, outputFile);
 const script = path.join('data', 'scripts', 'gfs-to-fp16.js');

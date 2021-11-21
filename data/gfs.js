@@ -378,7 +378,7 @@ for (const grib of simpleGribs) {
   for (let f = 0; f <= forecastHours; f++) {
     const inputFile =
       await downloadGrib(f, grib.parameter, grib.level, null, grib.wave);
-    const filename = datetime.plus({hours: f}).toISO() + '.fp16';
+    const filename = datetime.plus({hours: f}).toISO() + '.fp16.br';
     const outputFile = util.join(outputPath, filename);
 
     util.log('Converting GFS grib to fp16', inputFile, outputFile);
@@ -404,7 +404,7 @@ for (const grib of speedGribs) {
       await downloadGrib(f, grib.uParameter, grib.level),
       await downloadGrib(f, grib.vParameter, grib.level),
     ];
-    const filename = datetime.plus({hours: f}).toISO() + '.fp16';
+    const filename = datetime.plus({hours: f}).toISO() + '.fp16.br';
     const outputFile = util.join(outputPath, filename);
 
     util.log('Converting GFS grib to fp16', inputFiles, outputFile);
@@ -431,7 +431,7 @@ for (const grib of compoundGribs) {
     const uInputFile = await downloadGrib(f, grib.uParameter, grib.level);
     const vInputFile = await downloadGrib(f, grib.vParameter, grib.level);
 
-    const filename = datetime.plus({hours: f}).toISO() + '.fp16';
+    const filename = datetime.plus({hours: f}).toISO() + '.fp16.br';
     const uOutputFile = util.join(uOutputPath, filename);
     const vOutputFile = util.join(vOutputPath, filename);
 
@@ -461,7 +461,7 @@ for (const grib of accumulationGribs) {
   // first file doesn't need a special script (only one input file)
   const inputFile =
     await downloadGrib(1, grib.parameter, grib.level, fcstString(1));
-  const filename = datetime.plus({hours: 1}).toISO() + '.fp16';
+  const filename = datetime.plus({hours: 1}).toISO() + '.fp16.br';
   const outputFile = util.join(outputPath, filename);
 
   util.log('Converting GFS grib to fp16', inputFile, outputFile);
@@ -472,7 +472,7 @@ for (const grib of accumulationGribs) {
       await downloadGrib(f-1, grib.parameter, grib.level, fcstString(f-1)),
       await downloadGrib(f, grib.parameter, grib.level, fcstString(f)),
     ];
-    const filename = datetime.plus({hours: f}).toISO() + '.fp16';
+    const filename = datetime.plus({hours: f}).toISO() + '.fp16.br';
     const outputFile = util.join(outputPath, filename);
 
     util.log('Converting GFS grib to fp16', inputFiles, outputFile);
@@ -497,7 +497,7 @@ for (const grib of accumulation6hrGribs) {
   for (let f = 1; f <= forecastHours; f++) {
     if (f % 6 === 1) {
       const inputFile = await downloadGrib(f, grib.parameter, grib.level);
-      const filename = datetime.plus({hours: f}).toISO() + '.fp16';
+      const filename = datetime.plus({hours: f}).toISO() + '.fp16.br';
       const outputFile = util.join(outputPath, filename);
 
       util.log('Converting GFS grib to fp16', inputFile, outputFile);
@@ -508,7 +508,7 @@ for (const grib of accumulation6hrGribs) {
         await downloadGrib(f-1, grib.parameter, grib.level),
         await downloadGrib(f, grib.parameter, grib.level),
       ];
-      const filename = datetime.plus({hours: f}).toISO() + '.fp16';
+      const filename = datetime.plus({hours: f}).toISO() + '.fp16.br';
       const outputFile = util.join(outputPath, filename);
 
       util.log('Converting GFS grib to fp16', inputFiles, outputFile);

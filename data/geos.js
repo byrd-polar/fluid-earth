@@ -126,7 +126,7 @@ for (const geosVar of geosVars) {
     }
     for (let f = hoursForecastStart; f <= forecastHours; f++) {
         const inputFile = await downloadGEOSData(dataset, datetime, f);
-        const filename = datetime.plus({ hours: f }).toISO() + '.fp16';
+        const filename = datetime.plus({ hours: f }).toISO() + '.fp16.br';
         const outputFile = util.join(outputPath, filename);
 
         util.log('Converting GEOS NetCDF to fp16', inputFile, outputFile);

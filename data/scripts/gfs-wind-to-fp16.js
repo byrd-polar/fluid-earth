@@ -7,6 +7,7 @@ import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';
 import { Readable, Transform } from 'stream';
 import { createReadStream, createWriteStream } from 'fs';
+import { compress } from './utility.js';
 import { platform } from 'os';
 
 if (process.argv.length != 2 + 3) {
@@ -53,7 +54,7 @@ const output = createWriteStream(outputFile);
 
 cat.pipe(wind.stdin);
 wind.stdout.pipe(wgrib2.stdin)
-wgrib2.stdout.pipe(float16).pipe(output);
+wgrib2.stdout.pipe(float16).pipe(compress).pipe(output);
 
 wind.stderr.pipe(process.stderr);
 wgrib2.stderr.pipe(process.stderr);

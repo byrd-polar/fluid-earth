@@ -7,6 +7,7 @@ import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';
 import { Transform } from 'stream';
 import { createWriteStream } from 'fs';
+import { compress } from './utility.js';
 import { platform } from 'os';
 import split2 from 'split2';
 
@@ -49,7 +50,7 @@ const float16 = new Transform({
 
 const output = createWriteStream(outputFile);
 
-netcdf.stdout.pipe(split2()).pipe(float16).pipe(output);
+netcdf.stdout.pipe(split2()).pipe(float16).pipe(compress).pipe(output);
 
 netcdf.stderr.pipe(process.stderr);
 netcdf.on('exit', code => { if (code !== 0) process.exit(code) });

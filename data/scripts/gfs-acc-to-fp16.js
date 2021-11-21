@@ -5,7 +5,7 @@
 
 import { Float16Array } from '@petamoriken/float16';
 import { spawn } from 'child_process';
-import { writeFile } from 'fs/promises';
+import { writeCompressedFile } from './utility.js';
 import { platform } from 'os';
 
 if (process.argv.length != 2 + 3) {
@@ -49,4 +49,4 @@ for (let i = 0; i < data.length; i++) {
   data[i] = isNaN(valB - valA) ? -Infinity : valB - valA;
 }
 
-await writeFile(outputFile, Buffer.from(data.buffer));
+await writeCompressedFile(outputFile, Buffer.from(data.buffer));

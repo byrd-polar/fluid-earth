@@ -94,9 +94,9 @@ await mkdir(uOutputPath, { mode: '775', recursive: true });
 await mkdir(vOutputPath, { mode: '775', recursive: true });
 await mkdir(sOutputPath, { mode: '775', recursive: true });
 
-const uOutputFile = util.join(uOutputPath, datetime.toISO() + '.fp16');
-const vOutputFile = util.join(vOutputPath, datetime.toISO() + '.fp16');
-const sOutputFile = util.join(sOutputPath, datetime.toISO() + '.fp16');
+const uOutputFile = util.join(uOutputPath, datetime.toISO() + '.fp16.br');
+const vOutputFile = util.join(vOutputPath, datetime.toISO() + '.fp16.br');
+const sOutputFile = util.join(sOutputPath, datetime.toISO() + '.fp16.br');
 
 util.log('Converting OSCAR NetCDF to fp16', inputFile, uOutputFile);
 await execFile('node', [script, inputFile, uOutputFile, 'u']);
