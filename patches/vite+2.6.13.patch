@@ -1,5 +1,5 @@
 diff --git a/node_modules/vite/dist/node/chunks/dep-85dbaaa7.js b/node_modules/vite/dist/node/chunks/dep-85dbaaa7.js
-index 4e00aba..07bb3e4 100644
+index 4e00aba..225c17d 100644
 --- a/node_modules/vite/dist/node/chunks/dep-85dbaaa7.js
 +++ b/node_modules/vite/dist/node/chunks/dep-85dbaaa7.js
 @@ -4188,6 +4188,10 @@ function copyDir(srcDir, destDir) {
@@ -13,3 +13,14 @@ index 4e00aba..07bb3e4 100644
              copyDir(srcFile, destFile);
          }
          else {
+@@ -56547,6 +56551,10 @@ const sirvOptions = {
+         if (/\.[tj]sx?$/.test(pathname)) {
+             res.setHeader('Content-Type', 'application/javascript');
+         }
++        // custom mime type
++        if (pathname.endsWith('.fp16.br')) {
++            res.setHeader('Content-Type', 'application/octet-stream');
++        }
+     }
+ };
+ function servePublicMiddleware(dir) {
