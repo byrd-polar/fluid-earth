@@ -118,11 +118,11 @@
       let keys = Object.keys(pin);
       let expectedKeys = ['label', 'longitude', 'latitude'];
 
-      return keys.length === expectedKeys.length &&
-        expectedKeys.every(key => keys.includes(key)) &&
-        typeof pin.label === 'string' &&
-        typeof pin.latitude === 'number' &&
-        typeof pin.longitude === 'number';
+      return keys.length === expectedKeys.length 
+        && expectedKeys.every(key => keys.includes(key))
+        && typeof pin.label === 'string'
+        && typeof pin.latitude === 'number' 
+        && typeof pin.longitude === 'number';
     })) {
       pins = val.map(p => {
         return {
