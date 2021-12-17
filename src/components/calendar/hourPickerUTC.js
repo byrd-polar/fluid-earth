@@ -49,10 +49,10 @@ export function boxDateEnabled(boxDate, headerDate) {
 }
 
 export function boxDateSelected(boxDate, date) {
-  return boxDate.getUTCFullYear() === date.getUTCFullYear() &&
-         boxDate.getUTCMonth()    === date.getUTCMonth()    &&
-         boxDate.getUTCDate()     === date.getUTCDate()     &&
-         boxDate.getUTCHours()    === date.getUTCHours();
+  return boxDate.getUTCFullYear() === date.getUTCFullYear()
+      && boxDate.getUTCMonth()    === date.getUTCMonth()
+      && boxDate.getUTCDate()     === date.getUTCDate()
+      && boxDate.getUTCHours()    === date.getUTCHours();
 }
 
 export function selectedDate(boxDate, date) {

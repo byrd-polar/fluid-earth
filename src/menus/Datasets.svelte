@@ -52,13 +52,13 @@
     ));
   }
   $: gDataset = griddedDatasets.find(d => {
-    return tFilters[topic](d.name) &&
-           vFilters[variable](d.name) &&
-           hFilters[height](d.name);
+    return tFilters[topic](d.name)
+        && vFilters[variable](d.name)
+        && hFilters[height](d.name);
   });
   $: pDataset = particleDatasets.find(d => {
-    return aFilters[animation](d.name) &&
-           hFilters[height](d.name);
+    return aFilters[animation](d.name)
+        && hFilters[height](d.name);
   });
   $: topicOptions = topics.filter(t => t !== 'undefined');
   $: variableOptions = variables.filter(v => {
@@ -73,8 +73,9 @@
     if (a === 'none') return true;
 
     let datasets = particleDatasets.filter(d => hFilters[height](d.name));
-    return datasets.find(d => aFilters[a](d.name) && gDataset &&
-      validCloseDate(d, validDate(gDataset, date)));
+    return datasets.find(d => aFilters[a](d.name)
+        && gDataset
+        && validCloseDate(d, validDate(gDataset, date)));
   });
 
   async function handleSelect() {

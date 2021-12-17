@@ -99,7 +99,7 @@ export function reproj(
 ) {
   let reprojPoint = d3geoProjection(lonLat);
 
-  return Math.round(point[0]) === Math.round(reprojPoint[0]) &&
-         Math.round(point[1]) === Math.round(reprojPoint[1]) &&
-         lonLat[1] >= -90 && lonLat[1] <= 90;
+  return Math.round(point[0]) === Math.round(reprojPoint[0])
+      && Math.round(point[1]) === Math.round(reprojPoint[1])
+      && lonLat[1] >= -90 && lonLat[1] <= 90;
 }

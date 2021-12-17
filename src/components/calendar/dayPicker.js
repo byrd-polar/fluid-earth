@@ -45,9 +45,9 @@ export function boxDateEnabled(boxDate, headerDate) {
 }
 
 export function boxDateSelected(boxDate, date) {
-  return boxDate.getFullYear() === date.getFullYear() &&
-         boxDate.getMonth()    === date.getMonth()    &&
-         boxDate.getDate()     === date.getDate();
+  return boxDate.getFullYear() === date.getFullYear()
+      && boxDate.getMonth()    === date.getMonth()
+      && boxDate.getDate()     === date.getDate();
 }
 
 export function selectedDate(boxDate, date) {
