@@ -28,7 +28,7 @@
         Welcome{#if !$mobile}{' to the new Fluid Earth'}{/if}!
         Click here to view the tutorial.
       </button>
-      <button class="dismiss" on:click={dismiss} ariaLabel="Close notification">
+      <button class="dismiss" on:click={dismiss} aria-label="Close notification">
         <Close />
       </button>
     </section>

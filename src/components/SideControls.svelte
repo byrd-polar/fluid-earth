@@ -23,12 +23,14 @@
 
 <div class="sidedock">
   <button
+    aria-label="Zoom in"
     on:click={() => smoothZoom(true)}
     use:tooltip={{content: 'Zoom in', placement: 'left'}}
   >
     <ZoomIn />
   </button>
   <button
+    aria-label="Zoom out"
     on:click={() => smoothZoom(false)}
     use:tooltip={{content: 'Zoom out', placement: 'left'}}
   >
