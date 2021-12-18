@@ -100,7 +100,7 @@
     <button
       class="box"
       class:hour={pickerMode === 'hours'}
-      class:selected
+      class:selected={selected && enabled}
       on:click={() => selectDate(boxDate)}
       disabled={!enabled}
       use:tooltip={{content: `Set ${picker.boxUnit}`}}
