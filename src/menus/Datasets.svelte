@@ -74,8 +74,8 @@
 
     let datasets = particleDatasets.filter(d => hFilters[height](d.name));
     return datasets.find(d => aFilters[a](d.name)
-        && gDataset
-        && validCloseDate(d, validDate(gDataset, date)));
+                           && gDataset
+                           && validCloseDate(d, validDate(gDataset, date)));
   });
 
   async function handleSelect() {
