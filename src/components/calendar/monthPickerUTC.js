@@ -44,8 +44,8 @@ export function boxDateEnabled(boxDate, headerDate) {
 }
 
 export function boxDateSelected(boxDate, date) {
-  return boxDate.getUTCFullYear() === date.getUTCFullYear() &&
-         boxDate.getUTCMonth()    === date.getUTCMonth();
+  return boxDate.getUTCFullYear() === date.getUTCFullYear()
+      && boxDate.getUTCMonth()    === date.getUTCMonth();
 }
 
 export function selectedDate(boxDate, date) {

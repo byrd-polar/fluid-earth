@@ -58,8 +58,8 @@
     return {
       boxDate,
       selected: picker.boxDateSelected(boxDate, date),
-      enabled: picker.boxDateSelected(boxDate, wouldBeSelectedDate) &&
-               picker.boxDateEnabled(boxDate, headerDate),
+      enabled: picker.boxDateSelected(boxDate, wouldBeSelectedDate)
+            && picker.boxDateEnabled(boxDate, headerDate),
     };
   }
 

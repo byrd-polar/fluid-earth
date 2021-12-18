@@ -50,10 +50,11 @@ void main() {
   );
 
   // don't render points with lonLat out of range
-  if (lonLat.x >  PI ||
-      lonLat.x < -PI ||
-      lonLat.y >  PI_2 ||
-      lonLat.y < -PI_2) {
+  if ( lonLat.x >  PI
+    || lonLat.x < -PI
+    || lonLat.y >  PI_2
+    || lonLat.y < -PI_2
+  ) {
     gl_FragColor = vec4(0, 0, 0, 0); // transparent
     return;
   }

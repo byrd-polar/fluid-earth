@@ -48,10 +48,10 @@ export function boxDateEnabled(boxDate, headerDate) {
 }
 
 export function boxDateSelected(boxDate, date) {
-  return boxDate.getFullYear() === date.getFullYear() &&
-         boxDate.getMonth()    === date.getMonth()    &&
-         boxDate.getDate()     === date.getDate()     &&
-         boxDate.getHours()    === date.getHours();
+  return boxDate.getFullYear() === date.getFullYear()
+      && boxDate.getMonth()    === date.getMonth()
+      && boxDate.getDate()     === date.getDate()
+      && boxDate.getHours()    === date.getHours();
 }
 
 export function selectedDate(boxDate, date) {

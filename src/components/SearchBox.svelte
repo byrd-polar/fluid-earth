@@ -12,8 +12,9 @@
   let focused = false;
   let loading = false;
   let dropdownTemporarilyHidden = false;
-  $: dropdownShown = focused && (value.length > 0 || !loading) &&
-    !dropdownTemporarilyHidden;
+  $: dropdownShown = focused
+                  && (value.length > 0 || !loading)
+                  && !dropdownTemporarilyHidden;
 
   async function filterOptions() {
     dropdownTemporarilyHidden = false;

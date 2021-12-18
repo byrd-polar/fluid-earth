@@ -194,9 +194,8 @@
     // Use a different particle simulator for older devices that don't support
     // rendering to float textures at all and for mobile devices because of
     // issues rendering to float textures despite supporting the extension.
-    let canRenderToFloat =
-      particleGl.getExtension('EXT_color_buffer_float') ||
-      particleGl.getExtension('WEBGL_color_buffer_float');
+    let canRenderToFloat = particleGl.getExtension('EXT_color_buffer_float')
+                        || particleGl.getExtension('WEBGL_color_buffer_float');
 
     if (!canRenderToFloat || navigator.userAgent.includes("Mobi")) {
       particleSimulator =
@@ -251,10 +250,9 @@
       ...projectionUniforms,
     };
 
-    if (
-      clientWidth !== previousWidth ||
-      clientHeight !== previousHeight ||
-      pixelRatio !== previousPixelRatio
+    if ( clientWidth !== previousWidth
+      || clientHeight !== previousHeight
+      || pixelRatio !== previousPixelRatio
     ) {
       backgroundNeedsRedraw = true;
       trailsNeedReset = true;
@@ -338,8 +336,8 @@
   const arrayCache = new Map();
 
   function splitIfNeeded(griddedData) {
-    if (griddedData.width <= MAX_TEXTURE_SIZE ||
-        griddedData.width % 2 !== 0) return griddedData;
+    if ( griddedData.width <= MAX_TEXTURE_SIZE
+      || griddedData.width % 2 !== 0) return griddedData;
 
     let array;
     if (arrayCache.has(griddedData.floatArray)) {

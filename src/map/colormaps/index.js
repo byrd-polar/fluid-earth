@@ -375,10 +375,8 @@ for (let prop in colormaps) {
   types.add(colormap.type);
 
   // don't add reversed maps for custom colormaps
-  if (colormap.type === 'cmocean' ||
-      colormap.type === 'FEVer 1 original') {
-    continue;
-  }
+  if ( colormap.type === 'cmocean'
+    || colormap.type === 'FEVer 1 original') continue;
 
   colormaps[prop + '_REVERSED'] = {
     name: colormap.name + ' (reversed)',

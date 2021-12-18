@@ -78,10 +78,9 @@ try {
     `oscar_vel${datetime.diff(referenceDatetime, 'days').days}.nc.gz.nc4`
   );
 } catch (e) {
-  if (
-    e instanceof HTTPError &&
-    [404, 503].includes(e.response.statusCode) &&
-    DateTime.now() < datetime.plus({days: 3})
+  if ( e instanceof HTTPError
+    && [404, 503].includes(e.response.statusCode)
+    && DateTime.now() < datetime.plus({days: 3})
   ) {
     console.log(
       '\nRun considered successful as file is not expected to exist yet.'
