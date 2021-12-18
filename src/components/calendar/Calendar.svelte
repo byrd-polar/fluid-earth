@@ -53,10 +53,14 @@
     );
   }
 
-  function boxDateEnabled(boxDate, griddedDataset) {
+  function getInfo(boxDate) {
     let wouldBeSelectedDate = selectedDate(boxDate, griddedDataset);
-    return picker.boxDateSelected(boxDate, wouldBeSelectedDate) &&
-           picker.boxDateEnabled(boxDate, headerDate);
+    return {
+      boxDate,
+      selected: picker.boxDateSelected(boxDate, date),
+      enabled: picker.boxDateSelected(boxDate, wouldBeSelectedDate) &&
+               picker.boxDateEnabled(boxDate, headerDate),
+    };
   }
 
   let width;
@@ -92,13 +96,13 @@
       <RightArrow />
     </button>
   </div>
-  {#each boxDates as boxDate, i (pickerMode + i)}
+  {#each boxDates.map(getInfo) as { boxDate, selected, enabled }, i (pickerMode + i)}
     <button
       class="box"
       class:hour={pickerMode === 'hours'}
-      class:selected={picker.boxDateSelected(boxDate, date)}
+      class:selected
       on:click={() => selectDate(boxDate)}
-      disabled={!boxDateEnabled(boxDate, griddedDataset)}
+      disabled={!enabled}
       use:tooltip={{content: `Set ${picker.boxUnit}`}}
     >
       {picker.formatBox(boxDate)}
