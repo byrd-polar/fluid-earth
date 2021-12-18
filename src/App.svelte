@@ -256,9 +256,8 @@
       particleLoading = false;
 
       particleAssignments = () => {
-        if (
-          particleData.uVelocities !== uArray ||
-          particleData.vVelocities !== vArray
+        if ( particleData.uVelocities !== uArray
+          || particleData.vVelocities !== vArray
         ) {
           particleData = {
             uVelocities: uArray,
