@@ -29,11 +29,15 @@
 
   $: picker = pickers[pickerMode];
 
-  $: headerDate = picker.headerDate(date);
+  $: headerDate = getHeaderDate(picker);
   $: prevHeaderDate = picker.prevHeaderDate(headerDate);
   $: nextHeaderDate = picker.nextHeaderDate(headerDate);
 
   $: boxDates = picker.boxDates(headerDate);
+
+  function getHeaderDate(picker) {
+    return picker.headerDate(date);
+  }
 
   function selectDate(boxDate) {
     if (picker.boxDateSelected(boxDate, date)) return;
@@ -53,7 +57,7 @@
     );
   }
 
-  function getInfo(boxDate) {
+  function getInfo(boxDate, headerDate, date, griddedDataset) {
     let wouldBeSelectedDate = selectedDate(boxDate, griddedDataset);
     return {
       boxDate,
@@ -96,7 +100,9 @@
       <RightArrow />
     </button>
   </div>
-  {#each boxDates.map(getInfo) as { boxDate, selected, enabled }, i (pickerMode + i)}
+  {#each boxDates.map(boxDate => {
+    return getInfo(boxDate, headerDate, date, griddedDataset);
+  }) as { boxDate, selected, enabled }, i (pickerMode + i)}
     <button
       class="box"
       class:hour={pickerMode === 'hours'}
