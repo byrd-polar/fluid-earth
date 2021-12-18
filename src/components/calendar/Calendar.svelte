@@ -29,15 +29,11 @@
 
   $: picker = pickers[pickerMode];
 
-  $: headerDate = getHeaderDate(picker);
+  $: headerDate = picker.headerDate(date);
   $: prevHeaderDate = picker.prevHeaderDate(headerDate);
   $: nextHeaderDate = picker.nextHeaderDate(headerDate);
 
   $: boxDates = picker.boxDates(headerDate);
-
-  function getHeaderDate(picker) {
-    return picker.headerDate(date);
-  }
 
   function selectDate(boxDate) {
     if (picker.boxDateSelected(boxDate, date)) return;
