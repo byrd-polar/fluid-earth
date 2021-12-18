@@ -4,6 +4,7 @@
   import ChipGroup from '../ChipGroup.svelte';
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
+  import { tick } from 'svelte';
 
   import * as yearPicker from './yearPicker.js';
   import * as yearPickerUTC from './yearPickerUTC.js';
@@ -63,10 +64,55 @@
     };
   }
 
+  let focusHandler, calendar, hasFocus;
+
+  async function handleFocus() {
+    headerDate = picker.headerDate(date);
+    await tick();
+    calendar.querySelector('.selected').focus();
+  }
+
+  $: updateFocusHandler(hasFocus);
+
+  function updateFocusHandler(hasFocus) {
+    if (!focusHandler) return;
+
+    focusHandler.setAttribute('tabindex', hasFocus ? -1 : 0);
+  }
+
   let width;
 </script>
 
 <ChipGroup {options} bind:selected={pickerMode} />
+
+<div class="header">
+  <button
+    on:click={() => headerDate = prevHeaderDate}
+    disabled={headerDate < griddedDataset.start}
+    use:tooltip={{content: `Prev ${picker.headerUnit}`}}
+    tabindex="-1"
+  >
+    <LeftArrow />
+  </button>
+  <div>
+    {picker.formatHeader(headerDate)}
+  </div>
+  <button
+    on:click={() => headerDate = nextHeaderDate}
+    disabled={nextHeaderDate > griddedDataset.end}
+    use:tooltip={{content: `Next ${picker.headerUnit}`}}
+    tabindex="-1"
+  >
+    <RightArrow />
+  </button>
+</div>
+
+<div
+  bind:this={focusHandler}
+  on:focus={handleFocus}
+  tabindex="0"
+>
+</div>
 
 <div
   bind:clientWidth={width}
@@ -76,26 +122,10 @@
     --rows: {picker.boxDimensions[1]};
     --width: {width}px;
   "
+  bind:this={calendar}
+  on:focusin={() => hasFocus = true}
+  on:focusout={() => hasFocus = false}
 >
-  <div class="header">
-    <button
-      on:click={() => headerDate = prevHeaderDate}
-      disabled={headerDate < griddedDataset.start}
-      use:tooltip={{content: `Prev ${picker.headerUnit}`}}
-    >
-      <LeftArrow />
-    </button>
-    <div>
-      {picker.formatHeader(headerDate)}
-    </div>
-    <button
-      on:click={() => headerDate = nextHeaderDate}
-      disabled={nextHeaderDate > griddedDataset.end}
-      use:tooltip={{content: `Next ${picker.headerUnit}`}}
-    >
-      <RightArrow />
-    </button>
-  </div>
   {#each boxDates.map(boxDate => {
     return getInfo(boxDate, headerDate, date, griddedDataset);
   }) as { boxDate, selected, enabled }, i (pickerMode + i)}
@@ -106,6 +136,7 @@
       on:click={() => selectDate(boxDate)}
       disabled={!enabled}
       use:tooltip={{content: `Set ${picker.boxUnit}`}}
+      tabindex="-1"
     >
       {picker.formatBox(boxDate)}
     </button>
@@ -125,24 +156,17 @@
     filter: brightness(125%);
   }
 
-  div.calendar {
-    --header-height: 3.8rem;
-    margin-top: 0.5em;
-    display: grid;
-    grid-template-columns: repeat(var(--cols), 1fr);
-    grid-template-rows: var(--header-height) repeat(var(--rows), 1fr);
-    height: calc(var(--header-height) + var(--width) * 6 / 7); /* square days */
-    gap: 1px;
+  div.header, div.calendar {
     font-size: 1.2em;
-    border-radius: 4px;
     overflow: hidden;
   }
 
   div.header {
-    height: var(--header-height);
-    grid-column-start: span var(--cols);
+    margin: 0.5em 0 1px;
+    height: 3.8rem;
     background: var(--primary-color);
     display: flex;
+    border-radius: 4px 4px 0 0;
   }
 
   div.header::before {
@@ -169,6 +193,15 @@
     color: grey;
     filter: none;
     cursor: auto;
+  }
+
+  div.calendar {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
+    height: calc(var(--width) * 6 / 7); /* square days */
+    gap: 1px;
+    border-radius: 0 0 4px 4px;
   }
 
   button.box {
