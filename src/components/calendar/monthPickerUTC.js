@@ -1,4 +1,4 @@
-import { clone } from './utility.js';
+import { addUTC, clone } from './utility.js';
 
 export const headerUnit = 'year';
 
@@ -10,17 +10,11 @@ export function headerDate(date) {
 }
 
 export function nextHeaderDate(headerDate) {
-  return new Date(Date.UTC(
-    headerDate.getUTCFullYear() + 1,
-    0,
-  ));
+  return addUTC(headerDate, { years: 1 });
 }
 
 export function prevHeaderDate(headerDate) {
-  return new Date(Date.UTC(
-    headerDate.getUTCFullYear() - 1,
-    0,
-  ));
+  return addUTC(headerDate, { years: -1 });
 }
 
 export function formatHeader(headerDate) {

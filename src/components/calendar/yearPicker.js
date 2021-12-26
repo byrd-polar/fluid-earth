@@ -1,4 +1,4 @@
-import { clone } from './utility.js';
+import { add, clone } from './utility.js';
 
 export const headerUnit = 'decade';
 
@@ -10,17 +10,11 @@ export function headerDate(date) {
 }
 
 export function nextHeaderDate(headerDate) {
-  return new Date(
-    headerDate.getFullYear() + 10,
-    0,
-  );
+  return add(headerDate, { years: 10 });
 }
 
 export function prevHeaderDate(headerDate) {
-  return new Date(
-    headerDate.getFullYear() - 10,
-    0,
-  );
+  return add(headerDate, { years: -10 });
 }
 
 export function formatHeader(headerDate) {

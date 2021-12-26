@@ -1,4 +1,4 @@
-import { clone } from './utility.js';
+import { add, clone } from './utility.js';
 
 export const headerUnit = 'month';
 
@@ -10,17 +10,11 @@ export function headerDate(date) {
 }
 
 export function nextHeaderDate(headerDate) {
-  return new Date(
-    headerDate.getFullYear(),
-    headerDate.getMonth() + 1,
-  );
+  return add(headerDate, { months: 1 });
 }
 
 export function prevHeaderDate(headerDate) {
-  return new Date(
-    headerDate.getFullYear(),
-    headerDate.getMonth() - 1,
-  );
+  return add(headerDate, { months: -1 });
 }
 
 export function formatHeader(headerDate) {
