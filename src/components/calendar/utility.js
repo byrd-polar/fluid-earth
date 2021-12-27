@@ -1,3 +1,5 @@
+import { modulo } from '../../utility.js';
+
 // intentionally not covering all the edge cases; wait for the Temporal API and
 // then can get rid of all of this and maybe support more time zones
 //
@@ -25,7 +27,7 @@ export function add(date, duration) {
     date.getMilliseconds() + milliseconds,
   );
 
-  let expectedMonth = (date.getMonth() + months + 12 * years) % 12;
+  let expectedMonth = modulo(date.getMonth() + months + 12 * years, 12);
 
   if ((years || months) && (sum.getMonth() !== expectedMonth)) {
     return add(date, {...duration, days: days - 1});
@@ -55,7 +57,7 @@ export function addUTC(date, duration) {
     date.getUTCMilliseconds() + milliseconds,
   ));
 
-  let expectedMonth = (date.getUTCMonth() + months + 12 * years) % 12;
+  let expectedMonth = modulo(date.getUTCMonth() + months + 12 * years, 12);
 
   if ((years || months) && (sum.getUTCMonth() !== expectedMonth)) {
     return add(date, {...duration, days: days - 1});

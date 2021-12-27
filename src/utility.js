@@ -5,7 +5,7 @@ export function clamp(x, min, max) {
 
 // Takes x modulo y with optional offset
 export function modulo(x, y, offset=0) {
-  return (((x - offset % y ) + y ) % y) + offset;
+  return ((((x - offset) % y ) + y ) % y) + offset;
 }
 
 // Returns the closest valid date from the dataset relative to the given date
