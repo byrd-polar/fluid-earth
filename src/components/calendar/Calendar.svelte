@@ -131,7 +131,7 @@
       class:selected={selected && enabled}
       on:click={() => selectDate(boxDate)}
       disabled={!enabled}
-      use:tooltip={{content: `Set ${picker.boxUnit}`}}
+      aria-label={`Set ${picker.boxUnit}`}
       tabindex="-1"
     >
       {picker.formatBox(boxDate)}
