@@ -59,3 +59,11 @@ export function selectedDate(boxDate, date) {
 export function formatBox(boxDate) {
   return boxDate.getDate();
 }
+
+export const nextBox = date => add(date, { days: 1 });
+export const nextRow = date => add(date, { days: 7 });
+export const nextPage = date => add(date, { months: 1 });
+
+export const prevBox = date => add(date, { days: -1 });
+export const prevRow = date => add(date, { days: -7 });
+export const prevPage = date => add(date, { months: -1 });

@@ -64,3 +64,11 @@ export function formatBox(boxDate) {
     minute: '2-digit',
   });
 }
+
+export const nextBox = date => add(date, { hours: 1 });
+export const nextRow = date => add(date, { hours: 4 });
+export const nextPage = date => add(date, { days: 1 });
+
+export const prevBox = date => add(date, { hours: -1 });
+export const prevRow = date => add(date, { hours: -4 });
+export const prevPage = date => add(date, { days: -1 });

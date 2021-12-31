@@ -4,6 +4,7 @@
   import ChipGroup from '../ChipGroup.svelte';
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
+  import { add, addUTC, subtract, subtractUTC } from './utility.js';
   import { tick } from 'svelte';
 
   import * as yearPicker from './yearPicker.js';
@@ -64,8 +65,7 @@
 
   async function handleFocus() {
     headerDate = picker.headerDate(date);
-    await tick();
-    calendar.querySelector('.selected').focus();
+    await focusOnSelected();
   }
 
   $: updateFocusHandler(hasFocus);
@@ -74,6 +74,39 @@
     if (!focusHandler) return;
 
     focusHandler.setAttribute('tabindex', hasFocus ? -1 : 0);
+  }
+
+  async function handleKeydown(e) {
+    let newDate = keyToNewDate(e.key);
+    if (!newDate) return;
+
+    e.preventDefault();
+
+    let opts = {
+      preserveMonth: !utc && stuff, //TODO,
+      preserveUTCMonth: utc && stuff, //TODO,
+      excludedDate: date,
+    };
+    date = validDate(griddedDataset, newDate, opts);
+    console.log(date);
+    await focusOnSelected();
+  }
+
+  async function focusOnSelected() {
+    await tick();
+    calendar.querySelector('.selected').focus();
+  }
+
+  function keyToNewDate(key) {
+    switch(key) {
+      case 'ArrowLeft': return picker.prevBox(date);
+      case 'ArrowRight': return picker.nextBox(date);
+      case 'ArrowUp': return picker.prevRow(date);
+      case 'ArrowDown': return picker.nextRow(date);
+      case 'PageUp': return picker.prevPage(date);
+      case 'PageDown': return picker.nextPage(date);
+      default: return null;
+    }
   }
 
   let width;
@@ -121,6 +154,7 @@
   bind:this={calendar}
   on:focusin={() => hasFocus = true}
   on:focusout={() => hasFocus = false}
+  on:keydown={handleKeydown}
 >
   {#each boxDates.map(boxDate => {
     return getInfo(boxDate, headerDate, date, griddedDataset);

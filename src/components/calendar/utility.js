@@ -66,6 +66,22 @@ export function addUTC(date, duration) {
   return sum;
 }
 
+export function subtract(date, duration) {
+  return _subtract(date, duration, false);
+}
+
+export function subtractUTC(date, duration) {
+  return _subtract(date, duration, true);
+}
+
+function _subtract(date, duration, utc) {
+  let negativeDuration = Object.fromEntries(
+    Object.entries(duration).map(([key, val]) => [key, -val])
+  );
+  let addFn = utc ? addUTC : add;
+  return addFn(date, negativeDuration);
+}
+
 export function clone(date) {
   return new Date(date.getTime());
 }

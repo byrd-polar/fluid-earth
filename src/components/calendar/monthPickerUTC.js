@@ -63,3 +63,11 @@ export function formatBox(boxDate) {
     month: 'short',
   });
 }
+
+export const nextBox = date => addUTC(date, { months: 1 });
+export const nextRow = date => addUTC(date, { months: 3 });
+export const nextPage = date => addUTC(date, { years: 1 });
+
+export const prevBox = date => addUTC(date, { months: -1 });
+export const prevRow = date => addUTC(date, { months: -3 });
+export const prevPage = date => addUTC(date, { years: -1 });

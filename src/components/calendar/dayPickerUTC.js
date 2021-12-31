@@ -60,3 +60,11 @@ export function selectedDate(boxDate, date) {
 export function formatBox(boxDate) {
   return boxDate.getUTCDate();
 }
+
+export const nextBox = date => addUTC(date, { days: 1 });
+export const nextRow = date => addUTC(date, { days: 7 });
+export const nextPage = date => addUTC(date, { months: 1 });
+
+export const prevBox = date => addUTC(date, { days: -1 });
+export const prevRow = date => addUTC(date, { days: -7 });
+export const prevPage = date => addUTC(date, { months: -1 });

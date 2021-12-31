@@ -60,3 +60,11 @@ export function formatBox(boxDate) {
     year: 'numeric',
   });
 }
+
+export const nextBox = date => add(date, { years: 1 });
+export const nextRow = date => add(date, { years: 2 });
+export const nextPage = date => add(date, { years: 10 });
+
+export const prevBox = date => add(date, { years: -1 });
+export const prevRow = date => add(date, { years: -2 });
+export const prevPage = date => add(date, { years: -10 });

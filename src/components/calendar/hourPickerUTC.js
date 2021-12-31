@@ -67,3 +67,11 @@ export function formatBox(boxDate) {
     minute: '2-digit',
   });
 }
+
+export const nextBox = date => addUTC(date, { hours: 1 });
+export const nextRow = date => addUTC(date, { hours: 4 });
+export const nextPage = date => addUTC(date, { days: 1 });
+
+export const prevBox = date => addUTC(date, { hours: -1 });
+export const prevRow = date => addUTC(date, { hours: -4 });
+export const prevPage = date => addUTC(date, { days: -1 });

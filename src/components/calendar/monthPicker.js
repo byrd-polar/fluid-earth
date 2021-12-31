@@ -61,3 +61,11 @@ export function formatBox(boxDate) {
     month: 'short',
   });
 }
+
+export const nextBox = date => add(date, { months: 1 });
+export const nextRow = date => add(date, { months: 3 });
+export const nextPage = date => add(date, { years: 1 });
+
+export const prevBox = date => add(date, { months: -1 });
+export const prevRow = date => add(date, { months: -3 });
+export const prevPage = date => add(date, { years: -1 });
