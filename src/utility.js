@@ -10,16 +10,23 @@ export function modulo(x, y, offset=0) {
 
 // Returns the closest valid date from the dataset relative to the given date
 export function validDate(dataset, date, oscarOptions={}) {
-  let { limitMonth=false, utc=false } = oscarOptions;
+  let {
+    preserveMonth=false,
+    preserveUTCMonth=false,
+    excludedDate=undefined,
+  } = oscarOptions;
+
   if (dataset.intervalInHours === 'custom:OSCAR') {
     let year = date.getUTCFullYear();
     let candidates = [
       ...validOscarDates(year - 1),
       ...validOscarDates(year),
       ...validOscarDates(year + 1),
-    ].filter(c => limitMonth ? (utc ? c.getUTCMonth() === date.getUTCMonth()
-                                    : c.getMonth() === date.getMonth())
-                             : true);
+    ]
+    .filter(c => !preserveMonth || c.getMonth() === date.getMonth())
+    .filter(c => !preserveUTCMonth || c.getUTCMonth() === date.getUTCMonth())
+    .filter(c => !excludedDate || c.getTime() !== excludedDate.getTime());
+
     // not at all an efficient search, optimize this part if it becomes an issue
     candidates.sort((d1, d2) => Math.abs(date - d1) - Math.abs(date - d2));
     return clamp(candidates[0], dataset.start, dataset.end);
@@ -33,8 +40,8 @@ export function validDate(dataset, date, oscarOptions={}) {
 
 // Same as validDate, except returns null if the closest date is not "close
 // enough", i.e. too before dataset.start or too after dataset.end
-export function validCloseDate(dataset, date) {
-  let closest = validDate(dataset, date);
+export function validCloseDate(dataset, date, oscarOptions={}) {
+  let closest = validDate(dataset, date, oscarOptions);
 
   let maxDistance;
   if (dataset.intervalInHours === 'custom:OSCAR') {

@@ -43,11 +43,11 @@
   }
 
   function selectedDate(boxDate, griddedDataset) {
-    return validDate(
-      griddedDataset,
-      picker.selectedDate(boxDate, date),
-      { limitMonth: pickerMode === 'months', utc },
-    );
+    let opts = {
+      preserveMonth: !utc && pickerMode === 'months',
+      preserveUTCMonth: utc && pickerMode === 'months',
+    };
+    return validDate(griddedDataset, picker.selectedDate(boxDate, date), opts);
   }
 
   function getInfo(boxDate, headerDate, date, griddedDataset) {
