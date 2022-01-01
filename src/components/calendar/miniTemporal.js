@@ -1,4 +1,4 @@
-import { clamp, modulo } from './../../utility.js';
+import { clamp, modulo } from './../../math.js';
 
 export class ZonedDateTime {
   constructor(date, utc=false) {

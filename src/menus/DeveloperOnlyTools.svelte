@@ -7,7 +7,7 @@
   import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph";
   import RangeSlider from 'svelte-range-slider-pips';
   import Button from '../components/Button.svelte';
-  import { clamp } from '../utility.js';
+  import { clamp } from '../math.js';
   import colormaps, { types } from '../map/colormaps/';
   import projections from '../map/projections/';
 
