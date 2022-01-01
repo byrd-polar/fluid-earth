@@ -120,10 +120,11 @@ export class ZonedDateTime {
           val -= remainder;
           val += roundFn(remainder / roundingIncrement) * roundingIncrement;
 
-          return [val]
+          if (unit === 'day') val++;
 
+          return [val];
         } else {
-          val /= {
+          return val / {
             millisecond: 1000,
             second: 60,
             minute: 60,
@@ -131,8 +132,6 @@ export class ZonedDateTime {
             day: this.daysInMonth,
             month: 12,
           }[unit];
-
-          return val;
         }
 
       } else {
