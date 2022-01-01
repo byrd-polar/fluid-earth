@@ -62,7 +62,7 @@ export class ZonedDateTime {
 
     let sum = this.#fromDateArgs(
       this.year + years,
-      this.month + months,
+      this.month - 1 + months,
       this.day + days,
       this.hour + hours,
       this.minute + minutes,
@@ -70,9 +70,9 @@ export class ZonedDateTime {
       this.millisecond + milliseconds,
     );
 
-    let expectedMonth = modulo((this.#get('Month') + months + 12 * years), 12);
+    let expectedMonth = modulo((this.month - 1 + months + 12 * years), 12) + 1;
 
-    if ((years || months) && (sum.#get('Month') !== expectedMonth)) {
+    if ((years || months) && (sum.month !== expectedMonth)) {
       return this.add({...durationLike, days: days - 1});
     }
     return sum;
