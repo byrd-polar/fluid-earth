@@ -1,6 +1,6 @@
 <script>
   import { tick } from 'svelte';
-  import { modulo } from '../utility.js';
+  import { modulo } from '../math.js';
   import { createEventDispatcher } from 'svelte';
 
   export let options = ['test option'];

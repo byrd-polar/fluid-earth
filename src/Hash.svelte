@@ -1,7 +1,8 @@
 <script>
   import debounce from 'debounce';
   import { onMount, tick } from 'svelte';
-  import { clamp, modulo, validDate } from './utility.js';
+  import { clamp, modulo } from './math.js';
+  import { validDate } from './utility.js';
   import projections from './map/projections/';
 
   export let date;

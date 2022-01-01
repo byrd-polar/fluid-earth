@@ -2,7 +2,8 @@
   import { onMount } from 'svelte';
   import interact from 'interactjs';
   import { reproj } from '../map/projections/';
-  import { clamp, modulo, genericLabel } from '../utility.js';
+  import { clamp, modulo } from '../math.js';
+  import { genericLabel } from '../utility.js';
 
   export let minZoom;
   export let maxZoom;

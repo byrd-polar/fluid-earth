@@ -3,7 +3,7 @@
   import ZoomOut from 'carbon-icons-svelte/lib/ZoomOut24';
   import Tweener from '../tweener.js';
   import { cubicOut } from 'svelte/easing';
-  import { clamp } from '../utility.js';
+  import { clamp } from '../math.js';
   import tooltip from '../tooltip.js';
 
   export let zoom;
