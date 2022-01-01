@@ -84,6 +84,72 @@ export class ZonedDateTime {
     return this.add(negativeDurationLike);
   }
 
+  round(roundTo) {
+    let {
+      smallestUnit=null,
+      roundingIncrement=1,
+      roundingMode='halfExpand',
+    } = typeof roundTo === 'string'
+        ? { smallestUnit: roundTo }
+        : roundTo;
+
+    let dateArgs = [
+      0,
+      'millisecond',
+      'second',
+      'minute',
+      'hour',
+      'day',
+      'month',
+      'year',
+    ].reduce((prev, unit) => {
+      if (typeof prev === 'number') {
+        let val = this[unit] + prev;
+        if (['month', 'day'].includes(unit)) val--;
+
+        if (unit === smallestUnit) {
+          let roundFn = {
+            halfExpand: Math.round,
+            trunc: Math.trunc,
+            floor: Math.floor,
+            ceil: Math.ceil,
+          }[roundingMode];
+
+          let remainder = val % roundingIncrement;
+
+          val -= remainder;
+          val += roundFn(remainder / roundingIncrement) * roundingIncrement;
+
+          return [val]
+
+        } else {
+          val /= {
+            millisecond: 1000,
+            second: 60,
+            minute: 60,
+            hour: 24,
+            day: this.daysInMonth,
+            month: 12,
+          }[unit];
+
+          return val;
+        }
+
+      } else {
+        let val = this[unit];
+        if (unit === 'month') val--;
+
+        prev.unshift(val);
+
+        return prev;
+      }
+    });
+
+    if (dateArgs.length === 1) dateArgs.push(0);
+
+    return this._fromDateArgs(...dateArgs);
+  }
+
   _get(unit) {
     return this._date[`get${this._utc ? 'UTC' : ''}${unit}`]();
   }
