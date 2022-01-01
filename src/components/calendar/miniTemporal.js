@@ -139,9 +139,7 @@ export class ZonedDateTime {
         let val = this[unit];
         if (unit === 'month') val--;
 
-        prev.unshift(val);
-
-        return prev;
+        return [val, ...prev];
       }
     });
 
