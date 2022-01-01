@@ -1,28 +1,25 @@
 import { clamp, modulo } from './../../utility.js';
 
 export class ZonedDateTime {
-  #date
-  #utc
-
   constructor(date, utc=false) {
-    this.#date = new Date(date);
-    this.#utc = utc;
+    this._date = new Date(date);
+    this._utc = utc;
   }
 
-  get year()        { return this.#get('FullYear'); }
-  get month()       { return this.#get('Month') + 1; }
-  get day()         { return this.#get('Date'); }
-  get hour()        { return this.#get('Hours'); }
-  get minute()      { return this.#get('Minutes'); }
-  get second()      { return this.#get('Seconds'); }
-  get millisecond() { return this.#get('Milliseconds'); }
+  get year()        { return this._get('FullYear'); }
+  get month()       { return this._get('Month') + 1; }
+  get day()         { return this._get('Date'); }
+  get hour()        { return this._get('Hours'); }
+  get minute()      { return this._get('Minutes'); }
+  get second()      { return this._get('Seconds'); }
+  get millisecond() { return this._get('Milliseconds'); }
 
-  #get(unit) {
-    return date[`get${this.#utc ? 'UTC' : ''}${unit}`]();
+  _get(unit) {
+    return date[`get${this._utc ? 'UTC' : ''}${unit}`]();
   }
 
   equals(other) {
-    return this.#date.getTime() === other.#date.getTime();
+    return this._date.getTime() === other._date.getTime();
   }
 
   with(dateTimeLike) {
@@ -36,9 +33,9 @@ export class ZonedDateTime {
       millisecond=this.millisecond,
     } = dateTimeLike;
 
-    let lastDayInMonth = this.#fromDateArgs(year, month + 1, 0).day;
+    let lastDayInMonth = this._fromDateArgs(year, month + 1, 0).day;
 
-    return this.#fromDateArgs(
+    return this._fromDateArgs(
       year,
       clamp(month, 1, 12) - 1,
       clamp(day, 1, lastDayInMonth),
@@ -60,7 +57,7 @@ export class ZonedDateTime {
       milliseconds=0,
     } = durationLike;
 
-    let sum = this.#fromDateArgs(
+    let sum = this._fromDateArgs(
       this.year + years,
       this.month - 1 + months,
       this.day + days,
@@ -85,8 +82,8 @@ export class ZonedDateTime {
     return this.add(negativeDurationLike);
   }
 
-  #fromDateArgs(...args) {
-    return this.#utc ? new ZonedDateTime(new Date(Date.UTC(...args)))
+  _fromDateArgs(...args) {
+    return this._utc ? new ZonedDateTime(new Date(Date.UTC(...args)))
                      : new ZonedDateTime(new Date(...args));
   }
 }
