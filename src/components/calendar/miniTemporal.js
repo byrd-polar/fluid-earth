@@ -6,6 +6,18 @@ export class ZonedDateTime {
     this.utc = utc;
   }
 
+  get year()        { return this.#get('FullYear'); }
+  get month()       { return this.#get('Month') + 1; }
+  get day()         { return this.#get('Date'); }
+  get hour()        { return this.#get('Hours'); }
+  get minute()      { return this.#get('Minutes'); }
+  get second()      { return this.#get('Seconds'); }
+  get millisecond() { return this.#get('Milliseconds'); }
+
+  #get(unit) {
+    return date[`get${this.utc ? 'UTC' : ''}${unit}`]();
+  }
+
   equals(other) {
     return this.date.getTime() === other.date.getTime();
   }
@@ -22,13 +34,13 @@ export class ZonedDateTime {
     } = durationLike;
 
     let sum = ZonedDateTime.#fromDateArgs(utc,
-      this.#get('FullYear') + years,
-      this.#get('Month') + months,
-      this.#get('Date') + days,
-      this.#get('Hours') + hours,
-      this.#get('Minutes') + minutes,
-      this.#get('Seconds') + seconds,
-      this.#get('Milliseconds') + milliseconds,
+      this.year + years,
+      this.month + months,
+      this.day + days,
+      this.hour + hours,
+      this.minute + minutes,
+      this.second + seconds,
+      this.millisecond + milliseconds,
     );
 
     let expectedMonth = modulo((this.#get('Month') + months + 12 * years), 12);
@@ -48,31 +60,26 @@ export class ZonedDateTime {
 
   with(dateTimeLike) {
     let {
-             year=this.#get('FullYear'),
-            month=this.#get('Month') + 1,
-              day=this.#get('Date'),
-             hour=this.#get('Hours'),
-           minute=this.#get('Minutes'),
-           second=this.#get('Seconds'),
-      millisecond=this.#get('Milliseconds'),
+             year=this.year,
+            month=this.month,
+              day=this.day,
+             hour=this.hour,
+           minute=this.minute,
+           second=this.second,
+      millisecond=this.millisecond,
     } = dateTimeLike;
 
-    let endOfMonth = ZonedDateTime.#fromDateArgs(utc, year, month + 1, 0);
-    let lastDayInMonth = this.#get(endOfMonth.date, 'Date');
+    let maxDay = ZonedDateTime.#fromDateArgs(utc, year, month + 1, 0).day;
 
     return ZonedDateTime.#fromDateArgs(utc,
       year,
       clamp(month, 1, 12) - 1,
-      clamp(day, 1, lastDayInMonth),
+      clamp(day, 1, maxDay),
       clamp(hour, 0, 23),
       clamp(minute, 0, 59),
       clamp(second, 0, 59),
       clamp(millisecond, 0, 999),
     );
-  }
-
-  #get(unit) {
-    return date[`get${this.utc ? 'UTC' : ''}${unit}`]();
   }
 
   static #fromDateArgs(utc, ...args) {
