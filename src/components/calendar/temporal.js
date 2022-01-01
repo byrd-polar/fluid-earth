@@ -56,7 +56,7 @@ export class BabyTemporal {
       second,
       millisecond,
     } = {
-      ...this.toDateTimeLike(utc, false),
+      ...this.toDateTimeLike({ utc }),
       ...dateTimeLike,
     };
 
@@ -64,26 +64,26 @@ export class BabyTemporal {
 
     return newObj(utc,
       year,
-      clamp(month, 1, 12) - 1,
-      clamp(day, 1, lastDayInMonth),
-      clamp(hour, 0, 23),
-      clamp(minute, 0, 59),
-      clamp(second, 0, 59),
-      clamp(millisecond, 0, 999),
+      clamp(month, unitFloors.month, 12) - 1,
+      clamp(day, unitFloors.day, lastDayInMonth),
+      clamp(hour, unitFloors.hour, 23),
+      clamp(minute, unitFloors.minute, 59),
+      clamp(second, unitFloors.second, 59),
+      clamp(millisecond, unitFloors.millisecond, 999),
     );
   }
 
   truncate(smallestUnit, utc=true) {
-    let dateTimeLike = this.toDateTimeLike(utc);
-    for (let unit of Object.keys(dateTimeLike)) {
-      if (unit === smallestUnit) break;
-
-      dateTimeLike[unit] = 0;
-    }
-    return this.with(dateTimeLike, utc);
+    return this.with(this.toDateTimeLike({ smallestUnit, utc }));
   }
 
-  toDateTimeLike(utc=true, simplify=true) {
+  toDateTimeLike(options={}) {
+    let {
+      smallestUnit=null,
+      utc=true,
+      trim=false,
+    } = options;
+
     let dateTimeLike = {
       millisecond: get(utc, this.date, 'Milliseconds'),
            second: get(utc, this.date, 'Seconds'),
@@ -94,13 +94,16 @@ export class BabyTemporal {
              year: get(utc, this.date, 'FullYear'),
     };
 
-    if (!simplify) return dateTimeLike;
+    for (let unit of Object.keys(dateTimeLike)) {
+      if (unit === smallestUnit) break;
 
-    for (let [unit, value] of Object.entries(dateTimeLike)) {
-      if (value !== defaultValues[unit]) continue;
-
-      delete dateTimeLike[unit];
+      if (trim) {
+        delete dateTimeLike[unit];
+      } else {
+        dateTimeLike[unit] = unitFloors[unit];
+      }
     }
+
     return dateTimeLike;
   }
 }
@@ -114,8 +117,7 @@ function get(utc, date, unit) {
   return date[`get${utc ? 'UTC' : ''}${unit}`]();
 }
 
-const defaultValues = {
-  year: NaN,
+const unitFloors = {
   month: 1,
   day: 1,
   hour: 0,
