@@ -1,4 +1,4 @@
-import { validOscarDates } from '../src/oscar.js';
+import { nextOscarDate } from '../src/oscar.js';
 import * as util from './utility.js';
 import { DateTime } from 'luxon';
 import { HTTPError } from 'got';
@@ -57,11 +57,8 @@ let speedDataset = inventory.find(d => d.path === speedDatasetBase.path);
 let datetime;
 
 if (dataset) {
-  const year = DateTime.fromISO(dataset.end, {zone: 'utc'}).year;
-  const dates = validOscarDates(year).concat(validOscarDates(year + 1));
-  datetime = DateTime.fromJSDate(
-    dates.find(d => d > new Date(dataset.end)), {zone: 'utc'}
-  );
+  let date = nextOscarDate(new Date(dataset.end));
+  datetime = DateTime.fromJSDate(date, {zone: 'utc'});
 
 } else {
   datetime = referenceDatetime.plus({days: 7001}); // earliest available input

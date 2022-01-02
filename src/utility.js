@@ -1,4 +1,4 @@
-import { clamp, modulo } from './math.js';
+import { clamp } from './math.js';
 
 // Returns the closest valid date from the dataset relative to the given date
 export function validDate(dataset, date, oscarOptions={}) {
@@ -9,16 +9,12 @@ export function validDate(dataset, date, oscarOptions={}) {
   } = oscarOptions;
 
   if (dataset.intervalInHours === 'custom:OSCAR') {
-    let year = date.getUTCFullYear();
-    let candidates = [
-      ...validOscarDates(year - 1),
-      ...validOscarDates(year),
-      ...validOscarDates(year + 1),
-    ]
-    .filter(c => !preserveMonth || c.getMonth() === date.getMonth())
-    .filter(c => !preserveUTCMonth || c.getUTCMonth() === date.getUTCMonth())
-    .filter(c => !excludedDate || c.getTime() !== excludedDate.getTime());
-
+    let candidates = getValidDates(dataset).filter(c => {
+      return (!preserveMonth || c.getMonth() === date.getMonth())
+          && (!preserveUTCMonth || c.getUTCMonth() === date.getUTCMonth())
+          && (!excludedDate || c.getTime() !== excludedDate.getTime());
+    });
+    candidates.push(dataset.start, dataset.end);
     // not at all an efficient search, optimize this part if it becomes an issue
     candidates.sort((d1, d2) => Math.abs(date - d1) - Math.abs(date - d2));
     return clamp(candidates[0], dataset.start, dataset.end);
@@ -50,21 +46,16 @@ import { validOscarDates } from './oscar.js';
 
 // Return a list of all the valid dates for a dataset
 export function getValidDates(dataset) {
-  const dates = [];
-
   if (dataset.intervalInHours === 'custom:OSCAR') {
-    let year = dataset.start.getUTCFullYear();
-    while (year <= dataset.end.getUTCFullYear()) {
-      dates.push(...validOscarDates(year));
-      year++;
-    }
-    return dates.filter(d => d >= dataset.start && d <= dataset.end);
+    return validOscarDates(dataset.start, dataset.end);
   }
 
-  let t = dataset.start.getTime();
-  while (t <= dataset.end.getTime()) {
+  let dates = [];
+  let start = dataset.start.getTime();
+  let end = dataset.end.getTime();
+  let interval = dataset.intervalInHours * 60 * 60 * 1000;
+  for (let t = start; t <= end; t += interval) {
     dates.push(new Date(t));
-    t += dataset.intervalInHours * 60 * 60 * 1000;
   }
   return dates;
 }
