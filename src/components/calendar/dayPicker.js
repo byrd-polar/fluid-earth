@@ -1,67 +1,12 @@
-import { clone } from './utility.js';
-
 export const headerUnit = 'month';
+export const headerRoundTo = {smallestUnit: 'month', roundingMode: 'trunc'};
+export const headerInterval = {months: 1};
+export const headerFormat = {month: 'long', year: 'numeric'};
 
-export function headerDate(date) {
-  return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-  );
-}
-
-export function nextHeaderDate(headerDate) {
-  return new Date(
-    headerDate.getFullYear(),
-    headerDate.getMonth() + 1,
-  );
-}
-
-export function prevHeaderDate(headerDate) {
-  return new Date(
-    headerDate.getFullYear(),
-    headerDate.getMonth() - 1,
-  );
-}
-
-export function formatHeader(headerDate) {
-  return headerDate.toLocaleString(undefined, {
-    month: 'long',
-    year: 'numeric',
-  });
-}
-
-export const boxUnit = 'day';
 export const boxDimensions = [7, 6];
-
-export function boxDates(headerDate) {
-  const days = Array.from({ length: 42 }, () => clone(headerDate));
-  const offset = -headerDate.getDay() + 1;
-  for (let i = 0; i < days.length; i++) days[i].setDate(i + offset);
-  return days;
-}
-
-export function boxDateEnabled(boxDate, headerDate) {
-  return boxDate.getMonth() === headerDate.getMonth();
-}
-
-export function boxDateSelected(boxDate, date) {
-  return boxDate.getFullYear() === date.getFullYear()
-      && boxDate.getMonth()    === date.getMonth()
-      && boxDate.getDate()     === date.getDate();
-}
-
-export function selectedDate(boxDate, date) {
-  return new Date(
-    boxDate.getFullYear(),
-    boxDate.getMonth(),
-    boxDate.getDate(),
-    date.getHours(),
-    date.getMinutes(),
-    date.getSeconds(),
-    date.getMilliseconds(),
-  );
-}
-
-export function formatBox(boxDate) {
-  return boxDate.getDate();
-}
+export const boxOffset = header => { return {days: -(header.dayOfWeek % 7)} };
+export const boxInterval = {days: 1};
+export const boxEnabled = (box, header) => box.month === header.month;
+export const boxSelectedRoundTo = {smallestUnit: 'day', roundingMode: 'trunc'};
+export const boxSelect = ['year', 'month', 'day'];
+export const boxFormat = {day: 'numeric'};

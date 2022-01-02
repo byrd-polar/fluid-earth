@@ -4,15 +4,12 @@
   import ChipGroup from '../ChipGroup.svelte';
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
+  import { ZonedDateTime } from './miniTemporal.js';
 
   import * as yearPicker from './yearPicker.js';
-  import * as yearPickerUTC from './yearPickerUTC.js';
   import * as monthPicker from './monthPicker.js';
-  import * as monthPickerUTC from './monthPickerUTC.js';
   import * as dayPicker from './dayPicker.js';
-  import * as dayPickerUTC from './dayPickerUTC.js';
   import * as hourPicker from './hourPicker.js';
-  import * as hourPickerUTC from './hourPickerUTC.js';
 
   export let date;
   export let griddedDataset;
@@ -20,47 +17,68 @@
 
   let pickerMode = 'days';
   $: pickers = {
-    years:  utc ? yearPickerUTC  : yearPicker,
-    months: utc ? monthPickerUTC : monthPicker,
-    days:   utc ? dayPickerUTC   : dayPicker,
-    hours:  utc ? hourPickerUTC  : hourPicker,
+    years: yearPicker,
+    months: monthPicker,
+    days: dayPicker,
+    hours: hourPicker,
   };
   $: options = Object.keys(pickers);
 
   $: picker = pickers[pickerMode];
 
-  $: headerDate = picker.headerDate(date);
-  $: prevHeaderDate = picker.prevHeaderDate(headerDate);
-  $: nextHeaderDate = picker.nextHeaderDate(headerDate);
+  $: header = new ZonedDateTime(date, utc).round(picker.headerRoundTo);
+  $: prevHeader = header.subtract(picker.headerInterval);
+  $: nextHeader = header.add(picker.headerInterval);
 
-  $: boxDates = picker.boxDates(headerDate);
+  $: length = picker.boxDimensions.reduce((x, y) => x * y);
+  $: boxes = getBoxes(header);
 
-  function selectDate(boxDate) {
-    if (picker.boxDateSelected(boxDate, date)) return;
+  function getBoxes(header) {
+    return Array.from({length}, (_, i) => {
+      let base = header;
+      if (picker.boxOffset) base = header.add(picker.boxOffset(header));
 
-    date = selectedDate(boxDate, griddedDataset);
+      return base.add(Object.fromEntries(
+        Object.entries(picker.boxInterval).map(([key, val]) => [key, i * val])));
+    });
   }
 
-  function selectedDate(boxDate, griddedDataset) {
-    let oscarMonthFilter = d => {
-      return utc ? d.getUTCMonth() === boxDate.getUTCMonth() :
-                   d.getMonth() === boxDate.getMonth();
-    };
-    return validDate(
-      griddedDataset,
-      picker.selectedDate(boxDate, date),
-      pickerMode === 'months' ? oscarMonthFilter : undefined,
-    );
+  function selectDate(box) {
+    date = selectedDate(box, griddedDataset);
   }
 
-  function getInfo(boxDate, headerDate, date, griddedDataset) {
-    let wouldBeSelectedDate = selectedDate(boxDate, griddedDataset);
-    return {
-      boxDate,
-      selected: picker.boxDateSelected(boxDate, date),
-      enabled: picker.boxDateSelected(boxDate, wouldBeSelectedDate)
-            && picker.boxDateEnabled(boxDate, headerDate),
+  function selectedDate(box, griddedDataset) {
+    let blend = new ZonedDateTime(date, utc).with(Object.fromEntries(
+      picker.boxSelect.map(unit => [unit, box[unit]]))).date;
+
+    let opts = {
+      preserveMonth: !utc && pickerMode === 'months',
+      preserveUTCMonth: utc && pickerMode === 'months',
     };
+
+    return validDate(griddedDataset, blend, opts);
+  }
+
+  function isSelectedIf(box, date) {
+    return box.equals(
+      new ZonedDateTime(date, utc).round(picker.boxSelectedRoundTo));
+  }
+
+  function getInfo(box, header, date, griddedDataset) {
+    let selected = isSelectedIf(box, date);
+    let enabled = isSelectedIf(box, selectedDate(box, griddedDataset))
+               && picker.boxEnabled(box, header);
+
+    return { box, selected, enabled };
+  }
+
+  function format(dt, formatter) {
+    if (typeof formatter === 'function') return formatter(dt, utc);
+
+    return dt.date.toLocaleString([], {
+      timeZone: utc ? 'UTC' : undefined,
+      ...formatter,
+    });
   }
 
   let width;
@@ -79,35 +97,33 @@
 >
   <div class="header">
     <button
-      on:click={() => headerDate = prevHeaderDate}
-      disabled={headerDate < griddedDataset.start}
+      on:click={() => header = prevHeader}
+      disabled={header.date < griddedDataset.start}
       use:tooltip={{content: `Prev ${picker.headerUnit}`}}
     >
       <LeftArrow />
     </button>
     <div>
-      {picker.formatHeader(headerDate)}
+      {format(header, picker.headerFormat)}
     </div>
     <button
-      on:click={() => headerDate = nextHeaderDate}
-      disabled={nextHeaderDate > griddedDataset.end}
+      on:click={() => header = nextHeader}
+      disabled={nextHeader.date > griddedDataset.end}
       use:tooltip={{content: `Next ${picker.headerUnit}`}}
     >
       <RightArrow />
     </button>
   </div>
-  {#each boxDates.map(boxDate => {
-    return getInfo(boxDate, headerDate, date, griddedDataset);
-  }) as { boxDate, selected, enabled }, i (pickerMode + i)}
+  {#each boxes.map(box => getInfo(box, header, date, griddedDataset))
+      as { box, selected, enabled }, i (pickerMode + i)}
     <button
       class="box"
       class:hour={pickerMode === 'hours'}
       class:selected={selected && enabled}
-      on:click={() => selectDate(boxDate)}
+      on:click={() => { if (!selected) selectDate(box) }}
       disabled={!enabled}
-      use:tooltip={{content: `Set ${picker.boxUnit}`}}
     >
-      {picker.formatBox(boxDate)}
+      {format(box, picker.boxFormat)}
     </button>
   {/each}
 </div>
