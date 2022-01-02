@@ -34,9 +34,9 @@
   use:tooltip={{ content: 'Change timezone', placement: 'bottom'}}
   tabindex="0"
 >
-  <h3 class="date">{date.toLocaleDateString(undefined, dateOptions)}</h3>
+  <h3 class="date">{date.toLocaleString([], dateOptions)}</h3>
   <h3 class="time">
-    {fix24(date.toLocaleTimeString(undefined, timeOptions))}
+    {fix24(date.toLocaleString([], timeOptions))}
   </h3>
 </section>
 

@@ -141,7 +141,7 @@
   </button>
   <h3>{capitalizeFirstLetter(title)}</h3>
   <p>{prettyMilliseconds(range, {verbose: true})} starting on
-  {validDates[0].toLocaleDateString(undefined, dateOptions)}</p>
+  {validDates[0].toLocaleString([], dateOptions)}</p>
   <RangeSlider
     bind:value
     on:start={handleStart}
@@ -151,7 +151,7 @@
     springValues={{ stiffness: 1, damping: 1 }}
     formatter={v => {
       const d = validDates[v];
-      return d.toLocaleString(undefined, { hour: 'numeric' });
+      return d.toLocaleString([], { hour: 'numeric' });
     }}
     --range-range="var(--primary-color-light)"
     --range-pip="gray"

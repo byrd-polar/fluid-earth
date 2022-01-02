@@ -46,7 +46,7 @@
 
 <div>
   <p>
-    Start time: <span>{start.toLocaleDateString(undefined, dateOptions)}</span>
+    Start time: <span>{start.toLocaleString([], dateOptions)}</span>
   </p>
   <label for="range-timepoints">Number of timepoints:</label>
   <input
@@ -67,7 +67,7 @@
     step={1}
   />
   <p>
-    End time: <span>{end.toLocaleDateString(undefined, dateOptions)}</span>
+    End time: <span>{end.toLocaleString([], dateOptions)}</span>
   </p>
   <label for="range-fps">Frames per second:</label>
   <input
