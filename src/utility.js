@@ -14,8 +14,11 @@ export function validDate(dataset, date, oscarOptions={}) {
           && (!preserveUTCMonth || c.getUTCMonth() === date.getUTCMonth())
           && (!excludedDate || c.getTime() !== excludedDate.getTime());
     });
-    candidates.push(dataset.start, dataset.end);
-    // not at all an efficient search, optimize this part if it becomes an issue
+    let inflection = candidates.findIndex(c => c - date > 0);
+    if (inflection === 0) return dataset.start;
+    if (inflection === -1) return dataset.end;
+
+    candidates = candidates.slice(inflection - 1, inflection + 1);
     candidates.sort((d1, d2) => Math.abs(date - d1) - Math.abs(date - d2));
     return clamp(candidates[0], dataset.start, dataset.end);
   }
