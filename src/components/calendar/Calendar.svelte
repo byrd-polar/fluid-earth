@@ -4,7 +4,7 @@
   import ChipGroup from '../ChipGroup.svelte';
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
-  import { ZonedDateTime } from './miniTemporal.js';
+  import { ZonedDateTime, multiply } from './miniTemporal.js';
 
   import * as yearPicker from './yearPicker.js';
   import * as monthPicker from './monthPicker.js';
@@ -38,8 +38,7 @@
       let base = header;
       if (picker.boxOffset) base = header.add(picker.boxOffset(header));
 
-      return base.add(Object.fromEntries(
-        Object.entries(picker.boxInterval).map(([key, val]) => [key, i * val])));
+      return base.add(multiply(picker.boxInterval, i));
     });
   }
 

@@ -83,10 +83,7 @@ export class ZonedDateTime {
   }
 
   subtract(durationLike) {
-    let negativeDurationLike = Object.fromEntries(
-      Object.entries(durationLike).map(([key, val]) => [key, -val]));
-
-    return this.add(negativeDurationLike);
+    return this.add(multiply(durationLike, -1));
   }
 
   round(roundTo) {
@@ -164,4 +161,10 @@ export class ZonedDateTime {
     let date = this._utc ? new Date(Date.UTC(...args)) : new Date(...args);
     return new ZonedDateTime(date, this._utc);
   }
+}
+
+export function multiply(durationLike, factor) {
+  return Object.fromEntries(Object.entries(durationLike).map(
+    ([key, val]) => [key, factor * val]
+  ));
 }
