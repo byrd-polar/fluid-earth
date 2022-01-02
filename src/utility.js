@@ -1,7 +1,8 @@
-import { clamp } from './math.js';
-
 // Returns the closest valid date from the dataset relative to the given date
 export function validDate(dataset, date, oscarOptions={}) {
+  if (date <= dataset.start) return dataset.start;
+  if (date >= dataset.end) return dataset.end;
+
   let {
     preserveMonth=false,
     preserveUTCMonth=false,
@@ -15,18 +16,17 @@ export function validDate(dataset, date, oscarOptions={}) {
           && (!excludedDate || c.getTime() !== excludedDate.getTime());
     });
     let inflection = candidates.findIndex(c => c - date > 0);
-    if (inflection === 0) return dataset.start;
-    if (inflection === -1) return dataset.end;
+    if (inflection === 0) return candidates[0];
+    if (inflection === -1) return candidates[candidates.length - 1];
 
     candidates = candidates.slice(inflection - 1, inflection + 1);
     candidates.sort((d1, d2) => Math.abs(date - d1) - Math.abs(date - d2));
-    return clamp(candidates[0], dataset.start, dataset.end);
+    return candidates[0];
   }
 
   let intervalInMilliseconds = (dataset.intervalInHours * 60 * 60 * 1000) || 1;
   let n = Math.round((date - dataset.start) / intervalInMilliseconds);
-  let d = new Date(dataset.start.getTime() + intervalInMilliseconds * n);
-  return clamp(d, dataset.start, dataset.end);
+  return new Date(dataset.start.getTime() + intervalInMilliseconds * n);
 }
 
 // Same as validDate, except returns null if the closest date is not "close
