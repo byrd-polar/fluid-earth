@@ -5,6 +5,7 @@
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
   import { ZonedDateTime, multiply } from './miniTemporal.js';
+  import { tick } from 'svelte';
 
   import * as yearPicker from './yearPicker.js';
   import * as monthPicker from './monthPicker.js';
@@ -80,10 +81,92 @@
     });
   }
 
+  let focusHandler, calendar, hasFocus;
+
+  async function handleFocus() {
+    date = date; // refresh header and boxes so that selected box is visible
+    await focusOnSelected();
+  }
+
+  $: updateFocusHandler(hasFocus);
+
+  function updateFocusHandler(hasFocus) {
+    if (!focusHandler) return;
+
+    focusHandler.setAttribute('tabindex', hasFocus ? -1 : 0);
+  }
+
+  async function handleKeydown(e) {
+    let duration, mathFn;
+
+    if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
+      duration = picker.boxInterval;
+    } else if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+      duration = multiply(picker.boxInterval, picker.boxDimensions[0]);
+    } else if (['PageUp', 'PageDown'].includes(e.key)) {
+      duration = picker.headerInterval;
+    }
+
+    if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {
+      mathFn = 'subtract';
+    } else if (['ArrowRight', 'ArrowDown', 'PageDown'].includes(e.key)) {
+      mathFn = 'add';
+    }
+
+    if (!(duration && mathFn)) return;
+
+    e.preventDefault();
+
+    let newDate = new ZonedDateTime(date, utc)[mathFn](duration).date;
+    let preserveMonth = duration['months'] || duration['years'];
+    let opts = {
+      preserveMonth: !utc && preserveMonth,
+      preserveUTCMonth: utc && preserveMonth,
+      excludedDate: date,
+    };
+
+    date = validDate(griddedDataset, newDate, opts);
+    await focusOnSelected();
+  }
+
+  async function focusOnSelected() {
+    await tick();
+    calendar.querySelector('.selected').focus();
+  }
+
   let width;
 </script>
 
 <ChipGroup {options} bind:selected={pickerMode} />
+
+<div class="header">
+  <button
+    on:click={() => header = prevHeader}
+    disabled={header.date < griddedDataset.start}
+    use:tooltip={{content: `Prev ${picker.headerUnit}`}}
+    tabindex="-1"
+  >
+    <LeftArrow />
+  </button>
+  <div>
+    {format(header, picker.headerFormat)}
+  </div>
+  <button
+    on:click={() => header = nextHeader}
+    disabled={nextHeader.date > griddedDataset.end}
+    use:tooltip={{content: `Next ${picker.headerUnit}`}}
+    tabindex="-1"
+  >
+    <RightArrow />
+  </button>
+</div>
+
+<div
+  bind:this={focusHandler}
+  on:focus={handleFocus}
+  tabindex="0"
+>
+</div>
 
 <div
   bind:clientWidth={width}
@@ -93,26 +176,11 @@
     --rows: {picker.boxDimensions[1]};
     --width: {width}px;
   "
+  bind:this={calendar}
+  on:focusin={() => hasFocus = true}
+  on:focusout={() => hasFocus = false}
+  on:keydown={handleKeydown}
 >
-  <div class="header">
-    <button
-      on:click={() => header = prevHeader}
-      disabled={header.date < griddedDataset.start}
-      use:tooltip={{content: `Prev ${picker.headerUnit}`}}
-    >
-      <LeftArrow />
-    </button>
-    <div>
-      {format(header, picker.headerFormat)}
-    </div>
-    <button
-      on:click={() => header = nextHeader}
-      disabled={nextHeader.date > griddedDataset.end}
-      use:tooltip={{content: `Next ${picker.headerUnit}`}}
-    >
-      <RightArrow />
-    </button>
-  </div>
   {#each boxes.map(box => getInfo(box, header, date, griddedDataset))
       as { box, selected, enabled }, i (pickerMode + i)}
     <button
@@ -121,6 +189,7 @@
       class:selected={selected && enabled}
       on:click={() => { if (!selected) selectDate(box) }}
       disabled={!enabled}
+      tabindex="-1"
     >
       {format(box, picker.boxFormat)}
     </button>
@@ -140,24 +209,17 @@
     filter: brightness(125%);
   }
 
-  div.calendar {
-    --header-height: 3.8rem;
-    margin-top: 0.5em;
-    display: grid;
-    grid-template-columns: repeat(var(--cols), 1fr);
-    grid-template-rows: var(--header-height) repeat(var(--rows), 1fr);
-    height: calc(var(--header-height) + var(--width) * 6 / 7); /* square days */
-    gap: 1px;
+  div.header, div.calendar {
     font-size: 1.2em;
-    border-radius: 4px;
     overflow: hidden;
   }
 
   div.header {
-    height: var(--header-height);
-    grid-column-start: span var(--cols);
+    margin: 0.5em 0 1px;
+    height: 3.8rem;
     background: var(--primary-color);
     display: flex;
+    border-radius: 4px 4px 0 0;
   }
 
   div.header::before {
@@ -184,6 +246,15 @@
     color: grey;
     filter: none;
     cursor: auto;
+  }
+
+  div.calendar {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
+    height: calc(var(--width) * 6 / 7); /* square days */
+    gap: 1px;
+    border-radius: 0 0 4px 4px;
   }
 
   button.box {
