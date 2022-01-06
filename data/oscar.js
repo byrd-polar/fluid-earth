@@ -77,11 +77,8 @@ try {
 } catch (e) {
   if ( e instanceof HTTPError
     && [404, 503].includes(e.response.statusCode)
-    && DateTime.now() < datetime.plus({days: 3})
   ) {
-    console.log(
-      '\nRun considered successful as file is not expected to exist yet.'
-    );
+    console.log('\nIgnoring missing file or unresponsive server.');
     process.exit();
   }
   throw e;
