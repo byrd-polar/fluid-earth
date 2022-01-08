@@ -39,7 +39,7 @@ const month = datetime.toFormat('LL');
 const day = datetime.toFormat('dd');
 
 const inputFile = await util.download(
-  'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
+  'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/' +
   `sst.${year}${month}${day}/rtgssthr_grb_0.083_awips.grib2`,
   true
 );

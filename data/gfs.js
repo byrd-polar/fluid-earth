@@ -310,12 +310,12 @@ function getDataURL(system, datetime, forecast, wave) {
   const fNum = forecast.toString().padStart(3, '0');
 
   if (wave) {
-    return 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
+    return 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/' +
       `${system}.${year}${month}${day}/${hour}/wave/gridded/` +
       `${system}wave.t${hour}z.global.0p25.f${fNum}.grib2`;
   }
 
-  return 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/' +
+  return 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/' +
     `${system}.${year}${month}${day}/${hour}/atmos/` +
     `${system}.t${hour}z.pgrb2.0p25.f${fNum}`;
 }
