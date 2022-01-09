@@ -21,7 +21,7 @@ export async function atomicWriteFile(file, data) {
 }
 
 export async function createTempDir() {
-  return await mkdtemp(join(tmpdir(), 'fev2r'));
+  return await mkdtemp(join(tmpdir(), 'fev2r-'));
 }
 
 export async function lockFile(file) {
