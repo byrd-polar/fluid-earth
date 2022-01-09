@@ -1,3 +1,4 @@
+import { createWriteStream } from 'fs';
 import {
   mkdtemp,
   open,
@@ -6,6 +7,7 @@ import {
   rmdir,
   writeFile,
 } from 'fs/promises';
+import { get } from 'https';
 import { tmpdir } from 'os';
 import { basename, join } from 'path';
 
@@ -47,4 +49,21 @@ export async function unlockFile(file) {
 
 function getLockfile(file) {
   return `${file}.lock`;
+}
+
+export async function download(url, file) {
+  let writeStream = createWriteStream(file);
+  await new Promise((resolve, reject) => {
+    get(url, response => {
+      let { statusCode, statusMessage } = response;
+      if (statusCode !== 200) {
+        response.resume();
+        reject(`Download failed: ${statusCode} ${statusMessage}`);
+        return;
+      }
+      response.pipe(writeStream)
+        .on('error', reject)
+        .on('close', resolve);
+    }).on('error', reject);
+  });
 }
