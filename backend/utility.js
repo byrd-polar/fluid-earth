@@ -7,11 +7,11 @@ import {
   writeFile,
 } from 'fs/promises';
 import { tmpdir } from 'os';
-import { join } from 'path';
+import { basename, join } from 'path';
 
 export async function atomicWriteFile(file, data) {
   let tmpDir = await createTempDir();
-  let tmpFile = join(tmpDir, file);
+  let tmpFile = join(tmpDir, basename(file));
 
   await writeFile(tmpFile, data);
   await rename(tmpFile, file);
