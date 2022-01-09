@@ -50,9 +50,9 @@ function getLockfile(file) {
   return `${file}.lock`;
 }
 
-export async function download(url, file) {
+export async function download(url, file, options={}) {
   await new Promise((resolve, reject) => {
-    get(url, response => {
+    get(url, options, response => {
       let { statusCode, statusMessage } = response;
       if (statusCode !== 200) {
         response.resume();
