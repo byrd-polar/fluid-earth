@@ -31,15 +31,14 @@ export async function lockFile(file) {
   while (true) {
     try {
       await open(lock, 'wx');
+      break;
 
     } catch {
       if (backoff > 5_000) throw `Getting lock on ${file} timed out`;
 
       await new Promise(r => setTimeout(r, backoff));
       backoff += 100;
-      continue;
     }
-    break;
   }
 }
 
@@ -52,7 +51,6 @@ function getLockfile(file) {
 }
 
 export async function download(url, file) {
-  let writeStream = createWriteStream(file);
   await new Promise((resolve, reject) => {
     get(url, response => {
       let { statusCode, statusMessage } = response;
@@ -61,7 +59,7 @@ export async function download(url, file) {
         reject(`Download failed: ${statusCode} ${statusMessage}`);
         return;
       }
-      response.pipe(writeStream)
+      response.pipe(createWriteStream(file))
         .on('error', reject)
         .on('close', resolve);
     }).on('error', reject);
