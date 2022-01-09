@@ -6,10 +6,12 @@ import {
   rmdir,
   writeFile,
 } from 'fs/promises';
+import { tmpdir } from 'os';
+import { join } from 'path';
 
 export async function atomicWriteFile(file, data) {
   let tmpDir = await createTempDir();
-  let tmpFile = path.join(tmpDir, file);
+  let tmpFile = join(tmpDir, file);
 
   await writeFile(tmpFile, data);
   await rename(tmpFile, file);
@@ -17,7 +19,7 @@ export async function atomicWriteFile(file, data) {
 }
 
 export async function createTempDir() {
-  return await mkdtemp(path.join(os.tmpdir(), 'fev2r'));
+  return await mkdtemp(join(tmpdir(), 'fev2r'));
 }
 
 export async function lockFile(file) {
