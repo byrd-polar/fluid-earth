@@ -56,7 +56,7 @@ export async function download(url, file, options={}) {
       let { statusCode, statusMessage } = response;
       if (statusCode !== 200) {
         response.resume();
-        reject(`Download failed: ${statusCode} ${statusMessage}`);
+        reject(`Download failed with status ${statusCode} ${statusMessage}`);
         return;
       }
       response.pipe(createWriteStream(file))
