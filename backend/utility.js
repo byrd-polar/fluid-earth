@@ -10,6 +10,7 @@ import {
 import { get } from 'https';
 import { tmpdir } from 'os';
 import { basename, join } from 'path';
+import { setTimeout as sleep } from 'timers/promises';
 
 export async function atomicWriteFile(file, data) {
   let tmpDir = await createTempDir();
@@ -36,7 +37,7 @@ export async function lockFile(file) {
     } catch {
       if (backoff > 5_000) throw `Getting lock on ${file} timed out`;
 
-      await new Promise(r => setTimeout(r, backoff));
+      await sleep(backoff);
       backoff += 100;
     }
   }

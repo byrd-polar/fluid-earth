@@ -1,5 +1,6 @@
 import { Worker } from 'worker_threads'
 import { basename } from 'path';
+import { setTimeout as sleep } from 'timers/promises';
 
 runRabbitOnRepeat('./datasets/rtgssthr-0p083.js');
 
@@ -11,7 +12,7 @@ async function runRabbitOnRepeat(module) {
     } catch(error) {
       minutesBeforeRetry ??= 5;
       printMessage(module, error, minutesBeforeRetry);
-      await sleep(minutesBeforeRetry);
+      await sleep(msFromMinutes(minutesBeforeRetry));
     }
   }
 }
@@ -19,7 +20,7 @@ async function runRabbitOnRepeat(module) {
 async function runRabbit(module, time) {
   await new Promise((resolve, reject) => {
     let worker = new Worker('./rabbit.js', { argv: [module] });
-    let timeout = setTimeoutInMinutes(() => worker.terminate(), time);
+    let timeout = setTimeout(() => worker.terminate(), msFromMinutes(time));
     worker.on('error', reject);
     worker.on('exit', exitCode => {
       if (exitCode === 0) {
@@ -39,10 +40,6 @@ function printMessage(module, error, retry) {
   ].map(str => `${basename(module, '.js')}: ${str}`).join('\n'));
 }
 
-async function sleep(minutes) {
-  await new Promise(resolve => setTimeoutInMinutes(resolve, minutes));
-}
-
-function setTimeoutInMinutes(func, minutes) {
-  return setTimeout(func, 60 * 1000 * minutes);
+function msFromMinutes(minutes) {
+  return 60_000 * minutes;
 }
