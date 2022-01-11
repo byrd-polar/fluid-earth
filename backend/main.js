@@ -2,17 +2,19 @@ import { Worker } from 'worker_threads'
 import { basename } from 'path';
 import { setTimeout as sleep } from 'timers/promises';
 
+const MINUTES_BEFORE_RETRY = 5;
+const MINUTES_BEFORE_TIMEOUT = 5;
+
 runRabbitOnRepeat('./datasets/rtgssthr-0p083.js');
 
 async function runRabbitOnRepeat(module) {
   while(true) {
     try {
-      var { minutesBeforeTimeout, minutesBeforeRetry } = await import(module);
-      await runRabbit(module, minutesBeforeTimeout ?? 5);
+      await runRabbit(module, MINUTES_BEFORE_TIMEOUT);
+
     } catch(error) {
-      minutesBeforeRetry ??= 5;
-      printMessage(module, error, minutesBeforeRetry);
-      await sleep(msFromMinutes(minutesBeforeRetry));
+      printMessage(module, error, MINUTES_BEFORE_RETRY);
+      await sleep(msFromMinutes(MINUTES_BEFORE_RETRY));
     }
   }
 }
