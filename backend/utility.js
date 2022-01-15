@@ -10,7 +10,7 @@ import {
 import { get } from 'https';
 import { tmpdir } from 'os';
 import { basename, join } from 'path';
-import { pipeline as pipelineWithCallback } from 'stream';
+import { pipeline } from 'stream';
 import { setTimeout as sleep } from 'timers/promises';
 
 export async function atomicWriteFile(file, data) {
@@ -61,7 +61,7 @@ export async function download(url, file, options={}) {
         reject(`Download failed with status ${statusCode} ${statusMessage}`);
         return;
       }
-      pipelineWithCallback(
+      pipeline(
         response,
         createWriteStream(file),
         err => err ? reject(err) : resolve(),
