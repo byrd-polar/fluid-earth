@@ -69,8 +69,8 @@ export async function gfs_acc_grib(inputA, inputB, output) {
 
     pipeline(
       combine(sourceA, sourceB),
-      float32_to_float16,
       fix_nan_for_glsl,
+      float32_to_float16,
       createWriteStream(output),
       err => err ? reject(err) : resolve(),
     );
@@ -78,7 +78,7 @@ export async function gfs_acc_grib(inputA, inputB, output) {
 }
 
 function get_source(path, reject) {
-  return gfs_wgrib2(input, reject)
+  return gfs_wgrib2(path, reject)
     .on('error', reject)
     .pipe(Duplex.from(gfs_processing))
     .on('error', reject)
