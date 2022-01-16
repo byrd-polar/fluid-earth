@@ -24,9 +24,9 @@ export async function gfs_grib(input, output, factor=1) {
 }
 
 export async function gfs_acc_grib(inputA, inputB, output) {
-  let arrA = await get_values_array(inputA);
-  let arrB = await get_values_array(inputB);
-
+  let [arrA, arrB] = await Promise.all([inputA, inputB].map(input => {
+    return get_values_array(input);
+  }));
   await writeFile(output, float16_buffer(arrA.map((a, i) => {
     let b = arrB[i];
     a = is_magic_NaN(a) ? NaN : a;
