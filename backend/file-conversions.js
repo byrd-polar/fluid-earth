@@ -35,35 +35,29 @@ function gfs_wgrib2(path, reject) {
 
 async function* gfs_processing(source) {
   for await(const chunk of source) {
-    yield Buffer.from(
-      new Float32Array(chunk.buffer)
-      .map(v => v > 9.9989e20 ? NaN : v));
+    for await(const val of new Float32Array(chunk.buffer)) {
+      yield val > 9.9989e20 ? NaN : val;
+    }
   }
 }
 
 function multiply(factor) {
   return async function*(source) {
-    for await(const chunk of source) {
-      yield Buffer.from(
-        new Float32Array(chunk.buffer)
-        .map(v => v * factor));
+    for await(const val of source) {
+      yield v * factor;
     }
   }
 }
 
 async function* fix_nan_for_glsl() {
-  for await(const chunk of source) {
-    yield Buffer.from(
-      new Float32Array(chunk.buffer)
-      .map(v => isNaN(v) ? -Infinity : v));
+  for await(const val of source) {
+    yield isNaN(val) ? -Infinity : val;
   }
 }
 
 async function* float32_to_float16(source) {
-  for await(const chunk of source) {
-    yield Buffer.from(
-      Float16Array.from(
-        new Float32Array(chunk.buffer)));
+  for await(const val of source) {
+    yield Buffer.from(Float16Array.of(val).buffer);
   }
 }
 
@@ -87,16 +81,6 @@ function get_source(path, reject) {
     .on('error', reject)
     .pipe(Duplex.from(gfs_processing))
     .on('error', reject)
-    .pipe(Duplex.from(get_singles))
-    .on('error', reject);
-}
-
-async function* get_singles(source) {
-  for await(const chunk of source) {
-    for (const value of new Float32Array(chunk.buffer)) {
-      yield value;
-    }
-  }
 }
 
 function combine(sourceA, sourceB) {
