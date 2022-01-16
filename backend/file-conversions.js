@@ -9,10 +9,13 @@ export async function gfs_grib(input, output, factor=1) {
   await new Promise((resolve, reject) => {
     pipeline(
       gfs_wgrib2(input, reject),
-      gfs_processing,
-      multiply(factor),
-      fix_nan_for_glsl,
-      float32_to_float16,
+      async function*(source) {
+        for await(const chunk of source) {
+          let arr = new Float32Array(chunk.buffer)
+            .map(v => v > 9.9989e20 ? -Infinity : v * factor)
+          yield Buffer.from(new Float16Array(arr).buffer);
+        }
+      },
       createWriteStream(output),
       err => err ? reject(err) : resolve(),
     );
