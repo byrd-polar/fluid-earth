@@ -12,9 +12,9 @@ export async function gfs_grib(input, output, factor=1) {
       gfs_wgrib2(input, reject),
       async function*(source) {
         for await(const chunk of source) {
-          let arr = new Float32Array(chunk.buffer)
-            .map(v => is_magic_NaN(v) ? -Infinity : v * factor)
-          yield Buffer.from(new Float16Array(arr).buffer);
+          yield float16_buffer(new Float32Array(chunk.buffer).map(v => {
+            return is_magic_NaN(v) ? -Infinity : v * factor;
+          }));
         }
       },
       createWriteStream(output),
@@ -27,13 +27,13 @@ export async function gfs_acc_grib(inputA, inputB, output) {
   let arrA = await get_values_array(inputA);
   let arrB = await get_values_array(inputB);
 
-  await writeFile(output, Buffer.from((new Float16Array(arrA.map((a, i) => {
+  await writeFile(output, float16_buffer(arrA.map((a, i) => {
     let b = arrB[i];
     a = is_magic_NaN(a) ? NaN : a;
     b = is_magic_NaN(b) ? NaN : b;
     let v = b - a;
     return isNaN(v) ? -Infinity : v;
-  }))).buffer));
+  })));
 }
 
 async function get_values_array(path) {
@@ -64,4 +64,8 @@ function gfs_wgrib2(path, reject) {
 
 function is_magic_NaN(val) {
   return val > 9.9989e20;
+}
+
+function float16_buffer(float32Array) {
+  return Buffer.from(new Float16Array(float32Array).buffer);
 }
