@@ -41,14 +41,6 @@ async function* gfs_processing(source) {
   }
 }
 
-async function* float32_to_float16(source) {
-  for await(const chunk of source) {
-    yield Buffer.from(
-      Float16Array.from(
-        new Float32Array(chunk.buffer)));
-  }
-}
-
 function multiply(factor) {
   return async function*(source) {
     for await(const chunk of source) {
@@ -64,6 +56,14 @@ async function* fix_nan_for_glsl() {
     yield Buffer.from(
       new Float32Array(chunk.buffer)
       .map(v => isNaN(v) ? -Infinity : v));
+  }
+}
+
+async function* float32_to_float16(source) {
+  for await(const chunk of source) {
+    yield Buffer.from(
+      Float16Array.from(
+        new Float32Array(chunk.buffer)));
   }
 }
 
