@@ -1,5 +1,6 @@
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
+import { spawn } from 'child_process';
 import { createWriteStream } from 'fs';
 import { platform } from 'os';
 import { Duplex, pipeline } from 'stream';
@@ -44,12 +45,12 @@ async function* gfs_processing(source) {
 function multiply(factor) {
   return async function*(source) {
     for await(const val of source) {
-      yield v * factor;
+      yield val * factor;
     }
   }
 }
 
-async function* fix_nan_for_glsl() {
+async function* fix_nan_for_glsl(source) {
   for await(const val of source) {
     yield isNaN(val) ? -Infinity : val;
   }
