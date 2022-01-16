@@ -10,6 +10,7 @@ export async function gfs_grib(input, output, factor=1) {
       gfs_wgrib2(input, reject),
       gfs_processing,
       multiply(factor),
+      fix_nan_for_glsl,
       float32_to_float16,
       createWriteStream(output),
       err => err ? reject(err) : resolve(),
@@ -36,7 +37,7 @@ async function* gfs_processing(source) {
   for await(const chunk of source) {
     yield Buffer.from(
       new Float32Array(chunk.buffer)
-      .map(v => v > 9.9989e20 ? -Infinity : v));
+      .map(v => v > 9.9989e20 ? NaN : v));
   }
 }
 
@@ -58,6 +59,14 @@ function multiply(factor) {
   }
 }
 
+async function* fix_nan_for_glsl() {
+  for await(const chunk of source) {
+    yield Buffer.from(
+      new Float32Array(chunk.buffer)
+      .map(v => isNaN(v) ? -Infinity : v));
+  }
+}
+
 export async function gfs_acc_grib(inputA, inputB, output) {
   await new Promise((resolve, reject) => {
     let sourceA = get_source(inputA, reject);
@@ -66,6 +75,7 @@ export async function gfs_acc_grib(inputA, inputB, output) {
     pipeline(
       combine(sourceA, sourceB),
       float32_to_float16,
+      fix_nan_for_glsl,
       createWriteStream(output),
       err => err ? reject(err) : resolve(),
     );
@@ -98,8 +108,7 @@ function combine(sourceA, sourceB) {
     let b = await iterB.next();
 
     while (!a.done && !b.done) {
-      let val = b.value - a.value;
-      yield isNaN(val) ? -Infinity : val;
+      yield b.value - a.value;
 
       a = await iterA.next();
       b = await iterB.next();
