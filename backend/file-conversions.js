@@ -6,13 +6,13 @@ import { platform } from 'os';
 
 export async function gfs_grib(input, output, factor=1) {
   await writeFile(output, float32_array_to_float16_buffer(
-    await get_values_array(input),
+    await grib2_to_arr(input),
     v => is_magic_NaN(v) ? -Infinity : v,
   ));
 }
 
 export async function gfs_acc_grib(inputA, inputB, output) {
-  let [arrA, arrB] = await Promise.all([inputA, inputB].map(get_values_array));
+  let [arrA, arrB] = await Promise.all([inputA, inputB].map(grib2_to_arr));
 
   await writeFile(output, float32_array_to_float16_buffer(arrA, (a, i) => {
     let b = arrB[i];
@@ -23,30 +23,29 @@ export async function gfs_acc_grib(inputA, inputB, output) {
   }));
 }
 
-async function get_values_array(path) {
-  return new Promise(async (resolve, reject) => {
-    let stdout = gfs_wgrib2(path, reject);
-    let buffers = [];
-    for await(const chunk of stdout) {
-      buffers.push(chunk);
-    }
-    resolve(new Float32Array(Buffer.concat(buffers).buffer));
-  });
-}
+async function grib2_to_arr(path) {
+  return new Promise((resolve, reject) => {
+    let child = spawn('wgrib2', [
+      path,
+      '-inv', platform() === 'win32' ? 'NUL' : '/dev/null',
+      '-bin', '-',
+      '-no_header',
+      '-order', 'we:sn'
+    ]).on('error', reject);
 
-function gfs_wgrib2(path, reject) {
-  return spawn('wgrib2', [
-    path,
-    '-inv', platform() === 'win32' ? 'NUL' : '/dev/null',
-    '-bin', '-',
-    '-no_header',
-    '-order', 'we:sn'
-  ])
-  .on('error', reject)
-  .on('exit', code => {
-    if (code !== 0) reject(`wgrib2 exited with code ${code}`);
-  })
-  .stdout;
+    let { stdout, stderr } = child;
+    let chunks = [];
+
+    stdout.on('data', chunk => chunks.push(chunk));
+
+    child.on('close', code => {
+      if (code !== 0) {
+        reject(`wgrib2 exited with code ${code}`)
+      } else {
+        resolve(new Float32Array(Buffer.concat(chunks).buffer));
+      };
+    });
+  });
 }
 
 function is_magic_NaN(val) {
