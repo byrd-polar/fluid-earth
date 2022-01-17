@@ -1,39 +1,26 @@
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
-import { createWriteStream } from 'fs';
 import { writeFile } from 'fs/promises';
 import { platform } from 'os';
-import { Duplex, pipeline } from 'stream';
 
 export async function gfs_grib(input, output, factor=1) {
-  await new Promise((resolve, reject) => {
-    pipeline(
-      gfs_wgrib2(input, reject),
-      async function*(source) {
-        for await(const chunk of source) {
-          yield float16_buffer(new Float32Array(chunk.buffer).map(v => {
-            return is_magic_NaN(v) ? -Infinity : v * factor;
-          }));
-        }
-      },
-      createWriteStream(output),
-      err => err ? reject(err) : resolve(),
-    );
-  });
+  await writeFile(output, float32_array_to_float16_buffer(
+    await get_values_array(input),
+    v => is_magic_NaN(v) ? -Infinity : v,
+  ));
 }
 
 export async function gfs_acc_grib(inputA, inputB, output) {
-  let [arrA, arrB] = await Promise.all([inputA, inputB].map(input => {
-    return get_values_array(input);
-  }));
-  await writeFile(output, float16_buffer(arrA.map((a, i) => {
+  let [arrA, arrB] = await Promise.all([inputA, inputB].map(get_values_array));
+
+  await writeFile(output, float32_array_to_float16_buffer(arrA, (a, i) => {
     let b = arrB[i];
     a = is_magic_NaN(a) ? NaN : a;
     b = is_magic_NaN(b) ? NaN : b;
     let v = b - a;
     return isNaN(v) ? -Infinity : v;
-  })));
+  }));
 }
 
 async function get_values_array(path) {
@@ -66,6 +53,6 @@ function is_magic_NaN(val) {
   return val > 9.9989e20;
 }
 
-function float16_buffer(float32Array) {
-  return Buffer.from(new Float16Array(float32Array).buffer);
+function float32_array_to_float16_buffer(arr, transform) {
+  return Buffer.from(new Float16Array(arr.map(transform)).buffer);
 }
