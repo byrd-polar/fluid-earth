@@ -23,28 +23,35 @@ export async function gfs_acc_grib(inputA, inputB, output) {
   }));
 }
 
-async function grib2_to_arr(path) {
+async function grib2_to_arr(input) {
   return new Promise((resolve, reject) => {
     let child = spawn('wgrib2', [
-      path,
+      '-',
       '-inv', platform() === 'win32' ? 'NUL' : '/dev/null',
       '-bin', '-',
       '-no_header',
       '-order', 'we:sn'
-    ]).on('error', reject);
+    ], { stdio: [input, 'pipe', 'pipe'] });
 
     let { stdout, stderr } = child;
     let chunks = [];
+    let errs = [];
 
     stdout.on('data', chunk => chunks.push(chunk));
+    stderr.on('data', err => errs.push(err));
 
     child.on('close', code => {
-      if (code !== 0) {
-        reject(`wgrib2 exited with code ${code}`)
-      } else {
+      if (code === 0) {
         resolve(new Float32Array(Buffer.concat(chunks).buffer));
+      } else {
+        let msg = Buffer.concat(errs).toString();
+        reject(`wgrib2 exited with code ${code}:\n${msg}`);
       };
     });
+
+    for (let obj of [child, input, stdout, stderr]) {
+      obj.on('error', reject);
+    }
   });
 }
 
