@@ -1,6 +1,7 @@
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
+import { createReadStream } from 'fs';
 import { writeFile } from 'fs/promises';
 import { platform } from 'os';
 
@@ -24,6 +25,12 @@ export async function gfs_acc_grib(inputA, inputB, output) {
 }
 
 async function grib2_to_arr(input) {
+  if (typeof input === 'string') {
+    input = await new Promise((resolve, reject) => {
+      let s = createReadStream(input);
+      s.on('open', () => resolve(s));
+    });
+  }
   return new Promise((resolve, reject) => {
     let child = spawn('wgrib2', [
       '-',
