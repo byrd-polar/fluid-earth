@@ -8,7 +8,7 @@ import { platform } from 'os';
 export async function gfs_grib(input, output, factor=1) {
   await writeFile(output, float32_array_to_float16_buffer(
     await grib2_to_arr(input),
-    v => is_magic_NaN(v) ? -Infinity : v,
+    v => is_magic_NaN(v) ? -Infinity : v * factor,
   ));
 }
 
