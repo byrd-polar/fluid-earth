@@ -49,7 +49,8 @@ async function grib2_to_arr(input) {
 
     child.on('close', code => {
       if (code === 0) {
-        resolve(new Float32Array(Buffer.concat(chunks).buffer));
+        let buf = Buffer.concat(chunks);
+        resolve(new Float32Array(buf.buffer, buf.byteOffset, buf.length / 4));
       } else {
         let msg = Buffer.concat(errs).toString();
         reject(`wgrib2 exited with code ${code}:\n${msg}`);
