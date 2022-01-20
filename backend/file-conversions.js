@@ -12,14 +12,22 @@ export async function gfs_grib(input, output, factor=1) {
   ));
 }
 
+export async function gfs_speed_grib(inputA, inputB, output) {
+  await gfs_combine_grib(inputA, inputB, output, Math.hypot);
+}
+
 export async function gfs_acc_grib(inputA, inputB, output) {
+  await gfs_combine_grib(inputA, inputB, output, (a, b) => b - a);
+}
+
+async function gfs_combine_grib(inputA, inputB, output, combineFn) {
   let [arrA, arrB] = await Promise.all([inputA, inputB].map(grib2_to_arr));
 
   await writeFile(output, float32_array_to_float16_buffer(arrA, (a, i) => {
     let b = arrB[i];
     a = is_magic_NaN(a) ? NaN : a;
     b = is_magic_NaN(b) ? NaN : b;
-    let v = b - a;
+    let v = combineFn(a, b);
     return isNaN(v) ? -Infinity : v;
   }));
 }
