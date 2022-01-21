@@ -4,9 +4,12 @@ import { spawn } from 'child_process';
 import { createReadStream } from 'fs';
 import { writeFile } from 'fs/promises';
 import { platform } from 'os';
+import { brotliCompress as _brotliCompress, constants } from 'zlib';
+import { promisify } from 'util';
+const brotliCompress = promisify(_brotliCompress);
 
 export async function gfs_grib(input, output, factor=1) {
-  await writeFile(output, float32_array_to_float16_buffer(
+  await writeFile(output, await float32_array_to_data(
     await grib2_to_arr(input),
     v => is_magic_NaN(v) ? -Infinity : v * factor,
   ));
@@ -23,7 +26,7 @@ export async function gfs_acc_grib(inputA, inputB, output) {
 async function gfs_combine_grib(inputA, inputB, output, combineFn) {
   let [arrA, arrB] = await Promise.all([inputA, inputB].map(grib2_to_arr));
 
-  await writeFile(output, float32_array_to_float16_buffer(arrA, (a, i) => {
+  await writeFile(output, await float32_array_to_data(arrA, (a, i) => {
     let b = arrB[i];
     a = is_magic_NaN(a) ? NaN : a;
     b = is_magic_NaN(b) ? NaN : b;
@@ -75,6 +78,9 @@ function is_magic_NaN(val) {
   return val > 9.9989e20;
 }
 
-function float32_array_to_float16_buffer(arr, transform) {
-  return Buffer.from(new Float16Array(arr.map(transform)).buffer);
+async function float32_array_to_data(arr, transform) {
+  return await brotliCompress(
+    Buffer.from(new Float16Array(arr.map(transform)).buffer),
+    { params: { [constants.BROTLI_PARAM_QUALITY]: 9 } },
+  );
 }
