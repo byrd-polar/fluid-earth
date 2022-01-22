@@ -81,6 +81,6 @@ function is_magic_NaN(val) {
 async function float32_array_to_data(arr, transform) {
   return await brotliCompress(
     Buffer.from(new Float16Array(arr.map(transform)).buffer),
-    { params: { [constants.BROTLI_PARAM_QUALITY]: 9 } },
+    { params: { [constants.BROTLI_PARAM_QUALITY]: 6 } },
   );
 }
