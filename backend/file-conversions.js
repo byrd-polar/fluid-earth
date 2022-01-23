@@ -13,7 +13,8 @@ const defaults = {
   compression_level: 6,
 };
 
-export async function gfs_grib(input, output, options=defaults) {
+export async function gfs_grib(input, output, options) {
+  options = { ...defaults, ...options};
   await writeFile(output, await array_to_data(
     await grib2_to_arr(input),
     v => is_magic_NaN(v) ? -Infinity : v * options.factor,
@@ -21,13 +22,15 @@ export async function gfs_grib(input, output, options=defaults) {
   ));
 }
 
-export async function gfs_speed_grib(inputs, output, options=defaults) {
+export async function gfs_speed_grib(inputs, output, options) {
+  options = { ...defaults, ...options};
   await gfs_combine_grib(inputs, output, (a, b) => {
     return Math.hypot(a, b) * options.factor;
   }, options.compression_level);
 }
 
-export async function gfs_acc_grib(inputs, output, options=defaults) {
+export async function gfs_acc_grib(inputs, output, options) {
+  options = { ...defaults, ...options};
   await gfs_combine_grib(inputs, output, (a, b) => {
     return (b - a) * options.factor;
   }, options.compression_level);
