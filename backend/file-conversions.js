@@ -102,9 +102,8 @@ async function netcdf_to_arr(input, variable) {
       resolve(
         buffer
         .toString()
-        .split(` ${variable} =`)[1]
-        .split(/[,;]/)
-        .slice(0, -1)
+        .match(new RegExp(` ${variable} =\n(.*);`, 's'))[1]
+        .split(',')
         .map(x => parseFloat(x))
       );
     },
