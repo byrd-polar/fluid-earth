@@ -68,6 +68,8 @@ async function gfs_combine_grib(inputs, output, combine_fn, compression_level) {
   }, compression_level));
 }
 
+const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
+
 async function grib2_to_arr(input) {
   if (typeof input === 'string') {
     input = await new Promise((resolve, reject) => {
@@ -79,7 +81,7 @@ async function grib2_to_arr(input) {
     'wgrib2',
     [
       '-',
-      '-inv', platform() === 'win32' ? 'NUL' : '/dev/null',
+      '-inv', devnull,
       '-bin', '-',
       '-no_header',
       '-order', 'we:sn'
