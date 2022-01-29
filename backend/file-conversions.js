@@ -17,7 +17,7 @@ export async function grib2(input, output, options) {
   options = { ...defaults, ...options};
   await writeFile(output, await array_to_data(
     await grib2_to_arr(input),
-    v => is_magic_NaN(v) ? -Infinity : v * options.factor,
+    v => nan_for_glsl(is_magic_nan, v, options.factor),
     options.compression_level,
   ));
 }
@@ -40,7 +40,7 @@ export async function netcdf(input, output, options) {
   options = { ...defaults, ...options};
   await writeFile(output, await array_to_data(
     await netcdf_to_arr(input, options.variable),
-    v => isNaN(v) ? -Infinity : v * options.factor,
+    v => nan_for_glsl(isNaN, v, options.factor),
     options.compression_level,
   ));
 }
@@ -52,7 +52,7 @@ export async function netcdf_speed(input, output, options) {
   }));
   await writeFile(output, await array_to_data(arrA, (a, i) => {
     let v = Math.hypot(a, arrB[i]);
-    return isNaN(v) ? -Infinity : v * options.factor;
+    return nan_for_glsl(isNaN, v, options.factor);
   }, options.compression_level));
 }
 
@@ -61,10 +61,9 @@ async function gfs_combine_grib(inputs, output, combine_fn, compression_level) {
 
   await writeFile(output, await array_to_data(arrA, (a, i) => {
     let b = arrB[i];
-    a = is_magic_NaN(a) ? NaN : a;
-    b = is_magic_NaN(b) ? NaN : b;
-    let v = combine_fn(a, b);
-    return isNaN(v) ? -Infinity : v;
+    a = is_magic_nan(a) ? NaN : a;
+    b = is_magic_nan(b) ? NaN : b;
+    return nan_for_glsl(isNaN, combine_fn(a, b));
   }, compression_level));
 }
 
@@ -138,8 +137,12 @@ async function spawn_cmd(command, args, options, rejects, process_data_fn) {
   });
 }
 
-function is_magic_NaN(val) {
+function is_magic_nan(val) {
   return val > 9.9989e20;
+}
+
+function nan_for_glsl(is_nan_fn, val, factor=1) {
+  return is_nan_fn(val) ? -Infinity : val * factor;
 }
 
 async function array_to_data(arr, transform_fn, compression_level) {
