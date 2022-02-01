@@ -4,17 +4,43 @@ import { setTimeout as sleep } from 'timers/promises';
 
 const MINUTES_BEFORE_RETRY = 5;
 const MINUTES_BEFORE_TIMEOUT = 5;
+const MAX_CONCURRENT_RABBITS = 8;
 
-runRabbitOnRepeat('./datasets/rtgssthr-0p083.js');
+export class RabbitFarm {
+  #queued = [];
+  #running = new Set();
 
-async function runRabbitOnRepeat(module) {
-  while(true) {
+  add(...rabbits) {
+    this.#queued.push(...rabbits);
+    this.#tick();
+  }
+
+  #tick() {
+    while (this.#running.size < MAX_CONCURRENT_RABBITS) {
+      if (this.#queued.length === 0) break;
+
+      let rabbit = this.#queued.shift();
+      this.#run(rabbit);
+      this.#running.add(rabbit);
+    }
+  }
+
+  async #run(rabbit) {
+    let sleep_time = 0;
     try {
-      await runRabbit(module, MINUTES_BEFORE_TIMEOUT);
+      await runRabbit(rabbit, MINUTES_BEFORE_TIMEOUT);
 
     } catch(error) {
-      printMessage(module, error, MINUTES_BEFORE_RETRY);
-      await sleep(msFromMinutes(MINUTES_BEFORE_RETRY));
+      printMessage(rabbit, error, MINUTES_BEFORE_RETRY);
+      sleep_time = MINUTES_BEFORE_RETRY;
+
+    } finally {
+      this.#running.delete(rabbit);
+      this.#tick();
+
+      await sleep(msFromMinutes(sleep_time));
+      this.#queued.push(rabbit);
+      this.#tick();
     }
   }
 }
@@ -38,7 +64,7 @@ async function runRabbit(module, time) {
 function printMessage(module, error, retry) {
   console.log([
     ...error.toString().split('\n'),
-    `Retrying in ${retry} minutes...`,
+    `Retrying in ${retry} minutes (at least)...`,
   ].map(str => `${basename(module, '.js')}: ${str}`).join('\n'));
 }
 
