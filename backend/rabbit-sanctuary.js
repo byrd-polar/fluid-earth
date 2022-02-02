@@ -26,7 +26,9 @@ export class RabbitSanctuary {
   }
 
   remove(rabbit) {
-    this.#doomed.add(rabbit);
+    if (this.#all.has(rabbit)) {
+      this.#doomed.add(rabbit);
+    }
   }
 
   #tick() {
