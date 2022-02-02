@@ -9,17 +9,29 @@ const MAX_CONCURRENT_RABBITS = 8;
 export class RabbitSanctuary {
   #queued = [];
   #running = new Set();
+  #doomed = new Set();
 
   add(...rabbits) {
     this.#queued.push(...rabbits);
     this.#tick();
   }
 
+  remove(rabbit) {
+    this.#doomed.add(rabbit);
+  }
+
   #tick() {
     while (this.#running.size < MAX_CONCURRENT_RABBITS) {
       if (this.#queued.length === 0) break;
 
-      this.#run(this.#queued.shift());
+      let rabbit = this.#queued.shift();
+
+      if (this.#doomed.has(rabbit)) {
+        this.#doomed.delete(rabbit);
+
+      } else {
+        this.#run(rabbit);
+      }
     }
   }
 
