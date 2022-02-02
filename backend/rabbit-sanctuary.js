@@ -7,12 +7,21 @@ const MINUTES_BEFORE_TIMEOUT = 5;
 const MAX_CONCURRENT_RABBITS = 8;
 
 export class RabbitSanctuary {
+  #all = new Set();
   #queued = [];
   #running = new Set();
   #doomed = new Set();
 
   add(...rabbits) {
-    this.#queued.push(...rabbits);
+    for (let rabbit of rabbits) {
+      if (this.#all.has(rabbit)) {
+        this.#doomed.delete(rabbit);
+
+      } else {
+        this.#all.add(rabbit);
+        this.#queued.push(rabbit);
+      }
+    }
     this.#tick();
   }
 
@@ -27,6 +36,7 @@ export class RabbitSanctuary {
       let rabbit = this.#queued.shift();
 
       if (this.#doomed.has(rabbit)) {
+        this.#all.delete(rabbit);
         this.#doomed.delete(rabbit);
 
       } else {
