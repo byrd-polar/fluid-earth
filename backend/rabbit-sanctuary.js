@@ -19,29 +19,28 @@ export class RabbitSanctuary {
     while (this.#running.size < MAX_CONCURRENT_RABBITS) {
       if (this.#queued.length === 0) break;
 
-      let rabbit = this.#queued.shift();
-      this.#run(rabbit);
-      this.#running.add(rabbit);
+      this.#run(this.#queued.shift());
     }
   }
 
   async #run(rabbit) {
     let sleep_time = 0;
+    this.#running.add(rabbit);
+
     try {
       await do_rabbit_things(rabbit, MINUTES_BEFORE_TIMEOUT);
 
     } catch(error) {
       print_message(rabbit, error, MINUTES_BEFORE_RETRY);
       sleep_time = MINUTES_BEFORE_RETRY;
-
-    } finally {
-      this.#running.delete(rabbit);
-      this.#tick();
-
-      await sleep(ms_from_minutes(sleep_time));
-      this.#queued.push(rabbit);
-      this.#tick();
     }
+
+    this.#running.delete(rabbit);
+    this.#tick();
+
+    await sleep(ms_from_minutes(sleep_time));
+    this.#queued.push(rabbit);
+    this.#tick();
   }
 }
 
