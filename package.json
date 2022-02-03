@@ -29,6 +29,7 @@
     "@rollup/plugin-replace": "^4.0.0",
     "@sveltejs/vite-plugin-svelte": "*",
     "atomically": "^1.7.0",
+    "chokidar": "^3.5.3",
     "csv-parse": "^5.0.4",
     "dedent": "^0.7.0",
     "extract-zip": "^2.0.1",
