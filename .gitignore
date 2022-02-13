@@ -2,6 +2,8 @@
 /dist/
 /public/data/
 /data/cache/
+/backend/cache/
+/backend/tmp/
 
 .DS_Store
 
