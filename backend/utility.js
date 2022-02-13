@@ -1,4 +1,3 @@
-import { createWriteStream } from 'fs';
 import {
   mkdtemp,
   open,
@@ -7,27 +6,25 @@ import {
   rmdir,
   writeFile,
 } from 'fs/promises';
-import { get } from 'https';
 import { tmpdir } from 'os';
 import { basename, join } from 'path';
-import { pipeline } from 'stream';
 import { setTimeout as sleep } from 'timers/promises';
 
-export async function atomicWriteFile(file, data) {
-  let tmpDir = await createTempDir();
-  let tmpFile = join(tmpDir, basename(file));
+export async function write_file_atomically(file, data_or_stream) {
+  let tmp_dir = await create_temp_dir();
+  let tmp_file = join(tmp_dir, basename(file));
 
-  await writeFile(tmpFile, data);
-  await rename(tmpFile, file);
-  await rmdir(tmpDir);
+  await writeFile(tmp_file, data);
+  await rename(tmp_file, file);
+  await rmdir(tmp_dir);
 }
 
-export async function createTempDir() {
+export async function create_temp_dir() {
   return await mkdtemp(join(tmpdir(), 'fev2r-'));
 }
 
-export async function lockFile(file) {
-  let lock = getLockfile(file);
+export async function lock_file(file) {
+  let lock = get_lockfile(file);
   let backoff = 100;
 
   while (true) {
@@ -44,28 +41,10 @@ export async function lockFile(file) {
   }
 }
 
-export async function unlockFile(file) {
-  await rm(getLockfile(file));
+export async function unlock_file(file) {
+  await rm(get_lockfile(file));
 }
 
-function getLockfile(file) {
+function get_lockfile(file) {
   return `${file}.lock`;
-}
-
-export async function download(url, file, options={}) {
-  await new Promise((resolve, reject) => {
-    get(url, options, response => {
-      let { statusCode, statusMessage } = response;
-      if (statusCode !== 200) {
-        response.resume();
-        reject(`Download failed with status ${statusCode} ${statusMessage}`);
-        return;
-      }
-      pipeline(
-        response,
-        createWriteStream(file),
-        err => err ? reject(err) : resolve(),
-      );
-    }).on('error', reject);
-  });
 }
