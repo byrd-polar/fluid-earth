@@ -8,18 +8,19 @@ import { stream_to_file, write_file_atomically } from './utility.js';
 let cache_dir = join(dirname(fileURLToPath(import.meta.url)), 'cache');
 await mkdir(cache_dir, { recursive: true });
 
-export async function download(url, options, key) {
+export async function download_as_file(key, url, options={}) {
   let file = join(cache_dir, key);
-  let response = await get_response(url, options);
+  let response = await download_as_stream(url, options);
   
   if (response.headers['content-type'].startsWith('multipart/byteranges')) {
     await multipart_byteranges_to_file(file, response);
   } else {
     await stream_to_file(response, file);
   }
+  return file;
 }
 
-async function get_response(url, options) {
+export async function download_as_stream(url, options={}) {
   return new Promise((resolve, reject) => {
     get(url, options, response => {
       let { statusCode, statusMessage } = response;
