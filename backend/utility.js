@@ -13,7 +13,7 @@ import { pipeline } from 'stream/promises';
 import { createWriteStream } from 'fs';
 import { setTimeout as sleep } from 'timers/promises';
 
-let parent_tmp_dir = join(dirname(fileURLToPath(import.meta.url)), 'tmp');
+let parent_tmp_dir = join(dirname(fileURLToPath(import.meta.url)), 'atomic');
 await mkdir(parent_tmp_dir, { recursive: true });
 
 export async function write_file_atomically(file, data) {
