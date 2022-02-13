@@ -1,4 +1,7 @@
+import { join, dirname, basename } from 'path';
+import { fileURLToPath } from 'url';
 import {
+  mkdir,
   mkdtemp,
   open,
   rename,
@@ -6,21 +9,32 @@ import {
   rmdir,
   writeFile,
 } from 'fs/promises';
-import { tmpdir } from 'os';
-import { basename, join } from 'path';
+import { pipeline } from 'stream/promises';
+import { createWriteStream } from 'fs';
 import { setTimeout as sleep } from 'timers/promises';
 
-export async function write_file_atomically(file, data_or_stream) {
-  let tmp_dir = await create_temp_dir();
-  let tmp_file = join(tmp_dir, basename(file));
+let parent_tmp_dir = join(dirname(fileURLToPath(import.meta.url)), 'tmp');
+await mkdir(parent_tmp_dir, { recursive: true });
 
-  await writeFile(tmp_file, data);
-  await rename(tmp_file, file);
-  await rmdir(tmp_dir);
+export async function write_file_atomically(file, data) {
+  await write_atomically(file, data);
 }
 
-export async function create_temp_dir() {
-  return await mkdtemp(join(tmpdir(), 'fev2r-'));
+export async function stream_to_file(stream, file) {
+  await write_atomically(file, stream, true);
+}
+
+async function write_atomically(file, data, data_is_stream=false) {
+  let tmp_dir = await mkdtemp(parent_tmp_dir);
+  let tmp_file = join(tmp_dir, basename(file));
+
+  if (data_is_stream) {
+    await pipeline(data, createWriteStream(tmp_file));
+  } else {
+    await writeFile(tmp_file, data);
+  }
+  await rename(tmp_file, file);
+  await rmdir(tmp_dir);
 }
 
 export async function lock_file(file) {
