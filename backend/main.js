@@ -3,7 +3,7 @@ import { watch } from 'chokidar';
 
 let rc = new RabbitSanctuary();
 
-watch('./datasets')
+watch('./sources')
   .on('add', path => rc.add(relativize(path)))
   .on('unlink', path => rc.remove(relativize(path)));
 

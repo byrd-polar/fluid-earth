@@ -1,4 +1,6 @@
-export const metadataBase = {
+export const source = 'rtgssthr';
+
+export const metadata = {
   name: 'sea surface temperature',
   unit: 'tempC',
   originalUnit: 'tempK',
@@ -9,14 +11,4 @@ export const metadataBase = {
   height: 2160,
   intervalInHours: 24,
   projection: 'RTGSSTHR',
-};
-
-
-export function update(dataset, outputDirectory) {
-
-  return {
-    start: dataset.start,
-    end: datetime,
-    lastForecast: datetime,
-  }
 };
