@@ -13,8 +13,12 @@ import { pipeline } from 'stream/promises';
 import { setTimeout as sleep } from 'timers/promises';
 import { fileURLToPath } from 'url';
 
-let parent_tmp_dir = join(dirname(fileURLToPath(import.meta.url)), 'atomic');
+let parent_tmp_dir = absolute_path('./atomic');
 await mkdir(parent_tmp_dir, { recursive: true });
+
+export function absolute_path(relative_path) {
+  return join(dirname(fileURLToPath(import.meta.url)), relative_path);
+}
 
 export async function write_file_atomically(file, data) {
   await write_atomically(file, data);

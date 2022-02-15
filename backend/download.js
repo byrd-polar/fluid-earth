@@ -1,11 +1,14 @@
-import { stream_to_file, write_file_atomically } from './utility.js';
+import {
+  absolute_path,
+  stream_to_file,
+  write_file_atomically,
+} from './utility.js';
 import { Buffer } from 'buffer';
 import { mkdir, writeFile } from 'fs/promises';
 import { get } from 'https';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'path';
 
-let cache_dir = join(dirname(fileURLToPath(import.meta.url)), 'cache');
+let cache_dir = absolute_path('./cache');
 await mkdir(cache_dir, { recursive: true });
 
 export async function download_as_file(key, url, options={}) {
