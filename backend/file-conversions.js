@@ -1,8 +1,8 @@
+import { write_file_atomically } from './utility.js';
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
 import { createReadStream } from 'fs';
-import { writeFile } from 'fs/promises';
 import { platform } from 'os';
 import { brotliCompress as _brotliCompress, constants } from 'zlib';
 import { promisify } from 'util';
@@ -15,7 +15,7 @@ const defaults = {
 
 export async function grib2(input, output, options) {
   options = { ...defaults, ...options};
-  await writeFile(output, await array_to_data(
+  await write_file_atomically(output, await array_to_data(
     await grib2_to_arr(input),
     v => nan_for_glsl(is_magic_nan, v, options.factor),
     options.compression_level,
@@ -38,7 +38,7 @@ export async function grib2_acc(inputs, output, options) {
 
 export async function netcdf(input, output, options) {
   options = { ...defaults, ...options};
-  await writeFile(output, await array_to_data(
+  await write_file_atomically(output, await array_to_data(
     await netcdf_to_arr(input, options.variable),
     v => nan_for_glsl(isNaN, v, options.factor),
     options.compression_level,
@@ -50,7 +50,7 @@ export async function netcdf_speed(input, output, options) {
   let [arrA, arrB] = await Promise.all(options.variables.map(v => {
     return netcdf_to_arr(input, v);
   }));
-  await writeFile(output, await array_to_data(arrA, (a, i) => {
+  await write_file_atomically(output, await array_to_data(arrA, (a, i) => {
     let v = Math.hypot(a, arrB[i]);
     return nan_for_glsl(isNaN, v, options.factor);
   }, options.compression_level));
@@ -59,7 +59,7 @@ export async function netcdf_speed(input, output, options) {
 async function gfs_combine_grib(inputs, output, combine_fn, compression_level) {
   let [arrA, arrB] = await Promise.all(inputs.map(grib2_to_arr));
 
-  await writeFile(output, await array_to_data(arrA, (a, i) => {
+  await write_file_atomically(output, await array_to_data(arrA, (a, i) => {
     let b = arrB[i];
     a = is_magic_nan(a) ? NaN : a;
     b = is_magic_nan(b) ? NaN : b;
