@@ -1,5 +1,4 @@
-import { join, dirname, basename } from 'path';
-import { fileURLToPath } from 'url';
+import { createWriteStream } from 'fs';
 import {
   mkdir,
   mkdtemp,
@@ -9,9 +8,10 @@ import {
   rmdir,
   writeFile,
 } from 'fs/promises';
+import { join, dirname, basename } from 'path';
 import { pipeline } from 'stream/promises';
-import { createWriteStream } from 'fs';
 import { setTimeout as sleep } from 'timers/promises';
+import { fileURLToPath } from 'url';
 
 let parent_tmp_dir = join(dirname(fileURLToPath(import.meta.url)), 'atomic');
 await mkdir(parent_tmp_dir, { recursive: true });

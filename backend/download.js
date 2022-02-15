@@ -1,9 +1,9 @@
+import { stream_to_file, write_file_atomically } from './utility.js';
+import { Buffer } from 'buffer';
+import { mkdir, writeFile } from 'fs/promises';
+import { get } from 'https';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { get } from 'https';
-import { mkdir, writeFile } from 'fs/promises';
-import { Buffer } from 'buffer';
-import { stream_to_file, write_file_atomically } from './utility.js';
 
 let cache_dir = join(dirname(fileURLToPath(import.meta.url)), 'cache');
 await mkdir(cache_dir, { recursive: true });

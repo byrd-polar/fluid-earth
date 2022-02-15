@@ -1,6 +1,6 @@
-import { Worker } from 'worker_threads'
 import { basename } from 'path';
 import { setTimeout as sleep } from 'timers/promises';
+import { Worker } from 'worker_threads'
 
 const MINUTES_BEFORE_RETRY = 5;
 const MINUTES_BEFORE_TIMEOUT = 5;
