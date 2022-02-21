@@ -8,7 +8,7 @@ import { readdir, readFile } from 'fs/promises';
 import { basename, join, relative } from 'path';
 import { parentPort } from 'worker_threads';
 
-const datasets_dir = await make_absolute_path('./datasets');
+const datasets_dir = absolute_path('./datasets');
 const parent_output_dir = await make_absolute_path('../public/data');
 
 let source_path = process.argv[2];
@@ -23,26 +23,22 @@ let {
 
 parentPort?.postMessage(minutes_of_sleep_if_failure ?? minutes_of_sleep);
 
-let dataset_paths = (await readdir(datasets_dir))
-  .map(file => join(datasets_dir, file));
+let dataset_files = await readdir(datasets_dir);
+let datasets = (await Promise.all(dataset_files.map(async file => {
+  let dataset = await import(join(datasets_dir, file));
+  if (dataset.source !== source) return;
 
-let datasets = (await Promise.all(
-  dataset_paths.map(async path => await import(path))
-)).filter(dataset => dataset.source === source);
+  let output_dir = join(parent_output_dir, basename(file, '.js'));
+  await mkdir_p(output_dir);
 
-let output_dirs = await Promise.all(
-  dataset_paths.map(async path => {
-    let output_dir = join(parent_output_dir, basename(path, '.js'));
-    await mkdir_p(output_dir);
-    return output_dir;
-  })
-);
+  return { output_dir, ...dataset };
+}))).filter(d => d !== undefined);
 
-let { metadatas=[] } = await forage(datasets, output_dirs);
+let { metadatas=[] } = await forage(datasets);
 
 for (let [index, metadata] of metadatas.entries()) {
   let dataset = datasets[index];
-  let output_dir = output_dirs[index];
+  let output_dir = dataset.output_dir;
 
   metadata.name = dataset.name;
   metadata.path = `/${relative(absolute_path('../public'), output_dir)}/`;
