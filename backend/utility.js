@@ -16,9 +16,13 @@ import { fileURLToPath } from 'url';
 const parent_tmp_dir = await make_absolute_path('./atomic');
 
 export async function make_absolute_path(relative_path) {
-  let path = join(dirname(fileURLToPath(import.meta.url)), relative_path);
+  let path = absolute_path(relative_path);
   await mkdir_p(path);
   return path;
+}
+
+export function absolute_path(relative_path) {
+  return join(dirname(fileURLToPath(import.meta.url)), relative_path);
 }
 
 export async function mkdir_p(path) {
