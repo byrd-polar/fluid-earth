@@ -1,9 +1,9 @@
-import { absolute_path } from './utility.js';
+import { make_absolute_path } from './utility.js';
 import { readdir } from 'fs/promises';
 import { join, basename } from 'path';
 import { parentPort } from 'worker_threads';
 
-const datasets_dir = absolute_path('./datasets');
+const datasets_dir = await make_absolute_path('./datasets');
 
 let source_path = process.argv[2];
 let source = basename(source_path, '.js');

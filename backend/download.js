@@ -1,5 +1,5 @@
 import {
-  absolute_path,
+  make_absolute_path,
   stream_to_file,
   write_file_atomically,
 } from './utility.js';
@@ -8,8 +8,7 @@ import { mkdir, writeFile } from 'fs/promises';
 import { get } from 'https';
 import { join } from 'path';
 
-let cache_dir = absolute_path('./cache');
-await mkdir(cache_dir, { recursive: true });
+const cache_dir = await make_absolute_path('./cache');
 
 export async function download_as_file(key, url, options={}) {
   let file = join(cache_dir, key);
