@@ -3,6 +3,7 @@ import {
   mkdir,
   mkdtemp,
   open,
+  readFile,
   rename,
   rm,
   rmdir,
@@ -27,6 +28,21 @@ export function absolute_path(relative_path) {
 
 export async function mkdir_p(path) {
   await mkdir(path, { mode: '775', recursive: true });
+}
+
+export async function read_json(file, default_value=undefined) {
+  try {
+    return JSON.parse(await readFile(file, 'utf8'));
+  } catch (e) {
+    if (default_value !== undefined && e.code === 'ENOENT') {
+      return default_value;
+    }
+    throw e;
+  }
+}
+
+export async function write_json_atomically(file, obj) {
+  await write_file_atomically(file, JSON.stringify(obj, null, 2));
 }
 
 export async function write_file_atomically(file, data) {

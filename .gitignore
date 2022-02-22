@@ -4,6 +4,7 @@
 /data/cache/
 /backend/atomic/
 /backend/cache/
+/backend/state/
 
 .DS_Store
 

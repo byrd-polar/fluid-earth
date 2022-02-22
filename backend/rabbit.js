@@ -2,7 +2,9 @@ import {
   absolute_path,
   make_absolute_path,
   mkdir_p,
+  read_json,
   write_file_atomically,
+  write_json_atomically,
 } from './utility.js';
 import { readdir, readFile } from 'fs/promises';
 import { basename, join, relative } from 'path';
@@ -10,6 +12,7 @@ import { parentPort } from 'worker_threads';
 
 const datasets_dir = absolute_path('./datasets');
 const parent_output_dir = await make_absolute_path('../public/data');
+const state_dir = await make_absolute_path('./state');
 
 let source_path = process.argv[2];
 let source = basename(source_path, '.js');
@@ -34,7 +37,10 @@ let datasets = (await Promise.all(dataset_files.map(async file => {
   return { output_dir, ...dataset };
 }))).filter(d => d !== undefined);
 
-let { metadatas=[] } = await forage(datasets);
+let state_file = join(state_dir, `${source}.json`);
+let current_state = read_json(state_file, {});
+
+let { metadatas=[], new_state={} } = await forage(datasets, current_state);
 
 for (let [index, metadata] of metadatas.entries()) {
   let dataset = datasets[index];
@@ -44,7 +50,9 @@ for (let [index, metadata] of metadatas.entries()) {
   metadata.path = `/${relative(absolute_path('../public'), output_dir)}/`;
 
   let metadata_file = join(output_dir, 'metadata.json');
-  await write_file_atomically(metadata_file, JSON.stringify(metadata, null, 2));
+  await write_json_atomically(metadata_file, metadata);
 }
+
+await write_json_atomically(state_file, new_state);
 
 parentPort?.postMessage(minutes_of_sleep_if_success ?? minutes_of_sleep);
