@@ -9,22 +9,18 @@ const brotliCompress = promisify(_brotliCompress);
 
 export async function grib2(input, output, options={}) {
   await write_file_atomically(output, await array_to_data(
-    await grib2_to_arr(input),
+    await grib2_to_arr(input, options.match),
     v => nan_for_glsl(is_magic_nan, v, options.factor),
     options.compression_level,
   ));
 }
 
-export async function grib2_speed(inputs, output, options={}) {
-  await gfs_combine_grib(inputs, output, (a, b) => {
-    return Math.hypot(a, b) * options.factor;
-  }, options.compression_level);
+export async function grib2_speed(input, output, options={}) {
+  await gfs_combine_grib(input, output, options, Math.hypot);
 }
 
-export async function grib2_acc(inputs, output, options={}) {
-  await gfs_combine_grib(inputs, output, (a, b) => {
-    return (b - a) * options.factor;
-  }, options.compression_level);
+export async function grib2_acc(input, output, options={}) {
+  await gfs_combine_grib(input, output, options, (a, b) => b - a);
 }
 
 export async function netcdf(input, output, options={}) {
@@ -36,29 +32,31 @@ export async function netcdf(input, output, options={}) {
 }
 
 export async function netcdf_speed(input, output, options={}) {
-  let [arrA, arrB] = await Promise.all(options.variables.map(v => {
-    return netcdf_to_arr(input, v);
-  }));
+  let arrA = await netcdf_to_arr(input, options.variables[0]);
+  let arrB = await netcdf_to_arr(input, options.variables[1]);
+
   await write_file_atomically(output, await array_to_data(arrA, (a, i) => {
     let v = Math.hypot(a, arrB[i]);
     return nan_for_glsl(isNaN, v, options.factor);
   }, options.compression_level));
 }
 
-async function gfs_combine_grib(inputs, output, combine_fn, compression_level) {
-  let [arrA, arrB] = await Promise.all(inputs.map(grib2_to_arr));
+async function gfs_combine_grib(input, output, options, combine_fn) {
+  let arr = await grib2_to_arr(input, options.match);
+  let arrA = new Float32Array(arr.buffer, 0, arr.length / 2);
+  let arrB = new Float32Array(arr.buffer, 4 * arr.length / 2);
 
   await write_file_atomically(output, await array_to_data(arrA, (a, i) => {
     let b = arrB[i];
     a = is_magic_nan(a) ? NaN : a;
     b = is_magic_nan(b) ? NaN : b;
-    return nan_for_glsl(isNaN, combine_fn(a, b));
-  }, compression_level));
+    return nan_for_glsl(isNaN, combine_fn(a, b) * options.factor);
+  }, options.compression_level));
 }
 
 const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
 
-async function grib2_to_arr(input) {
+async function grib2_to_arr(input, match='.*') {
   if (typeof input === 'string') {
     input = await stream_from_file(input);
   }
@@ -66,6 +64,7 @@ async function grib2_to_arr(input) {
     'wgrib2',
     [
       '-',
+      '-match', match,
       '-inv', devnull,
       '-bin', '-',
       '-no_header',
