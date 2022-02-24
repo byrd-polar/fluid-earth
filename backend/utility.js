@@ -1,4 +1,3 @@
-import { createWriteStream } from 'fs';
 import {
   mkdir,
   mkdtemp,
@@ -46,22 +45,10 @@ export async function write_json_atomically(file, obj) {
 }
 
 export async function write_file_atomically(file, data) {
-  await write_atomically(file, data);
-}
-
-export async function stream_to_file(stream, file) {
-  await write_atomically(file, stream, true);
-}
-
-async function write_atomically(file, data, data_is_stream=false) {
   let tmp_dir = await mkdtemp(parent_tmp_dir);
   let tmp_file = join(tmp_dir, basename(file));
 
-  if (data_is_stream) {
-    await pipeline(data, createWriteStream(tmp_file));
-  } else {
-    await writeFile(tmp_file, data);
-  }
+  await writeFile(tmp_file, data);
   await rename(tmp_file, file);
   await rmdir(tmp_dir);
 }

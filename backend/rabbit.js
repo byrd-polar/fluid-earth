@@ -3,7 +3,6 @@ import {
   make_absolute_path,
   mkdir_p,
   read_json,
-  write_file_atomically,
   write_json_atomically,
 } from './utility.js';
 import { readdir, readFile } from 'fs/promises';

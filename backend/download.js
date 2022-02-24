@@ -1,9 +1,6 @@
-import {
-  make_absolute_path,
-  stream_to_file,
-  write_file_atomically,
-} from './utility.js';
+import { make_absolute_path } from './utility.js';
 import { Buffer } from 'buffer';
+import { createWriteStream } from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
 import { get } from 'https';
 import { join } from 'path';
@@ -17,7 +14,7 @@ export async function download_as_file(key, url, options={}) {
   if (response.headers['content-type'].startsWith('multipart/byteranges')) {
     await multipart_byteranges_to_file(file, response);
   } else {
-    await stream_to_file(response, file);
+    await pipeline(response, createWriteStream(file));
   }
   return file;
 }
@@ -55,5 +52,5 @@ async function multipart_byteranges_to_file(file, response) {
     index = multipart_byteranges.indexOf(start_delim, index);
   }
 
-  await write_file_atomically(file, Buffer.concat(bodies));
+  await writeFile(file, Buffer.concat(bodies));
 }
