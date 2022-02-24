@@ -1,14 +1,15 @@
-import { make_absolute_path } from './utility.js';
+import { make_absolute_path, stream_from_file } from './utility.js';
 import { Buffer } from 'buffer';
 import { createWriteStream } from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
 import { get } from 'https';
 import { join } from 'path';
+import { Readable } from 'stream';
 
 const cache_dir = await make_absolute_path('./cache');
 
 export async function download_as_file(key, url, options={}) {
-  let file = join(cache_dir, key);
+  let file = file_from_cache(key);
   let response = await download_as_stream(url, options);
   
   if (response.headers['content-type'].startsWith('multipart/byteranges')) {
@@ -17,6 +18,22 @@ export async function download_as_file(key, url, options={}) {
     await pipeline(response, createWriteStream(file));
   }
   return file;
+}
+
+export function file_from_cache(key) {
+  return join(cache_dir, key);
+}
+
+export async function stream_from_cache(key_or_keys) {
+  let keys = typeof key_or_keys === 'string' ? [key_or_keys] : key_or_keys;
+  let streams = await Promise.all(keys.map(async key => {
+    return await stream_from_file(file_from_cache(key));
+  }));
+  return Readable.from((async function* concat() {
+    for (const stream of streams) {
+      for await (const chunk of stream) yield chunk;
+    }
+  })());
 }
 
 export async function download_as_stream(url, options={}) {

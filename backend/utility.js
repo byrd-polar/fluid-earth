@@ -1,3 +1,4 @@
+import { createReadStream } from 'fs';
 import {
   mkdir,
   mkdtemp,
@@ -51,6 +52,10 @@ export async function write_file_atomically(file, data) {
   await writeFile(tmp_file, data);
   await rename(tmp_file, file);
   await rmdir(tmp_dir);
+}
+
+export async function stream_from_file(file) {
+  return createReadStream(null, { fd: await open(file) });
 }
 
 export async function lock_file(file) {

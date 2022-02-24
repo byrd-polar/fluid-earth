@@ -1,8 +1,7 @@
-import { write_file_atomically } from './utility.js';
+import { stream_from_file, write_file_atomically } from './utility.js';
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
-import { createReadStream } from 'fs';
 import { platform } from 'os';
 import { brotliCompress as _brotliCompress, constants } from 'zlib';
 import { promisify } from 'util';
@@ -71,10 +70,7 @@ const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
 
 async function grib2_to_arr(input) {
   if (typeof input === 'string') {
-    input = await new Promise((resolve, reject) => {
-      let s = createReadStream(input);
-      s.on('open', () => resolve(s));
-    });
+    input = await stream_from_file(input);
   }
   return await spawn_cmd(
     'wgrib2',
