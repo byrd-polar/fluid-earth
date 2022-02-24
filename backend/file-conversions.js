@@ -7,13 +7,7 @@ import { brotliCompress as _brotliCompress, constants } from 'zlib';
 import { promisify } from 'util';
 const brotliCompress = promisify(_brotliCompress);
 
-const defaults = {
-  factor: 1,
-  compression_level: 6,
-};
-
-export async function grib2(input, output, options) {
-  options = { ...defaults, ...options};
+export async function grib2(input, output, options={}) {
   await write_file_atomically(output, await array_to_data(
     await grib2_to_arr(input),
     v => nan_for_glsl(is_magic_nan, v, options.factor),
@@ -21,22 +15,19 @@ export async function grib2(input, output, options) {
   ));
 }
 
-export async function grib2_speed(inputs, output, options) {
-  options = { ...defaults, ...options};
+export async function grib2_speed(inputs, output, options={}) {
   await gfs_combine_grib(inputs, output, (a, b) => {
     return Math.hypot(a, b) * options.factor;
   }, options.compression_level);
 }
 
-export async function grib2_acc(inputs, output, options) {
-  options = { ...defaults, ...options};
+export async function grib2_acc(inputs, output, options={}) {
   await gfs_combine_grib(inputs, output, (a, b) => {
     return (b - a) * options.factor;
   }, options.compression_level);
 }
 
-export async function netcdf(input, output, options) {
-  options = { ...defaults, ...options};
+export async function netcdf(input, output, options={}) {
   await write_file_atomically(output, await array_to_data(
     await netcdf_to_arr(input, options.variable),
     v => nan_for_glsl(isNaN, v, options.factor),
@@ -44,8 +35,7 @@ export async function netcdf(input, output, options) {
   ));
 }
 
-export async function netcdf_speed(input, output, options) {
-  options = { ...defaults, ...options};
+export async function netcdf_speed(input, output, options={}) {
   let [arrA, arrB] = await Promise.all(options.variables.map(v => {
     return netcdf_to_arr(input, v);
   }));
@@ -141,7 +131,7 @@ function nan_for_glsl(is_nan_fn, val, factor=1) {
   return is_nan_fn(val) ? -Infinity : val * factor;
 }
 
-async function array_to_data(arr, transform_fn, compression_level) {
+async function array_to_data(arr, transform_fn, compression_level=6) {
   return await brotliCompress(
     Buffer.from(new Float16Array(arr.map(transform_fn)).buffer),
     { params: { [constants.BROTLI_PARAM_QUALITY]: compression_level } },
