@@ -62,6 +62,18 @@ export async function stream_from_file(file) {
   });
 }
 
+export async function run_all(promise_functions, max_concurrency=8) {
+  return new Promise((resolve, reject) => {
+    let finished_count = -max_concurrency;
+    let queue = [...promise_functions];
+    let tick = () => {
+      if (++finished_count === promise_functions.length) resolve();
+      if (queue.length > 0) queue.shift()().then(tick, reject);
+    };
+    for (let i = 0; i < max_concurrency; i++) tick();
+  });
+}
+
 export async function lock_file(file) {
   let lock = get_lockfile(file);
   let backoff = 100;
