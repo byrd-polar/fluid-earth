@@ -50,7 +50,7 @@ async function gfs_combine_grib(input, output, options, combine_fn) {
     let b = arrB[i];
     a = is_magic_nan(a) ? NaN : a;
     b = is_magic_nan(b) ? NaN : b;
-    return nan_for_glsl(isNaN, combine_fn(a, b) * options.factor);
+    return nan_for_glsl(isNaN, combine_fn(a, b), options.factor);
   }, options.compression_level));
 }
 
