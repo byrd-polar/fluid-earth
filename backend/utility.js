@@ -55,7 +55,11 @@ export async function write_file_atomically(file, data) {
 }
 
 export async function stream_from_file(file) {
-  return createReadStream(null, { fd: await open(file) });
+  return new Promise((resolve, reject) => {
+    let stream = createReadStream(file);
+    stream.on('open', () => resolve(stream));
+    stream.on('error', reject);
+  });
 }
 
 export async function lock_file(file) {
