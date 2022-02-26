@@ -10,7 +10,7 @@ import { basename, join, relative } from 'path';
 import { parentPort } from 'worker_threads';
 
 const datasets_dir = absolute_path('./datasets');
-const parent_output_dir = await make_absolute_path('../public/data');
+const parent_output_dir = await make_absolute_path('../public/tera');
 const state_dir = await make_absolute_path('./state');
 
 let source_path = process.argv[2];
