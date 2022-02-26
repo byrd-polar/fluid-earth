@@ -11,7 +11,7 @@ const cache_dir = await make_absolute_path('./cache');
 export async function download_as_file(key, url, options={}) {
   let file = file_from_cache(key);
   let response = await download_as_stream(url, options);
-  
+
   if (response.headers['content-type'].startsWith('multipart/byteranges')) {
     await multipart_byteranges_to_file(file, response);
   } else {
