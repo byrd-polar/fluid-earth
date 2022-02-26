@@ -6,7 +6,7 @@ import got from 'got';
 import pThrottle from 'p-throttle';
 import { promisify } from 'util';
 import { execFile as _execFile } from 'child_process';
-import _parseCSV from 'csv-parse';
+import {parse as _parseCSV } from 'csv-parse';
 const parseCSV = promisify(_parseCSV);
 const execFile = promisify(_execFile);
 

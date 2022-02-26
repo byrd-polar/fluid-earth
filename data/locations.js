@@ -5,7 +5,7 @@ import { promisify } from 'util';
 import { download, OUTPUT_DIR, CACHE_DIR, log } from './utility.js';
 
 import extract from 'extract-zip';
-import _parse from 'csv-parse';
+import { parse as _parse } from 'csv-parse';
 const parse = promisify(_parse);
 
 // Source + documentation: https://simplemaps.com/data/world-cities
