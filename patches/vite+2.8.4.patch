@@ -6,7 +6,7 @@ index a3dc2f2..15d5439 100644
          const destFile = path__default.resolve(destDir, file);
          const stat = fs__default.statSync(srcFile);
          if (stat.isDirectory()) {
-+            if (file === 'data') {
++            if (file === 'tera') {
 +                fs__default.symlinkSync(srcFile, destFile);
 +                continue;
 +            }
