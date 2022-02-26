@@ -27,12 +27,17 @@
 
   $: picker = pickers[pickerMode];
 
-  $: header = new ZonedDateTime(date, utc).round(picker.headerRoundTo);
+  $: header = updateHeader(date, utc, picker, header);
   $: prevHeader = header.subtract(picker.headerInterval);
   $: nextHeader = header.add(picker.headerInterval);
 
   $: length = picker.boxDimensions.reduce((x, y) => x * y);
   $: boxes = getBoxes(header);
+
+  function updateHeader(date, utc, picker, oldHeader=null) {
+    let newHeader = new ZonedDateTime(date, utc).round(picker.headerRoundTo);
+    return (oldHeader && oldHeader.equals(newHeader)) ? oldHeader : newHeader;
+  }
 
   function getBoxes(header) {
     return Array.from({length}, (_, i) => {
@@ -62,14 +67,6 @@
   function isSelectedIf(box, date) {
     return box.equals(
       new ZonedDateTime(date, utc).round(picker.boxSelectedRoundTo));
-  }
-
-  function getInfo(box, header, date, griddedDataset) {
-    let selected = isSelectedIf(box, date);
-    let enabled = isSelectedIf(box, selectedDate(box, griddedDataset))
-               && picker.boxEnabled(box, header);
-
-    return { box, selected, enabled };
   }
 
   function format(dt, formatter) {
@@ -181,8 +178,10 @@
   on:focusout={() => hasFocus = false}
   on:keydown={handleKeydown}
 >
-  {#each boxes.map(box => getInfo(box, header, date, griddedDataset))
-      as { box, selected, enabled }, i (pickerMode + i)}
+  {#each boxes as box, i (pickerMode + i)}
+    {@const selected = isSelectedIf(box, date)}
+    {@const enabled = isSelectedIf(box, selectedDate(box, griddedDataset))
+                   && picker.boxEnabled(box, header)}
     <button
       class="box"
       class:hour={pickerMode === 'hours'}
@@ -282,3 +281,5 @@
     background: var(--primary-color-light);
   }
 </style>
+
+<svelte:options immutable={true} />
