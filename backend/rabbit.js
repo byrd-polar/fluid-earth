@@ -28,16 +28,14 @@ parentPort?.postMessage(minutes_of_sleep_if_failure ?? minutes_of_sleep);
 let state_file = join(state_dir, `${source}.json`);
 let current_state = read_json(state_file, {});
 
-let dataset_files = await readdir(datasets_dir);
-let datasets = (await Promise.all(dataset_files.map(async file => {
-  let dataset = await import(join(datasets_dir, file));
-  if (dataset.source !== source) return;
+let dataset_files = (await readdir(datasets_dir))
+  .filter(file => basename(file, '.js').split('-')[0] === source);
 
+let datasets = (await Promise.all(dataset_files.map(async file => {
   let output_dir = join(parent_output_dir, basename(file, '.js'));
   await mkdir_p(output_dir);
-
-  return { output_dir, ...dataset };
-}))).filter(d => d !== undefined);
+  return { output_dir, ...(await import(join(datasets_dir, file))) };
+})));
 
 let { new_state={}, metadatas=[] } = await forage(current_state, datasets);
 
