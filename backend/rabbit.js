@@ -54,4 +54,14 @@ for (let [index, metadata] of metadatas.entries()) {
   await write_json_atomically(metadata_file, metadata);
 }
 
+let inventory = (await Promise.all(
+  (await readdir(parent_output_dir, { withFileTypes: true }))
+    .filter(entry => entry.isDirectory())
+    .map(dir => join(parent_output_dir, dir.name, 'metadata.json'))
+    .map(file => read_json(file, null))))
+  .filter(Boolean);
+
+let inventory_file = join(parent_output_dir, 'inventory.json');
+await write_json_atomically(inventory_file, inventory);
+
 parentPort?.postMessage(minutes_of_sleep_if_success ?? minutes_of_sleep);
