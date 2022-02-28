@@ -40,7 +40,7 @@ export default async ({ _, mode }) => {
   // If local data files don't exist, use the remote ones
   const dataProxy = await (async () => {
     try {
-      await access('./public/data');
+      await access('./public/tera');
       return false;
     } catch {
       return { '/data': 'https://fluid-earth.byrd.osu.edu' };
