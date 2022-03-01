@@ -91,7 +91,7 @@ async function netcdf_to_arr(input, variables, flatten=true) {
           .split(',')
           .map(x => parseFloat(x));
       });
-      resolve(flatten ? arrays.flat() : arrays);
+      resolve(flatten ? [].concat(...arrays) : arrays);
     },
   );
 }
