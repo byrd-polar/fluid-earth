@@ -25,15 +25,14 @@ export async function grib2_acc(input, output, options={}) {
 
 export async function netcdf(input, output, options={}) {
   await write_file_atomically(output, await array_to_data(
-    await netcdf_to_arr(input, options.variable),
+    await netcdf_to_arr(input, options.variables),
     v => nan_for_glsl(isNaN, v, options.factor),
     options.compression_level,
   ));
 }
 
 export async function netcdf_speed(input, output, options={}) {
-  let arrA = await netcdf_to_arr(input, options.variables[0]);
-  let arrB = await netcdf_to_arr(input, options.variables[1]);
+  let [arrA, arrB] = await netcdf_to_arr(input, options.variables, false);
 
   await write_file_atomically(output, await array_to_data(arrA, (a, i) => {
     let v = Math.hypot(a, arrB[i]);
@@ -78,20 +77,21 @@ async function grib2_to_arr(input, match='.*') {
   );
 }
 
-async function netcdf_to_arr(input, variable) {
+async function netcdf_to_arr(input, variables, flatten=true) {
   return await spawn_cmd(
     'ncdump',
-    ['-v', variable, '-p', '9,17', input],
+    ['-v', variables, '-p', '9,17', input],
     {},
     [],
     (buffer, resolve) => {
-      resolve(
-        buffer
-        .toString()
-        .match(new RegExp(` ${variable} =\n(.*);`, 's'))[1]
-        .split(',')
-        .map(x => parseFloat(x))
-      );
+      let string = buffer.toString();
+      let arrays = variables.split(',').map(v => {
+        return string
+          .match(new RegExp(` ${v} =\n(.*?);`, 's'))[1]
+          .split(',')
+          .map(x => parseFloat(x));
+      });
+      resolve(flatten ? arrays.flat() : arrays);
     },
   );
 }
