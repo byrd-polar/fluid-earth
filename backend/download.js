@@ -5,6 +5,7 @@ import { mkdir, writeFile } from 'fs/promises';
 import { get } from 'https';
 import { join } from 'path';
 import { Readable } from 'stream';
+import { pipeline } from 'stream/promises';
 
 const cache_dir = await make_absolute_path('./cache');
 
@@ -36,7 +37,7 @@ export async function stream_from_cache(key_or_keys) {
   })());
 }
 
-export async function download_as_stream(url, options={}) {
+async function download_as_stream(url, options={}) {
   return new Promise((resolve, reject) => {
     get(url, options, response => {
       let { statusCode, statusMessage } = response;

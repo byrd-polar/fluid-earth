@@ -26,7 +26,7 @@ let {
 parentPort?.postMessage(minutes_of_sleep_if_failure ?? minutes_of_sleep);
 
 let state_file = join(state_dir, `${source}.json`);
-let current_state = read_json(state_file, {});
+let current_state = await read_json(state_file, {});
 
 let dataset_files = (await readdir(datasets_dir))
   .filter(file => basename(file, '.js').split('-')[0] === source);
