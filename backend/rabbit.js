@@ -44,9 +44,9 @@ await write_json_atomically(state_file, new_state);
 for (let [index, metadata] of metadatas.entries()) {
   let dataset = datasets[index];
   let output_dir = dataset.output_dir;
-
-  metadata.name = dataset.name;
-  metadata.path = `/${relative(absolute_path('../public'), output_dir)}/`;
+  let name = dataset.name;
+  let path = `/${relative(absolute_path('../public'), output_dir)}/`;
+  metadata = { name, path, ...metadata };
 
   let metadata_file = join(output_dir, 'metadata.json');
   await write_json_atomically(metadata_file, metadata);
