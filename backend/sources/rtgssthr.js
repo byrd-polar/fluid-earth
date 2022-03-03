@@ -1,6 +1,6 @@
-import { ZonedDateTime } from '../../src/components/calendar/miniTemporal.js';
 import { download_as_file } from '../download.js';
 import { grib2 } from '../file-conversions.js';
+import { Datetime } from '../datetime.js';
 import { join } from 'path';
 
 const metadata = {
@@ -17,26 +17,21 @@ const metadata = {
 
 export async function forage(current_state, datasets) {
   let { start, end } = current_state;
-  let zdt;
+  let dt;
   if (end) {
-    zdt = new ZonedDateTime(new Date(end), true)
-      .add({ days: 1 });
+    dt = Datetime.from(end).add({ days: 1 });
   } else {
-    zdt = (new ZonedDateTime(new Date(), true))
-      .round('day')
-      .subtract({ days: 1 });
-    start = zdt.date.toISOString();
+    dt = Datetime.now().round('day').subtract({ days: 1 });
+    start = dt.to_iso_string();
   }
-  end = zdt.date.toISOString();
+  end = dt.to_iso_string();
 
-  let year = zdt.year;
-  let month = zdt.month.toString().padStart(2, '0');
-  let day = zdt.day.toString().padStart(2, '0');
+  let dirname = `sst.${dt.year}${dt.padded_month}${dt.padded_day}`;
 
   let input = await download_as_file(
-    `sst.${year}${month}${day}.grib2`,
+    `${dirname}.grib2`,
     'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/' +
-    `sst.${year}${month}${day}/rtgssthr_grb_0.083_awips.grib2`
+    `${dirname}/rtgssthr_grb_0.083_awips.grib2`
   );
 
   let output = join(datasets[0].output_dir, end + '.fp16.br');

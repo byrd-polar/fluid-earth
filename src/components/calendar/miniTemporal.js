@@ -159,7 +159,7 @@ export class ZonedDateTime {
 
   _fromDateArgs(...args) {
     let date = this._utc ? new Date(Date.UTC(...args)) : new Date(...args);
-    return new ZonedDateTime(date, this._utc);
+    return new this.constructor(date, this._utc);
   }
 }
 
