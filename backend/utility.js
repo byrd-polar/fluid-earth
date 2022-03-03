@@ -5,13 +5,10 @@ import {
   open,
   readFile,
   rename,
-  rm,
   rmdir,
   writeFile,
 } from 'fs/promises';
 import { join, dirname, basename } from 'path';
-import { pipeline } from 'stream/promises';
-import { setTimeout as sleep } from 'timers/promises';
 import { fileURLToPath } from 'url';
 
 const parent_tmp_dir = await make_absolute_path('./atomic');
@@ -72,30 +69,4 @@ export async function run_all(promise_functions, max_concurrency=8) {
     };
     for (let i = 0; i < max_concurrency; i++) tick();
   });
-}
-
-export async function lock_file(file) {
-  let lock = get_lockfile(file);
-  let backoff = 100;
-
-  while (true) {
-    try {
-      await open(lock, 'wx');
-      break;
-
-    } catch {
-      if (backoff > 5_000) throw `Getting lock on ${file} timed out`;
-
-      await sleep(backoff);
-      backoff += 100;
-    }
-  }
-}
-
-export async function unlock_file(file) {
-  await rm(get_lockfile(file));
-}
-
-function get_lockfile(file) {
-  return `${file}.lock`;
 }
