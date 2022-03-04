@@ -3,14 +3,14 @@ import { Buffer } from 'buffer';
 import { createWriteStream } from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
 import { get } from 'https';
-import { join } from 'path';
+import { join, basename } from 'path';
 import { pipeline } from 'stream/promises';
 import { v4 as uuidv4 } from 'uuid';
 
 const cache_dir = await make_absolute_path('./cache');
 
-export async function download(url, suffix='', options={}) {
-  let file = join(cache_dir, uuidv4() + suffix);
+export async function download(url, unique_path=true, options={}) {
+  let file = join(cache_dir, unique_path ? uuidv4() : basename(url));
   let response = await download_as_stream(url, options);
 
   if (response.headers['content-type'].startsWith('multipart/byteranges')) {

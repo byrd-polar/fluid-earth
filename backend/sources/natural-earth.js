@@ -16,7 +16,7 @@ export async function forage(current_state) {
   let { current_version } = current_state;
 
   if (version !== current_version) {
-    let files = await Promise.all(urls.map(url => download(url, '.shp')));
+    let files = await Promise.all(urls.map(url => download(url, false)));
     let input = files.join(' ');
     let output = join(parent_output_dir, 'topology.json');
 
