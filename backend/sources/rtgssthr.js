@@ -1,4 +1,4 @@
-import { download_as_file } from '../download.js';
+import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
 import { Datetime } from '../datetime.js';
 import { join } from 'path';
@@ -26,12 +26,10 @@ export async function forage(current_state, datasets) {
   }
   end = dt.to_iso_string();
 
-  let dirname = `sst.${dt.year}${dt.padded_month}${dt.padded_day}`;
-
-  let input = await download_as_file(
-    `${dirname}.grib2`,
-    'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/' +
-    `${dirname}/rtgssthr_grb_0.083_awips.grib2`
+  let input = await download(
+    'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
+    + `sst.${dt.year}${dt.padded_month}${dt.padded_day}/`
+    + 'rtgssthr_grb_0.083_awips.grib2'
   );
 
   let output = join(datasets[0].output_dir, end + '.fp16.br');

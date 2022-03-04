@@ -47,6 +47,7 @@
     "rollup-plugin-svelte": "^7.1.0",
     "split2": "^4.1.0",
     "svelte": "^3.46.4",
+    "uuid": "^8.3.2",
     "vite": "^2.8.4"
   },
   "dependencies": {

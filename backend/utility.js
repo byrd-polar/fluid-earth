@@ -9,6 +9,7 @@ import {
   writeFile,
 } from 'fs/promises';
 import { join, dirname, basename } from 'path';
+import { Readable } from 'stream';
 import { fileURLToPath } from 'url';
 
 const parent_tmp_dir = await make_absolute_path('./atomic');
@@ -49,6 +50,15 @@ export async function write_file_atomically(file, data) {
   await writeFile(tmp_file, data);
   await rename(tmp_file, file);
   await rmdir(tmp_dir);
+}
+
+export async function stream_from_files(files) {
+  let streams = await Promise.all(files.map(stream_from_file));
+  return Readable.from((async function* concat() {
+    for (const stream of streams)
+      for await (const chunk of stream)
+        yield chunk;
+  })());
 }
 
 export async function stream_from_file(file) {
