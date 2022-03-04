@@ -29,7 +29,7 @@ async function download_as_stream(url, options={}) {
         resolve(response);
       } else {
         response.resume();
-        reject(`Unexpected HTTP status code ${statusCode} ${statusMessage}`);
+        reject(`Error: HTTP status code ${statusCode} ${statusMessage}`);
       }
     }).on('error', reject);
   });

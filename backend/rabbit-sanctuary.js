@@ -52,13 +52,19 @@ export class RabbitSanctuary {
     this.#running.add(rabbit);
 
     try {
+      log(rabbit, 'Trying...');
       await do_rabbit_things(
         rabbit,
         MINUTES_BEFORE_TIMEOUT,
         msg => minutes_of_sleep = msg ?? minutes_of_sleep,
       );
+      log(rabbit, 'Success!');
+
     } catch(error) {
-      print_message(rabbit, error, minutes_of_sleep);
+      error.toString().split('\n').forEach(str => log(rabbit, str));
+
+    } finally {
+      log(rabbit, `Retrying in ${minutes_of_sleep} minutes...`);
     }
 
     this.#running.delete(rabbit);
@@ -87,11 +93,8 @@ async function do_rabbit_things(module, time, handle_message) {
   });
 }
 
-function print_message(module, error, minutes_of_sleep) {
-  console.log([
-    ...error.toString().split('\n'),
-    `Retrying in ${minutes_of_sleep} minutes (at least)...`,
-  ].map(str => `${basename(module, '.js')}: ${str}`).join('\n'));
+function log(module, str) {
+  console.log(`${basename(module, '.js')}: ${str}`);
 }
 
 function ms_from_minutes(minutes) {
