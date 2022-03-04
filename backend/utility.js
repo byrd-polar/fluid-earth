@@ -12,7 +12,7 @@ import { join, dirname, basename } from 'path';
 import { Readable } from 'stream';
 import { fileURLToPath } from 'url';
 
-const parent_tmp_dir = await make_absolute_path('./atomic');
+export const parent_output_dir = await make_absolute_path('../public/tera');
 
 export async function make_absolute_path(relative_path) {
   let path = absolute_path(relative_path);
@@ -42,6 +42,8 @@ export async function read_json(file, default_value=undefined) {
 export async function write_json_atomically(file, obj) {
   await write_file_atomically(file, JSON.stringify(obj, null, 2));
 }
+
+const parent_tmp_dir = await make_absolute_path('./atomic');
 
 export async function write_file_atomically(file, data) {
   let tmp_dir = await mkdtemp(parent_tmp_dir);

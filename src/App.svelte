@@ -183,8 +183,7 @@
     });
 
     // Load topology (lines on globe) data completely first
-    let topologyDataset = inventory.find(d => d.name === 'topology')
-    vectorData = await fetcher.fetch(topologyDataset);
+    vectorData = await ky('/tera/topology.json', {timeout: false}).json();
 
     setGriddedVariables(griddedDataset, simplifiedMode);
     setParticleVariables(particleDataset);

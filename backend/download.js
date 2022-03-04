@@ -9,8 +9,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 const cache_dir = await make_absolute_path('./cache');
 
-export async function download(url, options={}) {
-  let file = join(cache_dir, uuidv4());
+export async function download(url, suffix='', options={}) {
+  let file = join(cache_dir, uuidv4() + suffix);
   let response = await download_as_stream(url, options);
 
   if (response.headers['content-type'].startsWith('multipart/byteranges')) {
