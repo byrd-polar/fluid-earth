@@ -3,7 +3,7 @@ import { parent_output_dir } from '../utility.js';
 import mapshaper from 'mapshaper';
 import { join } from 'path';
 
-const version = 'v4.1.0';
+const version = 'v5.0.0';
 const base = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/';
 const urls = [
   '/50m_physical/ne_50m_graticules_all/ne_50m_graticules_10.shp',
