@@ -37,6 +37,7 @@
 
   import { onMount } from 'svelte';
   import { Float16Array } from '@petamoriken/float16';
+  import ky from 'ky';
 
   export let inventory;
 
@@ -59,7 +60,7 @@
   let particleDataset = inventory.filter(d => d.particleDisplay)[0];
   let date = (__production__ || !__using_local_data_files__) ?
     validDate(griddedDataset, $currentDate) :
-    griddedDataset.lastForecast;
+    griddedDataset.end;
 
   // always equal to date unless date is re-assigned in updateGriddedData
   $: anchorDate = date;

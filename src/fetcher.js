@@ -35,7 +35,7 @@ export default class Fetcher {
     // __fev2r_api__ is '' by default, can be replaced by env variable
     let url = __fev2r_api__ + dataset.path;
     if (date) {
-      url += date.toISOString() + '.fp16';
+      url += date.toISOString() + '.fp16.br';
     }
 
     // workaround for ':' being an illegal character for filenames on Windows,
