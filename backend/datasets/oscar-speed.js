@@ -5,7 +5,6 @@ export const unique_metadata = {
   originalUnit: 'm/s',
   domain: [0.0, 2.5],
   colormap: 'BLUES_REVERSED',
-  bytesPerFile: 1155362,
 };
 
 export { netcdf_speed as convert } from '../file-conversions.js';

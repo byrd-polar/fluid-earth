@@ -10,7 +10,6 @@ export const unique_metadata = {
     opacitySpeedDecay: 0.005,
     fade: 0.98
   },
-  bytesPerFile: 2310724,
 };
 
 export { netcdf as convert } from '../file-conversions.js';

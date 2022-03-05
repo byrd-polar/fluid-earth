@@ -43,7 +43,8 @@ export default class Fetcher {
     this._progressPerURL[url] = {
       type,
       transferredBytes: 0,
-      totalBytes: dataset.bytes || dataset.bytesPerFile,
+      totalBytes: dataset.width * dataset.height * 2
+        * (dataset.particleDisplay ? 2 : 1),
     };
     this._updateProgresses(type);
     this._triggerListeners();
