@@ -1,9 +1,15 @@
 import { download } from '../download.js';
-import { netcdf, netcdf_speed } from '../file-conversions.js';
 import { Datetime } from '../datetime.js';
 import { join } from 'path';
 
 const reference_datetime = Datetime.from('1992-10-05');
+
+const shared_metadata = {
+  width: 1201,
+  height: 481,
+  intervalInHours: 'custom:OSCAR',
+  projection: 'OSCAR',
+};
 
 export async function forage(current_state, datasets) {
   let { start, end } = current_state;
@@ -24,12 +30,9 @@ export async function forage(current_state, datasets) {
 
   let metadatas = await Promise.all(datasets.map(async dataset => {
     let output = join(dataset.output_dir, end + '.fp16.br');
-    let metadata = dataset.metadata;
-    let convert = metadata.particleDisplay ? netcdf : netcdf_speed;
+    await dataset.convert(input, output, { variables: 'u,v' });
 
-    await convert(input, output, { variables: 'u,v', compression_level: 11 });
-
-    return { start, end, ...metadata };
+    return { start, end, ...dataset.unique_metadata, ...shared_metadata };
   }));
 
   return { metadatas, new_state: { start, end } };

@@ -130,7 +130,7 @@ function nan_for_glsl(is_nan_fn, val, factor=1) {
   return is_nan_fn(val) ? -Infinity : val * factor;
 }
 
-async function array_to_data(arr, transform_fn, compression_level=6) {
+async function array_to_data(arr, transform_fn, compression_level=11) {
   return await brotliCompress(
     Buffer.from(new Float16Array(arr.map(transform_fn)).buffer),
     { params: { [constants.BROTLI_PARAM_QUALITY]: compression_level } },

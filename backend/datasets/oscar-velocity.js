@@ -1,6 +1,6 @@
 export const name = 'ocean surface currents';
 
-export const metadata = {
+export const unique_metadata = {
   particleLifetime: 10000,
   particleCount: 300000,
   particleDisplay: {
@@ -11,8 +11,6 @@ export const metadata = {
     fade: 0.98
   },
   bytesPerFile: 2310724,
-  width: 1201,
-  height: 481,
-  intervalInHours: 'custom:OSCAR',
-  projection: 'OSCAR',
 };
+
+export { netcdf as convert } from '../file-conversions.js';
