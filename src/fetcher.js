@@ -20,18 +20,6 @@ export default class Fetcher {
   }
 
   async fetch(dataset, date=null, type='default', abortPreviousOfType=true) {
-    // perform and return two fetches when there is a uPath and vPath instead of
-    // just a single path
-    if (dataset.path === undefined) {
-      let uDataset = {...dataset, path: dataset.uPath };
-      let vDataset = {...dataset, path: dataset.vPath };
-
-      let uData = this.fetch(uDataset, date, type, abortPreviousOfType);
-      let vData = this.fetch(vDataset, date, type, false);
-
-      return [await uData, await vData];
-    }
-
     // __fev2r_api__ is '' by default, can be replaced by env variable
     let url = __fev2r_api__ + dataset.path;
     if (date) {
@@ -81,10 +69,16 @@ export default class Fetcher {
           'Cache-Control': 'no-cache',
         },
       });
-      if (url.split('.').pop() === 'json') {
-        data = await res.json();
+
+      let buffer = await res.arrayBuffer();
+
+      if (dataset.particleDisplay) {
+        data = [
+          new Float16Array(buffer.slice(0, buffer.byteLength / 2)),
+          new Float16Array(buffer.slice(buffer.byteLength / 2)),
+        ];
       } else {
-        data = new Float16Array(await res.arrayBuffer());
+        data = new Float16Array(buffer);
       }
 
     } catch (error) {
