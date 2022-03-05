@@ -27,25 +27,26 @@
 
   $: picker = pickers[pickerMode];
 
-  $: header = updateHeader(date, utc, picker, header);
+  $: header = updateHeader(date, utc, picker);
   $: prevHeader = header.subtract(picker.headerInterval);
   $: nextHeader = header.add(picker.headerInterval);
 
   $: length = picker.boxDimensions.reduce((x, y) => x * y);
-  $: boxes = getBoxes(header);
+  $: base = picker.boxOffset ? header.add(picker.boxOffset(header)) : header;
+  $: boxes = Array.from({length}, (_, i) => {
+    return base.add(multiply(picker.boxInterval, i));
+  });
 
-  function updateHeader(date, utc, picker, oldHeader=null) {
+  let oldHeader;
+
+  function updateHeader(date, utc, picker) {
     let newHeader = new ZonedDateTime(date, utc).round(picker.headerRoundTo);
-    return (oldHeader && oldHeader.equals(newHeader)) ? oldHeader : newHeader;
-  }
-
-  function getBoxes(header) {
-    return Array.from({length}, (_, i) => {
-      let base = header;
-      if (picker.boxOffset) base = header.add(picker.boxOffset(header));
-
-      return base.add(multiply(picker.boxInterval, i));
-    });
+    if (oldHeader && oldHeader.equals(newHeader)) {
+      return oldHeader;
+    } else {
+      oldHeader = newHeader;
+      return newHeader;
+    }
   }
 
   function selectDate(box) {
