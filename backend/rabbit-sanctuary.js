@@ -1,3 +1,4 @@
+import { absolute_path } from './utility.js';
 import { basename } from 'path';
 import { setTimeout as sleep } from 'timers/promises';
 import { Worker } from 'worker_threads'
@@ -78,7 +79,7 @@ export class RabbitSanctuary {
 
 async function do_rabbit_things(module, time, handle_message) {
   await new Promise((resolve, reject) => {
-    let worker = new Worker('./rabbit.js', { argv: [module] });
+    let worker = new Worker(absolute_path('./rabbit.js'), { argv: [module] });
     let timeout = setTimeout(() => worker.terminate(), ms_from_minutes(time));
     worker.on('message', handle_message);
     worker.on('error', reject);

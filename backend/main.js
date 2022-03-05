@@ -1,12 +1,9 @@
 import { RabbitSanctuary } from './rabbit-sanctuary.js';
+import { absolute_path } from './utility.js';
 import { watch } from 'chokidar';
 
-let rc = new RabbitSanctuary();
+let rs = new RabbitSanctuary();
 
-watch('./sources')
-  .on('add', path => rc.add(relativize(path)))
-  .on('unlink', path => rc.remove(relativize(path)));
-
-function relativize(path) {
-  return `./${path}`;
-}
+watch(absolute_path('./sources'))
+  .on('add', path => rs.add(path))
+  .on('unlink', path => rs.remove(path));
