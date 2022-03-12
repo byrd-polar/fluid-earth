@@ -1,5 +1,5 @@
 <script>
-  import { getValidDates } from '../utility.js';
+  import { bytesPerFile, getValidDates } from '../utility.js';
   import prettyBytes from 'pretty-bytes';
 
   export let date;
@@ -39,7 +39,7 @@
     timeZoneName: 'short',
   };
 
-  $: loadSize = validDates.length * griddedDataset.bytesPerFile;
+  $: loadSize = validDates.length * bytesPerFile(griddedDataset);
 </script>
 
 <p>Use the Time Machine menu to change the start time.</p>

@@ -1,3 +1,8 @@
+// Calculate size of each file from dataset
+export function bytesPerFile(dataset) {
+  return dataset.width * dataset.height * 2 * (dataset.particleDisplay ? 2 : 1);
+}
+
 // Returns the closest valid date from the dataset relative to the given date
 export function validDate(dataset, date, oscarOptions={}) {
   if (date <= dataset.start) return dataset.start;
