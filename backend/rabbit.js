@@ -6,9 +6,8 @@ import {
   read_json,
   write_json_atomically,
 } from './utility.js';
-import { readdir, readFile } from 'fs/promises';
+import { readdir } from 'fs/promises';
 import { basename, join, relative } from 'path';
-import { parentPort } from 'worker_threads';
 
 const datasets_dir = absolute_path('./datasets');
 const state_dir = await make_absolute_path('./state');
@@ -16,14 +15,7 @@ const state_dir = await make_absolute_path('./state');
 let source_path = process.argv[2];
 let source = basename(source_path, '.js');
 
-let {
-  minutes_of_sleep,
-  minutes_of_sleep_if_failure,
-  minutes_of_sleep_if_success,
-  forage,
-} = await import(source_path);
-
-parentPort?.postMessage(minutes_of_sleep_if_failure ?? minutes_of_sleep);
+let { forage } = await import(source_path);
 
 let state_file = join(state_dir, `${source}.json`);
 let current_state = await read_json(state_file, {});
@@ -61,5 +53,3 @@ let inventory = (await Promise.all(
 
 let inventory_file = join(parent_output_dir, 'inventory.json.br');
 await write_json_atomically(inventory_file, inventory, true);
-
-parentPort?.postMessage(minutes_of_sleep_if_success ?? minutes_of_sleep);

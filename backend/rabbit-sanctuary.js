@@ -49,39 +49,36 @@ export class RabbitSanctuary {
   }
 
   async #run(rabbit) {
-    let minutes_of_sleep = DEFAULT_MINUTES_OF_SLEEP;
+    let need_sleep = false;
     this.#running.add(rabbit);
 
     try {
       log(rabbit, 'Trying...');
-      await do_rabbit_things(
-        rabbit,
-        MINUTES_BEFORE_TIMEOUT,
-        msg => minutes_of_sleep = msg ?? minutes_of_sleep,
-      );
+      await do_rabbit_things(rabbit, MINUTES_BEFORE_TIMEOUT);
+
       log(rabbit, 'Success!');
 
     } catch(error) {
-      error.toString().split('\n').forEach(str => log(rabbit, str));
+      need_sleep = true;
 
-    } finally {
-      log(rabbit, `Retrying in ${minutes_of_sleep} minutes...`);
+      for (let str of error.toString().split('\n')) log(rabbit, str);
+      log(rabbit, `Retrying in ${DEFAULT_MINUTES_OF_SLEEP} minutes...`);
     }
 
     this.#running.delete(rabbit);
     this.#tick();
 
-    await sleep(ms_from_minutes(minutes_of_sleep));
+    if (need_sleep) await sleep(ms_from_minutes(DEFAULT_MINUTES_OF_SLEEP));
+
     this.#queued.push(rabbit);
     this.#tick();
   }
 }
 
-async function do_rabbit_things(module, time, handle_message) {
+async function do_rabbit_things(module, time) {
   await new Promise((resolve, reject) => {
     let worker = new Worker(absolute_path('./rabbit.js'), { argv: [module] });
     let timeout = setTimeout(() => worker.terminate(), ms_from_minutes(time));
-    worker.on('message', handle_message);
     worker.on('error', reject);
     worker.on('exit', exitCode => {
       if (exitCode === 0) {
