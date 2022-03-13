@@ -5,7 +5,6 @@ import { Worker } from 'worker_threads'
 
 const DEFAULT_MINUTES_OF_SLEEP = 5;
 const MINUTES_BEFORE_TIMEOUT = 5;
-const MAX_CONCURRENT_RABBITS = 8;
 
 export class RabbitSanctuary {
   #all = new Set();
@@ -33,9 +32,7 @@ export class RabbitSanctuary {
   }
 
   #tick() {
-    while (this.#running.size < MAX_CONCURRENT_RABBITS) {
-      if (this.#queued.length === 0) break;
-
+    while (this.#queued.length > 0) {
       let rabbit = this.#queued.shift();
 
       if (this.#doomed.has(rabbit)) {
