@@ -11,6 +11,9 @@ import {
 import { join, dirname, basename } from 'path';
 import { Readable } from 'stream';
 import { fileURLToPath } from 'url';
+import { promisify } from 'util';
+import { brotliCompress as _brotliCompress, constants } from 'zlib';
+const brotliCompress = promisify(_brotliCompress);
 
 export const parent_output_dir = await make_absolute_path('../public/tera');
 
@@ -52,6 +55,11 @@ export async function write_file_atomically(file, data) {
   await writeFile(tmp_file, data);
   await rename(tmp_file, file);
   await rmdir(tmp_dir);
+}
+
+export async function brotli(buffer, compression_level=11) {
+  let params = { [constants.BROTLI_PARAM_QUALITY]: compression_level };
+  return await brotliCompress(buffer, { params });
 }
 
 export async function stream_from_files(files) {

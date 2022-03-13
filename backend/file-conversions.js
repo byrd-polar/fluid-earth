@@ -1,18 +1,14 @@
-import { stream_from_file, write_file_atomically } from './utility.js';
+import { brotli, stream_from_file, write_file_atomically } from './utility.js';
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
 import { platform } from 'os';
-import { brotliCompress as _brotliCompress, constants } from 'zlib';
-import { promisify } from 'util';
-const brotliCompress = promisify(_brotliCompress);
 
 export async function grib2(input, output, options={}) {
-  await write_file_atomically(output, await array_to_data(
-    await grib2_to_arr(input, options.match),
-    v => nan_for_glsl(is_magic_nan, v, options.factor),
-    options.compression_level,
-  ));
+  let arr = await grib2_to_arr(input, options.match);
+  let array = arr.map(v => nan_for_glsl(is_magic_nan, v, options.factor));
+
+  await write_array_to_file(output, array, options.compression_level);
 }
 
 export async function grib2_speed(input, output, options={}) {
@@ -24,20 +20,21 @@ export async function grib2_acc(input, output, options={}) {
 }
 
 export async function netcdf(input, output, options={}) {
-  await write_file_atomically(output, await array_to_data(
-    await netcdf_to_arr(input, options.variables),
-    v => nan_for_glsl(isNaN, v, options.factor),
-    options.compression_level,
-  ));
+  let arr = await netcdf_to_arr(input, options.variables);
+  let array = arr.map(v => nan_for_glsl(isNaN, v, options.factor));
+
+  await write_array_to_file(output, array, options.compression_level);
 }
 
 export async function netcdf_speed(input, output, options={}) {
   let [arrA, arrB] = await netcdf_to_arr(input, options.variables, false);
 
-  await write_file_atomically(output, await array_to_data(arrA, (a, i) => {
+  let array = arrA.map((a, i) => {
     let v = Math.hypot(a, arrB[i]);
     return nan_for_glsl(isNaN, v, options.factor);
-  }, options.compression_level));
+  });
+
+  await write_array_to_file(output, array, options.compression_level);
 }
 
 async function gfs_combine_grib(input, output, options, combine_fn) {
@@ -45,12 +42,14 @@ async function gfs_combine_grib(input, output, options, combine_fn) {
   let arrA = new Float32Array(arr.buffer, 0, arr.length / 2);
   let arrB = new Float32Array(arr.buffer, 4 * arr.length / 2);
 
-  await write_file_atomically(output, await array_to_data(arrA, (a, i) => {
+  let array = arrA.map((a, i) => {
     let b = arrB[i];
     a = is_magic_nan(a) ? NaN : a;
     b = is_magic_nan(b) ? NaN : b;
     return nan_for_glsl(isNaN, combine_fn(a, b), options.factor);
-  }, options.compression_level));
+  });
+
+  await write_array_to_file(output, array, options.compression_level);
 }
 
 const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
@@ -130,9 +129,9 @@ function nan_for_glsl(is_nan_fn, val, factor=1) {
   return is_nan_fn(val) ? -Infinity : val * factor;
 }
 
-async function array_to_data(arr, transform_fn, compression_level=11) {
-  return await brotliCompress(
-    Buffer.from(new Float16Array(arr.map(transform_fn)).buffer),
-    { params: { [constants.BROTLI_PARAM_QUALITY]: compression_level } },
-  );
+async function write_array_to_file(output, array, compression_level=11) {
+  let buffer = Buffer.from(new Float16Array(array).buffer);
+  let compressed_buffer = await brotli(buffer, compression_level);
+
+  await write_file_atomically(output, compressed_buffer);
 }
