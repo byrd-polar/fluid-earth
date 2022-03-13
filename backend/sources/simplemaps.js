@@ -1,12 +1,15 @@
 import { download } from '../download.js';
-import { parent_output_dir, write_json_atomically } from '../utility.js';
+import {
+  hash_of_this_file,
+  parent_output_dir,
+  write_json_atomically,
+} from '../utility.js';
 import { parse } from 'csv-parse/sync';
 import StreamZip from 'node-stream-zip';
 import { join } from 'path';
 
-const version = 'v1.73';
-const url = 'https://simplemaps.com/static/data/world-cities/basic/' +
-  `simplemaps_worldcities_basic${version}.zip`;
+const url = 'https://simplemaps.com/static/data/world-cities/basic/'
+          + 'simplemaps_worldcities_basicv1.73.zip';
 
 const extra_locations = [
   {
@@ -27,8 +30,8 @@ const extra_locations = [
 ];
 
 export async function forage(current_state) {
-  let { current_version } = current_state;
-  if (version === current_version) throw 'No update needed';
+  let source_hash = await hash_of_this_file(import.meta);
+  if (source_hash === current_state.source_hash) throw 'No update needed';
 
   let zip = new StreamZip.async({ file: await download(url) });
   let csv_buffer = await zip.entryData('worldcities.csv');
@@ -38,7 +41,7 @@ export async function forage(current_state) {
   let output = join(parent_output_dir, 'locations.json.br');
   await write_json_atomically(output, locations, true);
 
-  return { new_state: { current_version: version } };
+  return { new_state: { source_hash } };
 }
 
 function csv_to_locations_json(csv) {

@@ -1,24 +1,25 @@
 import { download } from '../download.js';
 import {
   brotli,
+  hash_of_this_file,
   parent_output_dir,
   write_file_atomically,
 } from '../utility.js';
 import mapshaper from 'mapshaper';
 import { join } from 'path';
 
-const version = 'v5.0.0';
-const base = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/';
+const base = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/'
+           + 'v5.0.0/50m_physical/';
 const urls = [
-  '/50m_physical/ne_50m_graticules_all/ne_50m_graticules_10.shp',
-  '/50m_physical/ne_50m_rivers_lake_centerlines.shp',
-  '/50m_physical/ne_50m_lakes.shp',
-  '/50m_physical/ne_50m_coastline.shp',
-].map(suffix => base + version + suffix);
+  'ne_50m_graticules_all/ne_50m_graticules_10.shp',
+  'ne_50m_rivers_lake_centerlines.shp',
+  'ne_50m_lakes.shp',
+  'ne_50m_coastline.shp',
+].map(suffix => base + suffix);
 
 export async function forage(current_state) {
-  let { current_version } = current_state;
-  if (version === current_version) throw 'No update needed';
+  let source_hash = await hash_of_this_file(import.meta);
+  if (source_hash === current_state.source_hash) throw 'No update needed';
 
   let files = await Promise.all(urls.map(url => download(url, false)));
   let input = files.join(' ');
@@ -29,5 +30,5 @@ export async function forage(current_state) {
 
   await write_file_atomically(output, await brotli(topojson));
 
-  return { new_state: { current_version: version } };
+  return { new_state: { source_hash } };
 }

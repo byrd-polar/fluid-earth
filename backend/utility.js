@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import { createReadStream } from 'fs';
 import {
   mkdir,
@@ -25,6 +26,11 @@ export async function make_absolute_path(relative_path) {
 
 export function absolute_path(relative_path) {
   return join(dirname(fileURLToPath(import.meta.url)), relative_path);
+}
+
+export async function hash_of_this_file(import_meta) {
+  let data = await readFile(fileURLToPath(import_meta.url));
+  return createHash('md5').update(data).digest('hex');
 }
 
 export async function mkdir_p(path) {
