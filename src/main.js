@@ -4,7 +4,7 @@ import colormaps from './map/colormaps/';
 import dataProjections from './map/data-projections/';
 
 (async () => {
-  let inventory = await ky('/tera/inventory.json', {
+  let inventory = await ky('/tera/inventory.json.br', {
     timeout: false,
     headers: {
       'Cache-Control': 'no-cache',

@@ -59,7 +59,7 @@ let inventory = (await Promise.all(
     .map(file => read_json(file, null))))
   .filter(Boolean);
 
-let inventory_file = join(parent_output_dir, 'inventory.json');
-await write_json_atomically(inventory_file, inventory);
+let inventory_file = join(parent_output_dir, 'inventory.json.br');
+await write_json_atomically(inventory_file, inventory, true);
 
 parentPort?.postMessage(minutes_of_sleep_if_success ?? minutes_of_sleep);

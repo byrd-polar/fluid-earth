@@ -16,7 +16,7 @@
   let placeholder = 'Columbus, Ohio, United States';
 
   async function loadData() {
-    return await ky('/tera/locations.json', {timeout: false}).json();
+    return await ky('/tera/locations.json.br', {timeout: false}).json();
   }
 
   async function onSelect(city) {

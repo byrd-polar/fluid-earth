@@ -42,8 +42,11 @@ export async function read_json(file, default_value=undefined) {
   }
 }
 
-export async function write_json_atomically(file, obj) {
-  await write_file_atomically(file, JSON.stringify(obj, null, 2));
+export async function write_json_atomically(file, obj, compress=false) {
+  let string = JSON.stringify(obj, null, compress ? null : 2);
+  let data = compress ? await brotli(string) : string;
+
+  await write_file_atomically(file, data);
 }
 
 const parent_tmp_dir = await make_absolute_path('./atomic');

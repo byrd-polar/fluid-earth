@@ -184,7 +184,7 @@
     });
 
     // Load topology (lines on globe) data completely first
-    vectorData = await ky('/tera/topology.json', {timeout: false}).json();
+    vectorData = await ky('/tera/topology.json.br', {timeout: false}).json();
 
     setGriddedVariables(griddedDataset, simplifiedMode);
     setParticleVariables(particleDataset);
