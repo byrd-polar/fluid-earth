@@ -28,16 +28,15 @@ const extra_locations = [
 
 export async function forage(current_state) {
   let { current_version } = current_state;
+  if (version === current_version) throw 'No update needed';
 
-  if (version !== current_version) {
-    let zip = new StreamZip.async({ file: await download(url) });
-    let csv_buffer = await zip.entryData('worldcities.csv');
-    await zip.close();
+  let zip = new StreamZip.async({ file: await download(url) });
+  let csv_buffer = await zip.entryData('worldcities.csv');
+  await zip.close();
 
-    let locations = csv_to_locations_json(parse(csv_buffer));
-    let output = join(parent_output_dir, 'locations.json.br');
-    await write_json_atomically(output, locations, true);
-  }
+  let locations = csv_to_locations_json(parse(csv_buffer));
+  let output = join(parent_output_dir, 'locations.json.br');
+  await write_json_atomically(output, locations, true);
 
   return { new_state: { current_version: version } };
 }
