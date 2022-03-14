@@ -42,7 +42,10 @@ export async function forage(current_state, datasets) {
 
   let metadatas = await Promise.all(datasets.map(async dataset => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
-    await netcdf(input, output, dataset.netcdf_options);
+    await netcdf(input, output, {
+      compression_level: offset > 3 ? 6 : 11,
+      ...dataset.netcdf_options,
+    });
 
     return { start, end, ...dataset.unique_metadata, ...shared_metadata };
   }));
