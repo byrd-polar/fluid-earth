@@ -63,6 +63,6 @@ function max_offset_by_forecast_hour(hour) {
     case 12:
       return 120;
     default:
-      throw `Corrupted state: invalid forecast hour: ${hour}`;
+      throw `Error: invalid forecast hour: ${hour}`;
   }
 }
