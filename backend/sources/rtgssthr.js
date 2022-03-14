@@ -20,7 +20,7 @@ export async function forage(current_state, datasets) {
   if (end) {
     dt = Datetime.from(end).add({ days: 1 });
   } else {
-    dt = Datetime.now().round('day').subtract({ days: 1 });
+    dt = Datetime.now().round('day').subtract({ days: 2 });
     start = dt.to_iso_string();
   }
   end = dt.to_iso_string();
