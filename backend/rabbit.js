@@ -31,6 +31,7 @@ let datasets = (await Promise.all(dataset_files.map(async file => {
 
 let { new_state={}, metadatas=[] } = await forage(current_state, datasets);
 
+new_state = { last_successful_update: new Date().toISOString(), ...new_state };
 await write_json_atomically(state_file, new_state);
 
 for (let [index, metadata] of metadatas.entries()) {
