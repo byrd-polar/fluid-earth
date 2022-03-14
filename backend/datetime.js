@@ -22,12 +22,20 @@ export class Datetime extends ZonedDateTime {
     return this.#get_padded('day');
   }
 
+  get padded_hour() {
+    return this.#get_padded('hour');
+  }
+
   to_iso_string() {
     return this.date.toISOString();
   }
 
   days_since(datetime) {
     return (this.date - datetime.date) / (1000 * 60 * 60 * 24);
+  }
+
+  valueOf() {
+    return this.date.getTime();
   }
 
   #get_padded(unit, length=2) {
