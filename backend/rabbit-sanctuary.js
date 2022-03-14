@@ -3,7 +3,7 @@ import { basename } from 'path';
 import { setTimeout as sleep } from 'timers/promises';
 import { Worker } from 'worker_threads'
 
-const DEFAULT_MINUTES_OF_SLEEP = 5;
+const MINUTES_BEFORE_RETRY = 5;
 const MINUTES_BEFORE_TIMEOUT = 5;
 
 export class RabbitSanctuary {
@@ -59,13 +59,13 @@ export class RabbitSanctuary {
       need_sleep = true;
 
       for (let str of error.toString().split('\n')) log(rabbit, str);
-      log(rabbit, `Retrying in ${DEFAULT_MINUTES_OF_SLEEP} minutes...`);
+      log(rabbit, `Retrying in ${MINUTES_BEFORE_RETRY} minutes...`);
     }
 
     this.#running.delete(rabbit);
     this.#tick();
 
-    if (need_sleep) await sleep(ms_from_minutes(DEFAULT_MINUTES_OF_SLEEP));
+    if (need_sleep) await sleep(ms_from_minutes(MINUTES_BEFORE_RETRY));
 
     this.#queued.push(rabbit);
     this.#tick();
