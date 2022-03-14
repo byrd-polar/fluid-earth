@@ -27,7 +27,7 @@ export async function forage(current_state, datasets) {
 
   let input = await download(
     'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
-    + `sst.${dt.year}${dt.padded_month}${dt.padded_day}/`
+    + `sst.${dt.year}${dt.p_month}${dt.p_day}/`
     + 'rtgssthr_grb_0.083_awips.grib2'
   );
 

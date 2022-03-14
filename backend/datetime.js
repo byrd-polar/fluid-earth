@@ -14,15 +14,15 @@ export class Datetime extends ZonedDateTime {
     return new this(nextOscarDate(new Date(iso_string)), true);
   }
 
-  get padded_month() {
+  get p_month() {
     return this.#get_padded('month');
   }
 
-  get padded_day() {
+  get p_day() {
     return this.#get_padded('day');
   }
 
-  get padded_hour() {
+  get p_hour() {
     return this.#get_padded('hour');
   }
 

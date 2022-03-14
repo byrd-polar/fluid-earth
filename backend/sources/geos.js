@@ -32,11 +32,10 @@ export async function forage(current_state, datasets) {
 
   let input = await download(
     'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/forecast/'
-    + `Y${fdt.year}/M${fdt.padded_month}/`
-    + `D${fdt.padded_day}/H${fdt.padded_hour}/`
+    + `Y${fdt.year}/M${fdt.p_month}/D${fdt.p_day}/H${fdt.p_hour}/`
     + 'GEOS.fp.fcst.inst1_2d_hwl_Nx.'
-    + `${fdt.year}${fdt.padded_month}${fdt.padded_day}_${fdt.padded_hour}+`
-    + `${dt.year}${dt.padded_month}${dt.padded_day}_${dt.padded_hour}`
+    + `${fdt.year}${fdt.p_month}${fdt.p_day}_${fdt.p_hour}+`
+    + `${dt.year}${dt.p_month}${dt.p_day}_${dt.p_hour}`
     + '00.V01.nc4'
   );
 
