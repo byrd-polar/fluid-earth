@@ -1,7 +1,7 @@
+import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
-import { Datetime } from '../datetime.js';
-import { join } from 'path';
+import { output_path } from '../utility.js';
 
 const metadata = {
   unit: 'tempC',
@@ -31,7 +31,7 @@ export async function forage(current_state, datasets) {
     + 'rtgssthr_grb_0.083_awips.grib2'
   );
 
-  let output = join(datasets[0].output_dir, end + '.fp16.br');
+  let output = output_path(datasets[0].output_dir, end);
 
   await grib2(input, output, { compression_level: 11 });
 

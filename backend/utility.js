@@ -9,6 +9,7 @@ import {
   rmdir,
   writeFile,
 } from 'fs/promises';
+import { platform } from 'os';
 import { join, dirname, basename } from 'path';
 import { Readable } from 'stream';
 import { fileURLToPath } from 'url';
@@ -101,4 +102,11 @@ export async function run_all(promise_functions, max_concurrency=8) {
     };
     for (let i = 0; i < max_concurrency; i++) tick();
   });
+}
+
+const windows = platform() === 'win32';
+
+export function output_path(output_dir, iso_date_string) {
+  if (windows) iso_date_string = iso_date_string.replaceAll(':', '_');
+  return join(output_dir, `${iso_date_string}.fp16.br`);
 }

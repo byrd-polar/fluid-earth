@@ -1,6 +1,6 @@
-import { download } from '../download.js';
 import { Datetime } from '../datetime.js';
-import { join } from 'path';
+import { download } from '../download.js';
+import { output_path } from '../utility.js';
 
 const reference_datetime = Datetime.from('1992-10-05');
 
@@ -29,7 +29,7 @@ export async function forage(current_state, datasets) {
   );
 
   let metadatas = await Promise.all(datasets.map(async dataset => {
-    let output = join(dataset.output_dir, end + '.fp16.br');
+    let output = output_path(dataset.output_dir, end);
     await dataset.convert(input, output, { variables: 'u,v' });
 
     return { start, end, ...dataset.unique_metadata, ...shared_metadata };
