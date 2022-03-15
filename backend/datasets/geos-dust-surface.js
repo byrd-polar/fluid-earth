@@ -1,6 +1,6 @@
 export const name = 'dust at surface';
 
-export const unique_metadata = {
+export const metadata = {
   unit: 'μg/m^3',
   originalUnit: 'μg/m^3',
   domain: [0, 900],

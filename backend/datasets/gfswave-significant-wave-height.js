@@ -1,6 +1,6 @@
 export const name = 'significant wave height';
 
-export const unique_metadata = {
+export const metadata = {
   unit: 'm',
   originalUnit: 'm',
   domain: [0, 12],

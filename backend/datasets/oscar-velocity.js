@@ -1,6 +1,6 @@
 export const name = 'ocean surface currents';
 
-export const unique_metadata = {
+export const metadata = {
   particleLifetime: 10000,
   particleCount: 300000,
   particleDisplay: {

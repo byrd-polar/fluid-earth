@@ -32,7 +32,7 @@ export async function forage(current_state, datasets) {
     let output = output_path(dataset.output_dir, end);
     await dataset.convert(input, output, { variables: 'u,v' });
 
-    return { start, end, ...dataset.unique_metadata, ...shared_metadata };
+    return { start, end, ...dataset.metadata, ...shared_metadata };
   }));
 
   return { metadatas, new_state: { start, end } };

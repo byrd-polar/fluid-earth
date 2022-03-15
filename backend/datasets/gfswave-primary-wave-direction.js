@@ -1,6 +1,6 @@
 export const name = 'primary wave direction (from)';
 
-export const unique_metadata = {
+export const metadata = {
   unit: 'deg',
   originalUnit: 'deg',
   domain: [0, 360],

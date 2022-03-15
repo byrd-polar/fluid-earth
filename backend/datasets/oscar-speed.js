@@ -1,6 +1,6 @@
 export const name = 'ocean surface currents speed';
 
-export const unique_metadata = {
+export const metadata = {
   unit: 'm/s',
   originalUnit: 'm/s',
   domain: [0.0, 2.5],

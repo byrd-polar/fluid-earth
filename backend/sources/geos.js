@@ -46,7 +46,7 @@ export async function forage(current_state, datasets) {
       ...dataset.netcdf_options,
     });
 
-    return { start, end, ...dataset.unique_metadata, ...shared_metadata };
+    return { start, end, ...dataset.metadata, ...shared_metadata };
   }));
 
   return { metadatas, new_state: { start, end, forecast, offset } };

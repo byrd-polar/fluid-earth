@@ -1,6 +1,6 @@
 export const name = 'carbon monoxide at surface';
 
-export const unique_metadata = {
+export const metadata = {
   unit: 'ppbv',
   originalUnit: 'ppbv',
   domain: [0, 1000],

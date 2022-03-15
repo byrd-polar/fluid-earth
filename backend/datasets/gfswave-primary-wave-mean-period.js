@@ -1,6 +1,6 @@
 export const name = 'primary wave mean period';
 
-export const unique_metadata = {
+export const metadata = {
   unit: 's',
   originalUnit: 's',
   domain: [0, 22],
