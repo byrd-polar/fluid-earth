@@ -11,7 +11,7 @@ const shared_metadata = {
 };
 
 export async function forage(current_state, datasets) {
-  let { start, end, forecast, offset } = current_state;
+  let { end, forecast, offset } = current_state;
   let fdt;
   if (forecast) {
     fdt = Datetime.from(forecast);
@@ -27,7 +27,6 @@ export async function forage(current_state, datasets) {
   forecast = fdt.to_iso_string();
 
   let dt = fdt.add({ hours: offset });
-  start ??= dt.to_iso_string();
   end = !end || dt > Datetime.from(end) ? dt.to_iso_string() : end;
 
   let input = await download(
@@ -40,16 +39,19 @@ export async function forage(current_state, datasets) {
   );
 
   let metadatas = await Promise.all(datasets.map(async dataset => {
+    let start = dataset.current_state.start ?? dt.to_iso_string();
+    let new_state = { start };
+
     let output = output_path(dataset.output_dir, dt.to_iso_string());
     await netcdf(input, output, {
       compression_level: offset > 3 ? 6 : 11,
       ...dataset.netcdf_options,
     });
 
-    return { start, end, ...dataset.metadata, ...shared_metadata };
+    return { start, end, ...dataset.metadata, ...shared_metadata, new_state };
   }));
 
-  return { metadatas, new_state: { start, end, forecast, offset } };
+  return { metadatas, new_state: { end, forecast, offset } };
 }
 
 function max_offset_by_forecast_hour(hour) {

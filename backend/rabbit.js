@@ -10,23 +10,31 @@ import { readdir } from 'fs/promises';
 import { basename, join, relative } from 'path';
 
 const datasets_dir = absolute_path('./datasets');
-const state_dir = await make_absolute_path('./state');
+const sources_state_dir = await make_absolute_path('./state/sources');
+const datasets_state_dir = await make_absolute_path('./state/datasets');
 
 let source_path = process.argv[2];
 let source = basename(source_path, '.js');
 
 let { forage } = await import(source_path);
 
-let state_file = join(state_dir, `${source}.json`);
+let state_file = join(sources_state_dir, `${source}.json`);
 let current_state = await read_json(state_file, {});
 
 let dataset_files = (await readdir(datasets_dir))
   .filter(file => basename(file, '.js').split('-')[0] === source);
 
 let datasets = (await Promise.all(dataset_files.map(async file => {
-  let output_dir = join(parent_output_dir, basename(file, '.js'));
+  let filename = basename(file, '.js');
+  let output_dir = join(parent_output_dir, filename);
+  let state_file = join(datasets_state_dir, `${filename}.json`);
   await mkdir_p(output_dir);
-  return { output_dir, ...(await import(join(datasets_dir, file))) };
+  return {
+    output_dir,
+    ...(await import(join(datasets_dir, file))),
+    state_file,
+    current_state: await read_json(state_file, {}),
+  };
 })));
 
 let { new_state={}, metadatas=[] } = await forage(current_state, datasets);
@@ -36,6 +44,10 @@ await write_json_atomically(state_file, new_state);
 
 for (let [index, metadata] of metadatas.entries()) {
   let dataset = datasets[index];
+
+  await write_json_atomically(dataset.state_file, metadata.new_state ?? {});
+  delete metadata.new_state;
+
   let output_dir = dataset.output_dir;
   let name = dataset.name;
   let path = `/${relative(absolute_path('../public'), output_dir)}/`;
