@@ -15,14 +15,10 @@ const metadata = {
 };
 
 export async function forage(current_state, datasets) {
-  let { start, end } = current_state;
-  let dt;
-  if (end) {
-    dt = Datetime.from(end).add({ days: 1 });
-  } else {
-    dt = Datetime.now().round('day').subtract({ days: 2 });
-    start = dt.to_iso_string();
-  }
+  let { end } = current_state;
+  let dt = end
+    ? Datetime.from(end).add({ days: 1 })
+    : Datetime.now().round('day').subtract({ days: 2 });
   end = dt.to_iso_string();
 
   let input = await download(
@@ -32,11 +28,12 @@ export async function forage(current_state, datasets) {
   );
 
   let output = output_path(datasets[0].output_dir, end);
-
   await grib2(input, output, { compression_level: 11 });
 
+  let start = datasets[0].current_state.start ?? dt.to_iso_string();
+
   return {
-    metadatas: [{ start, end, ...metadata }],
-    new_state: { start, end },
+    metadatas: [{ start, end, ...metadata, new_state: { start } }],
+    new_state: { end },
   };
 }

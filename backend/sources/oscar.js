@@ -13,13 +13,9 @@ const shared_metadata = {
 
 export async function forage(current_state, datasets) {
   let { start, end } = current_state;
-  let dt;
-  if (end) {
-    dt = Datetime.next_oscar_date(end);
-  } else {
-    dt = reference_datetime.add({ days: 7001 });
-    start = dt.to_iso_string();
-  }
+  let dt = end
+    ? Datetime.next_oscar_date(end)
+    : reference_datetime.add({ days: 7001 });
   end = dt.to_iso_string();
 
   let input = await download(
@@ -29,10 +25,13 @@ export async function forage(current_state, datasets) {
   );
 
   let metadatas = await Promise.all(datasets.map(async dataset => {
+    let start = dataset.current_state.start ?? dt.to_iso_string();
+    let new_state = { start };
+
     let output = output_path(dataset.output_dir, end);
     await dataset.convert(input, output, { variables: 'u,v' });
 
-    return { start, end, ...dataset.metadata, ...shared_metadata };
+    return { start, end, ...dataset.metadata, ...shared_metadata, new_state };
   }));
 
   return { metadatas, new_state: { start, end } };
