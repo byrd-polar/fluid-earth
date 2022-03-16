@@ -22,7 +22,7 @@ let state_file = join(sources_state_dir, `${source}.json`);
 let current_state = await read_json(state_file, {});
 
 let dataset_files = (await readdir(datasets_dir))
-  .filter(file => basename(file).split('-')[0] === source);
+  .filter(file => basename(file, '.js').split('-')[0] === source);
 
 let datasets = (await Promise.all(dataset_files.map(async file => {
   let filename = basename(file, '.js');
