@@ -1,7 +1,7 @@
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
-import { output_path } from '../utility.js';
+import { map_to_metadatas, output_path } from '../utility.js';
 import { parse } from 'csv-parse/sync';
 import { readFile } from 'fs/promises';
 
@@ -45,6 +45,8 @@ export async function forage(current_state, datasets) {
   let dt = fdt.add({ hours: offset });
   end = !end || dt > Datetime.from(end) ? dt.to_iso_string() : end;
 
+  let metadatas = map_to_metadatas(datasets, dt, end, shared_metadata);
+
   let url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
     + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
     + `wave/gridded/${system}wave.t${fdt.p_hour}z.`
@@ -64,17 +66,12 @@ export async function forage(current_state, datasets) {
 
   let input = await download(url, true, { headers: { Range } });
 
-  let metadatas = await Promise.all(datasets.map(async dataset => {
-    let start = dataset.current_state.start ?? dt.to_iso_string();
-    let new_state = { start };
-
+  await Promise.all(datasets.map(async dataset => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
     await grib2(input, output, {
       compression_level: system === 'gdas' && offset < 6 ? 11 : 6,
       match: dataset.parameter,
     });
-
-    return { start, end, ...dataset.metadata, ...shared_metadata, new_state };
   }));
 
   return { metadatas, new_state: { end, forecast, offset, system } };

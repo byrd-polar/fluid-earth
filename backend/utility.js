@@ -110,3 +110,12 @@ export function output_path(output_dir, iso_date_string) {
   if (windows) iso_date_string = iso_date_string.replaceAll(':', '_');
   return join(output_dir, `${iso_date_string}.fp16.br`);
 }
+
+export function map_to_metadatas(datasets, dt, end, shared_metadata) {
+  return datasets.map(dataset => {
+    let start = dataset.current_state.start ?? dt.to_iso_string();
+    let dataset_metadata = dataset.metadata ?? {};
+    let new_state = { start };
+    return { start, end, ...dataset_metadata, ...shared_metadata, new_state };
+  });
+}

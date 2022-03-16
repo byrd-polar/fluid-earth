@@ -1,7 +1,7 @@
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
-import { output_path } from '../utility.js';
+import { map_to_metadatas, output_path } from '../utility.js';
 
 const metadata = {
   unit: 'tempC',
@@ -21,6 +21,8 @@ export async function forage(current_state, datasets) {
     : Datetime.now().round('day').subtract({ days: 2 });
   end = dt.to_iso_string();
 
+  let metadatas = map_to_metadatas(datasets, dt, end, metadata);
+
   let input = await download(
     'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
     + `sst.${dt.year}${dt.p_month}${dt.p_day}/`
@@ -30,10 +32,5 @@ export async function forage(current_state, datasets) {
   let output = output_path(datasets[0].output_dir, end);
   await grib2(input, output, { compression_level: 11 });
 
-  let start = datasets[0].current_state.start ?? dt.to_iso_string();
-
-  return {
-    metadatas: [{ start, end, ...metadata, new_state: { start } }],
-    new_state: { end },
-  };
+  return { metadatas, new_state: { end } };
 }

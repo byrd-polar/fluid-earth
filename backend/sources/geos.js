@@ -1,7 +1,7 @@
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { netcdf } from '../file-conversions.js';
-import { output_path } from '../utility.js';
+import { map_to_metadatas, output_path } from '../utility.js';
 
 const shared_metadata = {
   width: 1152,
@@ -29,6 +29,8 @@ export async function forage(current_state, datasets) {
   let dt = fdt.add({ hours: offset });
   end = !end || dt > Datetime.from(end) ? dt.to_iso_string() : end;
 
+  let metadatas = map_to_metadatas(datasets, dt, end, shared_metadata);
+
   let input = await download(
     'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/forecast/'
     + `Y${fdt.year}/M${fdt.p_month}/D${fdt.p_day}/H${fdt.p_hour}/`
@@ -38,17 +40,12 @@ export async function forage(current_state, datasets) {
     + '00.V01.nc4'
   );
 
-  let metadatas = await Promise.all(datasets.map(async dataset => {
-    let start = dataset.current_state.start ?? dt.to_iso_string();
-    let new_state = { start };
-
+  await Promise.all(datasets.map(async dataset => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
     await netcdf(input, output, {
       compression_level: offset > 3 ? 6 : 11,
       ...dataset.netcdf_options,
     });
-
-    return { start, end, ...dataset.metadata, ...shared_metadata, new_state };
   }));
 
   return { metadatas, new_state: { end, forecast, offset } };
