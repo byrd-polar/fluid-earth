@@ -36,7 +36,7 @@ export async function forage(current_state, datasets) {
         throw `Error: unrecognized system: ${system}`;
     }
   } else {
-    fdt = Datetime.now().round('day').subtract({ hours: 12 });
+    fdt = Datetime.now().round('day').subtract({ hours: 36 });
     offset = 0;
     system = 'gdas';
   }
