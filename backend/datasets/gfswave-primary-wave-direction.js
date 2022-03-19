@@ -7,5 +7,6 @@ export const metadata = {
   colormap: 'RAINBOW',
 };
 
-export const parameter = 'DIRPW';
-export const level = 'surface';
+export const grib2_options = {
+  match: 'DIRPW:surface',
+};

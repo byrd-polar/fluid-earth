@@ -1,4 +1,7 @@
-export const level = '300 mb';
-export const name = `temperature at ${level}`;
+export const name = `temperature at 300 mb`;
 
-export { parameter, metadata } from './gfs-temperature-2-m.js';
+export { metadata } from './gfs-temperature-2-m.js';
+
+export const grib2_options = {
+  match: 'TMP:300 mb',
+};

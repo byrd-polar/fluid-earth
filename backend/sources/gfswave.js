@@ -19,7 +19,7 @@ export async function forage(current_state, datasets) {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
     await grib2(input, output, {
       compression_level: system === 'gdas' && offset < 6 ? 11 : 6,
-      match: dataset.parameter,
+      ...dataset.grib2_options,
     });
   }));
 

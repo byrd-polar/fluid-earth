@@ -7,5 +7,6 @@ export const metadata = {
   colormap: 'PU_BU_GN',
 };
 
-export const parameter = 'PERPW';
-export const level = 'surface';
+export const grib2_options = {
+  match: 'PERPW:surface',
+};

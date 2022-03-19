@@ -7,5 +7,6 @@ export const metadata = {
   colormap: 'GN_BU_REVERSED',
 };
 
-export const parameter = 'HTSGW';
-export const level = 'surface';
+export const grib2_options = {
+  match: 'HTSGW:surface',
+};

@@ -1,4 +1,7 @@
-export const level = '500 mb';
-export const name = `relative humidity at ${level}`;
+export const name = `relative humidity at 500 mb`;
 
-export { parameter, metadata } from './gfs-relative-humidity-2-m.js';
+export { metadata } from './gfs-relative-humidity-2-m.js';
+
+export const grib2_options = {
+  match: 'RH:500 mb',
+};

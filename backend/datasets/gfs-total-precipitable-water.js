@@ -1,5 +1,3 @@
-export const parameter = 'PWAT';
-export const level = 'entire atmosphere (considered as a single layer)';
 export const name = 'total precipitable water';
 
 export const metadata = {
@@ -7,4 +5,8 @@ export const metadata = {
   originalUnit: 'kg/m^2',
   domain: [0, 70],
   colormap: 'MAKO_REVERSED',
+};
+
+export const grib2_options = {
+  match: 'PWAT:entire atmosphere',
 };

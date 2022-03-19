@@ -1,4 +1,8 @@
-export const level = '500 mb';
-export const name = `geopotential height at ${level}`;
+export const name = `geopotential height at 500 mb`;
 
-export { parameter, factor, metadata } from './gfs-geopotential-height-surface.js';
+export { metadata } from './gfs-geopotential-height-surface.js';
+
+export const grib2_options = {
+  match: 'HGT:500 mb',
+  factor: 1e-3,
+};

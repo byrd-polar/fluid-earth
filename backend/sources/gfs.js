@@ -2,7 +2,6 @@ import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
 import { map_to_metadatas, output_path, run_all } from '../utility.js';
-import { parse } from 'csv-parse/sync';
 import { readFile } from 'fs/promises';
 
 export const shared_metadata = {
@@ -29,9 +28,7 @@ export async function forage(current_state, datasets) {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
     await grib2(input, output, {
       compression_level: system === 'gdas' && offset < 6 ? 11 : 6,
-      match: `${dataset.parameter}:${dataset.level}`
-        .replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
-      factor: dataset.factor,
+      ...dataset.grib2_options,
     });
   }));
 
@@ -76,15 +73,14 @@ export function increment_gfs_state(current_state) {
 
 export async function download_gfs(url, datasets) {
   let index_buffer = await readFile(await download(url + '.idx'));
-  let index = parse(index_buffer, { delimiter: ':' });
-  let Range = 'bytes=' + datasets.map(dataset => {
-    let i = index.findIndex(row => {
-      return row[3] === dataset.parameter
-          && row[4] === dataset.level;
-    });
-    if (i === -1) throw `Error: could not find ${dataset.name} in GFS index`;
+  let index = index_buffer.toString().split('\n');
 
-    return `${index[i][1]}-${index[i+1]?.[1] - 1 || ''}`;
+  let Range = 'bytes=' + datasets.map(dataset => {
+    let match = dataset.grib2_options.match;
+    let i = index.findIndex(line => line.match(new RegExp(match)));
+    if (i === -1) throw `Error: could not find '${match}' in GFS index`;
+
+    return `${index[i].split(':')[1]}-${index[i+1]?.split(':')[1] - 1 || ''}`;
   }).join(',');
 
   return download(url, true, { headers: { Range } });
