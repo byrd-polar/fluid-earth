@@ -69,7 +69,7 @@ export async function write_file_atomically(file, data) {
 
 export async function brotli(buffer, compression_level=11) {
   let params = { [constants.BROTLI_PARAM_QUALITY]: compression_level };
-  return await brotliCompress(buffer, { params });
+  return brotliCompress(buffer, { params });
 }
 
 export async function stream_from_files(files) {

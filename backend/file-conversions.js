@@ -58,7 +58,7 @@ async function grib2_to_arr(input, match='.*') {
   if (typeof input === 'string') {
     input = await stream_from_file(input);
   }
-  return await spawn_cmd(
+  return spawn_cmd(
     'wgrib2',
     [
       '-',
@@ -77,7 +77,7 @@ async function grib2_to_arr(input, match='.*') {
 }
 
 async function netcdf_to_arr(input, variables, flatten=true) {
-  return await spawn_cmd(
+  return spawn_cmd(
     'ncdump',
     ['-v', variables, '-p', '9,17', input],
     {},
