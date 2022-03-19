@@ -5,7 +5,7 @@ import { map_to_metadatas, output_path, run_all } from '../utility.js';
 import { parse } from 'csv-parse/sync';
 import { readFile } from 'fs/promises';
 
-const shared_metadata = {
+export const shared_metadata = {
   width: 1440,
   height: 721,
   intervalInHours: 1,
@@ -13,6 +13,32 @@ const shared_metadata = {
 };
 
 export async function forage(current_state, datasets) {
+  let { fdt, dt, end, forecast, offset, system } =
+    increment_gfs_state(current_state);
+
+  let metadatas = map_to_metadatas(datasets, dt, end, shared_metadata);
+
+  let url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
+    + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
+    + `atmos/${system}.t${fdt.p_hour}z.`
+    + `pgrb2.0p25.f${offset.toString().padStart(3, '0')}`;
+
+  let input = await download_gfs(url, datasets);
+
+  await run_all(datasets.map(dataset => async () => {
+    let output = output_path(dataset.output_dir, dt.to_iso_string());
+    await grib2(input, output, {
+      compression_level: system === 'gdas' && offset < 6 ? 11 : 6,
+      match: `${dataset.parameter}:${dataset.level}`
+        .replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+      factor: dataset.factor,
+    });
+  }));
+
+  return { metadatas, new_state: { end, forecast, offset, system } };
+}
+
+export function increment_gfs_state(current_state) {
   let { end, forecast, offset, system } = current_state;
   let fdt;
   if (forecast) {
@@ -45,13 +71,10 @@ export async function forage(current_state, datasets) {
   let dt = fdt.add({ hours: offset });
   end = !end || dt > Datetime.from(end) ? dt.to_iso_string() : end;
 
-  let metadatas = map_to_metadatas(datasets, dt, end, shared_metadata);
+  return { fdt, dt, end, forecast, offset, system };
+}
 
-  let url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
-    + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
-    + `atmos/${system}.t${fdt.p_hour}z.`
-    + `pgrb2.0p25.f${offset.toString().padStart(3, '0')}`;
-
+export async function download_gfs(url, datasets) {
   let index_buffer = await readFile(await download(url + '.idx'));
   let index = parse(index_buffer, { delimiter: ':' });
   let Range = 'bytes=' + datasets.map(dataset => {
@@ -64,17 +87,5 @@ export async function forage(current_state, datasets) {
     return `${index[i][1]}-${index[i+1]?.[1] - 1 || ''}`;
   }).join(',');
 
-  let input = await download(url, true, { headers: { Range } });
-
-  await run_all(datasets.map(dataset => async () => {
-    let output = output_path(dataset.output_dir, dt.to_iso_string());
-    await grib2(input, output, {
-      compression_level: system === 'gdas' && offset < 6 ? 11 : 6,
-      match: `${dataset.parameter}:${dataset.level}`
-        .replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
-      factor: dataset.factor,
-    });
-  }));
-
-  return { metadatas, new_state: { end, forecast, offset, system } };
+  return download(url, true, { headers: { Range } });
 }
