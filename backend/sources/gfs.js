@@ -22,16 +22,8 @@ export async function forage(current_state, datasets) {
     + `atmos/${system}.t${fdt.p_hour}z.`
     + `pgrb2.0p25.f${offset.toString().padStart(3, '0')}`;
 
-  let input = await download_gfs(url, datasets);
-
-  await run_all(datasets.map(dataset => async () => {
-    let output = output_path(dataset.output_dir, dt.to_iso_string());
-    await (dataset.convert ?? grib2)(input, output, {
-      compression_level: system === 'gdas' && offset < 6 ? 11 : 6,
-      ...dataset.grib2_options,
-    });
-  }));
-  await rm(input);
+  let simple_datasets = datasets.filter(d => !d.accumulation);
+  await convert_simple_gfs(url, simple_datasets, dt, system, offset);
 
   return { metadatas, new_state: { end, forecast, offset, system } };
 }
@@ -72,7 +64,20 @@ export function increment_gfs_state(current_state) {
   return { fdt, dt, end, forecast, offset, system };
 }
 
-export async function download_gfs(url, datasets) {
+export async function convert_simple_gfs(url, datasets, dt, system, offset) {
+  let input = await download_gfs(url, datasets);
+
+  await run_all(datasets.map(dataset => async () => {
+    let output = output_path(dataset.output_dir, dt.to_iso_string());
+    await (dataset.convert ?? grib2)(input, output, {
+      compression_level: system === 'gdas' && offset < 6 ? 11 : 6,
+      ...dataset.grib2_options,
+    });
+  }));
+  await rm(input);
+}
+
+async function download_gfs(url, datasets) {
   let matches = datasets.map(d => new RegExp(d.grib2_options.match));
 
   let idx = await download(url + '.idx');
