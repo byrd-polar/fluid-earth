@@ -26,7 +26,7 @@ export async function forage(current_state, datasets) {
 
   await run_all(datasets.map(dataset => async () => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
-    await grib2(input, output, {
+    await (dataset.convert ?? grib2)(input, output, {
       compression_level: system === 'gdas' && offset < 6 ? 11 : 6,
       ...dataset.grib2_options,
     });
