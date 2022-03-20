@@ -22,7 +22,7 @@ export async function forage(current_state) {
   let source_hash = await hash_of_this_file(import.meta);
   if (source_hash === current_state.source_hash) throw 'No update needed';
 
-  let files = await Promise.all(urls.map(url => download(url, false)));
+  let files = await Promise.all(urls.map(url => download(url, {}, false)));
   let output = join(parent_output_dir, 'topology.json.br');
 
   let cmds = `-i ${files.join(' ')} combine-files -o out.json format=topojson`;

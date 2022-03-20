@@ -91,5 +91,5 @@ export async function download_gfs(url, datasets) {
 
   let Range = `bytes=${index.map(l => `${l.start}-${l.end}`).join(',')}`;
 
-  return download(url, true, { headers: { Range } });
+  return download(url, { headers: { Range } });
 }

@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const cache_dir = await make_absolute_path(join(tmpdir(), 'fev2r-cache'));
 
-export async function download(url, unique_path=true, options={}) {
+export async function download(url, options={}, unique_path=true) {
   let file = join(cache_dir, unique_path ? uuidv4() : basename(url));
   let response = await download_as_stream(url, options);
 
