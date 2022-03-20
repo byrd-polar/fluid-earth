@@ -72,16 +72,22 @@ export function increment_gfs_state(current_state) {
 }
 
 export async function download_gfs(url, datasets) {
-  let index_buffer = await readFile(await download(url + '.idx'));
-  let index = index_buffer.toString().split('\n');
+  let matches = datasets.map(d => new RegExp(d.grib2_options.match));
 
-  let Range = 'bytes=' + datasets.map(dataset => {
-    let match = dataset.grib2_options.match;
-    let i = index.findIndex(line => line.match(new RegExp(match)));
-    if (i === -1) throw `Error: could not find '${match}' in GFS index`;
+  let idx = await download(url + '.idx');
+  let arr = (await readFile(idx)).toString().split('\n');
 
-    return `${index[i].split(':')[1]}-${index[i+1]?.split(':')[1] - 1 || ''}`;
-  }).join(',');
+  let index = arr.map((line, i) => {
+    let start = line.split(':')[1];
+    let end = arr[i+1]?.split(':')[1] - 1 || '';
+    return { start, end, match: r => line.match(r) };
+  }).filter(line => matches.some(line.match));
+
+  for (let match of matches)
+    if (!index.some(line => line.match(match)))
+      throw `Error: could not find '${match}' in GFS index`;
+
+  let Range = `bytes=${index.map(l => `${l.start}-${l.end}`).join(',')}`;
 
   return download(url, true, { headers: { Range } });
 }
