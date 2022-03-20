@@ -2,7 +2,6 @@
 /dist/
 /public/data/
 /public/tera/
-/data/cache/
 /backend/atomic/
 /backend/cache/
 /backend/state/

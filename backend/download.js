@@ -1,13 +1,14 @@
-import { make_absolute_path, stream_from_file } from './utility.js';
+import { make_absolute_path } from './utility.js';
 import { Buffer } from 'buffer';
 import { createWriteStream } from 'fs';
-import { mkdir, writeFile } from 'fs/promises';
+import { writeFile } from 'fs/promises';
 import { get } from 'https';
+import { tmpdir } from 'os';
 import { join, basename } from 'path';
 import { pipeline } from 'stream/promises';
 import { v4 as uuidv4 } from 'uuid';
 
-const cache_dir = await make_absolute_path('./cache');
+const cache_dir = await make_absolute_path(join(tmpdir(), 'fev2r-cache'));
 
 export async function download(url, unique_path=true, options={}) {
   let file = join(cache_dir, unique_path ? uuidv4() : basename(url));
