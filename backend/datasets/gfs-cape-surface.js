@@ -8,5 +8,5 @@ export const metadata = {
 };
 
 export const grib2_options = {
-  match: 'CAPE:surface',
+  match: ':CAPE:surface',
 };

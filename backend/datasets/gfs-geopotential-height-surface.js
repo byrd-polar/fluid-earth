@@ -8,6 +8,6 @@ export const metadata = {
 };
 
 export const grib2_options = {
-  match: 'HGT:surface',
+  match: ':HGT:surface',
   factor: 1e-3,
 };

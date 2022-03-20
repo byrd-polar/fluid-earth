@@ -8,5 +8,5 @@ export const metadata = {
 };
 
 export const grib2_options = {
-  match: 'RH:2 m above ground',
+  match: ':RH:2 m above ground',
 };

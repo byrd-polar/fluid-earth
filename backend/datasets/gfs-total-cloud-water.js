@@ -8,5 +8,5 @@ export const metadata = {
 };
 
 export const grib2_options = {
-  match: 'CWAT:entire atmosphere',
+  match: ':CWAT:entire atmosphere',
 };

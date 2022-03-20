@@ -8,5 +8,5 @@ export const metadata = {
 };
 
 export const grib2_options = {
-  match: 'DIRPW:surface',
+  match: ':DIRPW:surface',
 };

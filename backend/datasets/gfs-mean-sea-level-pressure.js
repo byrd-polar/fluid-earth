@@ -8,6 +8,6 @@ export const metadata = {
 };
 
 export const grib2_options = {
-  match: 'PRMSL:mean sea level',
+  match: ':PRMSL:mean sea level',
   factor: 1e-3,
 };
