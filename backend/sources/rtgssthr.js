@@ -16,13 +16,13 @@ const metadata = {
 };
 
 export async function forage(current_state, datasets) {
-  let { end } = current_state;
-  let dt = end
-    ? Datetime.from(end).add({ days: 1 })
+  let { date } = current_state;
+  let dt = date
+    ? Datetime.from(date).add({ days: 1 })
     : Datetime.now().round('day').subtract({ days: 2 });
-  end = dt.to_iso_string();
+  date = dt.to_iso_string();
 
-  let metadatas = map_to_metadatas(datasets, dt, end, metadata);
+  let metadatas = map_to_metadatas(datasets, dt, metadata);
 
   let input = await download(
     'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
@@ -30,9 +30,9 @@ export async function forage(current_state, datasets) {
     + 'rtgssthr_grb_0.083_awips.grib2'
   );
 
-  let output = output_path(datasets[0].output_dir, end);
+  let output = output_path(datasets[0].output_dir, date);
   await grib2(input, output, { compression_level: 11 });
   await rm(input);
 
-  return { metadatas, new_state: { end } };
+  return { metadatas, new_state: { date } };
 }

@@ -6,10 +6,10 @@ import {
 import { map_to_metadatas } from '../utility.js';
 
 export async function forage(current_state, datasets) {
-  let { fdt, dt, end, forecast, offset, system } =
+  let { fdt, dt, forecast, offset, system } =
     increment_gfs_state(current_state);
 
-  let metadatas = map_to_metadatas(datasets, dt, end, shared_metadata);
+  let metadatas = map_to_metadatas(datasets, dt, shared_metadata);
 
   let url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
     + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
@@ -18,5 +18,5 @@ export async function forage(current_state, datasets) {
 
   await convert_simple_gfs(url, datasets, dt, system, offset);
 
-  return { metadatas, new_state: { end, forecast, offset, system } };
+  return { metadatas, new_state: { forecast, offset, system } };
 }

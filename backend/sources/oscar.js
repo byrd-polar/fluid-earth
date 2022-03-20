@@ -13,13 +13,13 @@ const shared_metadata = {
 };
 
 export async function forage(current_state, datasets) {
-  let { start, end } = current_state;
-  let dt = end
-    ? Datetime.next_oscar_date(end)
+  let { date } = current_state;
+  let dt = date
+    ? Datetime.next_oscar_date(date)
     : reference_datetime.add({ days: 7001 });
-  end = dt.to_iso_string();
+  date = dt.to_iso_string();
 
-  let metadatas = map_to_metadatas(datasets, dt, end, shared_metadata);
+  let metadatas = map_to_metadatas(datasets, dt, shared_metadata);
 
   let input = await download(
     'https://podaac-opendap.jpl.nasa.gov/'
@@ -28,10 +28,10 @@ export async function forage(current_state, datasets) {
   );
 
   await Promise.all(datasets.map(async dataset => {
-    let output = output_path(dataset.output_dir, end);
+    let output = output_path(dataset.output_dir, date);
     await dataset.convert(input, output, { variables: 'u,v' });
   }));
   await rm(input);
 
-  return { metadatas, new_state: { start, end } };
+  return { metadatas, new_state: { date } };
 }

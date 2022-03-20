@@ -12,10 +12,10 @@ export const shared_metadata = {
 };
 
 export async function forage(current_state, datasets) {
-  let { fdt, dt, end, forecast, offset, system } =
+  let { fdt, dt, forecast, offset, system } =
     increment_gfs_state(current_state);
 
-  let metadatas = map_to_metadatas(datasets, dt, end, shared_metadata);
+  let metadatas = map_to_metadatas(datasets, dt, shared_metadata);
 
   let url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
     + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
@@ -25,11 +25,11 @@ export async function forage(current_state, datasets) {
   let simple_datasets = datasets.filter(d => !d.accumulation);
   await convert_simple_gfs(url, simple_datasets, dt, system, offset);
 
-  return { metadatas, new_state: { end, forecast, offset, system } };
+  return { metadatas, new_state: { forecast, offset, system } };
 }
 
 export function increment_gfs_state(current_state) {
-  let { end, forecast, offset, system } = current_state;
+  let { forecast, offset, system } = current_state;
   let fdt;
   if (forecast) {
     fdt = Datetime.from(forecast);
@@ -59,9 +59,8 @@ export function increment_gfs_state(current_state) {
   forecast = fdt.to_iso_string();
 
   let dt = fdt.add({ hours: offset });
-  end = !end || dt > Datetime.from(end) ? dt.to_iso_string() : end;
 
-  return { fdt, dt, end, forecast, offset, system };
+  return { fdt, dt, forecast, offset, system };
 }
 
 export async function convert_simple_gfs(url, datasets, dt, system, offset) {

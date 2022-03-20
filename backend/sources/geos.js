@@ -12,7 +12,7 @@ const shared_metadata = {
 };
 
 export async function forage(current_state, datasets) {
-  let { end, forecast, offset } = current_state;
+  let { forecast, offset } = current_state;
   let fdt;
   if (forecast) {
     fdt = Datetime.from(forecast);
@@ -28,9 +28,8 @@ export async function forage(current_state, datasets) {
   forecast = fdt.to_iso_string();
 
   let dt = fdt.add({ hours: offset });
-  end = !end || dt > Datetime.from(end) ? dt.to_iso_string() : end;
 
-  let metadatas = map_to_metadatas(datasets, dt, end, shared_metadata);
+  let metadatas = map_to_metadatas(datasets, dt, shared_metadata);
 
   let input = await download(
     'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/forecast/'
@@ -50,7 +49,7 @@ export async function forage(current_state, datasets) {
   }));
   await rm(input);
 
-  return { metadatas, new_state: { end, forecast, offset } };
+  return { metadatas, new_state: { forecast, offset } };
 }
 
 function max_offset_by_forecast_hour(hour) {
