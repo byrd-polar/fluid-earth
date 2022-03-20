@@ -65,7 +65,8 @@ async function grib2_to_arr(input, match='.*') {
       '-inv', devnull,
       '-bin', '-',
       '-no_header',
-      '-order', 'we:sn'
+      '-order', 'we:sn',
+      '-ncpu', '1',
     ],
     { stdio: [input, 'pipe', 'pipe'] },
     [input],
