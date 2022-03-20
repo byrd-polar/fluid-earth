@@ -5,6 +5,7 @@ import {
   write_json_atomically,
 } from '../utility.js';
 import { parse } from 'csv-parse/sync';
+import { rm } from 'fs/promises';
 import StreamZip from 'node-stream-zip';
 import { join } from 'path';
 
@@ -33,9 +34,11 @@ export async function forage(current_state) {
   let source_hash = await hash_of_this_file(import.meta);
   if (source_hash === current_state.source_hash) throw 'No update needed';
 
-  let zip = new StreamZip.async({ file: await download(url) });
+  let file = await download(url);
+  let zip = new StreamZip.async({ file });
   let csv_buffer = await zip.entryData('worldcities.csv');
   await zip.close();
+  await rm(file);
 
   let locations = csv_to_locations_json(parse(csv_buffer));
   let output = join(parent_output_dir, 'locations.json.br');

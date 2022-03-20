@@ -2,7 +2,7 @@ import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
 import { map_to_metadatas, output_path, run_all } from '../utility.js';
-import { readFile } from 'fs/promises';
+import { readFile, rm } from 'fs/promises';
 
 export const shared_metadata = {
   width: 1440,
@@ -31,6 +31,7 @@ export async function forage(current_state, datasets) {
       ...dataset.grib2_options,
     });
   }));
+  await rm(input);
 
   return { metadatas, new_state: { end, forecast, offset, system } };
 }
@@ -76,6 +77,7 @@ export async function download_gfs(url, datasets) {
 
   let idx = await download(url + '.idx');
   let arr = (await readFile(idx)).toString().split('\n');
+  await rm(idx);
 
   let index = arr.map((line, i) => {
     let start = line.split(':')[1];

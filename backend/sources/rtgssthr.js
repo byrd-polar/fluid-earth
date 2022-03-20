@@ -2,6 +2,7 @@ import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
 import { map_to_metadatas, output_path } from '../utility.js';
+import { rm } from 'fs/promises';
 
 const metadata = {
   unit: 'tempC',
@@ -31,6 +32,7 @@ export async function forage(current_state, datasets) {
 
   let output = output_path(datasets[0].output_dir, end);
   await grib2(input, output, { compression_level: 11 });
+  await rm(input);
 
   return { metadatas, new_state: { end } };
 }

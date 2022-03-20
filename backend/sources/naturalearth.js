@@ -5,6 +5,7 @@ import {
   parent_output_dir,
   write_file_atomically,
 } from '../utility.js';
+import { rm } from 'fs/promises';
 import mapshaper from 'mapshaper';
 import { join } from 'path';
 
@@ -22,11 +23,11 @@ export async function forage(current_state) {
   if (source_hash === current_state.source_hash) throw 'No update needed';
 
   let files = await Promise.all(urls.map(url => download(url, false)));
-  let input = files.join(' ');
   let output = join(parent_output_dir, 'topology.json.br');
 
-  let cmds = `-i ${input} combine-files -o out.json format=topojson`;
+  let cmds = `-i ${files.join(' ')} combine-files -o out.json format=topojson`;
   let topojson = (await mapshaper.applyCommands(cmds))['out.json'];
+  await Promise.all(files.map(file => rm(file)));
 
   await write_file_atomically(output, await brotli(topojson));
 

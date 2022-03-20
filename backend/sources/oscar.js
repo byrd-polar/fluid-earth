@@ -1,6 +1,7 @@
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { map_to_metadatas, output_path } from '../utility.js';
+import { rm } from 'fs/promises';
 
 const reference_datetime = Datetime.from('1992-10-05');
 
@@ -30,6 +31,7 @@ export async function forage(current_state, datasets) {
     let output = output_path(dataset.output_dir, end);
     await dataset.convert(input, output, { variables: 'u,v' });
   }));
+  await rm(input);
 
   return { metadatas, new_state: { start, end } };
 }

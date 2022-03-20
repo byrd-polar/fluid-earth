@@ -2,6 +2,7 @@ import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { netcdf } from '../file-conversions.js';
 import { map_to_metadatas, output_path } from '../utility.js';
+import { rm } from 'fs/promises';
 
 const shared_metadata = {
   width: 1152,
@@ -47,6 +48,7 @@ export async function forage(current_state, datasets) {
       ...dataset.netcdf_options,
     });
   }));
+  await rm(input);
 
   return { metadatas, new_state: { end, forecast, offset } };
 }

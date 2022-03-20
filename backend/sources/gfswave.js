@@ -1,6 +1,7 @@
 import { shared_metadata, increment_gfs_state, download_gfs } from './gfs.js';
 import { grib2 } from '../file-conversions.js';
 import { map_to_metadatas, output_path } from '../utility.js';
+import { rm } from 'fs/promises';
 
 export async function forage(current_state, datasets) {
   let { fdt, dt, end, forecast, offset, system } =
@@ -22,6 +23,7 @@ export async function forage(current_state, datasets) {
       ...dataset.grib2_options,
     });
   }));
+  await rm(input);
 
   return { metadatas, new_state: { end, forecast, offset, system } };
 }
