@@ -39,11 +39,10 @@ export async function netcdf_speed(input, output, options={}) {
 
 async function gfs_combine_grib(input, output, options, combine_fn) {
   let arr = await grib2_to_arr(input, options.match);
-  let arrA = new Float32Array(arr.buffer, 0, arr.length / 2);
-  let arrB = new Float32Array(arr.buffer, 4 * arr.length / 2);
 
-  let array = arrA.map((a, i) => {
-    let b = arrB[i];
+  let array = Array.from({ length: arr.length / 2 }, (_, i) => {
+    let a = arr[i];
+    let b = arr[i + arr.length / 2];
     a = is_magic_nan(a) ? NaN : a;
     b = is_magic_nan(b) ? NaN : b;
     return nan_for_glsl(isNaN, combine_fn(a, b), options.factor);
