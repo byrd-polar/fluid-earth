@@ -1,6 +1,6 @@
 import {
   absolute_path,
-  make_absolute_path,
+  create_dir,
   mkdir_p,
   parent_output_dir,
   read_json,
@@ -10,8 +10,8 @@ import { readdir } from 'fs/promises';
 import { basename, join, relative } from 'path';
 
 const datasets_dir = absolute_path('./datasets');
-const sources_state_dir = await make_absolute_path('./state/sources');
-const datasets_state_dir = await make_absolute_path('./state/datasets');
+const sources_state_dir = await create_dir('./state/sources');
+const datasets_state_dir = await create_dir('./state/datasets');
 
 let source_path = process.argv[2];
 let source = basename(source_path, '.js');

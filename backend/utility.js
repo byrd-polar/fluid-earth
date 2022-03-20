@@ -17,9 +17,9 @@ import { promisify } from 'util';
 import { brotliCompress as _brotliCompress, constants } from 'zlib';
 const brotliCompress = promisify(_brotliCompress);
 
-export const parent_output_dir = await make_absolute_path('../public/tera');
+export const parent_output_dir = await create_dir('../public/tera');
 
-export async function make_absolute_path(relative_path) {
+export async function create_dir(relative_path) {
   let path = absolute_path(relative_path);
   await mkdir_p(path);
   return path;
@@ -56,7 +56,7 @@ export async function write_json_atomically(file, obj, compress=false) {
   await write_file_atomically(file, data);
 }
 
-const parent_tmp_dir = await make_absolute_path('./atomic');
+const parent_tmp_dir = await create_dir('./atomic');
 
 export async function write_file_atomically(file, data) {
   let tmp_dir = await mkdtemp(parent_tmp_dir + sep);
