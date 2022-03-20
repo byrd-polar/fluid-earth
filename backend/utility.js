@@ -10,7 +10,7 @@ import {
   writeFile,
 } from 'fs/promises';
 import { platform } from 'os';
-import { join, dirname, basename } from 'path';
+import { resolve, join, dirname, sep, basename } from 'path';
 import { Readable } from 'stream';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
@@ -26,7 +26,7 @@ export async function make_absolute_path(relative_path) {
 }
 
 export function absolute_path(relative_path) {
-  return join(dirname(fileURLToPath(import.meta.url)), relative_path);
+  return resolve(dirname(fileURLToPath(import.meta.url)), relative_path);
 }
 
 export async function hash_of_this_file(import_meta) {
@@ -59,7 +59,7 @@ export async function write_json_atomically(file, obj, compress=false) {
 const parent_tmp_dir = await make_absolute_path('./atomic');
 
 export async function write_file_atomically(file, data) {
-  let tmp_dir = await mkdtemp(parent_tmp_dir);
+  let tmp_dir = await mkdtemp(parent_tmp_dir + sep);
   let tmp_file = join(tmp_dir, basename(file));
 
   await writeFile(tmp_file, data);
