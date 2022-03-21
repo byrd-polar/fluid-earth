@@ -1,7 +1,7 @@
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
-import { map_to_metadatas, output_path, run_all } from '../utility.js';
+import { typical_metadata, output_path, run_all } from '../utility.js';
 import { readFile, rm } from 'fs/promises';
 
 export const shared_metadata = {
@@ -15,7 +15,7 @@ export async function forage(current_state, datasets) {
   let { fdt, dt, forecast, offset, system } =
     increment_gfs_state(current_state);
 
-  let metadatas = map_to_metadatas(datasets, dt, shared_metadata);
+  let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
 
   let url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
     + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`

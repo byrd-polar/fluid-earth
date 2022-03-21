@@ -1,6 +1,6 @@
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
-import { map_to_metadatas, output_path } from '../utility.js';
+import { typical_metadata, output_path } from '../utility.js';
 import { rm } from 'fs/promises';
 
 const reference_datetime = Datetime.from('1992-10-05');
@@ -19,7 +19,7 @@ export async function forage(current_state, datasets) {
     : reference_datetime.add({ days: 7001 });
   date = dt.to_iso_string();
 
-  let metadatas = map_to_metadatas(datasets, dt, shared_metadata);
+  let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
 
   let input = await download(
     'https://podaac-opendap.jpl.nasa.gov/'

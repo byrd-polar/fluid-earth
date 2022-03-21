@@ -112,13 +112,11 @@ export function output_path(output_dir, iso_date_string) {
   return join(output_dir, `${iso_date_string}.fp16.br`);
 }
 
-export function map_to_metadatas(datasets, dt, shared_metadata) {
-  return datasets.map(dataset => {
-    let { start, end } = dataset.current_state;
-    start ??= dt.to_iso_string();
-    end = !end || dt > Datetime.from(end) ? dt.to_iso_string() : end;
-    let dataset_metadata = dataset.metadata ?? {};
-    let new_state = { start, end };
-    return { start, end, ...dataset_metadata, ...shared_metadata, new_state };
-  });
+export function typical_metadata(dataset, dt, shared_metadata) {
+  let { start, end } = dataset.current_state;
+  start ??= dt.to_iso_string();
+  end = !end || dt > Datetime.from(end) ? dt.to_iso_string() : end;
+  let dataset_metadata = dataset.metadata ?? {};
+  let new_state = { start, end };
+  return { start, end, ...dataset_metadata, ...shared_metadata, new_state };
 }

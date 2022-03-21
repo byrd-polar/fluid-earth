@@ -1,7 +1,7 @@
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { netcdf } from '../file-conversions.js';
-import { map_to_metadatas, output_path } from '../utility.js';
+import { typical_metadata, output_path } from '../utility.js';
 import { rm } from 'fs/promises';
 
 const shared_metadata = {
@@ -29,7 +29,7 @@ export async function forage(current_state, datasets) {
 
   let dt = fdt.add({ hours: offset });
 
-  let metadatas = map_to_metadatas(datasets, dt, shared_metadata);
+  let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
 
   let input = await download(
     'https://portal.nccs.nasa.gov/datashare/gmao/geos-fp/forecast/'
