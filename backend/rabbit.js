@@ -43,6 +43,8 @@ new_state = { last_successful_update: new Date().toISOString(), ...new_state };
 await write_json_atomically(state_file, new_state);
 
 for (let [index, metadata] of metadatas.entries()) {
+  if (!metadata) continue;
+
   let dataset = datasets[index];
 
   await write_json_atomically(dataset.state_file, metadata.new_state ?? {});
