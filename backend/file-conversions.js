@@ -5,7 +5,7 @@ import { spawn } from 'child_process';
 import { platform } from 'os';
 
 export async function grib2(input, output, options={}) {
-  let arr = await grib2_to_arr(input, options.match);
+  let arr = await grib2_to_arr(input, options.match, options.limit);
   let array = arr.map(v => nan_for_glsl(is_magic_nan, v, options.factor));
 
   await write_array_to_file(output, array, options.compression_level);
@@ -38,7 +38,7 @@ export async function netcdf_speed(input, output, options={}) {
 }
 
 async function gfs_combine_grib(input, output, options, combine_fn) {
-  let arr = await grib2_to_arr(input, options.match);
+  let arr = await grib2_to_arr(input, options.match, options.limit);
 
   let array = Array.from({ length: arr.length / 2 }, (_, i) => {
     let a = arr[i];
@@ -53,7 +53,7 @@ async function gfs_combine_grib(input, output, options, combine_fn) {
 
 const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
 
-async function grib2_to_arr(input, match='.*') {
+async function grib2_to_arr(input, match='.*', limit=1) {
   if (typeof input === 'string') {
     input = await stream_from_file(input);
   }
@@ -62,6 +62,7 @@ async function grib2_to_arr(input, match='.*') {
     [
       '-',
       '-match', match,
+      '-limit', limit,
       '-inv', devnull,
       '-bin', '-',
       '-no_header',

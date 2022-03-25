@@ -77,23 +77,35 @@ export async function convert_simple_gfs(url, datasets, dt, system, offset) {
 }
 
 async function download_gfs(url, datasets) {
-  let matches = datasets.map(d => new RegExp(d.grib2_options.match));
-
   let idx = await download(url + '.idx');
-  let arr = (await readFile(idx)).toString().split('\n');
+  let idx_string = (await readFile(idx)).toString();
+  let index = idx_string.split('\n').map((line, i, lines) => {
+    let start = line.split(':')[1];
+    let end = lines[i+1]?.split(':')[1] - 1 || '';
+    return { line, range: `${start}-${end}` };
+  });
   await rm(idx);
 
-  let index = arr.map((line, i) => {
-    let start = line.split(':')[1];
-    let end = arr[i+1]?.split(':')[1] - 1 || '';
-    return { start, end, match: r => line.match(r) };
-  }).filter(line => matches.some(line.match));
+  let match_limits = new Map(datasets.map(dataset => {
+    let { match, limit=1 } = dataset.grib2_options;
+    return [ new RegExp(match), limit ];
+  }));
 
-  for (let match of matches)
-    if (!index.some(line => line.match(match)))
-      throw `Error: could not find '${match}' in GFS index`;
+  let Range = `bytes=${index.filter(row => {
+    let has_match = false;
+    for (let [match_regex, limit] of match_limits) {
+      if (row.line.match(match_regex) && limit > 0) {
+        match_limits.set(match_regex, limit - 1);
+        has_match = true;
+      }
+    }
+    return has_match;
+  }).map(row => row.range).join(',')}`;
 
-  let Range = `bytes=${index.map(l => `${l.start}-${l.end}`).join(',')}`;
+  for (let [match_regex, limit] of match_limits) {
+    if (limit > 0)
+      throw `Error: could not find enough '${match_regex}' in GFS index`;
+  }
 
   return download(url, { headers: { Range } });
 }
