@@ -1,6 +1,6 @@
 import { create_dir } from './utility.js';
 import { Buffer } from 'buffer';
-import { createWriteStream } from 'fs';
+import { createReadStream, createWriteStream } from 'fs';
 import { writeFile } from 'fs/promises';
 import { get } from 'https';
 import { tmpdir } from 'os';
@@ -19,6 +19,17 @@ export async function download(url, options={}, unique_path=true) {
   } else {
     await pipeline(response, createWriteStream(file));
   }
+  return file;
+}
+
+export async function cat(...files) {
+  let file = join(cache_dir, uuidv4());
+
+  await pipeline(async function* () {
+    for (const stream of files.map(file => createReadStream(file)))
+      for await (const chunk of stream) yield chunk;
+  }, createWriteStream(file));
+
   return file;
 }
 
