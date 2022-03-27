@@ -1,4 +1,4 @@
-import { brotli, stream_from_file, write_file_atomically } from './utility.js';
+import { brotli, write_file_atomically } from './utility.js';
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
@@ -54,13 +54,10 @@ async function gfs_combine_grib(input, output, options, combine_fn) {
 const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
 
 async function grib2_to_arr(input, match='.*', limit=1) {
-  if (typeof input === 'string') {
-    input = await stream_from_file(input);
-  }
   return spawn_cmd(
     'wgrib2',
     [
-      '-',
+      input,
       '-match', match,
       '-limit', limit,
       '-inv', devnull,
@@ -69,8 +66,6 @@ async function grib2_to_arr(input, match='.*', limit=1) {
       '-order', 'we:sn',
       '-ncpu', '1',
     ],
-    { stdio: [input, 'pipe', 'pipe'] },
-    [input],
     (buf, resolve) => {
       resolve(new Float32Array(buf.buffer, buf.byteOffset, buf.length / 4));
     },
@@ -80,9 +75,11 @@ async function grib2_to_arr(input, match='.*', limit=1) {
 async function netcdf_to_arr(input, variables, flatten=true) {
   return spawn_cmd(
     'ncdump',
-    ['-v', variables, '-p', '9,17', input],
-    {},
-    [],
+    [
+      '-v', variables,
+      '-p', '9,17',
+      input,
+    ],
     (buffer, resolve) => {
       let string = buffer.toString();
       let arrays = variables.split(',').map(v => {
@@ -96,9 +93,9 @@ async function netcdf_to_arr(input, variables, flatten=true) {
   );
 }
 
-async function spawn_cmd(command, args, options, rejects, process_data_fn) {
+async function spawn_cmd(command, args, process_data_fn) {
   return new Promise((resolve, reject) => {
-    let child = spawn(command, args, options);
+    let child = spawn(command, args);
 
     let { stdout, stderr } = child;
     let chunks = [];
@@ -116,7 +113,7 @@ async function spawn_cmd(command, args, options, rejects, process_data_fn) {
       };
     });
 
-    for (let obj of [child, stdout, stderr, ...rejects]) {
+    for (let obj of [child, stdout, stderr]) {
       obj.on('error', reject);
     }
   });

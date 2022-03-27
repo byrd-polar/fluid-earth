@@ -73,23 +73,6 @@ export async function brotli(buffer, compression_level=11) {
   return brotliCompress(buffer, { params });
 }
 
-export async function stream_from_files(files) {
-  let streams = await Promise.all(files.map(stream_from_file));
-  return Readable.from((async function* concat() {
-    for (const stream of streams)
-      for await (const chunk of stream)
-        yield chunk;
-  })());
-}
-
-export async function stream_from_file(file) {
-  return new Promise((resolve, reject) => {
-    let stream = createReadStream(file);
-    stream.on('open', () => resolve(stream));
-    stream.on('error', reject);
-  });
-}
-
 export async function run_all(promise_functions, max_concurrency=8) {
   return new Promise((resolve, reject) => {
     let finished_count = -max_concurrency;
