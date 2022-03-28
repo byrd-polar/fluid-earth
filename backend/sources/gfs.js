@@ -12,64 +12,51 @@ export const shared_metadata = {
 };
 
 export async function forage(current_state, datasets) {
-  let { fdt, dt, forecast, offset, system } =
-    increment_gfs_state(current_state);
+  let { forecast, offset, system } = increment_state(current_state);
+  let dt = Datetime.from(forecast).add({ hours: offset });
 
   let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
 
-  let url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
-    + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
-    + `atmos/${system}.t${fdt.p_hour}z.`
-    + `pgrb2.0p25.f${offset.toString().padStart(3, '0')}`;
+  let url = gfs_url({ forecast, offset, system });
+  let compression_level = system === 'gdas' && offset < 6 ? 11 : 6;
 
   let simple_datasets = datasets.filter(d => !d.accumulation);
-  await convert_simple_gfs(url, simple_datasets, dt, system, offset);
+  await convert_simple(url, simple_datasets, dt, compression_level);
 
   return { metadatas, new_state: { forecast, offset, system } };
 }
 
-export function increment_gfs_state(current_state) {
-  let { forecast, offset, system } = current_state;
-  let fdt;
-  if (forecast) {
-    fdt = Datetime.from(forecast);
-    offset++;
-    switch (system) {
-      case 'gfs':
-        if (offset > 120) {
-          offset = 0;
-          system = 'gdas';
-        }
-        break;
-      case 'gdas':
-        if (offset > 9) {
-          fdt = fdt.add({ hours: 6 });
-          offset = 0;
-          system = 'gfs';
-        }
-        break;
-      default:
-        throw `Error: unrecognized system: ${system}`;
-    }
-  } else {
-    fdt = Datetime.now().round('day').subtract({ hours: 36 });
-    offset = 0;
-    system = 'gdas';
-  }
-  forecast = fdt.to_iso_string();
+export function increment_state(current_state) {
+  let initial_forecast = () => {
+    return Datetime.now().round('day').subtract({ hours: 36 }).to_iso_string();
+  };
+  let { forecast=initial_forecast(), offset=120, system='gfs' } = current_state;
 
-  let dt = fdt.add({ hours: offset });
+  offset = (offset + 1) % (system === 'gfs' ? 121 : 10);
+  system = offset === 0 ? (system === 'gfs' ? 'gdas' : 'gfs') : system;
+  forecast = offset === 0 && system === 'gfs'
+    ? Datetime.from(forecast).add({ hours: 6 }).to_iso_string()
+    : forecast;
 
-  return { fdt, dt, forecast, offset, system };
+  return { forecast, offset, system };
 }
 
-export async function convert_simple_gfs(url, datasets, dt, system, offset) {
+function gfs_url({ forecast, offset, system }) {
+  let fdt = Datetime.from(forecast);
+
+  return 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
+    + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
+    + `atmos/${system}.t${fdt.p_hour}z.`
+    + `pgrb2.0p25.f${offset.toString().padStart(3, '0')}`;
+}
+
+export async function convert_simple(url, datasets, dt, compression_level) {
   let input = await download_gfs(url, datasets);
 
   await run_all(datasets.map(dataset => async () => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
     await (dataset.convert ?? grib2)(input, output, {
-      compression_level: system === 'gdas' && offset < 6 ? 11 : 6,
+      compression_level,
       ...dataset.grib2_options,
     });
   }));
