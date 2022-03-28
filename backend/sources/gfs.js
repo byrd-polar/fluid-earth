@@ -1,6 +1,6 @@
 import { Datetime } from '../datetime.js';
-import { download } from '../download.js';
-import { grib2 } from '../file-conversions.js';
+import { destructive_cat, download } from '../download.js';
+import { grib2, grib2_acc } from '../file-conversions.js';
 import { typical_metadata, output_path, run_all } from '../utility.js';
 import { readFile, rm } from 'fs/promises';
 
@@ -15,13 +15,23 @@ export async function forage(current_state, datasets) {
   let { forecast, offset, system } = increment_state(current_state);
   let dt = Datetime.from(forecast).add({ hours: offset });
 
-  let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
+  let metadatas = datasets.map(d => {
+    return d.accumulation && offset === 0
+      ? null
+      : typical_metadata(d, dt, shared_metadata);
+  });
 
   let url = gfs_url({ forecast, offset, system });
   let compression_level = system === 'gdas' && offset < 6 ? 11 : 6;
 
   let simple_datasets = datasets.filter(d => !d.accumulation);
   await convert_simple(url, simple_datasets, dt, compression_level);
+
+  if (offset !== 0) {
+    let urls = [url, gfs_url(current_state)];
+    let accum_datasets = datasets.filter(d => d.accumulation);
+    await convert_accum(urls, accum_datasets, dt, offset, compression_level);
+  }
 
   return { metadatas, new_state: { forecast, offset, system } };
 }
@@ -57,6 +67,25 @@ export async function convert_simple(url, datasets, dt, compression_level) {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
     await (dataset.convert ?? grib2)(input, output, {
       compression_level,
+      ...dataset.grib2_options,
+    });
+  }));
+  await rm(input);
+}
+
+async function convert_accum(urls, datasets, dt, offset, compression_level) {
+  let input = offset === 1
+    ? await download_gfs(urls[0], datasets)
+    : await destructive_cat(await Promise.all(urls.map(url => {
+        return download_gfs(url, datasets);
+      })));
+
+  await Promise.all(datasets.map(async dataset => {
+    let simple = offset % dataset.accumulation.reset === 1;
+
+    let output = output_path(dataset.output_dir, dt.to_iso_string());
+    await (simple ? grib2 : grib2_acc)(input, output, {
+      limit: simple ? 1 : 2,
       ...dataset.grib2_options,
     });
   }));

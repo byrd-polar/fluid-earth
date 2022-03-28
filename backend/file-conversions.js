@@ -16,7 +16,7 @@ export async function grib2_speed(input, output, options={}) {
 }
 
 export async function grib2_acc(input, output, options={}) {
-  await gfs_combine_grib(input, output, options, (a, b) => b - a);
+  await gfs_combine_grib(input, output, options, (a, b) => a - b);
 }
 
 export async function netcdf(input, output, options={}) {
