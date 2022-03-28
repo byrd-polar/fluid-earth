@@ -1,9 +1,0 @@
-[Unit]
-Description=Download and process RTGSSTHR data for Fluid Earth
-OnFailure=fev2r-email@%n.service
-
-[Service]
-Type=oneshot
-WorkingDirectory=/export/data/fev2r/repository
-ExecStart=/usr/bin/npm run data:rtgssthr
-TimeoutStartSec=23h 50min

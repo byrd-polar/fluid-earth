@@ -1,9 +1,0 @@
-[Unit]
-Description=Update RTGSSTHR data every 24 hours
-
-[Timer]
-OnCalendar=*-*-* 18:45
-Persistent=true
-
-[Install]
-WantedBy=timers.target
