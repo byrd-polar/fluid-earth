@@ -1,7 +1,7 @@
 import { create_dir } from './utility.js';
 import { Buffer } from 'buffer';
 import { createReadStream, createWriteStream } from 'fs';
-import { writeFile } from 'fs/promises';
+import { rm, writeFile } from 'fs/promises';
 import { get } from 'https';
 import { tmpdir } from 'os';
 import { join, basename } from 'path';
@@ -22,13 +22,15 @@ export async function download(url, options={}, unique_path=true) {
   return file;
 }
 
-export async function cat(...files) {
+export async function destructive_cat(files) {
   let file = join(cache_dir, uuidv4());
 
   await pipeline(async function* () {
-    for (const stream of files.map(file => createReadStream(file)))
-      for await (const chunk of stream) yield chunk;
+    for (let stream of files.map(input_file => createReadStream(input_file)))
+      for await (let chunk of stream) yield chunk;
   }, createWriteStream(file));
+
+  for (let input_file of files) await rm(input_file);
 
   return file;
 }
