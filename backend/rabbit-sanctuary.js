@@ -58,7 +58,9 @@ export class RabbitSanctuary {
     } catch(error) {
       need_sleep = true;
 
-      let err_string = error?.toString() ?? 'Unknown error';
+      let err_string = error?.stack
+        ?? error?.toString()
+        ?? 'Unknown error';
 
       for (let line of err_string.split('\n')) log(rabbit, line);
       log(rabbit, `Retrying in ${MINUTES_BEFORE_RETRY} minutes...`);
