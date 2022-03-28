@@ -43,7 +43,7 @@ async function download_as_stream(url, options={}) {
         resolve(response);
       } else {
         response.resume();
-        reject(`Error: HTTP status code ${statusCode} ${statusMessage} ${url}`);
+        reject(`Error: HTTP status ${statusCode} ${statusMessage} for ${url}`);
       }
     }).on('error', reject);
   });
