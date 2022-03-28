@@ -104,6 +104,7 @@ export default async ({ _, mode }) => {
       rollupOptions: {
         plugins: productionOnlyPlugins,
       },
+      minify: 'terser',
       terserOptions: {
         format: { comments: false },
       },
