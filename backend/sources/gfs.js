@@ -93,7 +93,8 @@ async function convert_accum(urls, datasets, dt, offset, compression_level) {
 }
 
 async function download_gfs(url, datasets) {
-  let idx = await download(url + '.idx');
+  let idx_url = url + '.idx';
+  let idx = await download(idx_url);
   let idx_string = (await readFile(idx)).toString();
   let index = idx_string.split('\n').map((line, i, lines) => {
     let start = line.split(':')[1];
@@ -120,7 +121,7 @@ async function download_gfs(url, datasets) {
 
   for (let [match_regex, limit] of match_limits) {
     if (limit > 0)
-      throw `Error: could not find enough '${match_regex}' in GFS index`;
+      throw `Error: could not match enough '${match_regex}' in ${idx_url}`;
   }
 
   return download(url, { headers: { Range } });
