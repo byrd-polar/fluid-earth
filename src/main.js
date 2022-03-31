@@ -17,8 +17,11 @@ import dataProjections from './map/data-projections/';
     //
     // will need to update this if date strings are added in different sections
     // of the inventory
-    for (const prop of ['start', 'lastForecast', 'end']) {
+    for (const prop of ['start', 'end']) {
       if (prop in dataset) dataset[prop] = new Date(dataset[prop]);
+    }
+    if ('missing' in dataset) {
+      dataset.missing = dataset.missing.map(iso => new Date(iso));
     }
     // replace colormap strings with colormap objects
     if ('colormap' in dataset) {

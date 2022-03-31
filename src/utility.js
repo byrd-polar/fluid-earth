@@ -14,12 +14,17 @@ export function validDate(dataset, date, oscarOptions={}) {
     excludedDate=undefined,
   } = oscarOptions;
 
+  let candidates;
   if (dataset.intervalInHours === 'custom:OSCAR') {
-    let candidates = getValidDates(dataset).filter(c => {
+    candidates = getValidDates(dataset).filter(c => {
       return (!preserveMonth || c.getMonth() === date.getMonth())
           && (!preserveUTCMonth || c.getUTCMonth() === date.getUTCMonth())
           && (!excludedDate || c.getTime() !== excludedDate.getTime());
     });
+  } else if (dataset.missing) {
+    candidates = getValidDates(dataset);
+  }
+  if (candidates) {
     let inflection = candidates.findIndex(c => c - date > 0);
     if (inflection === 0) return candidates[0];
     if (inflection === -1) return candidates[candidates.length - 1];
@@ -63,7 +68,9 @@ export function getValidDates(dataset) {
   let end = dataset.end.getTime();
   let interval = dataset.intervalInHours * 60 * 60 * 1000;
   for (let t = start; t <= end; t += interval) {
-    dates.push(new Date(t));
+    if (!dataset.missing?.some(d => d.valueOf() === t)) {
+      dates.push(new Date(t));
+    }
   }
   return dates;
 }
