@@ -1,6 +1,7 @@
 import {
   absolute_path,
   create_dir,
+  json_dir_to_obj,
   mkdir_p,
   parent_output_dir,
   read_json,
@@ -68,3 +69,7 @@ let inventory = (await Promise.all(
 
 let inventory_file = join(parent_output_dir, 'inventory.json.br');
 await write_json_atomically(inventory_file, inventory, true);
+
+let state_summary = await json_dir_to_obj(absolute_path('./state'));
+let state_summary_file = join(parent_output_dir, 'state.json');
+await write_json_atomically(state_summary_file, state_summary);

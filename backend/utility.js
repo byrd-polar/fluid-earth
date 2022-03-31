@@ -5,9 +5,11 @@ import {
   mkdir,
   mkdtemp,
   open,
+  readdir,
   readFile,
   rename,
   rmdir,
+  stat,
   writeFile,
 } from 'fs/promises';
 import { platform } from 'os';
@@ -37,6 +39,17 @@ export async function hash_of_this_file(import_meta) {
 
 export async function mkdir_p(path) {
   await mkdir(path, { mode: '775', recursive: true });
+}
+
+export async function json_dir_to_obj(path) {
+  if (!(await stat(path)).isDirectory()) return read_json(path);
+
+  return Object.fromEntries(await Promise.all(
+    (await readdir(path)).map(async file => [
+      basename(file, '.json'),
+      await json_dir_to_obj(join(path, file)),
+    ])
+  ));
 }
 
 export async function read_json(file, default_value=undefined) {
