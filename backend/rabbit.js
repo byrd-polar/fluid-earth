@@ -10,6 +10,10 @@ import {
 import { readdir } from 'fs/promises';
 import { basename, join, relative } from 'path';
 
+let heart = { last_beat: new Date().toISOString() };
+let heart_file = join(parent_output_dir, 'heart.json');
+await write_json_atomically(heart_file, heart);
+
 const datasets_dir = absolute_path('./datasets');
 const sources_state_dir = await create_dir('./state/sources');
 const datasets_state_dir = await create_dir('./state/datasets');
