@@ -1,5 +1,5 @@
 import { Datetime } from '../datetime.js';
-import { download } from '../download.js';
+import { download, ensure_exists } from '../download.js';
 import { netcdf } from '../file-conversions.js';
 import { typical_metadata, output_path } from '../utility.js';
 
@@ -36,6 +36,7 @@ export async function forage(current_state, datasets) {
     + `${fdt.year}${fdt.p_month}${fdt.p_day}_${fdt.p_hour}+`
     + `${dt.year}${dt.p_month}${dt.p_day}_${dt.p_hour}`
     + '00.V01.nc4#mode=bytes';
+  await ensure_exists(input);
 
   await Promise.all(datasets.map(async dataset => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
