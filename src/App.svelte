@@ -57,8 +57,12 @@
   let kioskMode = false;
 
   const fetcher = new Fetcher();
-  let griddedDataset = gDatasets[0];
-  let particleDataset = pDatasets[0];
+  let griddedDataset
+    = gDatasets.find(d => d.name === 'temperature at 2 m above ground')
+   ?? gDatasets[0];
+  let particleDataset
+    = pDatasets.find(d => d.name === 'wind at 10 m above ground')
+   ?? pDatasets[0];
   let date = (__production__ || !__using_local_data_files__) ?
     validDate(griddedDataset, $currentDate) :
     griddedDataset.end;
