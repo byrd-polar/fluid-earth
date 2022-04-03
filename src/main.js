@@ -34,8 +34,11 @@ import dataProjections from './map/data-projections/';
     }
   }
 
+  let gDatasets = inventory.filter(d => d.colormap)
+  let pDatasets = inventory.filter(d => d.particleDisplay);
+
   new App({
     target: document.body,
-    props: { inventory },
+    props: { gDatasets, pDatasets },
   });
 })();

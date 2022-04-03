@@ -39,7 +39,8 @@
   import { Float16Array } from '@petamoriken/float16';
   import ky from 'ky';
 
-  export let inventory;
+  export let gDatasets;
+  export let pDatasets;
 
   const minZoom = 0.375;
   const maxZoom = 24;
@@ -56,8 +57,8 @@
   let kioskMode = false;
 
   const fetcher = new Fetcher();
-  let griddedDataset = inventory.filter(d => d.colormap)[0];
-  let particleDataset = inventory.filter(d => d.particleDisplay)[0];
+  let griddedDataset = gDatasets[0];
+  let particleDataset = pDatasets[0];
   let date = (__production__ || !__using_local_data_files__) ?
     validDate(griddedDataset, $currentDate) :
     griddedDataset.end;
@@ -343,7 +344,8 @@
   bind:simplifiedMode
   bind:kioskMode
   bind:pins
-  {inventory}
+  {gDatasets}
+  {pDatasets}
   {minZoom}
   {maxZoom}
 />
@@ -366,7 +368,8 @@
 <Menu bind:openedMenu menuName="Datasets" bind:simplifiedMode>
   <Datasets
     {date}
-    {inventory}
+    {gDatasets}
+    {pDatasets}
     bind:griddedDataset
     bind:particleDataset
     bind:particlesShown
@@ -427,7 +430,8 @@
       {maxLong}
       bind:centerLatitude
       bind:centerLongitude
-      {inventory}
+      {gDatasets}
+      {pDatasets}
       bind:griddedDataset
       bind:particleDataset
       bind:griddedColormap

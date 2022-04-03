@@ -33,13 +33,11 @@
     centerLongitude = clamp(centerLongitude + right - left, minLong, maxLong);
   }
 
-  export let inventory;
+  export let gDatasets;
+  export let pDatasets;
   export let griddedDataset;
   export let particleDataset;
   export let griddedColormap;
-
-  let griddedDatasets = inventory.filter(d => d.colormap)
-  let particleDatasets = inventory.filter(d => d.particleDisplay);
 
   export let projection;
 </script>
@@ -149,7 +147,7 @@ user interface components.
 <h2>All Datasets</h2>
 
 <h3>Gridded</h3>
-{#each griddedDatasets as dataset}
+{#each gDatasets as dataset}
   <label>
     <input
       type="radio"
@@ -162,7 +160,7 @@ user interface components.
 {/each}
 
 <h3>Particle</h3>
-{#each particleDatasets as dataset}
+{#each pDatasets as dataset}
   <label>
     <input
       type="radio"

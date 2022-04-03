@@ -10,16 +10,15 @@
   import iconsMap from './filters/iconsMap.js';
 
   export let date;
-  export let inventory;
+  export let gDatasets;
+  export let pDatasets;
   export let griddedDataset;
   export let particleDataset;
   export let particlesShown;
   export let simplifiedMode;
 
-  let griddedDatasets = inventory.filter(d => d.colormap)
-  let particleDatasets = inventory.filter(d => d.particleDisplay);
-  let griddedNames = griddedDatasets.map(dataset => dataset.name);
-  let particleNames = particleDatasets.map(dataset => dataset.name);
+  let griddedNames = gDatasets.map(dataset => dataset.name);
+  let particleNames = pDatasets.map(dataset => dataset.name);
 
   $: tFilters =     topicFilters[simplifiedMode ? 'simple' : 'normal'];
   $: vFilters =  variableFilters[simplifiedMode ? 'simple' : 'normal'];
@@ -51,12 +50,12 @@
       particlesShown ? particleDataset.name : ''
     ));
   }
-  $: gDataset = griddedDatasets.find(d => {
+  $: gDataset = gDatasets.find(d => {
     return tFilters[topic](d.name)
         && vFilters[variable](d.name)
         && hFilters[height](d.name);
   });
-  $: pDataset = particleDatasets.find(d => {
+  $: pDataset = pDatasets.find(d => {
     return aFilters[animation](d.name)
         && hFilters[height](d.name);
   });
@@ -72,7 +71,7 @@
   $: animationOptions = animations.filter(a => {
     if (a === 'none') return true;
 
-    let datasets = particleDatasets.filter(d => hFilters[height](d.name));
+    let datasets = pDatasets.filter(d => hFilters[height](d.name));
     return datasets.find(d => aFilters[a](d.name)
                            && gDataset
                            && validCloseDate(d, validDate(gDataset, date)));

@@ -17,7 +17,8 @@
   export let kioskMode;
   export let pins;
 
-  export let inventory;
+  export let gDatasets;
+  export let pDatasets;
   export let minZoom;
   export let maxZoom;
 
@@ -65,12 +66,12 @@
     // for each variable, get value from hash, and update variable if valid
     let val;
 
-    val = inventory.find(d => d.name === hash.get('gdata'));
+    val = gDatasets.find(d => d.name === hash.get('gdata'));
     if (val) {
       griddedDataset = val;
     }
 
-    val = inventory.find(d => d.name === hash.get('pdata'));
+    val = pDatasets.find(d => d.name === hash.get('pdata'));
     if (val) {
       particleDataset = val;
     }
