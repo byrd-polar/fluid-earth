@@ -22,10 +22,6 @@ export async function download(url, options={}, unique_path=true) {
   return file;
 }
 
-export async function ensure_exists(url) {
-  await download_as_stream(url, { method: 'HEAD' });
-}
-
 export async function destructive_cat(files) {
   let file = join(cache_dir, uuidv4());
 
