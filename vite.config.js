@@ -43,7 +43,7 @@ export default async ({ _, mode }) => {
       await access('./public/tera');
       return false;
     } catch {
-      return { '/data': 'https://fluid-earth.byrd.osu.edu' };
+      return { '/tera': 'https://fluid-earth.byrd.osu.edu' };
     }
   })();
 
