@@ -4,11 +4,11 @@
   ignore = "[[ $HEAD == main ]]"
 
 [build.environment]
-  NODE_VERSION = "14"
-  NPM_VERSION = "7"
+  NODE_VERSION = "16"
+  NPM_VERSION = "8"
 
 [[redirects]]
-  from = "/data/*"
-  to = "https://fever.byrd.osu.edu/fev2r-data-3/:splat"
+  from = "/tera/*"
+  to = "https://fluid-earth.byrd.osu.edu/tera/:splat"
   status = 200
   force = true
