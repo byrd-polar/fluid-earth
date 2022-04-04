@@ -1,0 +1,17 @@
+name: Hello Actions
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: error code 0
+        run: |
+          echo hello
+          exit 0
+      - name: error code 1
+        run: |
+          echo hi
+          exit 1
