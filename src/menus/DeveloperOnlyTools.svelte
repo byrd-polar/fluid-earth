@@ -1,10 +1,10 @@
 <script>
-  import Add24 from "carbon-icons-svelte/lib/Add24";
-  import Subtract24 from "carbon-icons-svelte/lib/Subtract24";
-  import CaretLeftGlyph from "carbon-icons-svelte/lib/CaretLeftGlyph";
-  import CaretRightGlyph from "carbon-icons-svelte/lib/CaretRightGlyph";
-  import CaretUpGlyph from "carbon-icons-svelte/lib/CaretUpGlyph";
-  import CaretDownGlyph from "carbon-icons-svelte/lib/CaretDownGlyph";
+  import Add from 'carbon-icons-svelte/lib/Add.svelte';
+  import Subtract from 'carbon-icons-svelte/lib/Subtract.svelte';
+  import CaretLeft from 'carbon-icons-svelte/lib/CaretLeft.svelte';
+  import CaretRight from 'carbon-icons-svelte/lib/CaretRight.svelte';
+  import CaretUp from 'carbon-icons-svelte/lib/CaretUp.svelte';
+  import CaretDown from 'carbon-icons-svelte/lib/CaretDown.svelte';
   import RangeSlider from 'svelte-range-slider-pips';
   import Button from '../components/Button.svelte';
   import { clamp } from '../math.js';
@@ -57,7 +57,7 @@ user interface components.
     disabled={zoom === minZoom}
     tip="Zoom out"
   >
-    <Subtract24 />
+    <Subtract size={24} />
   </Button>
   <RangeSlider
     bind:value={zoom}
@@ -73,7 +73,7 @@ user interface components.
     disabled={zoom === maxZoom}
     tip="Zoom in"
   >
-    <Add24 />
+    <Add size={24} />
   </Button>
 </div>
 
@@ -86,7 +86,7 @@ user interface components.
     disabled={centerLatitude === maxLat}
     tip="Pan up"
   >
-    <CaretUpGlyph />
+    <CaretUp />
   </Button>
 
   <Button secondary
@@ -95,7 +95,7 @@ user interface components.
     tip="Pan down"
     tipPlacement="bottom"
   >
-    <CaretDownGlyph />
+    <CaretDown />
   </Button>
 
   <Button secondary
@@ -104,7 +104,7 @@ user interface components.
     tip="Pan left"
     tipPlacement="left"
   >
-    <CaretLeftGlyph />
+    <CaretLeft />
   </Button>
 
   <Button secondary
@@ -113,11 +113,11 @@ user interface components.
     tip="Pan right"
     tipPlacement="right"
   >
-    <CaretRightGlyph />
+    <CaretRight />
   </Button>
 
   <div class="slider vertical">
-    <CaretUpGlyph />
+    <CaretUp />
     <RangeSlider
       bind:value={centerLatitude}
       min={minLat}
@@ -127,11 +127,11 @@ user interface components.
       float
       formatter={v => `Lat: ${v}`}
     />
-    <CaretDownGlyph />
+    <CaretDown />
   </div>
 
   <div class="slider">
-    <CaretLeftGlyph />
+    <CaretLeft />
     <RangeSlider
       bind:value={centerLongitude}
       min={minLong}
@@ -140,7 +140,7 @@ user interface components.
       float
       formatter={v => `Lon: ${v}`}
     />
-    <CaretRightGlyph />
+    <CaretRight />
   </div>
 </div>
 

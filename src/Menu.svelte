@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import IconButton from './components/IconButton.svelte';
-  import ArrowLeft24 from "carbon-icons-svelte/lib/ArrowLeft24";
+  import ArrowLeft from 'carbon-icons-svelte/lib/ArrowLeft.svelte';
   import HeaderToggle from './components/HeaderToggle.svelte';
   import { tips } from './tooltip.js';
   import overlayscroll from './overlayscroll.js';
@@ -45,7 +45,7 @@
 >
   <header>
     <IconButton action={closeMenu} ariaLabel="close menu">
-      <ArrowLeft24 />
+      <ArrowLeft size={24} />
     </IconButton>
     <h1>{menuName}</h1>
     {#if simplifiedMode !== undefined}

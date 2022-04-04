@@ -1,8 +1,8 @@
 <script>
-  import Pause from 'carbon-icons-svelte/lib/PauseFilled32';
-  import Play from 'carbon-icons-svelte/lib/PlayFilled32';
-  import Repeat from 'carbon-icons-svelte/lib/Repeat20';
-  import RepeatOne from 'carbon-icons-svelte/lib/RepeatOne20';
+  import Pause from 'carbon-icons-svelte/lib/PauseFilled.svelte';
+  import Play from 'carbon-icons-svelte/lib/PlayFilled.svelte';
+  import Repeat from 'carbon-icons-svelte/lib/Repeat.svelte';
+  import RepeatOne from 'carbon-icons-svelte/lib/RepeatOne.svelte';
   import RangeSlider from 'svelte-range-slider-pips';
   import { capitalizeFirstLetter, simpleTranslate } from '../utility.js';
   import prettyMilliseconds from 'pretty-ms';
@@ -134,9 +134,9 @@
 <div>
   <button on:click={playing ? pause : play} class="play">
     {#if playing}
-      <Pause />
+      <Pause size={32} />
     {:else}
-      <Play />
+      <Play size={32} />
     {/if}
   </button>
   <h3>{capitalizeFirstLetter(title)}</h3>
@@ -160,9 +160,9 @@
   />
   <button class="repeat" on:click={() => repeat = !repeat}>
     {#if repeat}
-      <RepeatOne style="color: var(--primary-color-light" />
+      <RepeatOne size={20} style="color: var(--primary-color-light" />
     {:else}
-      <Repeat />
+      <Repeat size={20} />
     {/if}
   </button>
 </div>

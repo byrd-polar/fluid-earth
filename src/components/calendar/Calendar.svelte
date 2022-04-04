@@ -1,6 +1,6 @@
 <script>
-  import LeftArrow from 'carbon-icons-svelte/lib/ChevronLeft32';
-  import RightArrow from 'carbon-icons-svelte/lib/ChevronRight32';
+  import ChevronLeft from 'carbon-icons-svelte/lib/ChevronLeft.svelte';
+  import ChevronRight from 'carbon-icons-svelte/lib/ChevronRight.svelte';
   import ChipGroup from '../ChipGroup.svelte';
   import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
@@ -144,7 +144,7 @@
     use:tooltip={{content: `Prev ${picker.headerUnit}`}}
     tabindex="-1"
   >
-    <LeftArrow />
+    <ChevronLeft size={32} />
   </button>
   <div>
     {format(header, picker.headerFormat)}
@@ -155,7 +155,7 @@
     use:tooltip={{content: `Next ${picker.headerUnit}`}}
     tabindex="-1"
   >
-    <RightArrow />
+    <ChevronRight size={32} />
   </button>
 </div>
 

@@ -6,10 +6,10 @@
   import { createFocusTrap } from 'focus-trap';
   import overlayscroll from './overlayscroll.js';
 
-  import Blog32 from "carbon-icons-svelte/lib/Blog32";
-  import LogoFacebook32 from "carbon-icons-svelte/lib/LogoFacebook32";
-  import LogoTwitter32 from "carbon-icons-svelte/lib/LogoTwitter32";
-  import LogoGithub32 from "carbon-icons-svelte/lib/LogoGithub32";
+  import Blog from 'carbon-icons-svelte/lib/Blog.svelte';
+  import Facebook from 'carbon-icons-svelte/lib/LogoFacebook.svelte';
+  import Twitter from 'carbon-icons-svelte/lib/LogoTwitter.svelte';
+  import Github from 'carbon-icons-svelte/lib/LogoGithub.svelte';
 
   export let menus;
   export let openedMenu;
@@ -115,16 +115,16 @@
       >
     </a>
     <a href="https://u.osu.edu/fever/">
-      <Blog32 aria-label="Blog" />
+      <Blog size={32} aria-label="Blog" />
     </a>
     <a href="https://www.facebook.com/byrdpolar">
-      <LogoFacebook32 aria-label="Facebook" />
+      <Facebook size={32} aria-label="Facebook" />
     </a>
     <a href="https://twitter.com/ByrdPolar">
-      <LogoTwitter32 aria-label="Twitter" />
+      <Twitter size={32} aria-label="Twitter" />
     </a>
     <a href="https://github.com/byrd-polar/fluid-earth">
-      <LogoGithub32 aria-label="Github" />
+      <Github size={32} aria-label="Github" />
     </a>
   </footer>
 </div>

@@ -1,7 +1,7 @@
 <script>
   import Button from './Button.svelte';
-  import Time24 from "carbon-icons-svelte/lib/Time24";
-  import Shuffle24 from "carbon-icons-svelte/lib/Shuffle24";
+  import Time from 'carbon-icons-svelte/lib/Time.svelte';
+  import Shuffle from 'carbon-icons-svelte/lib/Shuffle.svelte';
   import { validDate } from '../utility.js';
   import { currentDate } from '../stores.js';
 
@@ -24,10 +24,10 @@
 
 <div>
   <Button action={now} disabled={date.getTime() === nowDate.getTime()} flex>
-    <span>now</span><Time24 />
+    <span>now</span><Time size={24} />
   </Button>
   <Button action={random} flex secondary>
-    <span>random</span><Shuffle24 />
+    <span>random</span><Shuffle size={24} />
   </Button>
 </div>
 

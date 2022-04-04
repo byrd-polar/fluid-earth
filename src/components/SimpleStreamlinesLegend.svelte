@@ -1,6 +1,6 @@
 <script>
-  import Pause from 'carbon-icons-svelte/lib/PauseOutlineFilled32';
-  import Play from 'carbon-icons-svelte/lib/PlayOutlineFilled32';
+  import Play from 'carbon-icons-svelte/lib/PlayOutlineFilled.svelte';
+  import Pause from 'carbon-icons-svelte/lib/PauseOutlineFilled.svelte';
   import { capitalizeFirstLetter, simpleTranslate } from '../utility.js';
   import tooltip from '../tooltip.js';
 
@@ -22,8 +22,8 @@
 >
   <h3>{capitalizeFirstLetter(simpleTranslate(particleName))}</h3>
   <!-- Classes instead of if/else to avoid losing focus on Android Chrome -->
-  <Play class={!particlesPaused ? 'hidden' : undefined} />
-  <Pause class={particlesPaused ? 'hidden' : undefined} />
+  <Play size={32} class={!particlesPaused ? 'hidden' : undefined} />
+  <Pause size={32} class={particlesPaused ? 'hidden' : undefined} />
 </section>
 
 <style>

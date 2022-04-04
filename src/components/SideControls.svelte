@@ -1,6 +1,6 @@
 <script>
-  import ZoomIn from 'carbon-icons-svelte/lib/ZoomIn24';
-  import ZoomOut from 'carbon-icons-svelte/lib/ZoomOut24';
+  import ZoomIn from 'carbon-icons-svelte/lib/ZoomIn.svelte';
+  import ZoomOut from 'carbon-icons-svelte/lib/ZoomOut.svelte';
   import Tweener from '../tweener.js';
   import { cubicOut } from 'svelte/easing';
   import { clamp } from '../math.js';
@@ -27,14 +27,14 @@
     on:click={() => smoothZoom(true)}
     use:tooltip={{content: 'Zoom in', placement: 'left'}}
   >
-    <ZoomIn />
+    <ZoomIn size={24} />
   </button>
   <button
     aria-label="Zoom out"
     on:click={() => smoothZoom(false)}
     use:tooltip={{content: 'Zoom out', placement: 'left'}}
   >
-    <ZoomOut />
+    <ZoomOut size={24} />
   </button>
 </div>
 

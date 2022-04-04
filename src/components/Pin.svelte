@@ -1,6 +1,6 @@
 <script>
   import { fly, fade } from 'svelte/transition';
-  import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled32';
+  import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled.svelte';
   import tooltip from '../tooltip.js';
   import { clipped } from '../map/projections/';
   import { convert, prettyUnit, prettyLatLon } from '../utility.js';
@@ -33,6 +33,7 @@
   on:mouseleave={() => hovering = false}
 >
   <PinIcon
+    size={32}
     class="marker"
     style="z-index: {-1e8 + Math.round(y * 8)}"
     on:click={() => pins = pins.filter(p => p !== pin)}

@@ -1,5 +1,5 @@
 <script>
-  import Close from 'carbon-icons-svelte/lib/CloseOutline24';
+  import Close from 'carbon-icons-svelte/lib/CloseOutline.svelte';
   import { fade } from 'svelte/transition';
   import { mobile } from '../stores.js';
 
@@ -29,7 +29,7 @@
         Click here to view the tutorial.
       </button>
       <button class="dismiss" on:click={dismiss} aria-label="Close notification">
-        <Close />
+        <Close size={24} />
       </button>
     </section>
   </div>

@@ -5,7 +5,7 @@
 
 {#each items as item}
   <button on:click={() => action(item)}>
-    <svelte:component this={item.icon}/>
+    <svelte:component this={item.icon} size={24} />
     {item.name}
   </button>
 {/each}

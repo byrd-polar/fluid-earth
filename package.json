@@ -23,7 +23,7 @@
     "csv-parse": "^5.0.4",
     "dedent": "^0.7.0",
     "fx": "^20.0.2",
-    "mapshaper": "^0.5.103",
+    "mapshaper": "^0.5.106",
     "node-stream-zip": "^1.15.0",
     "npm-run-all": "^4.1.5",
     "patch-package": "^6.4.7",
@@ -31,14 +31,14 @@
     "rollup-plugin-glslify": "^1.2.1",
     "rollup-plugin-license": "^2.6.1",
     "rollup-plugin-svelte": "^7.1.0",
-    "svelte": "^3.46.4",
+    "svelte": "^3.46.6",
     "uuid": "^8.3.2",
-    "vite": "^2.8.6"
+    "vite": "^2.9.1"
   },
   "dependencies": {
     "@okrad/svelte-progressbar": "^1.11.3",
     "@petamoriken/float16": "^3.6.3",
-    "carbon-icons-svelte": "^10.45.1",
+    "carbon-icons-svelte": "^11.0.1",
     "d3-axis": "^3.0.0",
     "d3-geo": "^3.0.1",
     "d3-geo-projection": "^4.0.0",

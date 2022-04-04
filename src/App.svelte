@@ -307,26 +307,25 @@
 
   // Find new icons from: https://ibm.github.io/carbon-icons-svelte/
   //
-  // Not using { Icon } import syntax for significantly faster build times, see
-  // https://github.com/IBM/carbon-icons-svelte#direct-import-recommended
-  import Help24 from "carbon-icons-svelte/lib/Help24";
-  import Location24 from "carbon-icons-svelte/lib/Location24";
-  import ChartLineSmooth24 from "carbon-icons-svelte/lib/ChartLineSmooth24";
-  import Calendar24 from "carbon-icons-svelte/lib/Calendar24";
-  import DataPlayer24 from "carbon-icons-svelte/lib/DataPlayer24";
-  import ChoroplethMap24 from "carbon-icons-svelte/lib/ChoroplethMap24";
-  import RequestQuote24 from "carbon-icons-svelte/lib/RequestQuote24";
-  import Debug24 from "carbon-icons-svelte/lib/Debug24";
+  // Not using { Icon } import syntax for significantly faster build times
+  import Help from 'carbon-icons-svelte/lib/Help.svelte';
+  import Location from 'carbon-icons-svelte/lib/Location.svelte';
+  import ChartLineSmooth from 'carbon-icons-svelte/lib/ChartLineSmooth.svelte';
+  import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
+  import DataPlayer from 'carbon-icons-svelte/lib/DataPlayer.svelte';
+  import ChoroplethMap from 'carbon-icons-svelte/lib/ChoroplethMap.svelte';
+  import RequestQuote from 'carbon-icons-svelte/lib/RequestQuote.svelte';
+  import Debug from 'carbon-icons-svelte/lib/Debug.svelte';
 
   $: menus = [
-    { name: 'Help & About', icon: Help24 },
-    { name: 'Datasets', icon: ChartLineSmooth24 },
-    { name: 'Time Machine', icon: Calendar24 },
-    { name: 'Timelapse', icon: DataPlayer24 },
-    { name: 'Projections', icon: ChoroplethMap24 },
-    kioskMode ? null : { name: 'Markers', icon: Location24 },
-    kioskMode ? null : { name: 'Feedback', icon: RequestQuote24 },
-    __production__ ? null : { name: 'Developer-Only Tools', icon: Debug24 },
+    { name: 'Help & About', icon: Help },
+    { name: 'Datasets', icon: ChartLineSmooth },
+    { name: 'Time Machine', icon: Calendar },
+    { name: 'Timelapse', icon: DataPlayer },
+    { name: 'Projections', icon: ChoroplethMap },
+    kioskMode ? null : { name: 'Markers', icon: Location },
+    kioskMode ? null : { name: 'Feedback', icon: RequestQuote },
+    __production__ ? null : { name: 'Developer-Only Tools', icon: Debug },
   ].filter(m => m !== null);
 </script>
 

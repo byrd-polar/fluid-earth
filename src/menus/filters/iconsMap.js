@@ -1,6 +1,6 @@
-import Home from 'carbon-icons-svelte/lib/Home20';
-import Cloud from 'carbon-icons-svelte/lib/Cloud20';
-import Plane from 'carbon-icons-svelte/lib/PlanePrivate20';
+import Home from 'carbon-icons-svelte/lib/Home.svelte';
+import Cloud from 'carbon-icons-svelte/lib/Cloud.svelte';
+import Plane from 'carbon-icons-svelte/lib/Plane.svelte';
 
 export default {
   'surface': Home,

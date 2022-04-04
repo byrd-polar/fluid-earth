@@ -108,7 +108,7 @@ export default async ({ _, mode }) => {
       terserOptions: {
         format: { comments: false },
       },
-      chunkSizeWarningLimit: 600,
+      chunkSizeWarningLimit: 900,
       sourcemap: true,
     },
     plugins,

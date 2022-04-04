@@ -1,8 +1,8 @@
 <script>
   import Button from '../components/Button.svelte';
   import IconButton from '../components/IconButton.svelte';
-  import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled32';
-  import Close32 from "carbon-icons-svelte/lib/Close32";
+  import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled.svelte';
+  import Close from 'carbon-icons-svelte/lib/Close.svelte';
   import { slide, fade } from 'svelte/transition';
   import { convert, prettyUnit, prettyLatLon } from '../utility.js';
   import tooltip from '../tooltip.js';
@@ -25,7 +25,7 @@
           name={'Fly to marker'}
           tipPlacement={'top'}
         >
-          <PinIcon style="color: red" />
+          <PinIcon size={32} style="color: red" />
         </IconButton>
         <div class="text">
           <h3>{pin.label}</h3>
@@ -43,7 +43,7 @@
           action={() => pins = pins.filter(p => p !== pin)}
           ariaLabel="Remove pin"
         >
-          <Close32 />
+          <Close size={32} />
         </IconButton>
       </div>
     </li>

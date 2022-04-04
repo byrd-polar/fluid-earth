@@ -49,7 +49,7 @@
       tabindex={(selected === option || (i === 0 && noneSelected)) ? 0 : -1}
     >
       {#if iconsMap[option]}
-        <svelte:component this={iconsMap[option]} />
+        <svelte:component this={iconsMap[option]} size={20} />
       {/if}
       {option}
     </button>

@@ -1,6 +1,6 @@
 <script>
   import IconButton from './components/IconButton.svelte';
-  import Menu24 from "carbon-icons-svelte/lib/Menu24";
+  import Menu from 'carbon-icons-svelte/lib/Menu.svelte';
   import { tick } from 'svelte';
   import overlayscroll from './overlayscroll.js';
   import { mobile } from './stores.js';
@@ -36,7 +36,7 @@
     name="Menus and Links"
     action={openDrawer}
   >
-    <Menu24 />
+    <Menu size={24} />
   </IconButton>
   {#if !$mobile}
     {#each menus as menu}
@@ -45,7 +45,7 @@
         action={() => toggleMenu(menu.name)}
         selected={openedMenu === menu.name}
       >
-        <svelte:component this={menu.icon}/>
+        <svelte:component this={menu.icon} size={24} />
       </IconButton>
     {/each}
   {/if}
