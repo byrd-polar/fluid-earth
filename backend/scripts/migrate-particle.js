@@ -39,4 +39,4 @@ await run_all(filenames.map(filename => async () => {
 
     await write_file_atomically(output, new_data);
   }
-}), process.env.UV_THREADPOOL_SIZE ?? 4);
+}));
