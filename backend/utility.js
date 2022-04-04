@@ -86,7 +86,9 @@ export async function brotli(buffer, compression_level=11) {
   return brotliCompress(buffer, { params });
 }
 
-export async function run_all(promise_functions, max_concurrency=8) {
+const tp_size = process.env.UV_THREADPOOL_SIZE ?? 4;
+
+export async function run_all(promise_functions, max_concurrency=tp_size) {
   return new Promise((resolve, reject) => {
     let finished_count = -max_concurrency;
     let queue = [...promise_functions];
