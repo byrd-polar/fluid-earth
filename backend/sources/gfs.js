@@ -54,7 +54,7 @@ export function increment_state(current_state) {
 function gfs_url({ forecast, offset, system }) {
   let fdt = Datetime.from(forecast);
 
-  return 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
+  return 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/'
     + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
     + `atmos/${system}.t${fdt.p_hour}z.`
     + `pgrb2.0p25.f${offset.toString().padStart(3, '0')}`;

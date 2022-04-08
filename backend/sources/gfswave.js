@@ -19,7 +19,7 @@ export async function forage(current_state, datasets) {
 function gfswave_url({ forecast, offset, system }) {
   let fdt = Datetime.from(forecast);
 
-  return 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
+  return 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/'
     + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
     + `wave/gridded/${system}wave.t${fdt.p_hour}z.`
     + `global.0p25.f${offset.toString().padStart(3, '0')}.grib2`;
