@@ -59,5 +59,5 @@ npm install
 
 Fluid Earth comes with a lightweight web component which can be included in
 webpage contexts where the full application is not needed. Refer to the
-[documentation](exports/webcomponent/README.md) for more info on using the
+[documentation](webcomponent/README.md) for more info on using the
 web component.

@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "build:webcomponent": "rollup -c exports/webcomponent/rollup.config.js",
+    "build:webcomponent": "rollup -c webcomponent/rollup.config.js",
     "dev": "vite",
     "postinstall": "patch-package",
     "preview": "vite preview",

@@ -12,7 +12,7 @@ const preamble = dedent`
 `;
 
 export default {
-  input: 'exports/webcomponent/main.js',
+  input: 'webcomponent/main.js',
   output: {
     format: 'iife',
     name: 'app',
