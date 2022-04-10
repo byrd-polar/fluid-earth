@@ -1,97 +1,59 @@
-# Fluid Earth
-
-The successor to [FEVer](https://fever.byrd.osu.edu), making use of of
-[WebGL](https://en.wikipedia.org/wiki/WebGL). Codenamed `fev2r`.
-
-## Visit site
-
-[https://fluid-earth.byrd.osu.edu/](https://fluid-earth.byrd.osu.edu/)
-
-Note: this site is built from the `production` branch and may not reflect the
-latest changes on the `main` branch.
+# [Fluid Earth](https://fluid-earth.byrd.osu.edu/)
 
 ## About
 
-Fluid Earth is an interactive web application that allows you to visualize
-current and past conditions of Earth’s atmosphere and oceans. Fluid Earth is
-developed and maintained by The Ohio State University's Byrd Polar and Climate
-Research Center.
-
-You can use Fluid Earth to learn about the atmosphere and oceans by exploring
-the daily conditions in places where you live, work, and play or examining whole
-regions of the planet over years. In particular, Fluid Earth provides hands-on
-visualizations of conditions in polar regions, changes they are undergoing, and
-connections between polar regions and the rest of the planet. An open-source
-application, Fluid Earth is a vehicle for modern Earth science communication,
-making information used by the scientific community accessible and engaging to
-everyone. Fluid Earth is explorable 24 hours a day, 7 days a week using your
-computer, tablet, or smartphone.
+Fluid Earth is developed and maintained by The Ohio State University's Byrd
+Polar and Climate Research Center.
 
 If you are interested in using Fluid Earth for educational purposes or
 collaborating with us to develop Fluid Earth for a specific application, please
 email [gravina.2@osu.edu](mailto:gravina.2@osu.edu).
 
-## Developer Information
+## Development
 
-### Prerequisites
+### Frontend-only setup
+
+#### Prerequisites
 
 - [git](https://git-scm.com/)
-- [Node.js (version >= 14)](https://nodejs.org)
-- [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/)
-- [NetCDF](https://www.unidata.ucar.edu/downloads/netcdf/)
+- [Node.js](https://nodejs.org)
 
-### Getting started
-
-Install the dependencies...
-
-```bash
-git clone <URL of this repo>
+```sh
+git clone https://github.com/byrd-polar/fluid-earth
 cd fluid-earth
 npm install
-```
-
-...generate the data...
-
-```bash
-npm run data
-```
-
-...then start [Vite](https://vitejs.dev/):
-
-```bash
 npm run dev
 ```
 
-Navigate to [localhost:3000](http://localhost:3000). You should see your app
-running. Edit a component file in `src`, save it, and the page should
-automatically reload with your changes.
+### Local backend setup
+
+#### Additional prerequisites
+
+- [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/)
+- [NetCDF](https://www.unidata.ucar.edu/downloads/netcdf/)
+
+Complete the frontend-only setup, then:
+
+```sh
+npm run tera
+```
+
+To develop against the remote backend again (as in the frontend-only setup),
+remove  the `public/tera` directory.
+
+### Building frontend for production
+
+```sh
+npm run build
+npm run preview
+```
 
 ### Updating local development environment
 
-Pull from upstream (i.e. the repository at
-[https://github.com/byrd-polar/fluid-earth](https://github.com/byrd-polar/fluid-earth))...
-
-```bash
-git pull <URL or name of upstream remote> main
-```
-
-...then ensure any changes to the dependencies and data are applied:
-
-```bash
+```sh
+git pull https://github.com/byrd-polar/fluid-earth
 npm install
-npm run clean
-npm run data
 ```
-
-### Building and running in production mode
-
-To create an optimised version of the app:
-
-```bash
-npm run build:app
-```
-
-You can run the newly built app with `npm run preview`.
 
 ## Web component
 
@@ -99,13 +61,3 @@ Fluid Earth comes with a lightweight web component which can be included in
 webpage contexts where the full application is not needed. Refer to the
 [documentation](exports/webcomponent/README.md) for more info on using the
 web component.
-
-## Terms of Use
-
-The Terms of Use are specified [here](LICENSE) +
-
-The laws of the State of Ohio shall govern these Terms of Use and any disputes
-relating to our site.
-
-IF YOU DO NOT AGREE TO AND ACCEPT THESE TERMS OF USE YOU SHOULD NOT USE THE
-SOFTWARE.
