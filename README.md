@@ -25,6 +25,8 @@ npm install
 npm run dev
 ```
 
+Changes to files in `src` will be automatically displayed from the dev server.
+
 ### Local backend setup
 
 #### Additional prerequisites
@@ -32,7 +34,7 @@ npm run dev
 - [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/)
 - [NetCDF](https://www.unidata.ucar.edu/downloads/netcdf/)
 
-Complete the frontend-only setup, then:
+Complete the frontend-only setup, then in a separate terminal tab/window:
 
 ```sh
 npm run tera
