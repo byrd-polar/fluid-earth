@@ -2,6 +2,8 @@
 Description=Fluid Earth Tera Data File Generator
 
 [Service]
+Group=outreach
+UMask=0002
 WorkingDirectory=/export/data/fev2r/repository
 Environment=UV_THREADPOOL_SIZE=16
 ExecStart=/usr/bin/npm run tera
