@@ -22,7 +22,6 @@
     "chokidar": "^3.5.3",
     "csv-parse": "^5.0.4",
     "dedent": "^0.7.0",
-    "fx": "^20.0.2",
     "mapshaper": "^0.5.106",
     "node-stream-zip": "^1.15.0",
     "patch-package": "^6.4.7",
