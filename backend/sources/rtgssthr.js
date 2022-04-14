@@ -1,3 +1,4 @@
+import { base_url } from './gfs.js';
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
@@ -25,7 +26,7 @@ export async function forage(current_state, datasets) {
   let metadatas = datasets.map(d => typical_metadata(d, dt, metadata));
 
   let input = await download(
-    'https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod/'
+    base_url
     + `sst.${dt.year}${dt.p_month}${dt.p_day}/`
     + 'rtgssthr_grb_0.083_awips.grib2'
   );
