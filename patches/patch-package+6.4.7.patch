@@ -1,0 +1,14 @@
+diff --git a/node_modules/patch-package/dist/getPackageResolution.js b/node_modules/patch-package/dist/getPackageResolution.js
+index bc7ffaa..2942b33 100644
+--- a/node_modules/patch-package/dist/getPackageResolution.js
++++ b/node_modules/patch-package/dist/getPackageResolution.js
+@@ -55,6 +55,9 @@ function getPackageResolution({ packageDetails, packageManager, appPath, }) {
+         const lockfile = require(path_1.join(appPath, packageManager === "npm-shrinkwrap"
+             ? "npm-shrinkwrap.json"
+             : "package-lock.json"));
++        if (lockfile.lockfileVersion === 3) {
++            return lockfile.packages[packageDetails.path].resolved;
++        }
+         const lockFileStack = [lockfile];
+         for (const name of packageDetails.packageNames.slice(0, -1)) {
+             const child = lockFileStack[0].dependencies;
