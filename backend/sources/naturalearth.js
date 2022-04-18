@@ -10,7 +10,7 @@ import mapshaper from 'mapshaper';
 import { join } from 'path';
 
 const base = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/'
-           + 'v5.0.0/50m_physical/';
+           + 'v5.0.1/50m_physical/';
 const urls = [
   'ne_50m_graticules_all/ne_50m_graticules_10.shp',
   'ne_50m_rivers_lake_centerlines.shp',
