@@ -9,7 +9,6 @@
   import About from './menus/About.svelte';
   import Datasets from './menus/Datasets.svelte';
   import TimeMachine from './menus/TimeMachine.svelte';
-  import Timelapse from './menus/Timelapse.svelte';
   import Locations from './menus/Locations.svelte';
   import Projections from './menus/Projections.svelte';
   import DeveloperOnlyTools from './menus/DeveloperOnlyTools.svelte';
@@ -314,7 +313,6 @@
   import Location from 'carbon-icons-svelte/lib/Location.svelte';
   import ChartLineSmooth from 'carbon-icons-svelte/lib/ChartLineSmooth.svelte';
   import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
-  import DataPlayer from 'carbon-icons-svelte/lib/DataPlayer.svelte';
   import ChoroplethMap from 'carbon-icons-svelte/lib/ChoroplethMap.svelte';
   import RequestQuote from 'carbon-icons-svelte/lib/RequestQuote.svelte';
   import Debug from 'carbon-icons-svelte/lib/Debug.svelte';
@@ -323,7 +321,6 @@
     { name: 'Help & About', icon: Help },
     { name: 'Datasets', icon: ChartLineSmooth },
     { name: 'Time Machine', icon: Calendar },
-    { name: 'Timelapse', icon: DataPlayer },
     { name: 'Projections', icon: ChoroplethMap },
     kioskMode ? null : { name: 'Markers', icon: Location },
     kioskMode ? null : { name: 'Feedback', icon: RequestQuote },
@@ -386,15 +383,7 @@
     bind:date
     {utc}
     {griddedDataset}
-  />
-</Menu>
-<Menu bind:openedMenu menuName="Timelapse">
-  <Timelapse
     {fetcher}
-    {utc}
-    {simplifiedMode}
-    {griddedDataset}
-    bind:date
     bind:particlesShown
   />
 </Menu>

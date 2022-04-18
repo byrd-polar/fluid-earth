@@ -42,8 +42,6 @@
   $: loadSize = validDates.length * bytesPerFile(griddedDataset);
 </script>
 
-<p>Use the Time Machine menu to change the start time.</p>
-
 <div>
   <p>
     Start time: <span>{start.toLocaleString([], dateOptions)}</span>
