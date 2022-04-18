@@ -278,8 +278,8 @@
   }
 
   button.box.selected {
-    filter: none;
-    background: var(--primary-color-light);
+    background: var(--primary-color);
+    border: solid 2px var(--primary-color-light);
   }
 </style>
 
