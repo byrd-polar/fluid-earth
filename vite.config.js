@@ -100,6 +100,9 @@ export default async ({ _, mode }) => {
   })();
 
   return {
+    css: {
+      devSourcemap: true,
+    },
     build: {
       rollupOptions: {
         plugins: productionOnlyPlugins,
