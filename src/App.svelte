@@ -66,6 +66,7 @@
   let date = (__production__ || !__using_local_data_files__) ?
     validDate(griddedDataset, $currentDate) :
     griddedDataset.end;
+  let displayDate = date;
 
   // always equal to date unless date is re-assigned in updateGriddedData
   $: anchorDate = date;
@@ -284,6 +285,7 @@
 
     // update both gridded and particle datasets at the same time (if necessary)
     function assignVariables() {
+      displayDate = date;
       griddedAssignments();
       particleAssignments();
       griddedAssignments = () => {};
@@ -495,7 +497,7 @@
     <Loading {fetcher} />
     <Widgets
       bind:openedMenu
-      {date}
+      {displayDate}
       bind:utc
       bind:zoom
       {minZoom}

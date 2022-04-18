@@ -9,7 +9,7 @@
 
   export let openedMenu;
 
-  export let date;
+  export let displayDate;
   export let utc;
 
   export let zoom;
@@ -41,7 +41,7 @@
       {kioskMode}
     />
     <TimeDisplay
-      {date}
+      {displayDate}
       bind:utc
     />
   </div>

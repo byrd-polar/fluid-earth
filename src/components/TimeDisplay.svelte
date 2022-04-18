@@ -2,7 +2,7 @@
   import tooltip from '../tooltip.js';
   import { fix24 } from '../utility.js';
 
-  export let date;
+  export let displayDate;
   export let utc;
 
   $: dateOptions = {
@@ -34,9 +34,9 @@
   use:tooltip={{ content: 'Change timezone', placement: 'bottom'}}
   tabindex="0"
 >
-  <h3 class="date">{date.toLocaleString([], dateOptions)}</h3>
+  <h3 class="date">{displayDate.toLocaleString([], dateOptions)}</h3>
   <h3 class="time">
-    {fix24(date.toLocaleString([], timeOptions))}
+    {fix24(displayDate.toLocaleString([], timeOptions))}
   </h3>
 </section>
 
