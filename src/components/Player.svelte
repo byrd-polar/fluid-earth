@@ -173,7 +173,7 @@
     height: 100px;
     grid-template-columns: 100px 1fr min-content;
     grid-template-rows: min-content 1fr min-content;
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
 
     border-radius: 0.5em;
     background-color: var(--input-color);

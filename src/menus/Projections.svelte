@@ -69,7 +69,7 @@
     --secondary-color: var(--secondary-color-transparent);
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1em;
+    gap: 0.5em;
   }
 
   div :global(button) {

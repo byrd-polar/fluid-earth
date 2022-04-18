@@ -67,7 +67,7 @@
     all: unset;
     border: gray 2px solid;
     padding: 0.25em 0.5em;
-    margin: 0.25em 0.25em 0.25em 0;
+    margin: 0 0.25em 0.5em 0;
     border-radius: 1em;
     display: flex;
     align-items: center;

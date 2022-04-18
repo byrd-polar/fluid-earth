@@ -133,7 +133,7 @@
 
 <style>
   h3 {
-    margin: 1em 0 0.25em;
+    margin: 0.5em 0 0.25em;
     font-size: 1em;
   }
 </style>

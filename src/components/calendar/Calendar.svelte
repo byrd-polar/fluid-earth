@@ -215,7 +215,7 @@
   }
 
   div.header {
-    margin: 0.5em 0 1px;
+    margin-bottom: 1px;
     height: 3.8rem;
     background: var(--primary-color);
     display: flex;
