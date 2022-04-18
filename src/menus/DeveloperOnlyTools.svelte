@@ -42,15 +42,16 @@
   export let projection;
 </script>
 
-<h2>Note about this menu</h2>
-
+<details open>
+<summary><h2>Note about this menu</h2></summary>
 <p>
 This menu does not exist in the production build. It is used as a debugging tool
 when adding new datasets/colormaps/projections and for experimenting with new
 user interface components.
+</details>
 
-<h2>Zoom Controls</h2>
-
+<details>
+<summary><h2>Zoom Controls</h2></summary>
 <div class="slider">
   <Button secondary
     action={() => zom(-0.1)}
@@ -76,10 +77,10 @@ user interface components.
     <Add size={24} />
   </Button>
 </div>
+</details>
 
-
-<h2>Pan Controls</h2>
-
+<details>
+<summary><h2>Pan Controls</h2></summary>
 <div class="pan-controls">
   <Button secondary
     action={() => pan({ up: 5 })}
@@ -143,9 +144,10 @@ user interface components.
     <CaretRight />
   </div>
 </div>
+</details>
 
-<h2>All Datasets</h2>
-
+<details>
+<summary><h2>All Datasets</h2></summary>
 <h3>Gridded</h3>
 {#each gDatasets as dataset}
   <label>
@@ -171,22 +173,22 @@ user interface components.
     {dataset.name}
   </label>
 {/each}
+</details>
 
-<h2>About colormaps</h2>
-
+<details>
+<summary><h2>About colormaps</h2></summary>
 <p>
 Colormaps define how numerical values are converted to colors to display on the
 map.
-</p>
 <p>
 Perceptions of data are heavily influenced by the choice of colormap, so it is
 important for science communicators to select an appropriate colormap for their
 data. Toggle between the colormaps below to see how the same data looks when
 presented with different colors.
-</p>
+</details>
 
-<h2>All Colormaps</h2>
-
+<details>
+<summary><h2>All colormaps</h2></summary>
 {#each [...types] as type}
   <h3>{type}</h3>
 
@@ -201,17 +203,20 @@ presented with different colors.
     </label>
   {/each}
 {/each}
+</details>
 
-<h2>About projections</h2>
+<details>
+<summary><h2>About projections</h2></summary>
 <p>
 Map projections are the various ways of taking a three-dimensional globe and
 projecting it to the two-dimensional surface of a map.
 <p>
 This will always distort the globe in some way, so each projection has its
 tradeoffs and use cases.
+</details>
 
-<h2>All Projections</h2>
-
+<details>
+<summary><h2>All projections</h2></summary>
 {#each Object.values(projections) as p}
 <label>
   <input
@@ -222,6 +227,7 @@ tradeoffs and use cases.
   {p.name}
 </label>
 {/each}
+</details>
 
 <style>
   div.slider {

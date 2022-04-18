@@ -237,25 +237,10 @@ with text reformatted from original.
 </div>
 
 <style>
-  details {
-    margin-bottom: 1em;
-  }
-
-  summary {
-    cursor: pointer;
-    border-bottom: 1px solid;
-  }
-
-  summary h2 {
-    display: inline;
-    border-bottom: none;
-  }
-
   iframe {
     all: unset;
     width: 100%;
     aspect-ratio: 16 / 9;
-    margin-top: 1em;
   }
 
   dt {

@@ -126,14 +126,24 @@
     padding: 1em 1.25em;
   }
 
-  section :global(h2) {
+  section :global(details) {
+    margin-bottom: 1em;
+  }
+
+  section :global(summary) {
+    cursor: pointer;
+    border-bottom: 1px solid;
+    margin: 0.83em 0;
+  }
+
+  section :global(summary h2) {
+    display: inline;
     font-size: 1rem;
     font-weight: 400;
-    border-bottom: 1px solid;
     text-transform: uppercase;
   }
 
-  section > :global(:first-child) {
+  section > :global(:first-child summary) {
     margin-top: 0;
   }
 

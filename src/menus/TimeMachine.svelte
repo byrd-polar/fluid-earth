@@ -16,53 +16,44 @@
   let validDates = getValidDates(griddedDataset);
 </script>
 
-<h2>Jump To</h2>
+<details open>
+<summary><h2>Jump to</h2></summary>
 <TimeJumper
   {griddedDataset}
   bind:date
 />
+</details>
 
-<h2>Time Picker</h2>
+<details open>
+<summary><h2>Time Picker</h2></summary>
 <Calendar
   {griddedDataset}
   bind:date
   {utc}
 />
-
-<details>
-  <summary><h2>Timelapse</h2></summary>
-  <Player
-    {fetcher}
-    {utc}
-    {simplifiedMode}
-    {validDates}
-    {griddedDataset}
-    bind:date
-    bind:particlesShown
-    bind:sliding={playerActive}
-    {fps}
-  />
-  <RangeSettings
-    {date}
-    {utc}
-    {playerActive}
-    {griddedDataset}
-    bind:validDates
-    bind:fps
-  />
 </details>
 
-<style>
-  summary {
-    margin: 0.83em 0;
-    cursor: pointer;
-    border-bottom: 1px solid;
-  }
-
-  summary h2 {
-    display: inline;
-    border-bottom: none;
-  }
-</style>
+<details>
+<summary><h2>Timelapse</h2></summary>
+<Player
+  {fetcher}
+  {utc}
+  {simplifiedMode}
+  {validDates}
+  {griddedDataset}
+  bind:date
+  bind:particlesShown
+  bind:sliding={playerActive}
+  {fps}
+/>
+<RangeSettings
+  {date}
+  {utc}
+  {playerActive}
+  {griddedDataset}
+  bind:validDates
+  bind:fps
+/>
+</details>
 
 <svelte:options immutable={true} />

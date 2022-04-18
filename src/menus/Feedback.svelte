@@ -24,8 +24,8 @@
   }
 </script>
 
-<h2>Introduction</h2>
-
+<details open>
+<summary><h2>Introduction</h2></summary>
 <p>
   Help us improve Fluid Earth by providing us with your feedback.
   Tell us what you like or don't like, what works or doesn't work, what features
@@ -33,16 +33,16 @@
   Feedback from the community and educators has helped make this project a
   success.
 </p>
+</details>
 
-<h2>Feedback Form</h2>
-
+<details open>
+<summary><h2>Feedback Form</h2></summary>
 <!--
   See https://docs.netlify.com/forms/setup/
 
   If changing the number or type of inputs, be sure to modify the corresponding
   form in public/form.html
 -->
-
 <form name="feedback" method="POST" data-netlify="true" bind:this={form}>
   <input type="hidden" name="form-name" value="feedback" />
   <label>
@@ -61,7 +61,6 @@
     <Button type="submit">Submit Feedback</Button>
   {/if}
 </form>
-
 {#if formSubmitted}
   <p transition:fade>
     {#if formSubmittedSuccessfully}
@@ -80,6 +79,7 @@
     {/if}
   </p>
 {/if}
+</details>
 
 <style>
   form {

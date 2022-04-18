@@ -61,7 +61,8 @@
   }
 </script>
 
-<h2>About this menu</h2>
+<details open>
+<summary><h2>About This Menu</h2></summary>
 <p>
 Locations on the map can be marked. Hover over the marker or see the section
 below to view information about that location.
@@ -69,13 +70,15 @@ below to view information about that location.
 To mark a location, hold down the <b>left mouse button</b> on the map, or use
 the following search box.
 </p>
-
 <SearchBox {label} {placeholder} {loadData} {onSelect} />
+</details>
 
-<h2>Marked locations</h2>
+<details open>
+<summary><h2>Marked locations</h2></summary>
 <LocationsList
   bind:pins
   {griddedData}
   {griddedUnit}
   {moveTo}
 />
+</details>

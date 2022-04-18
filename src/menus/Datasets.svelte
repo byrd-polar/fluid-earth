@@ -96,8 +96,8 @@
   }
 </script>
 
-<h2>Filter by</h2>
-
+<details open>
+<summary><h2>Filter by</h2></summary>
 <h3>Topic</h3>
 <ChipGroup
   options={topicOptions}
@@ -129,6 +129,7 @@
   on:select={handleSelect}
   {iconsMap}
 />
+</details>
 
 <style>
   h3 {

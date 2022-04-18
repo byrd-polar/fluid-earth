@@ -52,8 +52,8 @@
 </script>
 
 
-<h2>Selected Views</h2>
-
+<details open>
+<summary><h2>Selected Views</h2></summary>
 <div>
   {#each selectedViews as view}
     <Button action={view.function} secondary>
@@ -62,6 +62,7 @@
     </Button>
   {/each}
 </div>
+</details>
 
 <style>
   div {
