@@ -189,7 +189,7 @@
       class:selected={selected && enabled}
       on:click={() => { if (!selected) selectDate(box) }}
       disabled={!enabled}
-      tabindex="-1"
+      tabindex={selected ? 0 : -1}
     >
       {format(box, picker.boxFormat)}
     </button>
