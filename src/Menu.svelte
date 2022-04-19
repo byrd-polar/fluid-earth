@@ -130,14 +130,14 @@
     margin-bottom: 1em;
   }
 
-  section :global(details:not([open])) {
-    height: 1.5625em; /* Workaround for Chromium margins not collapsing */
-  }
-
   section :global(summary) {
     cursor: pointer;
     border-bottom: 1px solid;
     margin-bottom: 1em;
+  }
+
+  section :global(details:not([open]) summary) {
+    margin-bottom: 0;
   }
 
   section :global(summary h2) {
