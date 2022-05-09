@@ -26,7 +26,7 @@ async function get(filename) {
 
 const up = new Up();
 
-console.log(`Checking status of ${tera_url}...`);
+console.log(`Checking status of ${tera_url} ...`);
 console.log({ now: up.now.toISOString() });
 
 let heart = await get('heart.json');
