@@ -36,13 +36,13 @@ export default class MapBackground {
   }
 
   set data(d) {
-    let oldWidth = this._data.width;
-    let oldHeight = this._data.width;
     this._data = d;
 
-    if (oldWidth !== this._data.width || oldHeight !== this._data.height) {
-      this._textures.gridded = this._createGriddedTexture();
-    }
+    this._gl.deleteTexture(this._textures.gridded);
+    this._gl.deleteTexture(this._textures.data);
+    this._gl.deleteFramebuffer(this._framebuffers.gridded.framebuffer);
+
+    this._textures.gridded = this._createGriddedTexture();
     this._textures.data = this._createDataTexture();
     this._framebuffers = this._createFramebuffers();
     this._dataNeedsRecolor = true;
@@ -50,6 +50,7 @@ export default class MapBackground {
 
   set colormap(c) {
     this._colormap = c;
+    this._gl.deleteTexture(this._textures.colormap);
     this._textures.colormap = this._createColormapTexture();
     this._dataNeedsRecolor = true;
   }
@@ -70,6 +71,9 @@ export default class MapBackground {
   }
 
   set vectorData(d) {
+    Object.values(this._buffers.vectors).forEach(vector =>  {
+      this._gl.deleteBuffer(vector.indices);
+    });
     this._buffers.vectors = this._createVectorBuffers(d);
   }
 

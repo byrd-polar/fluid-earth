@@ -64,13 +64,22 @@ export default class ParticleSimulator {
 
   set lifetime(l) {
     this._lifetime = l;
+
+    this._gl.deleteBuffer(this._buffers.draw.indices);
+    this._gl.deleteTexture(this._textures.simA);
+    this._gl.deleteFramebuffer(this._framebuffers.simA.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simB.framebuffer);
+
     this._textures.simA = this._createSimATexture();
     this._framebuffers = this._createFramebuffers();
   }
 
   set data(d) {
     this._data = d;
-    this._gl.deleteTexture(this._textures.vectorField);
+
+    this._gl.deleteTexture(this._textures.vectorFieldU);
+    this._gl.deleteTexture(this._textures.vectorFieldV);
+
     this._textures.vectorFieldU =
       this._createVectorFieldTexture(this._data.uVelocities);
     this._textures.vectorFieldV =
