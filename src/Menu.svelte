@@ -130,6 +130,11 @@
     margin-bottom: 1em;
   }
 
+  section :global(details > *) {
+    /* https://bugs.chromium.org/p/chromium/issues/detail?id=589475 */
+    box-sizing: border-box;
+  }
+
   section :global(summary) {
     cursor: pointer;
     border-bottom: 1px solid;

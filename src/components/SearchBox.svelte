@@ -74,60 +74,54 @@
   }
 </script>
 
-<div class="wrapper">
-  <label>
-    {label}
-    <input
-      bind:this={inputElement}
-      type="text"
-      spellcheck="false"
-      bind:value
-      on:focus={() => focused = true}
-      on:blur={() => focused = false}
-      on:focus={() => inputElement.select()}
-      on:focus={filterOptions}
-      on:input={filterOptions}
-      on:click={filterOptions}
-      on:keydown={handleKeydown}
-      class:dropdownShown
-      {placeholder}
-    >
-  </label>
-  {#if dropdownShown}
-    <div
-      class="dropdown"
-      style="width: {inputElement.clientWidth}px"
-      on:mousedown|preventDefault
-    >
-      {#if options.length > 0}
-        <ul>
-          {#each options as option}
-            <li
-              class:considered={candidateOption === option}
-              on:click={() => { select(option) }}
-            >
-              {option.label}
-            </li>
-          {/each}
-        </ul>
-      {:else if loading}
-        <div class="info">
-          Searching...
-        </div>
-      {:else}
-        <div class="info">
-          No matches found
-        </div>
-      {/if}
-    </div>
-  {/if}
-</div>
+<label>
+  {label}
+  <input
+    bind:this={inputElement}
+    type="text"
+    spellcheck="false"
+    bind:value
+    on:focus={() => focused = true}
+    on:blur={() => focused = false}
+    on:focus={() => inputElement.select()}
+    on:focus={filterOptions}
+    on:input={filterOptions}
+    on:click={filterOptions}
+    on:keydown={handleKeydown}
+    class:dropdownShown
+    {placeholder}
+  >
+</label>
+{#if dropdownShown}
+  <div
+    class="dropdown"
+    style="width: {inputElement.clientWidth}px"
+    on:mousedown|preventDefault
+  >
+    {#if options.length > 0}
+      <ul>
+        {#each options as option}
+          <li
+            class:considered={candidateOption === option}
+            on:click={() => { select(option) }}
+          >
+            {option.label}
+          </li>
+        {/each}
+      </ul>
+    {:else if loading}
+      <div class="info">
+        Searching...
+      </div>
+    {:else}
+      <div class="info">
+        No matches found
+      </div>
+    {/if}
+  </div>
+{/if}
 
 <style>
-  div.wrapper {
-    position: relative;
-  }
-
   input, div.dropdown {
     color: white;
   }
