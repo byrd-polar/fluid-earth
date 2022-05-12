@@ -378,6 +378,7 @@
     {utc}
     {griddedDataset}
     {fetcher}
+    {simplifiedMode}
     bind:particlesShown
   />
 </Menu>
