@@ -36,6 +36,7 @@
   "dependencies": {
     "@okrad/svelte-progressbar": "^1.11.3",
     "@petamoriken/float16": "^3.6.3",
+    "@slightlyoff/lite-vimeo": "^0.1.2",
     "carbon-icons-svelte": "^11.0.1",
     "d3-axis": "^3.0.0",
     "d3-geo": "^3.0.1",

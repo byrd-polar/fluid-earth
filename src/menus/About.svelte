@@ -2,6 +2,8 @@
 </p>, </dt>, and </dd> to reduce some of the tag clutter. -->
 
 <script>
+  import '@slightlyoff/lite-vimeo';
+
   export let kioskMode;
 
   let content;
@@ -30,11 +32,10 @@
 
 <details open>
 <summary><h2>Tutorial Video</h2></summary>
-<iframe
-  src="https://player.vimeo.com/video/579263200"
-  title="Quick tutorial video for Fluid Earth"
-  allowfullscreen
-></iframe>
+<lite-vimeo
+  videoid="579263200"
+  videotitle="Quick tutorial video for Fluid Earth"
+></lite-vimeo>
 </details>
 
 <details open>
@@ -237,12 +238,6 @@ with text reformatted from original.
 </div>
 
 <style>
-  iframe {
-    all: unset;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-  }
-
   dt {
     font-weight: bold;
     clear: both;
