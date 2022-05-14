@@ -12,7 +12,6 @@ uniform float u_zoom;
 uniform int u_projection;
 uniform bool u_translateY;
 uniform int u_griddedDataProjection;
-uniform bool u_offsetGridded;
 
 uniform sampler2D u_texture;
 uniform float u_gridWidth;
