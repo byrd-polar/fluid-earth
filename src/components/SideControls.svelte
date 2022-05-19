@@ -45,9 +45,9 @@
     flex-direction: column;
     margin-left: auto;
     pointer-events: auto;
-    padding: 0.5em 0.25em 0.5em 0.5em;
-    border-radius: 1.5em 0 0 1.5em;
-    filter: drop-shadow(0 0 0.125em black);
+    padding: 8px 4px 8px 8px;
+    border-radius: 24px 0 0 24px;
+    filter: drop-shadow(0 0 2px black);
   }
 
   button {
@@ -55,13 +55,13 @@
     display: flex;
     border-radius: 50%;
     background: var(--secondary-color);
-    padding: 0.5em;
+    padding: 8px;
     cursor: pointer;
     transition: filter 0.25s ease 0s;
   }
 
   button + button {
-    margin-top: 0.5em;
+    margin-top: 8px;
   }
 
   button:focus, button:hover {

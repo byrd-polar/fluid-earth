@@ -66,14 +66,14 @@
   nav {
     display: flex;
     flex-direction: column;
-    padding: 0.5em;
+    padding: 8px;
   }
 
   nav :global(button) {
-    margin: 0.75em 0;
+    margin: 12px 0;
   }
 
-  @media (max-width: 36rem) {
+  @media (max-width: 576px) {
     div.rail {
       background: transparent;
       position: absolute;
@@ -89,8 +89,8 @@
       margin: 0;
       /* multiple shadows used to increase intensity */
       filter:
-        drop-shadow(0 0 0.125em black)
-        drop-shadow(0 0 0.25em rgba(0, 0, 0, 0.5));
+        drop-shadow(0 0 2px black)
+        drop-shadow(0 0 4px rgba(0, 0, 0, 0.5));
     }
   }
 </style>

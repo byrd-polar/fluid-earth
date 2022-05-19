@@ -135,7 +135,7 @@
   let width;
 </script>
 
-<ChipGroup {options} bind:selected={pickerMode} />
+<ChipGroup {options} bind:selected={pickerMode} nowrap={true} />
 
 <div class="header">
   <button
@@ -216,7 +216,7 @@
 
   div.header {
     margin-bottom: 1px;
-    height: 3.8rem;
+    height: 61px;
     background: var(--primary-color);
     display: flex;
     border-radius: 4px 4px 0 0;
@@ -268,7 +268,9 @@
   }
 
   button.box.hour {
-    font-size: 16px;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   button.box:disabled {

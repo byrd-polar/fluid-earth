@@ -175,17 +175,18 @@
   }
 
   header {
-    padding: 1em 1em 0;
-  }
-
-  header img {
-    margin-left: -0.125em;
+    padding: 16px 16px 0;
   }
 
   h1 {
-    font-size: 1.8em;
-    margin: 0 0 0.5em;
+    font-size: 30px;
+    margin: 0 0 16px;
     white-space: nowrap;
+  }
+
+  h1 img {
+   vertical-align: text-bottom;
+   margin: 0 0.125em 0 -2px;
   }
 
   span.line {
@@ -197,9 +198,9 @@
   }
 
   section.info {
-    padding: 0 1em;
+    padding: 0 16px;
     font-size: 0.9em;
-    margin: auto;
+    margin: auto 0;
   }
 
   a {
@@ -207,7 +208,7 @@
   }
 
   footer {
-    padding: 0 1em 1em 1em;
+    padding: 0 16px 16px 16px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -215,8 +216,8 @@
 
   footer a {
     color: inherit;
-    margin-right: 0.5em;
-    margin-top: 1em;
+    margin-right: 8px;
+    margin-top: 16px;
     flex: 1;
   }
 

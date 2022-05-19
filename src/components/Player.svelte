@@ -170,7 +170,6 @@
 <style>
   div {
     display: grid;
-    height: 100px;
     grid-template-columns: 100px 1fr min-content;
     grid-template-rows: min-content 1fr min-content;
     margin-bottom: 0.5em;
@@ -191,7 +190,7 @@
   button.play {
     transition: filter 0.25s ease 0s;
     box-sizing: border-box;
-    padding: 0.5em 1em;
+    padding: 8px 16px;
     background-color: var(--primary-color);
     grid-row: 1 / span 3;
     background: var(--primary-color);
@@ -223,13 +222,13 @@
   }
 
   h3 {
-    margin: 0.5rem 0.75rem 0.25rem;
+    margin: 0.5rem 12px 0.25rem;
     font-size: 1rem;
   }
 
   p {
     font-size: 0.9rem;
-    margin: 0 0.75rem;
+    margin: 0 12px;
   }
 
   h3, p {
@@ -240,6 +239,7 @@
   }
 
   div :global(.rangeSlider) {
+    font-size: 16px !important;
     margin-bottom: 1em;
   }
 
@@ -249,9 +249,9 @@
 
   button.repeat {
     border-radius: 50%;
-    height: 2em;
-    width: 2em;
-    margin: 0.25em 0.25em 0.25em 0;
+    height: 32px;
+    width: 32px;
+    margin: 4px 4px 4px 0;
   }
 
   button.repeat:hover {

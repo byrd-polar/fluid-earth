@@ -127,7 +127,7 @@
   }
 
   input {
-    font-size: 16px;
+    font-size: 1rem;
     width: 100%;
     border: none;
     margin-top: 0.25em;

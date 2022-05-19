@@ -112,7 +112,7 @@
     flex-wrap: wrap-reverse;
   }
 
-  @media (max-width: 36rem) {
+  @media (max-width: 576px) {
     div.top {
       flex-wrap: wrap-reverse;
       align-items: flex-end;

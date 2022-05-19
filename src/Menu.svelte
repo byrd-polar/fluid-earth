@@ -64,8 +64,8 @@
     background-color: #1d1d1d;
     color: hsla(0, 0%, 100%, .8);
 
-    width: 28em;
-    margin-left: -28em;
+    width: 448px;
+    margin-left: -448px;
     visibility: hidden;
     transition:
       margin-left 0.3s ease 0s,
@@ -97,7 +97,7 @@
   header {
     background-color: var(--primary-color);
     height: 64px;
-    padding: 0 1em 0 0.75em;
+    padding: 0 16px 0 12px;
     display: flex;
     align-items: center;
     box-shadow:
@@ -115,6 +115,9 @@
     color: white;
     font-weight: 500;
     font-size: 1.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   div {
@@ -123,7 +126,7 @@
   }
 
   section {
-    padding: 1em 1.25em;
+    padding: 1em 20px;
   }
 
   section :global(details) {
@@ -152,12 +155,12 @@
     text-transform: uppercase;
   }
 
-  @media (max-width: 36rem) {
+  @media (max-width: 576px) {
     aside {
       width: 100%;
       /*
         Hack using auto instead of 0 to avoid animating from this property,
-        such as when resizing to > 36rem (avoids menu from appearing, then
+        such as when resizing to > 576px (avoids menu from appearing, then
         closing immediately, messing up the canvas resize by making it low-res)
 
         Seems to be supported by spec, see note about auto value here:
@@ -192,7 +195,7 @@
     }
 
     header {
-      padding: 0 1em 0 0.25em;
+      padding: 0 16px 0 4px;
     }
 
     header :global(button) {
@@ -200,7 +203,7 @@
     }
 
     section {
-      padding: 1em 0.75em;
+      padding: 1em 12px;
     }
   }
 </style>

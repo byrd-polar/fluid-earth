@@ -6,7 +6,7 @@
 {#each items as item}
   <button on:click={() => action(item)}>
     <svelte:component this={item.icon} size={24} />
-    {item.name}
+    <span>{item.name}</span>
   </button>
 {/each}
 
@@ -36,5 +36,13 @@
 
   button :global(svg) {
     margin: 0 16px;
+    flex-shrink: 0;
+  }
+
+  span {
+    margin-right: 16px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 </style>

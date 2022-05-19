@@ -41,10 +41,11 @@
   }
 
   div > :global(:first-child) {
-    flex: 2;
+    flex: 1;
   }
 
-  span {
-    margin-right: 0.5em;
+  div :global(svg) {
+    margin-left: 0.5em;
+    flex-shrink: 0;
   }
 </style>

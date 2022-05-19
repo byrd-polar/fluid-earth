@@ -1,6 +1,6 @@
 import { readable } from 'svelte/store';
 
-const mediaQuery = window.matchMedia('(max-width: 36rem)');
+const mediaQuery = window.matchMedia('(max-width: 576px)');
 
 export const mobile = readable(mediaQuery.matches, set => {
 

@@ -32,7 +32,7 @@
     transition: filter 0.25s ease 0s;
     box-sizing: border-box;
     color: white;
-    padding: 0.5em 1em;
+    padding: 8px 16px;
     text-align: center;
     text-transform: uppercase;
     background-color: var(--primary-color);

@@ -37,12 +37,16 @@ sup {
   line-height: 0;
 }
 
-h1 img {
+#splash h1 {
+  font-size: 32px;
+}
+
+#splash h1 img {
   vertical-align: text-bottom;
   margin-right: 0.125em;
 }
 
-.errmsg {
+#splash .errmsg {
   width: 80%;
   text-align: center;
   margin-top: 0;
@@ -61,7 +65,7 @@ h1 img {
   z-index: 5;
   opacity: 1;
   transition: opacity 0.5s;
-  --sk-size: 2.5em;
+  --sk-size: 40px;
   --sk-color: var(--primary-color-light);
 }
 

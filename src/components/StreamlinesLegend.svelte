@@ -61,9 +61,9 @@
 <style>
   section {
     flex: 1;
-    padding: 0.25rem 0.75rem;
-    max-width: 32em;
-    flex-basis: 24em;
+    padding: 4px 12px;
+    max-width: 512px;
+    flex-basis: 384px;
     pointer-events: auto;
     border-radius: 4px;
     transition: background-color 0.25s ease 0s;
@@ -89,11 +89,11 @@
 
   @keyframes slide {
     from { transform: translate(calc(-1 * var(--trail-width)), 0); }
-    to { transform: translate(32em, 0); }
+    to { transform: translate(512px, 0); }
   }
 
   div.legend {
-    height: 0.8em;
+    height: 13px;
     position: relative;
     overflow: hidden;
   }

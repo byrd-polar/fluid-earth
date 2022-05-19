@@ -73,7 +73,7 @@
     align-items: center;
   }
 
-  @media (max-width: 36rem) {
+  @media (max-width: 576px) {
     div.wrapper {
       height: auto;
       width: 100%;

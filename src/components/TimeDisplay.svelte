@@ -72,7 +72,7 @@
     font-weight: normal;
   }
 
-  @media (max-width: 36rem) {
+  @media (max-width: 576px) {
     h3 {
       font-size: 1em;
       padding: 0.5rem 0.75rem;

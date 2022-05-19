@@ -6,6 +6,7 @@
   export let options = ['test option'];
   export let selected = options[0];
   export let iconsMap = {};
+  export let nowrap = false;
 
   const dispatch = createEventDispatcher();
   let div;
@@ -40,7 +41,7 @@
   }
 </script>
 
-<div bind:this={div}>
+<div bind:this={div} class:nowrap>
   {#each options as option, i}
     <button
       on:click={() => select(option)}
@@ -61,6 +62,11 @@
   div {
     display: flex;
     flex-wrap: wrap;
+  }
+
+  div.nowrap {
+    flex-wrap: nowrap;
+    overflow-y: auto;
   }
 
   button {
