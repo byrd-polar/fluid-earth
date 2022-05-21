@@ -2,7 +2,6 @@
   import IconButton from './components/IconButton.svelte';
   import Menu from 'carbon-icons-svelte/lib/Menu.svelte';
   import { tick } from 'svelte';
-  import overlayscroll from './overlayscroll.js';
   import { mobile } from './stores.js';
 
   export let menus;
@@ -30,7 +29,7 @@
   })() }
 </script>
 
-<div class="rail" bind:this={rail} use:overlayscroll>
+<div class="rail" bind:this={rail}>
 <nav>
   <IconButton
     name="Menus and Links"
@@ -57,6 +56,7 @@
     z-index: 2;
     background: var(--secondary-color-dark);
     overflow: auto;
+    scrollbar-color: grey transparent;
     box-shadow:
       2px 0 1px -1px rgba(0,0,0,.2),
       1px 0 1px  0   rgba(0,0,0,.14),

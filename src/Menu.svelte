@@ -4,7 +4,6 @@
   import ArrowLeft from 'carbon-icons-svelte/lib/ArrowLeft.svelte';
   import HeaderToggle from './components/HeaderToggle.svelte';
   import { tips } from './tooltip.js';
-  import overlayscroll from './overlayscroll.js';
   import { mobile } from './stores.js';
 
   export let openedMenu;
@@ -52,11 +51,9 @@
       <HeaderToggle bind:simplifiedMode />
     {/if}
   </header>
-  <div use:overlayscroll>
-    <section>
-      <slot></slot>
-    </section>
-  </div>
+  <section>
+    <slot></slot>
+  </section>
 </aside>
 
 <style>
@@ -120,12 +117,11 @@
     text-overflow: ellipsis;
   }
 
-  div {
-    overflow: auto;
-    flex: 1;
-  }
-
   section {
+    overflow: auto;
+    scrollbar-color: grey transparent;
+    scrollbar-gutter: stable;
+    flex: 1;
     padding: 1em 20px;
   }
 

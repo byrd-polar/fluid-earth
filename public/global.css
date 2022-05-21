@@ -15,6 +15,7 @@ html {
   --input-color-opaque: #464646;
   --range-handle: var(--primary-color-light);
   --range-handle-focus: var(--primary-color-light);
+  color-scheme: dark;
 }
 
 *, *:before, *:after {

@@ -4,7 +4,6 @@
   import List from './components/List.svelte';
   import Button from './components/Button.svelte';
   import { createFocusTrap } from 'focus-trap';
-  import overlayscroll from './overlayscroll.js';
 
   import Blog from 'carbon-icons-svelte/lib/Blog.svelte';
   import Facebook from 'carbon-icons-svelte/lib/LogoFacebook.svelte';
@@ -72,9 +71,7 @@
   class:open={drawerOpen}
   bind:this={drawer}
   on:keydown={handleKeydown}
-  use:overlayscroll
 >
-<div class="wrapper">
   <header>
     <h1>
       <img width="42" height="42" alt="logo" src="/images/logo.svg">
@@ -127,7 +124,6 @@
       <Github size={32} aria-label="Github" />
     </a>
   </footer>
-</div>
 </aside>
 <div
   class="scrim"
@@ -145,10 +141,14 @@
     position: absolute;
 
     height: 100%;
-    width: 256px;
-    overflow: auto;
 
-    margin-left: -256px;
+    display: flex;
+    flex-direction: column;
+
+    overflow-y: auto;
+    scrollbar-color: grey transparent;
+
+    margin-left: -280px; /* a little extra for potential scrollbar width */
     visibility: hidden;
     transition:
       margin-left 0.25s ease 0s,
@@ -168,10 +168,8 @@
       visibility 0s linear 0s;
   }
 
-  div.wrapper {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  aside > * {
+    width: 256px;
   }
 
   header {
