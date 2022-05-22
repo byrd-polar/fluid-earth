@@ -92,6 +92,7 @@
     {placeholder}
   >
 </label>
+<div class="anchor">
 {#if dropdownShown}
   <div
     class="dropdown"
@@ -120,6 +121,7 @@
     {/if}
   </div>
 {/if}
+</div>
 
 <style>
   input, div.dropdown {
@@ -143,11 +145,17 @@
     border-bottom: thin solid gray;
   }
 
+  div.anchor {
+    position: relative;
+  }
+
   div.dropdown {
     position: absolute;
+    top: 0;
     z-index: 1;
     padding: 0.25em 0;
     background-color: var(--input-color-opaque);
+    box-shadow: 0 1px 1px black;
   }
 
   div.dropdown,
