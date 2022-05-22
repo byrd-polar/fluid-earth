@@ -229,7 +229,7 @@ these libraries.
 <p>
 Location search data in the Markers menu is from the
 "<a href="https://simplemaps.com/data/world-cities">
-Basic World Cities Database v1.73</a>" by
+Basic World Cities Database</a>" by
 <a href="https://simplemaps.com">Pareto Software, LLC</a>, used under
 <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
 with text reformatted from original.

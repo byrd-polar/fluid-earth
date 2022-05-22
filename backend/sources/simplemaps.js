@@ -10,7 +10,7 @@ import StreamZip from 'node-stream-zip';
 import { join } from 'path';
 
 const url = 'https://simplemaps.com/static/data/world-cities/basic/'
-          + 'simplemaps_worldcities_basicv1.73.zip';
+          + 'simplemaps_worldcities_basicv1.75.zip';
 
 const extra_locations = [
   {
