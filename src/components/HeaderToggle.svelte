@@ -18,7 +18,7 @@
       content: 'auto',
     },
     content: `
-    <p>Advanced mode has:
+    <p>Toggle advanced mode, which has:
     <ul>
       <li>additional dataset variables and heights
       <li>perceptually uniform colormaps
@@ -33,7 +33,8 @@
 <div bind:this={wrapper}>
   <Toggle
     bind:toggled={advancedMode}
-    label={`Advanced mode ${simplifiedMode ? 'off' : 'on'}`}
+    label="Advanced mode"
+    hideLabel
     toggledColor="var(--primary-color-light)"
     untoggledColor="#ABABAB"
     style="margin-left: auto"
@@ -45,20 +46,15 @@
     margin-left: auto;
   }
 
-  div :global(label) {
-    text-align: right;
-    color: white;
-  }
-
   div :global(button::after) {
     position: absolute;
     content: "";
     top: 0;
     bottom: 0;
-    left: -0.75rem;
+    left: -12px;
     margin: auto;
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 40px;
+    width: 40px;
     text-align: center;
     border-radius: 50%;
     background-color: transparent;
@@ -68,7 +64,7 @@
   }
 
   div :global(button[aria-checked="true"]::after) {
-    transform: translateX(1.375rem);
+    transform: translateX(22px);
   }
 
   div :global(button:focus) {

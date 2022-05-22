@@ -1,0 +1,62 @@
+diff --git a/node_modules/svelte-toggle/src/Toggle.svelte b/node_modules/svelte-toggle/src/Toggle.svelte
+index 4afded6..4665079 100644
+--- a/node_modules/svelte-toggle/src/Toggle.svelte
++++ b/node_modules/svelte-toggle/src/Toggle.svelte
+@@ -106,11 +106,11 @@
+ 
+   button {
+     position: relative;
+-    padding: 0 0.25rem;
++    padding: 0 4px;
+     border: 0;
+-    border-radius: 1rem;
+-    height: 1.25rem;
+-    width: 2.5rem;
++    border-radius: 16px;
++    height: 20px;
++    width: 40px;
+     font: inherit;
+     color: inherit;
+     line-height: inherit;
+@@ -130,10 +130,10 @@
+     content: "";
+     top: 0;
+     bottom: 0;
+-    left: 0.125rem;
++    left: 2px;
+     margin: auto;
+-    height: 1rem;
+-    width: 1rem;
++    height: 16px;
++    width: 16px;
+     text-align: center;
+     border-radius: 50%;
+     background-color: currentColor;
+@@ -141,21 +141,21 @@
+   }
+ 
+   button[aria-checked="true"]:before {
+-    transform: translateX(1.25rem);
++    transform: translateX(20px);
+   }
+ 
+   button.small {
+-    height: 1rem;
+-    width: 1.75rem;
++    height: 16px;
++    width: 28px;
+   }
+ 
+   button.small:before {
+-    height: 0.75rem;
+-    width: 0.75rem;
++    height: 12px;
++    width: 12px;
+   }
+ 
+   button.small[aria-checked="true"]:before {
+-    transform: translateX(0.75rem);
++    transform: translateX(12px);
+   }
+ 
+   div {
