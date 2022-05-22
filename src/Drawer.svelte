@@ -95,12 +95,13 @@
     severe weather events.</p>
   </section>
   <footer>
-    <a href="https://byrd.osu.edu/">
+    <a href="https://byrd.osu.edu/" style="grid-column: 1 / -1">
       <img
         width="224"
         height="33"
         alt="The Ohio State University"
         src="/images/TheOhioStateUniversity-REV-Horiz-RGBHEX.png"
+        style="width: 100%"
       >
     </a>
     <a href="https://www.nsf.gov/funding/pgm_summ.jsp?pims_id=504793">
@@ -109,6 +110,7 @@
         height="48"
         alt="National Science Foundation"
         src="/images/NSF_4-Color_bitmap_Logo.png"
+        style="margin-left: -8px"
       >
     </a>
     <a href="https://u.osu.edu/fever/">
@@ -141,14 +143,15 @@
     position: absolute;
 
     height: 100%;
+    width: 256px;
 
     display: flex;
     flex-direction: column;
 
-    overflow-y: auto;
+    overflow: hidden auto;
     scrollbar-color: grey transparent;
 
-    margin-left: -280px; /* a little extra for potential scrollbar width */
+    margin-left: -256px;
     visibility: hidden;
     transition:
       margin-left 0.25s ease 0s,
@@ -166,10 +169,6 @@
     transition:
       margin-left 0.25s ease 0s,
       visibility 0s linear 0s;
-  }
-
-  aside > * {
-    width: 256px;
   }
 
   header {
@@ -202,34 +201,19 @@
   }
 
   a {
-    color: white;
+    color: inherit;
   }
 
   footer {
     padding: 0 16px 16px 16px;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px 8px;
     align-items: center;
-  }
-
-  footer a {
-    color: inherit;
-    margin-right: 8px;
-    margin-top: 16px;
-    flex: 1;
-  }
-
-  footer a:first-child, footer a:last-child {
-    margin-right: 0;
-  }
-
-  footer a:nth-child(2) {
-    margin-left: -7.875px;
   }
 
   footer a > :global(*) {
     display: block;
-    margin: 0 auto;
   }
 
   div.scrim {
