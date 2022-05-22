@@ -66,7 +66,7 @@
 
   div.nowrap {
     flex-wrap: nowrap;
-    overflow-y: auto;
+    overflow: auto hidden;
   }
 
   button {

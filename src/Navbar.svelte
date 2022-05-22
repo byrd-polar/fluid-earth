@@ -55,7 +55,7 @@
   div.rail {
     z-index: 2;
     background: var(--secondary-color-dark);
-    overflow: auto;
+    overflow: hidden auto;
     scrollbar-color: grey transparent;
     box-shadow:
       2px 0 1px -1px rgba(0,0,0,.2),

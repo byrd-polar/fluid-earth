@@ -118,7 +118,7 @@
   }
 
   section {
-    overflow: auto;
+    overflow: hidden auto;
     scrollbar-color: grey transparent;
     scrollbar-gutter: stable;
     flex: 1;
