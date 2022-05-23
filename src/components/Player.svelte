@@ -4,6 +4,7 @@
   import Repeat from 'carbon-icons-svelte/lib/Repeat.svelte';
   import RepeatOne from 'carbon-icons-svelte/lib/RepeatOne.svelte';
   import RangeSlider from 'svelte-range-slider-pips';
+  import tooltip from '../tooltip.js';
   import { capitalizeFirstLetter, simpleTranslate } from '../utility.js';
   import prettyMilliseconds from 'pretty-ms';
   import { tick } from 'svelte';
@@ -132,7 +133,11 @@
 </script>
 
 <div>
-  <button on:click={playing ? pause : play} class="play">
+  <button
+    class="play"
+    on:click={playing ? pause : play}
+    aria-label="Pause/play timelapse"
+  >
     {#if playing}
       <Pause size={32} />
     {:else}
@@ -158,7 +163,11 @@
     --range-pip-active="gray"
     range="min" float pips
   />
-  <button class="repeat" on:click={() => repeat = !repeat}>
+  <button
+    class="repeat"
+    on:click={() => repeat = !repeat}
+    use:tooltip={{ content: 'Toggle auto-repeat' }}
+  >
     {#if repeat}
       <RepeatOne size={20} style="color: var(--primary-color-light" />
     {:else}

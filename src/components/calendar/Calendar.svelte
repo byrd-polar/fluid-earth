@@ -2,7 +2,6 @@
   import ChevronLeft from 'carbon-icons-svelte/lib/ChevronLeft.svelte';
   import ChevronRight from 'carbon-icons-svelte/lib/ChevronRight.svelte';
   import ChipGroup from '../ChipGroup.svelte';
-  import tooltip from '../../tooltip.js';
   import { validDate } from '../../utility.js';
   import { ZonedDateTime, multiply } from './miniTemporal.js';
   import { tick } from 'svelte';
@@ -82,7 +81,7 @@
   let focusHandler, calendar, hasFocus;
 
   async function handleFocus() {
-    date = date; // refresh header and boxes so that selected box is visible
+    header = updateHeader(date, utc, picker); // ensure selected box is visible
     await focusOnSelected();
   }
 
@@ -141,7 +140,7 @@
   <button
     on:click={() => header = prevHeader}
     disabled={header.date < griddedDataset.start}
-    use:tooltip={{content: `Prev ${picker.headerUnit}`}}
+    aria-label={`Prev ${picker.headerUnit}`}
     tabindex="-1"
   >
     <ChevronLeft size={32} />
@@ -152,7 +151,7 @@
   <button
     on:click={() => header = nextHeader}
     disabled={nextHeader.date > griddedDataset.end}
-    use:tooltip={{content: `Next ${picker.headerUnit}`}}
+    aria-label={`Next ${picker.headerUnit}`}
     tabindex="-1"
   >
     <ChevronRight size={32} />
