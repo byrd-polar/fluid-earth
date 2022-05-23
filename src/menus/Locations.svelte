@@ -12,7 +12,7 @@
   export let griddedData;
   export let griddedUnit;
 
-  let label = 'Search by country, city, or region:';
+  let label = 'Add pin by country, city, or region:';
   let placeholder = 'Columbus, Ohio, United States';
 
   async function loadData() {
@@ -70,11 +70,11 @@ below to view information about that location.
 To mark a location, hold down the <b>left mouse button</b> on the map, or use
 the following search box.
 </p>
-<SearchBox {label} {placeholder} {loadData} {onSelect} />
 </details>
 
 <details open>
 <summary><h2>Marked locations</h2></summary>
+<SearchBox {label} {placeholder} {loadData} {onSelect} />
 <LocationsList
   bind:pins
   {griddedData}

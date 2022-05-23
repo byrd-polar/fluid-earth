@@ -5,7 +5,6 @@
   export let onSelect = () => {};
   export let maxShown = 9;
 
-  let inputElement;
   let value = '';
   let options = [];
   let data = undefined;
@@ -77,7 +76,6 @@
 <label>
   {label}
   <input
-    bind:this={inputElement}
     type="text"
     spellcheck="false"
     bind:value
@@ -94,9 +92,9 @@
 </label>
 <div class="anchor">
 {#if dropdownShown}
+<div class="spacer">
   <div
     class="dropdown"
-    style="width: {inputElement.clientWidth}px"
     on:mousedown|preventDefault
   >
     {#if options.length > 0}
@@ -120,6 +118,7 @@
       </div>
     {/if}
   </div>
+</div>
 {/if}
 </div>
 
@@ -147,13 +146,18 @@
 
   div.anchor {
     position: relative;
+    margin-bottom: 1em;
+  }
+
+  div.spacer {
+    width: 100%;
+    position: absolute;
+    padding-bottom: 1em;
   }
 
   div.dropdown {
-    position: absolute;
-    top: 0;
     z-index: 1;
-    padding: 0.25em 0;
+    padding-top: 0.25em;
     background-color: var(--input-color-opaque);
     box-shadow: 0 1px 1px black;
   }
