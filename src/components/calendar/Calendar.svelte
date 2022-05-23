@@ -215,7 +215,6 @@
 
   div.header {
     margin-bottom: 1px;
-    height: 61px;
     background: var(--primary-color);
     display: flex;
     border-radius: 4px 4px 0 0;
@@ -233,6 +232,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
   }
 
   div.header button {
@@ -251,7 +251,7 @@
     display: grid;
     grid-template-columns: repeat(var(--cols), 1fr);
     grid-template-rows: repeat(var(--rows), 1fr);
-    height: calc(var(--width) * 6 / 7); /* square days */
+    min-height: calc(var(--width) * 6 / 7); /* square days */
     gap: 1px;
     border-radius: 0 0 4px 4px;
   }
@@ -264,12 +264,12 @@
     align-items: center;
     font-size: inherit;
     cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   button.box.hour {
     font-size: 1rem;
-    white-space: nowrap;
-    overflow: hidden;
   }
 
   button.box:disabled {
