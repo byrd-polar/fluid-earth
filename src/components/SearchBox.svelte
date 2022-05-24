@@ -76,12 +76,11 @@
 <label>
   {label}
   <input
-    type="text"
+    type="search"
     spellcheck="false"
     bind:value
     on:focus={() => focused = true}
     on:blur={() => focused = false}
-    on:focus={() => inputElement.select()}
     on:focus={filterOptions}
     on:input={filterOptions}
     on:click={filterOptions}
