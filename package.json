@@ -45,6 +45,7 @@
     "d3-scale-chromatic": "^3.0.0",
     "d3-selection": "^3.0.0",
     "debounce": "^1.2.1",
+    "dotenv": "^16.0.1",
     "esm-seedrandom": "github:shanewholloway/js-esm-seedrandom",
     "focus-trap": "^6.7.3",
     "interactjs": "^1.10.11",
