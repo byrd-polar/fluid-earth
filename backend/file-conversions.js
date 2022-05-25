@@ -54,46 +54,36 @@ async function gfs_combine_grib(input, output, options, combine_fn) {
 const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
 
 async function grib2_to_arr(input, match='.*', limit=1) {
-  return spawn_cmd(
-    'wgrib2',
-    [
-      input,
-      '-match', match,
-      '-limit', limit,
-      '-inv', devnull,
-      '-bin', '-',
-      '-no_header',
-      '-order', 'we:sn',
-      '-ncpu', '1',
-    ],
-    (buf, resolve) => {
-      resolve(new Float32Array(buf.buffer, buf.byteOffset, buf.length / 4));
-    },
-  );
+  let buffer = await spawn_cmd('wgrib2', [
+    input,
+    '-match', match,
+    '-limit', limit,
+    '-inv', devnull,
+    '-bin', '-',
+    '-no_header',
+    '-order', 'we:sn',
+    '-ncpu', '1',
+  ]);
+  return new Float32Array(buffer.buffer, buffer.byteOffset, buffer.length / 4);
 }
 
 async function netcdf_to_arr(input, variables, flatten=true) {
-  return spawn_cmd(
-    'ncdump',
-    [
-      '-v', variables,
-      '-p', '9,17',
-      input,
-    ],
-    (buffer, resolve) => {
-      let string = buffer.toString();
-      let arrays = variables.split(',').map(v => {
-        return string
-          .match(new RegExp(` ${v} =\n(.*?);`, 's'))[1]
-          .split(',')
-          .map(x => parseFloat(x));
-      });
-      resolve(flatten ? [].concat(...arrays) : arrays);
-    },
-  );
+  let buffer = await spawn_cmd('ncdump', [
+    '-v', variables,
+    '-p', '9,17',
+    input,
+  ]);
+  let string = buffer.toString();
+  let arrays = variables.split(',').map(v => {
+    return string
+      .match(new RegExp(` ${v} =\n(.*?);`, 's'))[1]
+      .split(',')
+      .map(x => parseFloat(x));
+  });
+  return flatten ? [].concat(...arrays) : arrays;
 }
 
-async function spawn_cmd(command, args, process_data_fn) {
+async function spawn_cmd(command, args) {
   return new Promise((resolve, reject) => {
     let child = spawn(command, args);
 
@@ -106,7 +96,7 @@ async function spawn_cmd(command, args, process_data_fn) {
 
     child.on('close', code => {
       if (code === 0) {
-        process_data_fn(Buffer.concat(chunks), resolve);
+        resolve(Buffer.concat(chunks));
       } else {
         let msg = Buffer.concat(errs).toString();
         reject(`${command} exited with code ${code}:\n${msg}`);
