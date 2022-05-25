@@ -18,7 +18,7 @@ async function download_cds(dataset_name, request, auth) {
     reply = await get_json(task_url, { auth });
   }
 
-  if (reply.state !== 'completed') throw reply.error;
+  if (reply.state !== 'completed') throw `Error: ${reply.error.message}`;
 
   let download_url = reply.location.startsWith('https://')
     ? reply.location
