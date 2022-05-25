@@ -1,8 +1,20 @@
-import { brotli, write_file_atomically } from './utility.js';
+import { brotli, create_dir, write_file_atomically } from './utility.js';
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
-import { platform } from 'os';
+import { readFile, rm } from 'fs/promises';
+import { platform, tmpdir } from 'os';
+import { join } from 'path';
+import { v4 as uuidv4 } from 'uuid';
+
+const temp_dir = await create_dir(join(tmpdir(), 'fev2r-temp'));
+
+export async function grib1(input, output, options={}) {
+  let arr = await grib1_to_arr(input);
+  let array = arr.map(v => nan_for_glsl(is_magic_nan, v, options.factor));
+
+  await write_array_to_file(output, array, options.compression_level);
+}
 
 export async function grib2(input, output, options={}) {
   let arr = await grib2_to_arr(input, options.match, options.limit);
@@ -51,6 +63,20 @@ async function gfs_combine_grib(input, output, options, combine_fn) {
   await write_array_to_file(output, array, options.compression_level);
 }
 
+async function grib1_to_arr(input) {
+  let temp_file = join(temp_dir, uuidv4());
+  await spawn_cmd('wgrib', [
+    input,
+    '-d', 1,
+    '-bin',
+    '-nh',
+    '-o', temp_file,
+  ]);
+  let buffer = await readFile(temp_file);
+  await rm(temp_file);
+  return float32array_from_buffer(buffer);
+}
+
 const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
 
 async function grib2_to_arr(input, match='.*', limit=1) {
@@ -64,7 +90,7 @@ async function grib2_to_arr(input, match='.*', limit=1) {
     '-order', 'we:sn',
     '-ncpu', '1',
   ]);
-  return new Float32Array(buffer.buffer, buffer.byteOffset, buffer.length / 4);
+  return float32array_from_buffer(buffer);
 }
 
 async function netcdf_to_arr(input, variables, flatten=true) {
@@ -122,4 +148,8 @@ async function write_array_to_file(output, array, compression_level=11) {
   let compressed_buffer = await brotli(buffer, compression_level);
 
   await write_file_atomically(output, compressed_buffer);
+}
+
+function float32array_from_buffer(buffer) {
+  return new Float32Array(buffer.buffer, buffer.byteOffset, buffer.length / 4);
 }

@@ -33,6 +33,7 @@ Changes to files in `src` will be automatically displayed from the dev server.
 
 #### Additional prerequisites
 
+- [wgrib](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html)
 - [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/)
 - [NetCDF](https://www.unidata.ucar.edu/downloads/netcdf/)
 
