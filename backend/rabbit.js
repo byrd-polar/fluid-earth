@@ -1,10 +1,11 @@
 import {
   absolute_path,
-  create_dir,
+  datasets_state_dir,
   json_dir_to_obj,
   mkdir_p,
   parent_output_dir,
   read_json,
+  sources_state_dir,
   write_json_atomically,
 } from './utility.js';
 import { readdir } from 'fs/promises';
@@ -15,8 +16,6 @@ let heart_file = join(parent_output_dir, 'heart.json');
 await write_json_atomically(heart_file, heart);
 
 const datasets_dir = absolute_path('./datasets');
-const sources_state_dir = await create_dir('./state/sources');
-const datasets_state_dir = await create_dir('./state/datasets');
 
 let source_path = process.argv[2];
 let source = basename(source_path, '.js');

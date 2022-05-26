@@ -12,7 +12,7 @@ import {
   stat,
   writeFile,
 } from 'fs/promises';
-import { platform } from 'os';
+import { platform, tmpdir } from 'os';
 import { resolve, join, dirname, sep, basename } from 'path';
 import { Readable } from 'stream';
 import { fileURLToPath } from 'url';
@@ -21,8 +21,11 @@ import { brotliCompress as _brotliCompress, constants } from 'zlib';
 const brotliCompress = promisify(_brotliCompress);
 
 export const parent_output_dir = await create_dir('../public/tera');
+export const sources_state_dir = await create_dir('./state/sources');
+export const datasets_state_dir = await create_dir('./state/datasets');
+export const cache_dir = await create_dir(join(tmpdir(), 'fev2r-cache'));
 
-export async function create_dir(relative_path) {
+async function create_dir(relative_path) {
   let path = absolute_path(relative_path);
   await mkdir_p(path);
   return path;

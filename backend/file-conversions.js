@@ -1,13 +1,11 @@
-import { brotli, create_dir, write_file_atomically } from './utility.js';
+import { brotli, cache_dir, write_file_atomically } from './utility.js';
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
 import { readFile, rm } from 'fs/promises';
-import { platform, tmpdir } from 'os';
+import { platform } from 'os';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
-
-const temp_dir = await create_dir(join(tmpdir(), 'fev2r-temp'));
 
 export async function grib1(input, output, options={}) {
   let arr = await grib1_to_arr(input);
@@ -64,7 +62,7 @@ async function gfs_combine_grib(input, output, options, combine_fn) {
 }
 
 async function grib1_to_arr(input) {
-  let temp_file = join(temp_dir, uuidv4());
+  let temp_file = join(cache_dir, uuidv4());
   await spawn_cmd('wgrib', [
     input,
     '-d', 1,

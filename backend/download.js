@@ -1,14 +1,11 @@
-import { create_dir } from './utility.js';
+import { cache_dir } from './utility.js';
 import { Buffer } from 'buffer';
 import { createReadStream, createWriteStream } from 'fs';
 import { rm, writeFile } from 'fs/promises';
 import { get, request } from 'https';
-import { tmpdir } from 'os';
 import { join, basename } from 'path';
 import { pipeline } from 'stream/promises';
 import { v4 as uuidv4 } from 'uuid';
-
-const cache_dir = await create_dir(join(tmpdir(), 'fev2r-cache'));
 
 export async function download(url, options={}, unique_path=true) {
   let file = join(cache_dir, unique_path ? uuidv4() : basename(url));
