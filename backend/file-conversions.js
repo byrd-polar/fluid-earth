@@ -8,7 +8,7 @@ import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function grib1(input, output, options={}) {
-  let arr = await grib1_to_arr(input);
+  let arr = await grib1_to_arr(input, options.record_number);
   let array = arr.map(v => nan_for_glsl(is_magic_nan, v, options.factor));
 
   await write_array_to_file(output, array, options.compression_level);
@@ -61,11 +61,11 @@ async function gfs_combine_grib(input, output, options, combine_fn) {
   await write_array_to_file(output, array, options.compression_level);
 }
 
-async function grib1_to_arr(input) {
+async function grib1_to_arr(input, record_number=1) {
   let temp_file = join(cache_dir, uuidv4());
   await spawn_cmd('wgrib', [
     input,
-    '-d', 1,
+    '-d', record_number,
     '-bin',
     '-nh',
     '-o', temp_file,
