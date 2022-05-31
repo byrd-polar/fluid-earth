@@ -10,8 +10,18 @@ void projectToTexture(
     in float gridHeight,
     in int projection
 ) {
+  // ERA5
+  if (projection == -1) {
+    textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
+
+    float xOffset = 0.5 / gridWidth;
+    float yScale = -(gridHeight - 1.0) / gridHeight;
+
+    textureCoord.x = mod(textureCoord.x + xOffset, 1.0);
+    textureCoord.y = yScale * (textureCoord.y - 0.5) + 0.5;
+  }
   // GFS
-  if (projection == 0) {
+  else if (projection == 0) {
 
     textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
 

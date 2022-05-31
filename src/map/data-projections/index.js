@@ -6,6 +6,18 @@
 // particleData objects in App.svelte to get value of arbitrary lonLat points
 
 export default Object.freeze({
+  ERA5: {
+    id: -1,
+    function: (data, lonLat) => {
+      const wRes = data.width / 360;
+      const hRes = (data.height - 1) / 180;
+
+      const col = Math.round((lonLat[0] + 360) * wRes) % data.width;
+      const row = (data.height - 1) - Math.round((lonLat[1] + 90) * hRes);
+
+      return row * data.width + col;
+    },
+  },
   GFS: {
     id: 0,
     function: (data, lonLat) => {

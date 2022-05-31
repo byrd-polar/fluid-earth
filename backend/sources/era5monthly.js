@@ -12,7 +12,7 @@ const shared_metadata = {
   width: 1440,
   height: 721,
   intervalInHours: 1,
-  projection: 'GFS',
+  projection: 'ERA5',
 };
 
 export async function forage(current_state, datasets) {
