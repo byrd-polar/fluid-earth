@@ -73,7 +73,7 @@ export default class Fetcher {
 
       let buffer = await res.arrayBuffer();
 
-      if (dataset.particleDisplay) {
+      if (dataset.type === 'particle') {
         data = [
           new Float16Array(buffer.slice(0, buffer.byteLength / 2)),
           new Float16Array(buffer.slice(buffer.byteLength / 2)),

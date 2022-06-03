@@ -1,7 +1,6 @@
 import ky from 'ky';
 import App from './App.svelte';
-import colormaps from './map/colormaps/';
-import dataProjections from './map/data-projections/';
+import { GriddedDataset, ParticleDataset } from './dataset.js';
 
 (async () => {
   let inventory = await ky('/tera/inventory.json.br', {
@@ -11,31 +10,13 @@ import dataProjections from './map/data-projections/';
     },
   }).json();
 
-  // replace some strings in inventory with objects
-  for (const dataset of inventory) {
-    // replace ISO date strings (originally from JSON) with Date objects
-    //
-    // will need to update this if date strings are added in different sections
-    // of the inventory
-    for (const prop of ['start', 'end']) {
-      if (prop in dataset) dataset[prop] = new Date(dataset[prop]);
-    }
-    if ('missing' in dataset) {
-      dataset.missing = dataset.missing.map(iso => new Date(iso));
-    }
-    // replace colormap strings with colormap objects
-    if ('colormap' in dataset) {
-      dataset.colormap = colormaps[dataset.colormap] || colormaps['VIRIDIS'];
-    }
-    // replace projection strings with projection objects
-    if ('projection' in dataset) {
-      dataset.projection =
-        dataProjections[dataset.projection] || dataProjections['GFS'];
-    }
-  }
+  let gDatasets = inventory
+    .filter(d => d.colormap)
+    .map(d => new GriddedDataset(d));
 
-  let gDatasets = inventory.filter(d => d.colormap)
-  let pDatasets = inventory.filter(d => d.particleDisplay);
+  let pDatasets = inventory
+    .filter(d => d.particleDisplay)
+    .map(d => new ParticleDataset(d));
 
   new App({
     target: document.body,

@@ -15,7 +15,6 @@
   import Feedback from './menus/Feedback.svelte';
 
   import Map from './map/Map.svelte';
-  import colormaps from './map/colormaps/';
   import projections from './map/projections/';
   import dataProjections, {
     singleArrayDataGet,
