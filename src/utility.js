@@ -16,7 +16,7 @@ export function validDate(dataset, date, oscarOptions={}) {
           && (!preserveUTCMonth || c.getUTCMonth() === date.getUTCMonth())
           && (!excludedDate || c.getTime() !== excludedDate.getTime());
     });
-  } else if (dataset.missing) {
+  } else if (dataset.missing.length > 0) {
     candidates = getValidDates(dataset);
   }
   if (candidates) {
