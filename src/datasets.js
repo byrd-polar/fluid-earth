@@ -41,7 +41,7 @@ export class GriddedDataset extends Dataset {
     return {
       unit: this.unit,
       originalUnit: this.originalUnit,
-      get: lonLat => pairedArrayDataGet(this, lonLat),
+      get(lonLat) { return singleArrayDataGet(this, lonLat) },
       ...super.dataProps,
     }
   }
@@ -61,7 +61,7 @@ export class ParticleDataset extends Dataset {
 
   get dataProps() {
     return {
-      get: lonLat => pairedArrayDataGet(this, lonLat),
+      get(lonLat) { return pairedArrayDataGet(this, lonLat) },
       ...super.dataProps,
     }
   }
