@@ -1,12 +1,12 @@
-import colormaps from './map/colormaps/index.js';
+import colormaps from './map/colormaps/index.js'
 import dataProjections, {
   singleArrayDataGet,
   pairedArrayDataGet,
-} from './map/data-projections/';
-import { Float16Array } from '@petamoriken/float16';
+} from './map/data-projections/'
+import { Float16Array } from '@petamoriken/float16'
 
-const zeroProxy = new Proxy({}, { get() { return 0 } });
-const emptyDataArray = new Float16Array([-Infinity]);
+const zeroProxy = new Proxy({}, { get() { return 0 } })
+const emptyDataArray = new Float16Array([-Infinity])
 
 class Dataset {
   constructor(core)  { this.core = core ?? {} }
@@ -50,6 +50,16 @@ export class GriddedDataset extends Dataset {
     floatArray: emptyDataArray,
     ...new GriddedDataset().dataProps,
   }
+
+  async fetch(fetcher, date) {
+    let buffer = await fetcher.fetch(this, date)
+    if (!buffer) return this.emptyData
+
+    return {
+      floatArray: new Float16Array(buffer),
+      ...this.dataProps,
+    }
+  }
 }
 
 export class ParticleDataset extends Dataset {
@@ -70,5 +80,16 @@ export class ParticleDataset extends Dataset {
     uVelocities: emptyDataArray,
     vVelocities: emptyDataArray,
     ...new ParticleDataset().dataProps,
+  }
+
+  async fetch(fetcher, date) {
+    let buffer = await fetcher.fetch(this, date)
+    if (!buffer) return this.emptyData
+
+    return {
+      uVelocities: new Float16Array(buffer.slice(0, buffer.byteLength / 2)),
+      vVelocities: new Float16Array(buffer.slice(buffer.byteLength / 2)),
+      ...this.dataProps,
+    }
   }
 }

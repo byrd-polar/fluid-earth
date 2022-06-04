@@ -193,23 +193,11 @@
         date = valid;
       }
 
-      let array = await fetcher.fetch(griddedDataset, date, 'gridded');
-
-      if (!array) return;
-
+      let data = await griddedDataset.fetch(fetcher, date);
       griddedLoading = false;
 
       griddedAssignments = () => {
-        griddedData = {
-          floatArray: array,
-          width: griddedDataset.width,
-          height: griddedDataset.height,
-          originalUnit: griddedDataset.originalUnit,
-          unit : griddedDataset.unit,
-          projection: griddedDataset.projection,
-          get: lonLat => singleArrayDataGet(griddedData, lonLat),
-        };
-
+        griddedData = data;
         setGriddedVariables(griddedDataset, simplifiedMode);
       };
 
@@ -228,27 +216,11 @@
 
       particleLoading = true;
 
-      let [uArray, vArray] =
-        await fetcher.fetch(particleDataset, valid, 'particle');
-
-      if (!uArray || !vArray) return;
-
+      let data = await particleDataset.fetch(fetcher, valid);
       particleLoading = false;
 
       particleAssignments = () => {
-        if ( particleData.uVelocities !== uArray
-          || particleData.vVelocities !== vArray
-        ) {
-          particleData = {
-            uVelocities: uArray,
-            vVelocities: vArray,
-            width: particleDataset.width,
-            height: particleDataset.height,
-            projection: particleDataset.projection,
-            get: lonLat => pairedArrayDataGet(particleData, lonLat),
-          };
-        }
-
+        particleData = data;
         setParticleVariables(particleDataset);
       };
 

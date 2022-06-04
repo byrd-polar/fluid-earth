@@ -1,5 +1,4 @@
 import ky from 'ky';
-import { Float16Array } from '@petamoriken/float16';
 
 export default class Fetcher {
   constructor() {
@@ -19,12 +18,10 @@ export default class Fetcher {
     this._downloadListeners.push(func);
   }
 
-  async fetch(dataset, date=null, type='default', abortPreviousOfType=true) {
+  async fetch(dataset, date, abortPreviousOfType=true) {
     // __fev2r_api__ is '' by default, can be replaced by env variable
-    let url = __fev2r_api__ + dataset.path;
-    if (date) {
-      url += date.toISOString() + '.fp16.br';
-    }
+    let url = __fev2r_api__ + dataset.path + date.toISOString() + '.fp16.br';
+    let type = dataset.type;
 
     // workaround for ':' being an illegal character for filenames on Windows,
     if (__using_local_data_files__ && __windows__) {
@@ -71,15 +68,8 @@ export default class Fetcher {
       });
 
       let buffer = await res.arrayBuffer();
-
-      if (dataset.type === 'particle') {
-        data = [
-          new Float16Array(buffer.slice(0, buffer.byteLength / 2)),
-          new Float16Array(buffer.slice(buffer.byteLength / 2)),
-        ];
-      } else {
-        data = new Float16Array(buffer);
-      }
+      this._cache[url] = buffer;
+      return buffer;
 
     } catch (error) {
       delete this._progressPerURL[url];
@@ -97,12 +87,9 @@ export default class Fetcher {
       }
       return false;
     }
-
-    this._cache[url] = data;
-    return data;
   }
 
-  abort(type='default') {
+  abort(type) {
     let controller = this._abortControllers[type];
     if (controller) {
       controller.abort();
