@@ -19,6 +19,8 @@ export default class Fetcher {
   }
 
   async fetch(dataset, date, abortPreviousOfType=true) {
+    if (!dataset.path) return false;
+
     // __fev2r_api__ is '' by default, can be replaced by env variable
     let url = __fev2r_api__ + dataset.path + date.toISOString() + '.fp16.br';
     let type = dataset.type;

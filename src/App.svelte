@@ -35,8 +35,6 @@
   import { Float16Array } from '@petamoriken/float16';
   import ky from 'ky';
 
-  export let gDatasets;
-  export let pDatasets;
 
   const minZoom = 0.375;
   const maxZoom = 24;
@@ -53,12 +51,12 @@
   let kioskMode = false;
 
   const fetcher = new Fetcher();
-  let griddedDataset
-    = gDatasets.find(d => d.name === 'temperature at 2 m above ground')
-   ?? gDatasets[0];
-  let particleDataset
-    = pDatasets.find(d => d.name === 'wind at 10 m above ground')
-   ?? pDatasets[0];
+
+  let gDatasets = [new GriddedDataset()];
+  let pDatasets = [new ParticleDataset()];
+  let griddedDataset = gDatasets[0];
+  let particleDataset = pDatasets[0];
+
   let date = (__production__ || !__using_local_data_files__) ?
     validDate(griddedDataset, $currentDate) :
     griddedDataset.end;
@@ -165,6 +163,22 @@
   onMount(async () => {
     // Load topology (lines on globe) data completely first
     vectorData = await ky('/tera/topology.json.br', {timeout: false}).json();
+
+    let inventory = await ky('/tera/inventory.json.br', {
+      timeout: false,
+      headers: { 'Cache-Control': 'no-cache' },
+    }).json();
+
+    gDatasets = [...GriddedDataset.filter(inventory), ...gDatasets];
+    pDatasets = [...ParticleDataset.filter(inventory), ...pDatasets];
+
+    griddedDataset
+      = gDatasets.find(d => d.name === 'temperature at 2 m above ground')
+     ?? gDatasets[0];
+
+    particleDataset
+      = pDatasets.find(d => d.name === 'wind at 10 m above ground')
+     ?? pDatasets[0];
 
     setGriddedVariables(griddedDataset, simplifiedMode);
     setParticleVariables(particleDataset);

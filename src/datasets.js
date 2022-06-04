@@ -10,12 +10,12 @@ const emptyDataArray = new Float16Array([-Infinity])
 
 class Dataset {
   constructor(core)  { this.core = core ?? {} }
-  get name()         { return this.core.name ?? 'Empty dataset' }
+  get name()         { return this.core.name ?? 'empty dataset' }
   get path()         { return this.core.path ?? null }
   get width()        { return this.core.width ?? 1 }
   get height()       { return this.core.height ?? 1 }
-  get start()        { return new Date(this.core.start ?? 0) }
-  get end()          { return new Date(this.core.end ?? 0) }
+  get start()        { return new Date(this.core.start ?? new Date()) }
+  get end()          { return new Date(this.core.end ?? new Date()) }
   get missing()      { return (this.core.missing ?? []).map(d => new Date(d)) }
   get interval()     { return this.core.intervalInHours ?? 1 }
   get projection()   { return dataProjections[this.core.projection ?? 'GFS'] }
@@ -51,9 +51,15 @@ export class GriddedDataset extends Dataset {
     ...new GriddedDataset().dataProps,
   }
 
+  static filter(inventory) {
+    return inventory
+      .filter(d => d.colormap)
+      .map(d => new GriddedDataset(d));
+  }
+
   async fetch(fetcher, date) {
     let buffer = await fetcher.fetch(this, date)
-    if (!buffer) return this.emptyData
+    if (!buffer) return this.constructor.emptyData
 
     return {
       floatArray: new Float16Array(buffer),
@@ -82,9 +88,15 @@ export class ParticleDataset extends Dataset {
     ...new ParticleDataset().dataProps,
   }
 
+  static filter(inventory) {
+    return inventory
+      .filter(d => d.particleDisplay)
+      .map(d => new ParticleDataset(d));
+  }
+
   async fetch(fetcher, date) {
     let buffer = await fetcher.fetch(this, date)
-    if (!buffer) return this.emptyData
+    if (!buffer) return this.constructor.emptyData
 
     return {
       uVelocities: new Float16Array(buffer.slice(0, buffer.byteLength / 2)),
