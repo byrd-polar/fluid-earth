@@ -16,10 +16,6 @@
 
   import Map from './map/Map.svelte';
   import projections from './map/projections/';
-  import dataProjections, {
-    singleArrayDataGet,
-    pairedArrayDataGet,
-  } from './map/data-projections/';
 
   import Queries from './overlays/Queries.svelte';
   import Widgets from './overlays/Widgets.svelte';
@@ -32,6 +28,8 @@
     simplifyDataset,
   } from './utility.js';
   import { currentDate, mobile } from './stores.js';
+
+  import { GriddedDataset, ParticleDataset } from './datasets.js';
 
   import { onMount } from 'svelte';
   import { Float16Array } from '@petamoriken/float16';
@@ -82,20 +80,12 @@
   let zoom = 1.5;
   $: portraitBasedZoom = $mobile;
 
-  let griddedData = {
-    floatArray: new Float16Array([-Infinity]),
-    width: 1,
-    height: 1,
-    originalUnit: griddedDataset.originalUnit,
-    unit : griddedDataset.unit,
-    projection: dataProjections.GFS,
-    get: lonLat => NaN,
-  };
+  let griddedData = GriddedDataset.emptyData;
   let griddedName = griddedDataset.name;
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
   let griddedScale = griddedDataset.scale;
-  let griddedOriginalUnit = griddedDataset.originalUnit;
+  let griddedOriginalUnit = griddedData.originalUnit;
   let preferredUnits = {
     speed: ['km/h', 'm/s', 'kn', 'mph'],
     temperature: ['tempC', 'tempF', 'tempK'],
@@ -110,15 +100,7 @@
   // Keep griddedUnit in sync with griddedData, not griddedDataset
   $: griddedUnit = validUnit(griddedData.unit, preferredUnits);
 
-  const emptyParticleData = {
-    uVelocities: new Float16Array([0]),
-    vVelocities: new Float16Array([0]),
-    width: 1,
-    height: 1,
-    projection: dataProjections.GFS,
-    get: lonLat => NaN,
-  };
-  let particleData = emptyParticleData;
+  let particleData = ParticleDataset.emptyData;
 
   let vectorData = { objects: {} };
   let vectorColors = {
@@ -131,7 +113,7 @@
 
   let particlesShown = true;
   $: if (!particlesShown) {
-    particleData = emptyParticleData;
+    particleData = ParticleDataset.emptyData;
   }
   let particleName = particleDataset.name;
   let particlesPaused = false;

@@ -163,7 +163,7 @@ import variableFilters from './menus/filters/variables.js';
 
 const dsCache = new Map();
 
-import { GriddedDataset } from './dataset.js';
+import { GriddedDataset } from './datasets.js';
 
 // Return a copy of the dataset with the original colormaps/scales/domains from
 // the old Fluid Earth Viewer

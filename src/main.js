@@ -1,6 +1,6 @@
 import ky from 'ky';
 import App from './App.svelte';
-import { GriddedDataset, ParticleDataset } from './dataset.js';
+import { GriddedDataset, ParticleDataset } from './datasets.js';
 
 (async () => {
   let inventory = await ky('/tera/inventory.json.br', {
