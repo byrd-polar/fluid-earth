@@ -15,7 +15,7 @@ export function validDate(dataset, date, oscarOptions={}) {
   } = oscarOptions;
 
   let candidates;
-  if (dataset.intervalInHours === 'custom:OSCAR') {
+  if (dataset.interval === 'custom:OSCAR') {
     candidates = getValidDates(dataset).filter(c => {
       return (!preserveMonth || c.getMonth() === date.getMonth())
           && (!preserveUTCMonth || c.getUTCMonth() === date.getUTCMonth())
@@ -34,7 +34,7 @@ export function validDate(dataset, date, oscarOptions={}) {
     return candidates[0];
   }
 
-  let intervalInMilliseconds = (dataset.intervalInHours * 60 * 60 * 1000) || 1;
+  let intervalInMilliseconds = (dataset.interval * 60 * 60 * 1000) || 1;
   let n = Math.round((date - dataset.start) / intervalInMilliseconds);
   return new Date(dataset.start.getTime() + intervalInMilliseconds * n);
 }
@@ -45,10 +45,10 @@ export function validCloseDate(dataset, date) {
   let closest = validDate(dataset, date);
 
   let maxDistance;
-  if (dataset.intervalInHours === 'custom:OSCAR') {
+  if (dataset.interval === 'custom:OSCAR') {
     maxDistance =  6 * 24 * 60 * 60 * 1000;
   } else {
-    maxDistance = dataset.intervalInHours * 60 * 60 * 1000;
+    maxDistance = dataset.interval * 60 * 60 * 1000;
   }
   if (Math.abs(closest - date) > maxDistance) return null;
 
@@ -59,14 +59,14 @@ import { validOscarDates } from './oscar.js';
 
 // Return a list of all the valid dates for a dataset
 export function getValidDates(dataset) {
-  if (dataset.intervalInHours === 'custom:OSCAR') {
+  if (dataset.interval === 'custom:OSCAR') {
     return validOscarDates(dataset.start, dataset.end);
   }
 
   let dates = [];
   let start = dataset.start.getTime();
   let end = dataset.end.getTime();
-  let interval = dataset.intervalInHours * 60 * 60 * 1000;
+  let interval = dataset.interval * 60 * 60 * 1000;
   for (let t = start; t <= end; t += interval) {
     if (!dataset.missing?.some(d => d.valueOf() === t)) {
       dates.push(new Date(t));
