@@ -1,5 +1,5 @@
 <script>
-  import { bytesPerFile, getValidDates } from '../utility.js';
+  import { getValidDates } from '../utility.js';
   import prettyBytes from 'pretty-bytes';
 
   export let date;
@@ -39,7 +39,7 @@
     timeZoneName: 'short',
   };
 
-  $: loadSize = validDates.length * bytesPerFile(griddedDataset);
+  $: loadSize = validDates.length * griddedDataset.bytesPerFile;
 </script>
 
 <div>

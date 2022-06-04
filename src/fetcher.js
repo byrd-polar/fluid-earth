@@ -1,6 +1,5 @@
 import ky from 'ky';
 import { Float16Array } from '@petamoriken/float16';
-import { bytesPerFile } from './utility.js';
 
 export default class Fetcher {
   constructor() {
@@ -44,7 +43,7 @@ export default class Fetcher {
     this._progressPerURL[url] = {
       type,
       transferredBytes: 0,
-      totalBytes: bytesPerFile(dataset),
+      totalBytes: dataset.bytesPerFile,
     };
     this._updateProgresses(type);
     this._triggerListeners();
