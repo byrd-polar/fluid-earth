@@ -36,6 +36,7 @@ export class GriddedDataset extends Dataset {
   get domain()       { return this.core.domain ?? [0, 1] }
   get unit()         { return this.core.unit ?? 'm' }
   get originalUnit() { return this.core.originalUnit ?? 'm' }
+  get scale()        { return this.core.scale ?? 'linear' }
 
   get dataProps() {
     return {
