@@ -17,8 +17,8 @@
   export let particlesShown;
   export let simplifiedMode;
 
-  let griddedNames = gDatasets.map(dataset => dataset.name);
-  let particleNames = pDatasets.map(dataset => dataset.name);
+  $: griddedNames = gDatasets.map(dataset => dataset.name);
+  $: particleNames = pDatasets.map(dataset => dataset.name);
 
   $: tFilters =     topicFilters[simplifiedMode ? 'simple' : 'normal'];
   $: vFilters =  variableFilters[simplifiedMode ? 'simple' : 'normal'];
