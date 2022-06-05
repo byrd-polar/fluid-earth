@@ -23,18 +23,15 @@
   import Surface from './overlays/Surface.svelte';
 
   import Fetcher from './fetcher.js';
+  import { GriddedDataset, ParticleDataset } from './datasets.js';
   import {
     validDate, validCloseDate, validUnit,
     simplifyDataset,
   } from './utility.js';
   import { currentDate, mobile } from './stores.js';
 
-  import { GriddedDataset, ParticleDataset } from './datasets.js';
-
   import { onMount } from 'svelte';
-  import { Float16Array } from '@petamoriken/float16';
   import ky from 'ky';
-
 
   const minZoom = 0.375;
   const maxZoom = 24;
@@ -161,9 +158,15 @@
   $: applyMode(simplifiedMode);
 
   onMount(async () => {
-    // Load topology (lines on globe) data completely first
-    vectorData = await ky('/tera/topology.json.br', {timeout: false}).json();
+    await Promise.all([loadTopology(), loadDatasets()]);
+    removeSplash();
+  });
 
+  async function loadTopology() {
+    vectorData = await ky('/tera/topology.json.br', {timeout: false}).json();
+  }
+
+  async function loadDatasets() {
     let inventory = await ky('/tera/inventory.json.br', {
       timeout: false,
       headers: { 'Cache-Control': 'no-cache' },
@@ -252,8 +255,10 @@
       particleAssignments = () => {};
       initialLoad = false;
     }
+  }
 
-    // fade out and remove splash screen from public/index.html after loading
+  function removeSplash() {
+    // fade out and remove splash screen from index.html after loading
     const splashElement = document.getElementById('splash');
     if (splashElement) {
       splashElement.classList.add('faded');
@@ -262,7 +267,7 @@
         1000 * parseFloat(getComputedStyle(splashElement)['transitionDuration'])
       );
     }
-  });
+  }
 
   $: date, updateGriddedData(griddedDataset);
   $: date, particlesShown, updateParticleData(particleDataset);
