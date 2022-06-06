@@ -10,7 +10,7 @@ const emptyDataArray = new Float16Array([-Infinity])
 
 class Dataset {
   constructor(core)  { this.core = core ?? {} }
-  get name()         { return this.core.name ?? 'empty dataset' }
+  get name()         { return this.core.name ?? 'none' }
   get path()         { return this.core.path ?? null }
   get width()        { return this.core.width ?? 1 }
   get height()       { return this.core.height ?? 1 }
@@ -34,8 +34,8 @@ export class GriddedDataset extends Dataset {
   get type()         { return 'gridded' }
   get colormap()     { return colormaps[this.core.colormap ?? 'VIRIDIS'] }
   get domain()       { return this.core.domain ?? [0, 1] }
-  get unit()         { return this.core.unit ?? 'm' }
-  get originalUnit() { return this.core.originalUnit ?? 'm' }
+  get unit()         { return this.core.unit ?? 'unitless' }
+  get originalUnit() { return this.core.originalUnit ?? 'unitless' }
   get scale()        { return this.core.scale ?? 'linear' }
 
   get dataProps() {
@@ -72,7 +72,7 @@ export class GriddedDataset extends Dataset {
 export class ParticleDataset extends Dataset {
   get type()             { return 'particle' }
   get particleLifetime() { return this.core.particleLifetime ?? 0 }
-  get particleCount()    { return this.core.particleCount ?? 0 }
+  get particleCount()    { return this.core.particleCount ?? 1 }
   get particleDisplay()  { return this.core.particleDisplay ?? zeroProxy }
   get bytesPerFile()     { return 2 * super.bytesPerFile }
 
