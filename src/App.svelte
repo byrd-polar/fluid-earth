@@ -30,7 +30,7 @@
   } from './utility.js';
   import { currentDate, mobile } from './stores.js';
 
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import ky from 'ky';
 
   const minZoom = 0.375;
@@ -40,6 +40,8 @@
   const maxLat = 90;
   const minLong = -360;
   const maxLong = 360;
+
+  let hashEnabled = false;
 
   let openedMenu = null;
   let drawerOpen = false;
@@ -183,6 +185,9 @@
       = pDatasets.find(d => d.name === 'wind at 10 m above ground')
      ?? pDatasets[0];
 
+    hashEnabled = true;
+    await tick(); // wait for Hash to update application state
+
     setGriddedVariables(griddedDataset, simplifiedMode);
     setParticleVariables(particleDataset);
 
@@ -301,6 +306,7 @@
   bind:variable={variable}
 -->
 <Hash
+  {hashEnabled}
   bind:date
   bind:griddedDataset
   bind:particleDataset
