@@ -96,6 +96,7 @@
   };
   // Keep griddedUnit in sync with griddedData, not griddedDataset
   $: griddedUnit = validUnit(griddedData.unit, preferredUnits);
+  $: griddedOriginalUnit = griddedData.originalUnit;
 
   let particleData = ParticleDataset.emptyData;
 
@@ -134,8 +135,6 @@
     griddedDomain = dataset.domain;
     griddedScale = dataset.scale;
     griddedColormap = dataset.colormap;
-    griddedOriginalUnit = dataset.originalUnit;
-    griddedUnit = validUnit(dataset.unit, preferredUnits);
 
     previousGriddedDataset = dataset;
   }

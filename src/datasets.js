@@ -34,8 +34,8 @@ export class GriddedDataset extends Dataset {
   get type()         { return 'gridded' }
   get colormap()     { return colormaps[this.core.colormap ?? 'VIRIDIS'] }
   get domain()       { return this.core.domain ?? [0, 1] }
-  get unit()         { return this.core.unit ?? 'unitless' }
-  get originalUnit() { return this.core.originalUnit ?? 'unitless' }
+  get unit()         { return this.core.unit ?? '' }
+  get originalUnit() { return this.core.originalUnit ?? '' }
   get scale()        { return this.core.scale ?? 'linear' }
 
   get dataProps() {
