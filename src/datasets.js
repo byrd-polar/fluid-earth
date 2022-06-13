@@ -55,7 +55,7 @@ export class GriddedDataset extends Dataset {
   static filter(inventory) {
     return inventory
       .filter(d => d.colormap)
-      .map(d => new GriddedDataset(d));
+      .map(d => new GriddedDataset(d))
   }
 
   async fetch(fetcher, date) {
@@ -92,7 +92,7 @@ export class ParticleDataset extends Dataset {
   static filter(inventory) {
     return inventory
       .filter(d => d.particleDisplay)
-      .map(d => new ParticleDataset(d));
+      .map(d => new ParticleDataset(d))
   }
 
   async fetch(fetcher, date) {
