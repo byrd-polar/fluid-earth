@@ -49,9 +49,7 @@ class Dataset {
     let url = __fev2r_api__ + this.path + dateString + '.fp16.br'
 
     // workaround for ':' being an illegal character for filenames on Windows,
-    if (__using_local_data_files__ && __windows__) {
-      url = url.replace(/:/g, '_');
-    }
+    if (__using_local_data_files__ && __windows__) url = url.replace(/:/g, '_')
 
     let byteArray = new Uint8Array(this.bytesPerFile)
     let offset = 0
