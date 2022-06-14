@@ -10,7 +10,7 @@
   }];
   let closed = true;
 
-  addDatasetFetchListener((progress, total) => {
+  addDatasetFetchListener(({ progress, total }) => {
     closed = (total === 0);
     series[0].perc = closed ? 0 : Math.floor(100 * progress / total);
   });

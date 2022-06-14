@@ -31,12 +31,11 @@ class Dataset {
 
   fetchCache = {}
 
-  static progress = 0
-  static total = 0
+  static fetchStatus = { progress: 0, total: 0 }
   static fetchListeners = []
 
   static notifyFetchListeners() {
-    this.fetchListeners.forEach(f => f(this.progress, this.total))
+    this.fetchListeners.forEach(f => f(this.fetchStatus))
   }
 
   async fetchData(date, signal) {
@@ -56,7 +55,9 @@ class Dataset {
 
     let values = []
     let thisProgress = 0
-    this.constructor.total += this.bytesPerFile
+    let status = this.constructor.fetchStatus
+
+    status.total += this.bytesPerFile
     this.constructor.notifyFetchListeners()
 
     try {
@@ -72,19 +73,19 @@ class Dataset {
 
         values.push(value)
         thisProgress += value.byteLength
-        this.constructor.progress += value.byteLength
+        status.progress += value.byteLength
         this.constructor.notifyFetchListeners()
       }
 
     } catch(e) {
-      this.constructor.total -= this.bytesPerFile
-      this.constructor.progress -= thisProgress
+      status.total -= this.bytesPerFile
+      status.progress -= thisProgress
       throw e
 
     } finally {
-      if (this.constructor.progress === this.constructor.total) {
-        this.constructor.progress = 0
-        this.constructor.total = 0
+      if (status.progress === status.total) {
+        status.progress = 0
+        status.total = 0
       }
       this.constructor.notifyFetchListeners()
     }
