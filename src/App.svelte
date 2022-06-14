@@ -22,7 +22,6 @@
   import Loading from './overlays/Loading.svelte';
   import Surface from './overlays/Surface.svelte';
 
-  import Fetcher from './fetcher.js';
   import { GriddedDataset, ParticleDataset } from './datasets.js';
   import {
     validDate, validCloseDate, validUnit,
@@ -48,8 +47,6 @@
 
   let simplifiedMode = true;
   let kioskMode = false;
-
-  const fetcher = new Fetcher();
 
   let gDatasets = [new GriddedDataset()];
   let pDatasets = [new ParticleDataset()];
@@ -196,13 +193,13 @@
 
     let griddedLoading = false;
     let particleLoading = false;
+    let griddedController;
+    let particleController;
     let griddedAssignments = () => {};
     let particleAssignments = () => {};
     let initialLoad = true;
 
     updateGriddedData = async (griddedDataset) => {
-      griddedLoading = true;
-
       // Ensure that original date is switched back to if switching to and back
       // from a griddedDataset with different values from validDate
       if (anchorDate.getTime() !== date.getTime()) {
@@ -214,8 +211,21 @@
         date = valid;
       }
 
-      let data = await griddedDataset.fetch(fetcher, date);
-      griddedLoading = false;
+      griddedController?.abort();
+      griddedController = new AbortController();
+      let { signal } = griddedController;
+
+      griddedLoading = true;
+
+      let data;
+      try {
+        data = await griddedDataset.fetchData(date, signal);
+      } catch(e) {
+        if (e.name === 'AbortError') return;
+        data = GriddedDataset.emptyData;
+      } finally {
+        griddedLoading = false;
+      }
 
       griddedAssignments = () => {
         griddedData = data;
@@ -235,10 +245,21 @@
 
       if (!particlesShown) return;
 
+      particleController?.abort();
+      particleController = new AbortController();
+      let { signal } = particleController;
+
       particleLoading = true;
 
-      let data = await particleDataset.fetch(fetcher, valid);
-      particleLoading = false;
+      let data;
+      try {
+        data = await particleDataset.fetchData(valid, signal);
+      } catch(e) {
+        if (e.name === 'AbortError') return;
+        data = ParticleDataset.emptyData;
+      } finally {
+        particleLoading = false;
+      }
 
       particleAssignments = () => {
         particleData = data;
@@ -354,7 +375,6 @@
     bind:date
     {utc}
     {griddedDataset}
-    {fetcher}
     {simplifiedMode}
     bind:particlesShown
   />
@@ -455,7 +475,7 @@
       {griddedColormap}
       {kioskMode}
     />
-    <Loading {fetcher} />
+    <Loading />
     <Widgets
       bind:openedMenu
       {displayDate}

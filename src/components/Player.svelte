@@ -9,7 +9,6 @@
   import prettyMilliseconds from 'pretty-ms';
   import { tick } from 'svelte';
 
-  export let fetcher;
   export let validDates;
   export let utc;
   export let simplifiedMode;
@@ -35,6 +34,7 @@
 
   let playing = false;
   let loading = false;
+  let controller;
   let particlesOriginallyShown = particlesShown;
   let timeoutID;
   let value = 0;
@@ -58,18 +58,21 @@
     playing = true;
     loading = true;
 
-    let fetches = [];
-    for (const d of validDates) {
-      fetches.push(fetcher.fetch(griddedDataset, d, 'player', false));
+    controller = new AbortController();
+    let { signal } = controller;
+
+    try {
+      await Promise.all(validDates.map(d => {
+        return griddedDataset.fetchData(d, signal);
+      }));
+    } catch {
+      return
+    } finally {
+      loading = false;
     }
 
-    let results = await Promise.all(fetches);
-    loading = false;
-
-    if (results.every(r => r)) {
-      if (value >= maxValue || value < 0) value = 0;
-      timeoutID = window.setTimeout(loopDate, time);
-    }
+    if (value >= maxValue || value < 0) value = 0;
+    timeoutID = window.setTimeout(loopDate, time);
   }
 
   async function loopDate() {
@@ -92,7 +95,7 @@
   function pause() {
     if (!playing) return;
 
-    if (loading) fetcher.abort('player');
+    if (loading) controller.abort();
 
     window.clearTimeout(timeoutID);
     playing = false;

@@ -1,7 +1,6 @@
 <script>
   import ProgressBar from '@okrad/svelte-progressbar';
-
-  export let fetcher;
+  import { addDatasetFetchListener } from '../datasets.js';
 
   let series = [{
     perc: 0,
@@ -11,10 +10,9 @@
   }];
   let closed = true;
 
-  fetcher.addDownloadListener(p => {
-    closed = (p.transferredBytes === p.totalBytes);
-    series[0].perc =
-      closed ? 0 : Math.floor(100 * p.transferredBytes / p.totalBytes);
+  addDatasetFetchListener((progress, total) => {
+    closed = (total === 0);
+    series[0].perc = closed ? 0 : Math.floor(100 * progress / total);
   });
 </script>
 

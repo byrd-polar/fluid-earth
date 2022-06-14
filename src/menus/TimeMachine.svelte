@@ -8,7 +8,6 @@
   export let date;
   export let utc;
   export let griddedDataset;
-  export let fetcher;
   export let simplifiedMode;
   export let particlesShown;
 
@@ -36,7 +35,6 @@
 <details>
 <summary><h2>Timelapse</h2></summary>
 <Player
-  {fetcher}
   {utc}
   {simplifiedMode}
   {validDates}
