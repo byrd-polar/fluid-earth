@@ -53,8 +53,8 @@ class Dataset {
       url = url.replace(/:/g, '_');
     }
 
-    let values = []
-    let thisProgress = 0
+    let byteArray = new Uint8Array(this.bytesPerFile)
+    let offset = 0
     let status = this.constructor.fetchStatus
 
     status.total += this.bytesPerFile
@@ -71,8 +71,8 @@ class Dataset {
         let { done, value } = await reader.read()
         if (done) break
 
-        values.push(value)
-        thisProgress += value.byteLength
+        byteArray.set(value, offset)
+        offset += value.byteLength
         status.progress += value.byteLength
         this.constructor.notifyFetchListeners()
       }
@@ -90,8 +90,7 @@ class Dataset {
       this.constructor.notifyFetchListeners()
     }
 
-    let buffer = await new Blob(values).arrayBuffer()
-    let data = this.bufferToData(buffer)
+    let data = this.bufferToData(byteArray.buffer)
     this.fetchCache[dateString] = data
     return data
   }
