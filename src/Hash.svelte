@@ -3,8 +3,7 @@
   import { clamp, modulo } from './math.js';
   import { validDate } from './utility.js';
   import projections from './map/projections/';
-
-  export let hashEnabled;
+  import { onMount } from 'svelte';
 
   export let date;
   export let griddedDataset;
@@ -41,17 +40,15 @@
   };
   $: debouncedSetHashFromAppState(stateObj);
 
-  $: if (hashEnabled) setAppStateFromHash();
+  onMount(setAppStateFromHash);
 
   function setHashFromAppState(stateObj) {
-    if (!hashEnabled) return;
-
     let hash = new URLSearchParams(stateObj);
     window.history.replaceState(null, '', `#${hash}`);
   }
 
   function setAppStateFromHash() {
-    if (!hashEnabled || !window.location.hash) return;
+    if (!window.location.hash) return;
 
     let hash = new URLSearchParams(window.location.hash.slice(1));
 

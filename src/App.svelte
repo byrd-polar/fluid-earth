@@ -32,6 +32,9 @@
   import { onMount, tick } from 'svelte';
   import ky from 'ky';
 
+  export let gDatasets;
+  export let pDatasets;
+
   const minZoom = 0.375;
   const maxZoom = 24;
 
@@ -40,18 +43,19 @@
   const minLong = -360;
   const maxLong = 360;
 
-  let hashEnabled = false;
-
   let openedMenu = null;
   let drawerOpen = false;
 
   let simplifiedMode = true;
   let kioskMode = false;
 
-  let gDatasets = [GriddedDataset.none];
-  let pDatasets = [ParticleDataset.none];
-  let griddedDataset = gDatasets[0];
-  let particleDataset = pDatasets[0];
+  let griddedDataset
+    = gDatasets.find(d => d.name === 'temperature at 2 m above ground')
+    ?? gDatasets[0];
+
+  let particleDataset
+    = pDatasets.find(d => d.name === 'wind at 10 m above ground')
+    ?? pDatasets[0];
 
   let date = (__production__ || !__using_local_data_files__) ?
     validDate(griddedDataset, $currentDate) :
@@ -165,28 +169,6 @@
   }
 
   async function loadDatasets() {
-    let inventory = await ky('/tera/inventory.json.br', {
-      timeout: false,
-      headers: { 'Cache-Control': 'no-cache' },
-    }).json();
-
-    gDatasets = [...GriddedDataset.filter(inventory), ...gDatasets];
-    pDatasets = [...ParticleDataset.filter(inventory), ...pDatasets];
-
-    griddedDataset
-      = gDatasets.find(d => d.name === 'temperature at 2 m above ground')
-     ?? gDatasets[0];
-
-    particleDataset
-      = pDatasets.find(d => d.name === 'wind at 10 m above ground')
-     ?? pDatasets[0];
-
-    hashEnabled = true;
-    await tick(); // wait for Hash to update application state
-
-    setGriddedVariables(griddedDataset, simplifiedMode);
-    setParticleVariables(particleDataset);
-
     // Methods for updating gridded and particle data in response to date or
     // dataset changes. Defined here so that they aren't triggered multiple
     // times during the initial mount due to a Svelte bug with bindings.
@@ -326,7 +308,6 @@
   bind:variable={variable}
 -->
 <Hash
-  {hashEnabled}
   bind:date
   bind:griddedDataset
   bind:particleDataset

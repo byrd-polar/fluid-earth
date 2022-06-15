@@ -1,3 +1,8 @@
+export async function fetchJson(url, options) {
+  let response = await fetch(url, options);
+  return await response.json();
+}
+
 // Returns the closest valid date from the dataset relative to the given date
 export function validDate(dataset, date, oscarOptions={}) {
   if (date <= dataset.start) return dataset.start;
