@@ -48,8 +48,8 @@
   let simplifiedMode = true;
   let kioskMode = false;
 
-  let gDatasets = [new GriddedDataset()];
-  let pDatasets = [new ParticleDataset()];
+  let gDatasets = [GriddedDataset.none];
+  let pDatasets = [ParticleDataset.none];
   let griddedDataset = gDatasets[0];
   let particleDataset = pDatasets[0];
 

@@ -99,6 +99,8 @@ export function addDatasetFetchListener(f) {
 }
 
 export class GriddedDataset extends Dataset {
+  static none = new GriddedDataset()
+
   get type()         { return 'gridded' }
   get colormap()     { return colormaps[this.core.colormap ?? 'VIRIDIS'] }
   get domain()       { return this.core.domain ?? [0, 1] }
@@ -135,6 +137,8 @@ export class GriddedDataset extends Dataset {
 }
 
 export class ParticleDataset extends Dataset {
+  static none = new ParticleDataset()
+
   get type()             { return 'particle' }
   get particleLifetime() { return this.core.particleLifetime ?? 0 }
   get particleCount()    { return this.core.particleCount ?? 1 }
