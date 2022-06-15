@@ -149,13 +149,13 @@
   }
 
   div.spacer {
+    z-index: 1;
     width: 100%;
     position: absolute;
     padding-bottom: 1em;
   }
 
   div.dropdown {
-    z-index: 1;
     padding-top: 0.25em;
     background-color: var(--input-color-opaque);
     box-shadow: 0 1px 1px black;
