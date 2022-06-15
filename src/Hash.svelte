@@ -1,9 +1,9 @@
 <script>
   import debounce from 'debounce';
+  import { onMount, tick } from 'svelte';
   import { clamp, modulo } from './math.js';
   import { validDate } from './utility.js';
   import projections from './map/projections/';
-  import { onMount } from 'svelte';
 
   export let date;
   export let griddedDataset;
@@ -40,9 +40,20 @@
   };
   $: debouncedSetHashFromAppState(stateObj);
 
-  onMount(setAppStateFromHash);
+  onMount(async () => {
+    await tick(); // fixes parts of app not updating on initial load
+    setAppStateFromHash();
+  });
+
+  let initialPageLoad = true;
 
   function setHashFromAppState(stateObj) {
+    // avoid setting the hash based on initial value if hash already exists
+    if (initialPageLoad) {
+      initialPageLoad = false;
+      if (window.location.hash) return;
+    }
+
     let hash = new URLSearchParams(stateObj);
     window.history.replaceState(null, '', `#${hash}`);
   }
