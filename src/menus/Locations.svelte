@@ -1,8 +1,8 @@
 <script>
-  import ky from 'ky';
   import SearchBox from '../components/SearchBox.svelte';
   import LocationsList from '../components/LocationsList.svelte';
   import Tweener from '../tweener.js';
+  import { fetchJson } from '../utility.js';
   import { cubicOut } from 'svelte/easing';
 
   export let centerLongitude;
@@ -16,7 +16,7 @@
   let placeholder = 'Columbus, Ohio, United States';
 
   async function loadData() {
-    return ky('/tera/locations.json.br', {timeout: false}).json();
+    return fetchJson('/tera/locations.json.br');
   }
 
   async function onSelect(city) {

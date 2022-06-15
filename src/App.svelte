@@ -24,13 +24,13 @@
 
   import { GriddedDataset, ParticleDataset } from './datasets.js';
   import {
+    fetchJson,
     validDate, validCloseDate, validUnit,
     simplifyDataset,
   } from './utility.js';
   import { currentDate, mobile } from './stores.js';
 
   import { onMount, tick } from 'svelte';
-  import ky from 'ky';
 
   export let gDatasets;
   export let pDatasets;
@@ -165,7 +165,7 @@
   });
 
   async function loadTopology() {
-    vectorData = await ky('/tera/topology.json.br', {timeout: false}).json();
+    vectorData = await fetchJson('/tera/topology.json.br');
   }
 
   async function loadDatasets() {
