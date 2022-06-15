@@ -30,7 +30,7 @@
   } from './utility.js';
   import { currentDate, mobile } from './stores.js';
 
-  import { onMount, tick } from 'svelte';
+  import { onMount } from 'svelte';
 
   export let gDatasets;
   export let pDatasets;

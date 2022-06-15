@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from 'svelte';
   import IconButton from './components/IconButton.svelte';
   import ArrowLeft from 'carbon-icons-svelte/lib/ArrowLeft.svelte';
   import HeaderToggle from './components/HeaderToggle.svelte';
