@@ -1,9 +1,97 @@
-<script>
-  import debounce from 'debounce';
-  import { onMount, tick } from 'svelte';
+<script context="module">
   import { clamp, modulo } from './math.js';
   import { validDate } from './utility.js';
   import projections from './map/projections/';
+
+  export class HashAppState {
+    constructor(gDatasets, pDatasets, minZoom, maxZoom) {
+      this.gDatasets = gDatasets;
+      this.pDatasets = pDatasets;
+      this.minZoom = minZoom;
+      this.maxZoom = maxZoom;
+      this.refresh();
+    }
+
+    refresh() {
+      this.hash = new URLSearchParams(window.location.hash?.slice(1));
+    }
+
+    get date() {
+      let val = this.hash.has('date') ? new Date(this.hash.get('date')) : NaN;
+      return isNaN(val) || (this.gdata === undefined)
+        ? undefined
+        : validDate(this.gdata, val);
+    }
+
+    get gdata() {
+      return this.gDatasets.find(d => d.name === this.hash.get('gdata'));
+    }
+
+    get pdata() {
+      return this.pDatasets.find(d => d.name === this.hash.get('pdata'));
+    }
+
+    get pshow() {
+      let val = this.hash.get('pshow');
+      return (val === 'true' || val === 'false') ? (val === 'true') : undefined;
+    }
+
+    get proj() {
+      return Object.values(projections)
+        .find(p => p.name === this.hash.get('proj'));
+    }
+
+    get lat() {
+      let val = parseFloat(this.hash.get('lat'));
+      return isNaN(val) ? undefined : clamp(val, -90, 90);
+    }
+
+    get lon() {
+      let val = parseFloat(this.hash.get('lon'));
+      return isNaN(val) ? undefined : modulo(val, 360, -180);
+    }
+
+    get zoom() {
+      let val = parseFloat(this.hash.get('zoom'));
+      return isNaN(val) ? undefined : clamp(val, this.minZoom, this.maxZoom);
+    }
+
+    get smode() {
+      let val = this.hash.get('smode');
+      return (val === 'true' || val === 'false') ? (val === 'true') : undefined;
+    }
+
+    get kmode() {
+      let val = this.hash.get('kmode');
+      return (val === 'true' || val === 'false') ? (val === 'true') : undefined;
+    }
+
+    get pins() {
+      let val;
+      try { val = JSON.parse(this.hash.get('pins')); }
+      catch { return undefined; }
+
+      if (!Array.isArray(val)) return undefined;
+
+      return val
+        .filter(p => {
+          return typeof p.label === 'string'
+              && typeof p.latitude === 'number'
+              && typeof p.longitude === 'number';
+        })
+        .map(p => {
+          return {
+            label: p.label,
+            latitude: clamp(p.latitude, -90, 90),
+            longitude: modulo(p.longitude, 360, -180),
+          };
+        });
+    }
+  }
+</script>
+
+<script>
+  import debounce from 'debounce';
 
   export let date;
   export let griddedDataset;
@@ -40,105 +128,28 @@
   };
   $: debouncedSetHashFromAppState(stateObj);
 
-  onMount(async () => {
-    await tick(); // fixes parts of app not updating on initial load
-    setAppStateFromHash();
-  });
-
-  let initialPageLoad = true;
-
   function setHashFromAppState(stateObj) {
-    // avoid setting the hash based on initial value if hash already exists
-    if (initialPageLoad) {
-      initialPageLoad = false;
-      if (window.location.hash) return;
-    }
-
     let hash = new URLSearchParams(stateObj);
     window.history.replaceState(null, '', `#${hash}`);
   }
 
+  let hash = new HashAppState(gDatasets, pDatasets, minZoom, maxZoom);
+
   function setAppStateFromHash() {
-    if (!window.location.hash) return;
+    hash.refresh();
 
-    let hash = new URLSearchParams(window.location.hash.slice(1));
-
-    // for each variable, get value from hash, and update variable if valid
     let val;
-
-    val = gDatasets.find(d => d.name === hash.get('gdata'));
-    if (val) {
-      griddedDataset = val;
-    }
-
-    val = pDatasets.find(d => d.name === hash.get('pdata'));
-    if (val) {
-      particleDataset = val;
-    }
-
-    val = hash.get('pshow');
-    if (val === 'true' || val === 'false') {
-      particlesShown = (val === 'true');
-    }
-
-    val = Object.values(projections).find(p => p.name === hash.get('proj'));
-    if (val) {
-      projection = val;
-    }
-
-    val = parseFloat(hash.get('lat'));
-    if (!isNaN(val)) {
-      centerLatitude = clamp(val, -90, 90);
-    }
-
-    val = parseFloat(hash.get('lon'));
-    if (!isNaN(val)) {
-      centerLongitude = modulo(val, 360, -180);
-    }
-
-    val = parseFloat(hash.get('zoom'));
-    if (!isNaN(val)) {
-      zoom = clamp(val, minZoom, maxZoom);
-    }
-
-    val = hash.get('smode');
-    if (val === 'true' || val === 'false') {
-      simplifiedMode = (val === 'true');
-    }
-
-    val = hash.get('kmode');
-    if (val === 'true' || val === 'false') {
-      kioskMode = (val === 'true');
-    }
-
-    try {
-      val = JSON.parse(hash.get('pins'));
-    } catch {
-      val = false;
-    }
-    if (Array.isArray(val) && val.every(pin => {
-      let keys = Object.keys(pin);
-      let expectedKeys = ['label', 'longitude', 'latitude'];
-
-      return keys.length === expectedKeys.length
-          && expectedKeys.every(key => keys.includes(key))
-          && typeof pin.label === 'string'
-          && typeof pin.latitude === 'number'
-          && typeof pin.longitude === 'number';
-    })) {
-      pins = val.map(p => {
-        return {
-          label: p.label,
-          latitude: clamp(p.latitude, -90, 90),
-          longitude: modulo(p.longitude, 360, -180),
-        };
-      });
-    }
-
-    val = hash.has('date') ? new Date(hash.get('date')) : NaN;
-    if (!isNaN(val)) {
-      date = validDate(griddedDataset, val);
-    }
+    val = hash.date;  if (val !== undefined) date = val;
+    val = hash.gdata; if (val !== undefined) griddedDataset = val;
+    val = hash.pdata; if (val !== undefined) particleDataset = val;
+    val = hash.pshow; if (val !== undefined) particlesShown = val;
+    val = hash.proj;  if (val !== undefined) projection = val;
+    val = hash.lat;   if (val !== undefined) centerLatitude = val;
+    val = hash.lon;   if (val !== undefined) centerLongitude = val;
+    val = hash.zoom;  if (val !== undefined) zoom = val;
+    val = hash.smode; if (val !== undefined) simplifiedMode = val;
+    val = hash.kmode; if (val !== undefined) kioskMode = val;
+    val = hash.pins;  if (val !== undefined) pins = val;
 
     // fix any invalid parts of the URL
     setHashFromAppState(stateObj);

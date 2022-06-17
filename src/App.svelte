@@ -1,5 +1,5 @@
 <script>
-  import Hash from './Hash.svelte';
+  import Hash, { HashAppState } from './Hash.svelte';
   import Navbar from './Navbar.svelte';
   import Drawer from './Drawer.svelte';
   import Menu from './Menu.svelte';
@@ -23,6 +23,7 @@
   import Surface from './overlays/Surface.svelte';
 
   import { GriddedDataset, ParticleDataset } from './datasets.js';
+  import { randlon, randlat } from './math.js';
   import {
     fetchJson,
     validDate, validCloseDate, validUnit,
@@ -43,23 +44,27 @@
   const minLong = -360;
   const maxLong = 360;
 
+  let hash = new HashAppState(gDatasets, pDatasets, minZoom, maxZoom);
+
   let openedMenu = null;
   let drawerOpen = false;
 
-  let simplifiedMode = true;
-  let kioskMode = false;
+  let simplifiedMode = hash.smode ?? true;
+  let kioskMode = hash.kmode ?? false;
 
   let griddedDataset
-    = gDatasets.find(d => d.name === 'temperature at 2 m above ground')
+    = hash.gdata
+    ?? gDatasets.find(d => d.name === 'temperature at 2 m above ground')
     ?? gDatasets[0];
 
   let particleDataset
-    = pDatasets.find(d => d.name === 'wind at 10 m above ground')
+    = hash.pdata
+    ?? pDatasets.find(d => d.name === 'wind at 10 m above ground')
     ?? pDatasets[0];
 
-  let date = (__production__ || !__using_local_data_files__) ?
-    validDate(griddedDataset, $currentDate) :
-    griddedDataset.end;
+  let date = hash.date ?? (__production__ || !__using_local_data_files__)
+    ? validDate(griddedDataset, $currentDate)
+    : griddedDataset.end;
   let displayDate = date;
 
   // always equal to date unless date is re-assigned in updateGriddedData
@@ -69,13 +74,14 @@
   let updateGriddedData = () => {};
   let updateParticleData = () => {};
 
-  let projection = projections.VERTICAL_PERSPECTIVE;
+  let projection = hash.proj ?? projections.VERTICAL_PERSPECTIVE;
   let forwardProjectionFunction = projection.function;
   let inverseProjectionFunction = projection.function.invert;
   let canvasRatio = 1;
-  let centerLongitude = 360 * Math.random() - 180;
-  let centerLatitude = (180 / Math.PI) * Math.asin(2 * Math.random() - 1);
-  let zoom = 1.5;
+
+  let centerLongitude = hash.lon ?? randlon();
+  let centerLatitude = hash.lat ?? randlat();
+  let zoom = hash.zoom ?? 1.5;
   $: portraitBasedZoom = $mobile;
 
   let griddedData = GriddedDataset.emptyData;
@@ -110,7 +116,7 @@
     ne_50m_graticules_10: [255, 255, 255, 0.1],
   };
 
-  let particlesShown = true;
+  let particlesShown = hash.pshow ?? true;
   $: if (!particlesShown) {
     particleData = ParticleDataset.emptyData;
   }
@@ -121,7 +127,7 @@
   let particleDisplay = particleDataset.particleDisplay;
 
   let utc = false;
-  let pins = [];
+  let pins = hash.pins ?? [];
   let cursor = null;
 
   let previousGriddedDataset, previousParticleDataset;

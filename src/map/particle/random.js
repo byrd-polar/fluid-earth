@@ -1,8 +1,10 @@
+import { randlon, randlat } from '../../math.js';
+
 export function randomLongitudeArray(length) {
   let random = new Float32Array(length);
 
   for (let i = 0; i < random.length; i++) {
-    random[i] = 360 * Math.random() - 180;
+    random[i] = randlon();
   }
 
   return random;
@@ -12,7 +14,7 @@ export function randomLatitudeArray(length) {
   let random = new Float32Array(length);
 
   for (let i = 0; i < random.length; i++) {
-    random[i] = (180 / Math.PI) * Math.asin(2 * Math.random() - 1);
+    random[i] = randlat();
   }
 
   return random;
