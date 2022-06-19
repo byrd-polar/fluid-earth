@@ -116,10 +116,6 @@
     ne_50m_graticules_10: [255, 255, 255, 0.1],
   };
 
-  let particlesShown = hash.pshow ?? true;
-  $: if (!particlesShown) {
-    particleData = ParticleDataset.emptyData;
-  }
   let particleName = particleDataset.name;
   let particlesPaused = false;
   let particleLifetime = particleDataset.particleLifetime;
@@ -228,10 +224,8 @@
     updateParticleData = async (particleDataset) => {
       let valid = validCloseDate(particleDataset, date);
       if (!valid) {
-        particlesShown = false;
+        particleDataset = ParticleDataset.none;
       }
-
-      if (!particlesShown) return;
 
       particleController?.abort();
       particleController = new AbortController();
@@ -283,7 +277,7 @@
   }
 
   $: date, updateGriddedData(griddedDataset);
-  $: date, particlesShown, updateParticleData(particleDataset);
+  $: date, updateParticleData(particleDataset);
 
   // Find new icons from: https://ibm.github.io/carbon-icons-svelte/
   //
@@ -317,7 +311,6 @@
   bind:date
   bind:griddedDataset
   bind:particleDataset
-  bind:particlesShown
   bind:projection
   bind:centerLatitude
   bind:centerLongitude
@@ -353,17 +346,16 @@
     {pDatasets}
     bind:griddedDataset
     bind:particleDataset
-    bind:particlesShown
     {simplifiedMode}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Time Machine">
   <TimeMachine
     bind:date
+    bind:particleDataset
     {utc}
     {griddedDataset}
     {simplifiedMode}
-    bind:particlesShown
   />
 </Menu>
 <Menu bind:openedMenu menuName="Projections">
@@ -424,7 +416,6 @@
     {griddedDomain}
     {griddedScale}
     {particleData}
-    {particlesShown}
     {particlesPaused}
     {particleLifetime}
     {particleCount}
@@ -478,7 +469,6 @@
       {griddedUnit}
       bind:preferredUnits
       {particleName}
-      {particlesShown}
       {particleDisplay}
       bind:particlesPaused
       {simplifiedMode}

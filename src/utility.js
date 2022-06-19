@@ -5,6 +5,7 @@ export async function fetchJson(url, options) {
 
 // Returns the closest valid date from the dataset relative to the given date
 export function validDate(dataset, date, oscarOptions={}) {
+  if (dataset.name === 'none') return date;
   if (date <= dataset.start) return dataset.start;
   if (date >= dataset.end) return dataset.end;
 

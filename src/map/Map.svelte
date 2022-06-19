@@ -37,13 +37,17 @@
   export let griddedBaseColor = [38, 38, 38, 1]; // rgba greyish color
 
   export let particleData = {
-    uVelocities: new Float16Array([0]),
-    vVelocities: new Float16Array([0]),
+    uVelocities: new Float16Array([-Infinity]),
+    vVelocities: new Float16Array([-Infinity]),
     width: 1,
     height: 1,
     projection: dataProjections.GFS,
   };
-  export let particlesShown = false;
+
+  function isEmptyDataArray(arr) {
+    return arr.length === 1 && arr[0] === -Infinity;
+  }
+
   export let particlesPaused = false;
   export let particleLifetime = 1000; // milliseconds
   export let particleCount = 1e5;
@@ -142,11 +146,6 @@
       particleLifetime,
       particleDisplay,
     trailsNeedReset = true;
-
-  let particlesNeedClearing = false;
-  $: if (!particlesShown) {
-    particlesNeedClearing = true;
-  }
 
   onMount(() => {
     // Work around an issue with software-based webgl not being able to do blend
@@ -291,34 +290,27 @@
       backgroundNeedsRedraw = false;
     }
 
-    if (particlesShown) {
-      if (trailsNeedReset) {
-        particleSimulator.resetTrails();
-      }
-      if (!particlesPaused || (particlesPaused && trailsNeedReset)) {
-        particleSimulator.drawWithTrails(
-          sharedUniforms,
-          particleDisplay.size * (projection.particleSizeFactor || 1),
-          particleDisplay.opacity,
-          particleDisplay.opacitySpeedDecay,
-          particleDisplay.fade
-        );
-      }
-      if (!particlesPaused) {
-        particleSimulator.step(
-          sharedUniforms,
-          Math.min(timeDelta, 100),
-          particleDisplay.rate
-        );
-      }
-      if (trailsNeedReset) {
-        trailsNeedReset = false;
-      }
+    if (trailsNeedReset) {
+      particleSimulator.resetTrails();
     }
-
-    if (particlesNeedClearing) {
-      particleGl.clear(particleGl.COLOR_BUFFER_BIT);
-      particlesNeedClearing = false;
+    if (!particlesPaused || (particlesPaused && trailsNeedReset)) {
+      particleSimulator.drawWithTrails(
+        sharedUniforms,
+        particleDisplay.size * (projection.particleSizeFactor || 1),
+        particleDisplay.opacity,
+        particleDisplay.opacitySpeedDecay,
+        particleDisplay.fade
+      );
+    }
+    if (!particlesPaused) {
+      particleSimulator.step(
+        sharedUniforms,
+        Math.min(timeDelta, 100),
+        particleDisplay.rate
+      );
+    }
+    if (trailsNeedReset) {
+      trailsNeedReset = false;
     }
 
     requestAnimationFrame(render);

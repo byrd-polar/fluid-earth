@@ -4,7 +4,7 @@ const normal = {
   'currents':
     name => name.includes('currents'),
   'none':
-    name => true,
+    name => name === 'none',
 
   undefined: () => false,
 };

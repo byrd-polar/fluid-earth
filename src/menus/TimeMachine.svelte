@@ -8,8 +8,8 @@
   export let date;
   export let utc;
   export let griddedDataset;
+  export let particleDataset;
   export let simplifiedMode;
-  export let particlesShown;
 
   let playerActive, fps;
   let validDates = getValidDates(griddedDataset);
@@ -40,7 +40,7 @@
   {validDates}
   {griddedDataset}
   bind:date
-  bind:particlesShown
+  bind:particleDataset
   bind:sliding={playerActive}
   {fps}
 />

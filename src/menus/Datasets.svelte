@@ -14,7 +14,6 @@
   export let pDatasets;
   export let griddedDataset;
   export let particleDataset;
-  export let particlesShown;
   export let simplifiedMode;
 
   $: griddedNames = gDatasets.map(dataset => dataset.name);
@@ -39,16 +38,12 @@
     }
     previousTopic = topic;
   }
-  $: update(griddedDataset, particleDataset, particlesShown, simplifiedMode);
-  function update(
-    griddedDataset, particleDataset, particlesShown, simplifiedMode
-  ) {
+  $: update(griddedDataset, particleDataset, simplifiedMode);
+  function update(griddedDataset, particleDataset, simplifiedMode) {
     topic     =     topics.find(c => tFilters[c](griddedDataset.name));
     variable  =  variables.find(v => vFilters[v](griddedDataset.name));
     height    =    heights.find(h => hFilters[h](griddedDataset.name));
-    animation = animations.find(a => aFilters[a](
-      particlesShown ? particleDataset.name : ''
-    ));
+    animation = animations.find(a => aFilters[a](particleDataset.name));
   }
   $: gDataset = gDatasets.find(d => {
     return tFilters[topic](d.name)
@@ -57,7 +52,7 @@
   });
   $: pDataset = pDatasets.find(d => {
     return aFilters[animation](d.name)
-        && hFilters[height](d.name);
+        && (hFilters[height](d.name) || d.name === 'none');
   });
   $: topicOptions = topics.filter(t => t !== 'undefined');
   $: variableOptions = variables.filter(v => {
@@ -69,9 +64,8 @@
     return names.find(name => hFilters[h](name));
   });
   $: animationOptions = animations.filter(a => {
-    if (a === 'none') return true;
-
-    let datasets = pDatasets.filter(d => hFilters[height](d.name));
+    let datasets = pDatasets
+      .filter(d => hFilters[height](d.name) || d.name === 'none');
     return datasets.find(d => aFilters[a](d.name)
                            && gDataset
                            && validCloseDate(d, validDate(gDataset, date)));
@@ -92,7 +86,6 @@
   function updateDatasets() {
     if (gDataset && griddedDataset !== gDataset) griddedDataset = gDataset;
     if (pDataset && particleDataset !== pDataset) particleDataset = pDataset;
-    particlesShown = (animation !== 'none');
   }
 </script>
 

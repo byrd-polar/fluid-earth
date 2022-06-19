@@ -17,7 +17,6 @@
   export let maxZoom;
 
   export let particleName;
-  export let particlesShown;
   export let particleDisplay;
 
   export let griddedName;
@@ -53,17 +52,19 @@
     />
   {/if}
   <div class="bottom">
-    <GriddedLegend
-      {griddedName}
-      {griddedColormap}
-      {griddedDomain}
-      {griddedScale}
-      {griddedUnit}
-      {griddedOriginalUnit}
-      bind:preferredUnits
-      {simplifiedMode}
-    />
-    {#if particlesShown}
+    {#if griddedName !== 'none'}
+      <GriddedLegend
+        {griddedName}
+        {griddedColormap}
+        {griddedDomain}
+        {griddedScale}
+        {griddedUnit}
+        {griddedOriginalUnit}
+        bind:preferredUnits
+        {simplifiedMode}
+      />
+    {/if}
+    {#if particleName !== 'none'}
       {#if simplifiedMode}
         <SimpleStreamLegend
           {particleName}

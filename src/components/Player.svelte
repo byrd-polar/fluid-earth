@@ -4,6 +4,7 @@
   import Repeat from 'carbon-icons-svelte/lib/Repeat.svelte';
   import RepeatOne from 'carbon-icons-svelte/lib/RepeatOne.svelte';
   import RangeSlider from 'svelte-range-slider-pips';
+  import { ParticleDataset } from '../datasets.js';
   import tooltip from '../tooltip.js';
   import { capitalizeFirstLetter, simpleTranslate } from '../utility.js';
   import prettyMilliseconds from 'pretty-ms';
@@ -14,9 +15,9 @@
   export let simplifiedMode;
 
   export let griddedDataset;
+  export let particleDataset;
 
   export let date;
-  export let particlesShown;
   // used to enforce that updates to `date` from outside this component pause it
   export let sliding = false;
   export let fps = 5;
@@ -35,7 +36,7 @@
   let playing = false;
   let loading = false;
   let controller;
-  let particlesOriginallyShown = particlesShown;
+  let originalParticleDataset = particleDataset;
   let timeoutID;
   let value = 0;
   let repeat = false;
@@ -47,11 +48,11 @@
   $: time = 1000 / (fps || 1);
 
   $: value, slideDate();
-  $: validDates, particlesShown, pause();
+  $: validDates, particleDataset, pause();
 
   async function play() {
-    particlesOriginallyShown = particlesShown;
-    particlesShown = false;
+    originalParticleDataset = particleDataset;
+    particleDataset = ParticleDataset.none;
 
     await tick();
 
@@ -99,7 +100,7 @@
 
     window.clearTimeout(timeoutID);
     playing = false;
-    if (!particlesShown) particlesShown = particlesOriginallyShown;
+    particleDataset = originalParticleDataset;
   }
 
   async function slideDate() {
@@ -126,12 +127,12 @@
 
   function handleStart() {
     pause();
-    particlesOriginallyShown = particlesShown;
-    particlesShown = false;
+    originalParticleDataset = particleDataset;
+    particleDataset = ParticleDataset.none;
   }
 
   function handleStop() {
-    particlesShown = particlesOriginallyShown;
+    particleDataset = originalParticleDataset;
   }
 </script>
 

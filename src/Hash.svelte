@@ -1,4 +1,5 @@
 <script context="module">
+  import { ParticleDataset } from './datasets.js';
   import { clamp, modulo } from './math.js';
   import { validDate } from './utility.js';
   import projections from './map/projections/';
@@ -28,9 +29,12 @@
     }
 
     get pdata() {
-      return this.pDatasets.find(d => d.name === this.hash.get('pdata'));
+      return this.pshow
+        ? ParticleDataset.none
+        : this.pDatasets.find(d => d.name === this.hash.get('pdata'));
     }
 
+    // no longer used in hash output, kept to transition old hash urls to new
     get pshow() {
       let val = this.hash.get('pshow');
       return (val === 'true' || val === 'false') ? (val === 'true') : undefined;
@@ -96,7 +100,6 @@
   export let date;
   export let griddedDataset;
   export let particleDataset;
-  export let particlesShown;
   export let projection;
   export let centerLatitude;
   export let centerLongitude;
@@ -117,7 +120,6 @@
     date:   date.toISOString(),
     gdata:  griddedDataset.name,
     pdata:  particleDataset.name,
-    pshow:  particlesShown,
     proj:   projection.name,
     lat:    centerLatitude.toFixed(2),
     lon:    centerLongitude.toFixed(2),
@@ -142,7 +144,6 @@
     val = hash.date;  if (val !== undefined) date = val;
     val = hash.gdata; if (val !== undefined) griddedDataset = val;
     val = hash.pdata; if (val !== undefined) particleDataset = val;
-    val = hash.pshow; if (val !== undefined) particlesShown = val;
     val = hash.proj;  if (val !== undefined) projection = val;
     val = hash.lat;   if (val !== undefined) centerLatitude = val;
     val = hash.lon;   if (val !== undefined) centerLongitude = val;
