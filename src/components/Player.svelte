@@ -67,7 +67,7 @@
         return griddedDataset.fetchData(d, signal);
       }));
     } catch {
-      return
+      return;
     } finally {
       loading = false;
     }

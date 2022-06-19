@@ -206,6 +206,7 @@
         data = await griddedDataset.fetchData(date, signal);
       } catch(e) {
         if (e.name === 'AbortError') return;
+        console.error(e);
         data = GriddedDataset.emptyData;
       } finally {
         griddedLoading = false;

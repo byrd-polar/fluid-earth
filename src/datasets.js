@@ -77,7 +77,7 @@ class Dataset {
 
     } catch(e) {
       status.total -= this.bytesPerFile
-      status.progress -= thisProgress
+      status.progress -= offset
       throw e
 
     } finally {
