@@ -199,7 +199,9 @@ export default class ParticleSimulator {
 
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsA);
     this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+
     twgl.bindFramebufferInfo(this._gl, null);
+    this._gl.clear(this._gl.COLOR_BUFFER_BIT);
   }
 
   _createPrograms() {

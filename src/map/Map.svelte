@@ -292,8 +292,10 @@
 
     if (trailsNeedReset) {
       particleSimulator.resetTrails();
+      trailsNeedReset = false;
     }
-    if (!particlesPaused || (particlesPaused && trailsNeedReset)) {
+
+    if (!particlesPaused) {
       particleSimulator.drawWithTrails(
         sharedUniforms,
         particleDisplay.size * (projection.particleSizeFactor || 1),
@@ -301,16 +303,11 @@
         particleDisplay.opacitySpeedDecay,
         particleDisplay.fade
       );
-    }
-    if (!particlesPaused) {
       particleSimulator.step(
         sharedUniforms,
         Math.min(timeDelta, 100),
         particleDisplay.rate
       );
-    }
-    if (trailsNeedReset) {
-      trailsNeedReset = false;
     }
 
     requestAnimationFrame(render);
