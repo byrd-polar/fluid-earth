@@ -141,7 +141,7 @@ export class ParticleDataset extends Dataset {
 
   get type()             { return 'particle' }
   get particleLifetime() { return this.core.particleLifetime ?? 0 }
-  get particleCount()    { return this.core.particleCount ?? 1 }
+  get particleCount()    { return this.core.particleCount ?? 0 }
   get particleDisplay()  { return this.core.particleDisplay ?? zeroProxy }
   get bytesPerFile()     { return 2 * super.bytesPerFile }
 

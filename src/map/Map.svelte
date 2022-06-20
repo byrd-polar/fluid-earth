@@ -122,7 +122,7 @@
 
   let particleSimulator = {};
   $: particleSimulator.data = particleData;
-  $: particleSimulator.count = particleCount;
+  $: particleSimulator.count = particleCount || 1;
   $: particleSimulator.lifetime = particleLifetime;
 
   let backgroundNeedsRedraw;
@@ -183,12 +183,12 @@
     });
 
     let particleSimulatorOptions = {
-      count: particleCount,
+      count: particleCount || 1,
       lifetime: particleLifetime,
       data: particleData,
       majorPerformanceCaveat: majorPerformanceCaveat,
       webgl2: webgl2,
-    }
+    };
 
     // Use a different particle simulator for older devices that don't support
     // rendering to float textures at all and for mobile devices because of
@@ -295,7 +295,7 @@
       trailsNeedReset = false;
     }
 
-    if (!particlesPaused) {
+    if (!particlesPaused && particleCount !== 0) {
       particleSimulator.drawWithTrails(
         sharedUniforms,
         particleDisplay.size * (projection.particleSizeFactor || 1),
