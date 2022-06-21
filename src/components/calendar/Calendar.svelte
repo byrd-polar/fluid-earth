@@ -3,7 +3,7 @@
   import ChevronRight from 'carbon-icons-svelte/lib/ChevronRight.svelte';
   import ChipGroup from '../ChipGroup.svelte';
   import { validDate } from '../../utility.js';
-  import { ZonedDateTime, multiply } from './miniTemporal.js';
+  import { ZonedDateTime, multiply } from '../../temporal.js';
   import { tick } from 'svelte';
 
   import * as yearPicker from './yearPicker.js';

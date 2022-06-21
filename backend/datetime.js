@@ -1,4 +1,4 @@
-import { ZonedDateTime } from '../src/components/calendar/miniTemporal.js';
+import { ZonedDateTime } from '../src/temporal.js';
 import { nextOscarDate } from '../src/oscar.js';
 
 export class Datetime extends ZonedDateTime {
