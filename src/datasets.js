@@ -39,7 +39,12 @@ class Dataset {
   get end()          { return new Date(this.core.end ?? new Date()) }
   get missing()      { return (this.core.missing ?? []).map(d => new Date(d)) }
   get interval()     {
-    return intervals[this.core.interval] ?? intervals['custom:NONE']
+    switch(this.core.intervalInHours) {
+      case 1: return intervals.hourly
+      case 24: return intervals.daily
+      case 'custom:OSCAR': return intervals['custom:OSCAR']
+      default: return intervals[this.core.interval] ?? intervals['custom:NONE']
+    }
   }
   get projection()   { return dataProjections[this.core.projection ?? 'GFS'] }
   get bytesPerFile() { return this.width * this.height * 2 }
