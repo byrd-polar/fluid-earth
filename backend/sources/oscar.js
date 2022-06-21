@@ -8,7 +8,7 @@ const reference_datetime = Datetime.from('1992-10-05');
 const shared_metadata = {
   width: 1201,
   height: 481,
-  intervalInHours: 'custom:OSCAR',
+  interval: 'custom:OSCAR',
   projection: 'OSCAR',
 };
 

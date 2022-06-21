@@ -7,7 +7,7 @@ import { rm } from 'fs/promises';
 const shared_metadata = {
   width: 1152,
   height: 721,
-  intervalInHours: 1,
+  interval: 'hourly',
   projection: 'GEOS',
 };
 

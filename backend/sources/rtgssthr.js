@@ -12,7 +12,7 @@ const metadata = {
   colormap: 'THERMAL',
   width: 4320,
   height: 2160,
-  intervalInHours: 24,
+  interval: 'daily',
   projection: 'RTGSSTHR',
 };
 

@@ -2,7 +2,6 @@
   import ChevronLeft from 'carbon-icons-svelte/lib/ChevronLeft.svelte';
   import ChevronRight from 'carbon-icons-svelte/lib/ChevronRight.svelte';
   import ChipGroup from '../ChipGroup.svelte';
-  import { validDate } from '../../utility.js';
   import { ZonedDateTime, multiply } from '../../temporal.js';
   import { tick } from 'svelte';
 
@@ -61,7 +60,7 @@
       preserveUTCMonth: utc && pickerMode === 'months',
     };
 
-    return validDate(griddedDataset, blend, opts);
+    return griddedDataset.closestValidDate(blend, opts);
   }
 
   function isSelectedIf(box, date) {
@@ -122,7 +121,7 @@
       excludedDate: date,
     };
 
-    date = validDate(griddedDataset, newDate, opts);
+    date = griddedDataset.closestValidDate(newDate, opts);
     await focusOnSelected();
   }
 

@@ -7,7 +7,7 @@ import { readFile, rm } from 'fs/promises';
 export const shared_metadata = {
   width: 1440,
   height: 721,
-  intervalInHours: 1,
+  interval: 'hourly',
   projection: 'GFS',
 };
 

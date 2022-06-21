@@ -3,77 +3,15 @@ export async function fetchJson(url, options) {
   return response.json();
 }
 
-// Returns the closest valid date from the dataset relative to the given date
-export function validDate(dataset, date, oscarOptions={}) {
-  if (dataset.name === 'none') return date;
-  if (date <= dataset.start) return dataset.start;
-  if (date >= dataset.end) return dataset.end;
+export function findClosestDateInAscendingList(date, candidates) {
+  // can optimize by making this a binary search
+  let inflection = candidates.findIndex(c => c - date > 0);
+  if (inflection === 0) return candidates[0];
+  if (inflection === -1) return candidates[candidates.length - 1];
 
-  let {
-    preserveMonth=false,
-    preserveUTCMonth=false,
-    excludedDate=undefined,
-  } = oscarOptions;
-
-  let candidates;
-  if (dataset.interval === 'custom:OSCAR') {
-    candidates = getValidDates(dataset).filter(c => {
-      return (!preserveMonth || c.getMonth() === date.getMonth())
-          && (!preserveUTCMonth || c.getUTCMonth() === date.getUTCMonth())
-          && (!excludedDate || c.getTime() !== excludedDate.getTime());
-    });
-  } else if (dataset.missing.length > 0) {
-    candidates = getValidDates(dataset);
-  }
-  if (candidates) {
-    let inflection = candidates.findIndex(c => c - date > 0);
-    if (inflection === 0) return candidates[0];
-    if (inflection === -1) return candidates[candidates.length - 1];
-
-    candidates = candidates.slice(inflection - 1, inflection + 1);
-    candidates.sort((d1, d2) => Math.abs(date - d1) - Math.abs(date - d2));
-    return candidates[0];
-  }
-
-  let intervalInMilliseconds = (dataset.interval * 60 * 60 * 1000) || 1;
-  let n = Math.round((date - dataset.start) / intervalInMilliseconds);
-  return new Date(dataset.start.getTime() + intervalInMilliseconds * n);
-}
-
-// Same as validDate, except returns null if the closest date is not "close
-// enough", i.e. too before dataset.start or too after dataset.end
-export function validCloseDate(dataset, date) {
-  let closest = validDate(dataset, date);
-
-  let maxDistance;
-  if (dataset.interval === 'custom:OSCAR') {
-    maxDistance =  6 * 24 * 60 * 60 * 1000;
-  } else {
-    maxDistance = dataset.interval * 60 * 60 * 1000;
-  }
-  if (Math.abs(closest - date) > maxDistance) return null;
-
-  return closest;
-}
-
-import { validOscarDates } from './oscar.js';
-
-// Return a list of all the valid dates for a dataset
-export function getValidDates(dataset) {
-  if (dataset.interval === 'custom:OSCAR') {
-    return validOscarDates(dataset.start, dataset.end);
-  }
-
-  let dates = [];
-  let start = dataset.start.getTime();
-  let end = dataset.end.getTime();
-  let interval = dataset.interval * 60 * 60 * 1000;
-  for (let t = start; t <= end; t += interval) {
-    if (!dataset.missing?.some(d => d.valueOf() === t)) {
-      dates.push(new Date(t));
-    }
-  }
-  return dates;
+  candidates = candidates.slice(inflection - 1, inflection + 1);
+  candidates.sort((d1, d2) => Math.abs(date - d1) - Math.abs(date - d2));
+  return candidates[0];
 }
 
 import Qty from 'js-quantities/esm';

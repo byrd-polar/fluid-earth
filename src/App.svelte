@@ -24,11 +24,7 @@
 
   import { GriddedDataset, ParticleDataset } from './datasets.js';
   import { randlon, randlat } from './math.js';
-  import {
-    fetchJson,
-    validDate, validCloseDate, validUnit,
-    simplifyDataset,
-  } from './utility.js';
+  import { fetchJson, validUnit, simplifyDataset } from './utility.js';
   import { currentDate, mobile } from './stores.js';
 
   import { onMount } from 'svelte';
@@ -63,7 +59,7 @@
     ?? pDatasets[0];
 
   let date = hash.date ?? (__production__ || !__using_local_data_files__)
-    ? validDate(griddedDataset, $currentDate)
+    ? griddedDataset.closestValidDate($currentDate)
     : griddedDataset.end;
   let displayDate = date;
 
@@ -185,12 +181,12 @@
 
     updateGriddedData = async (griddedDataset) => {
       // Ensure that original date is switched back to if switching to and back
-      // from a griddedDataset with different values from validDate
+      // from a griddedDataset with different values for closestValidDate
       if (anchorDate.getTime() !== date.getTime()) {
         date = anchorDate;
       }
 
-      let valid = validDate(griddedDataset, date);
+      let valid = griddedDataset.closestValidDate(date);
       if (valid.getTime() !== date.getTime()) {
         date = valid;
       }
@@ -223,7 +219,7 @@
     };
 
     updateParticleData = async (particleDataset) => {
-      let valid = validCloseDate(particleDataset, date);
+      let valid = particleDataset.closestValidDate(date);
       if (!valid) {
         particleDataset = ParticleDataset.none;
       }

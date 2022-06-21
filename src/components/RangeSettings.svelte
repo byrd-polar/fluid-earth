@@ -1,5 +1,4 @@
 <script>
-  import { getValidDates } from '../utility.js';
   import prettyBytes from 'pretty-bytes';
 
   export let date;
@@ -13,7 +12,7 @@
 
   $: date, updateStart();
 
-  $: datesAfterStart = getValidDates(griddedDataset)
+  $: datesAfterStart = griddedDataset.computeValidDates()
     .filter(d => d >= start);
 
   $: validDates = datesAfterStart

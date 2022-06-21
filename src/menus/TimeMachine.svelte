@@ -3,7 +3,6 @@
   import Calendar from '../components/calendar/Calendar.svelte';
   import Player from '../components/Player.svelte';
   import RangeSettings from '../components/RangeSettings.svelte';
-  import { getValidDates } from '../utility.js';
 
   export let date;
   export let utc;
@@ -12,7 +11,7 @@
   export let simplifiedMode;
 
   let playerActive, fps;
-  let validDates = getValidDates(griddedDataset);
+  let validDates = griddedDataset.computeValidDates();
 </script>
 
 <details open>

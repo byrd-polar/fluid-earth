@@ -1,7 +1,6 @@
 <script context="module">
   import { ParticleDataset } from './datasets.js';
   import { clamp, modulo } from './math.js';
-  import { validDate } from './utility.js';
   import projections from './map/projections/';
 
   export class HashAppState {
@@ -21,7 +20,7 @@
       let val = this.hash.has('date') ? new Date(this.hash.get('date')) : NaN;
       return isNaN(val) || (this.gdata === undefined)
         ? undefined
-        : validDate(this.gdata, val);
+        : this.gdata.closestValidDate(val);
     }
 
     get gdata() {

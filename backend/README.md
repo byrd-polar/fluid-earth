@@ -29,7 +29,7 @@ key | value type | meaning | example
 `path` | path string | absolute path of data directory | `"/data/gfs-0p25-temperature-2-m-above-ground/"`
 `width` | integer | horizontal/longitude dimension of data | `1440`
 `height` | integer | vertical/latitude dimension of data | `721`
-`intervalInHours` | integer or `custom:*` string | hours between each data file (see `/src/utility.js`) | `1` or `"custom:OSCAR"`
+`interval` | string | time between each data file (see `/src/datasets.js`) | `hourly`
 `projection` | `dataProjection` string (see `/src/map/data-projections/index.js`) | conversion between row/col and lat/lon | `"GFS"`
 `start` | ISO date string | filename, excluding `.fp16.br` extension, of earliest data | `"2021-07-03T12:00:00.000Z"`
 `end` | ISO date string | filename, excluding `.fp16.br` extension, of most future data | `"2021-07-03T21:00:00.000Z"`

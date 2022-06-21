@@ -11,7 +11,7 @@ const name = 'reanalysis-era5-single-levels-monthly-means';
 const shared_metadata = {
   width: 1440,
   height: 721,
-  intervalInHours: 1,
+  interval: 'monthly-aggregate',
   projection: 'ERA5',
 };
 

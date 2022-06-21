@@ -1,6 +1,5 @@
 <script>
   import ChipGroup from '../components/ChipGroup.svelte';
-  import { validDate, validCloseDate } from '../utility.js';
   import { tick } from 'svelte';
 
   import topicFilters from './filters/topics.js';
@@ -66,9 +65,11 @@
   $: animationOptions = animations.filter(a => {
     let datasets = pDatasets
       .filter(d => hFilters[height](d.name) || d.name === 'none');
-    return datasets.find(d => aFilters[a](d.name)
-                           && gDataset
-                           && validCloseDate(d, validDate(gDataset, date)));
+    return datasets.find(d => {
+      return aFilters[a](d.name)
+          && gDataset
+          && d.closestValidDate(gDataset.closestValidDate(date));
+    });
   });
 
   async function handleSelect() {
