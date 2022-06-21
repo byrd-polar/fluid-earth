@@ -37,8 +37,8 @@
   export let griddedBaseColor = [38, 38, 38, 1]; // rgba greyish color
 
   export let particleData = {
-    uVelocities: new Float16Array([-Infinity]),
-    vVelocities: new Float16Array([-Infinity]),
+    uVelocities: new Float16Array([0]),
+    vVelocities: new Float16Array([0]),
     width: 1,
     height: 1,
     projection: dataProjections.GFS,

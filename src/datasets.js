@@ -6,7 +6,8 @@ import dataProjections, {
 import { Float16Array } from '@petamoriken/float16'
 
 const zeroProxy = new Proxy({}, { get() { return 0 } })
-const emptyDataArray = new Float16Array([-Infinity])
+const nanDataArray = new Float16Array([-Infinity])
+const zeroDataArray = new Float16Array([0])
 
 class Dataset {
   constructor(core)  { this.core = core ?? {} }
@@ -118,7 +119,7 @@ export class GriddedDataset extends Dataset {
   }
 
   static emptyData = {
-    floatArray: emptyDataArray,
+    floatArray: nanDataArray,
     ...new GriddedDataset().dataProps,
   }
 
@@ -153,8 +154,8 @@ export class ParticleDataset extends Dataset {
   }
 
   static emptyData = {
-    uVelocities: emptyDataArray,
-    vVelocities: emptyDataArray,
+    uVelocities: zeroDataArray,
+    vVelocities: zeroDataArray,
     ...new ParticleDataset().dataProps,
   }
 
