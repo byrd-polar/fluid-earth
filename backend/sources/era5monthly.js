@@ -47,13 +47,13 @@ const base_url = 'https://cds.climate.copernicus.eu/api/v2';
 
 async function verify_update_needed(name, dt, last_updated) {
   let ui_resources_url = `${base_url}.ui/resources/${name}`;
-  let { updated_date } = await get_json(ui_resources_url);
-  let getting_latest = dt >= Datetime.from(updated_date).round({
+  let { update_date } = await get_json(ui_resources_url);
+  let getting_latest = dt >= Datetime.from(update_date).round({
     smallestUnit: 'month',
     roundingMode: 'floor',
   });
-  if (last_updated === updated_date && getting_latest) throw 'No update needed';
-  return updated_date;
+  if (last_updated === update_date && getting_latest) throw 'No update needed';
+  return update_date;
 }
 
 async function download_cds(name, request, auth) {
