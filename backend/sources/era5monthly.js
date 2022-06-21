@@ -19,7 +19,7 @@ export async function forage(current_state, datasets) {
   let { date, last_updated } = current_state;
   let dt = date
     ? Datetime.from(date).add({ months: 1 })
-    : Datetime.from('1979-01-01');
+    : Datetime.from('1959-01-01');
   date = dt.to_iso_string();
   last_updated = await verify_update_needed(name, dt, last_updated);
 
