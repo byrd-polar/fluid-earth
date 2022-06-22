@@ -9,32 +9,33 @@ import { ZonedDateTime } from './temporal.js'
 import { findClosestDateInAscendingList } from './utility.js'
 import { Float16Array } from '@petamoriken/float16'
 
+const now = new Date()
 const zeroProxy = new Proxy({}, { get() { return 0 } })
 const nanDataArray = new Float16Array([-Infinity])
 const zeroDataArray = new Float16Array([0])
 
 class Dataset {
-  constructor(core)  { this.core = core ?? {} }
-  get name()         { return this.core.name ?? 'none' }
-  get path()         { return this.core.path ?? null }
-  get width()        { return this.core.width ?? 1 }
-  get height()       { return this.core.height ?? 1 }
-  get start()        { return new Date(this.core.start ?? new Date()) }
-  get end()          { return new Date(this.core.end ?? new Date()) }
-  get missing()      { return (this.core.missing ?? []).map(d => new Date(d)) }
-  get interval()     {
-    switch(this.core.intervalInHours) {
-      case 1: return intervals.hourly
-      case 24: return intervals.daily
-      case 'custom:OSCAR': return intervals['custom:OSCAR']
-      default: return intervals[this.core.interval] ?? intervals['custom:NONE']
-    }
-  }
-  get projection()   { return dataProjections[this.core.projection ?? 'GFS'] }
-  get bytesPerFile() { return this.width * this.height * 2 }
-
-  get dataProps() {
-    return {
+  constructor(core={}) {
+    this.core         = core
+    this.name         = core.name ?? 'none'
+    this.path         = core.path ?? null
+    this.width        = core.width ?? 1
+    this.height       = core.height ?? 1
+    this.start        = new Date(core.start ?? now)
+    this.end          = new Date(core.end ?? now)
+    this.interval     = (() => {
+      switch(core.intervalInHours) {
+        case 1: return intervals.hourly
+        case 24: return intervals.daily
+        case 'custom:OSCAR': return intervals['custom:OSCAR']
+        default: return intervals[core.interval] ?? intervals['custom:NONE']
+      }
+    })()
+    this.missing      = (core.missing ?? []).map(d => new Date(d))
+    this.validDates   = this.computeValidDates()
+    this.projection   = dataProjections[core.projection ?? 'GFS']
+    this.bytesPerFile = this.width * this.height * 2
+    this.dataProps    = {
       width: this.width,
       height: this.height,
       projection: this.projection,
@@ -120,7 +121,7 @@ class Dataset {
           excludedDate=undefined,
         } = oscarOptions
 
-        let candidates = this.computeValidDates().filter(c => {
+        let candidates = this.validDates.filter(c => {
           return (!preserveMonth || c.getMonth() === date.getMonth())
               && (!preserveUTCMonth || c.getUTCMonth() === date.getUTCMonth())
               && (!excludedDate || c.getTime() !== excludedDate.getTime())
@@ -133,7 +134,7 @@ class Dataset {
           .date
 
         return this.isMissingDate(closest)
-          ? findClosestDateInAscendingList(date, this.computeValidDates())
+          ? findClosestDateInAscendingList(date, this.validDates)
           : closest
     }
   }
@@ -170,19 +171,19 @@ export function addDatasetFetchListener(f) {
 export class GriddedDataset extends Dataset {
   static none = new GriddedDataset()
 
-  get type()         { return 'gridded' }
-  get colormap()     { return colormaps[this.core.colormap ?? 'VIRIDIS'] }
-  get domain()       { return this.core.domain ?? [0, 1] }
-  get unit()         { return this.core.unit ?? '' }
-  get originalUnit() { return this.core.originalUnit ?? '' }
-  get scale()        { return this.core.scale ?? 'linear' }
-
-  get dataProps() {
-    return {
+  constructor(core={}) {
+    super(core)
+    this.type         = 'gridded'
+    this.colormap     = colormaps[core.colormap ?? 'VIRIDIS']
+    this.domain       = core.domain ?? [0, 1]
+    this.unit         = core.unit ?? ''
+    this.originalUnit = core.originalUnit ?? ''
+    this.scale        = core.scale ?? 'linear'
+    this.dataProps    = {
       unit: this.unit,
       originalUnit: this.originalUnit,
       get(lonLat) { return singleArrayDataGet(this, lonLat) },
-      ...super.dataProps,
+      ...this.dataProps,
     }
   }
 
@@ -208,16 +209,16 @@ export class GriddedDataset extends Dataset {
 export class ParticleDataset extends Dataset {
   static none = new ParticleDataset()
 
-  get type()             { return 'particle' }
-  get particleLifetime() { return this.core.particleLifetime ?? 0 }
-  get particleCount()    { return this.core.particleCount ?? 0 }
-  get particleDisplay()  { return this.core.particleDisplay ?? zeroProxy }
-  get bytesPerFile()     { return 2 * super.bytesPerFile }
-
-  get dataProps() {
-    return {
+  constructor(core={}) {
+    super(core)
+    this.type             = 'particle'
+    this.particleLifetime = core.particleLifetime ?? 0
+    this.particleCount    = core.particleCount ?? 0
+    this.particleDisplay  = core.particleDisplay ?? zeroProxy
+    this.bytesPerFile     = 2 * this.bytesPerFile
+    this.dataProps        = {
       get(lonLat) { return pairedArrayDataGet(this, lonLat) },
-      ...super.dataProps,
+      ...this.dataProps,
     }
   }
 

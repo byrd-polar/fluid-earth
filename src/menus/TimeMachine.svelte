@@ -11,7 +11,7 @@
   export let simplifiedMode;
 
   let playerActive, fps;
-  let validDates = griddedDataset.computeValidDates();
+  let validDates = griddedDataset.validDates; // reactive via RangeSettings
 </script>
 
 <details open>

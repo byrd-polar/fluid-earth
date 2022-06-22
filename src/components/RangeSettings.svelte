@@ -12,8 +12,7 @@
 
   $: date, updateStart();
 
-  $: datesAfterStart = griddedDataset.computeValidDates()
-    .filter(d => d >= start);
+  $: datesAfterStart = griddedDataset.validDates.filter(d => d >= start);
 
   $: validDates = datesAfterStart
     .filter((_, i) => i % (interval || 1) === 0)

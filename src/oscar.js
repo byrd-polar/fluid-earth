@@ -10,27 +10,15 @@ export function nextOscarDate(currentDate) {
   return dates.find(d => d > currentDate);
 }
 
-let cache = new Map();
-
-function getKey(startDate, endDate) {
-  return `${startDate.getTime()}|${endDate.getTime()}`;
-}
-
 // Get all dates with OSCAR data between given start and end dates, inclusive
 export function validOscarDates(startDate, endDate) {
-  let key = getKey(startDate, endDate);
-  if (cache.has(key)) return cache.get(key);
-
   let startYear = startDate.getUTCFullYear();
   let endYear = endDate.getUTCFullYear();
   let dates = [];
   for (let year = startYear; year <= endYear; year++) {
     dates.push(...validOscarDatesForYear(year));
   }
-
-  dates = dates.filter(d => d >= startDate && d <= endDate);
-  cache.set(key, dates);
-  return dates;
+  return dates.filter(d => d >= startDate && d <= endDate);
 }
 
 // Given a year, return the Dates that correspond to the OSCAR data that
