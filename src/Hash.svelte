@@ -28,7 +28,7 @@
     }
 
     get pdata() {
-      return this.pshow
+      return (this.pshow === false)
         ? ParticleDataset.none
         : this.pDatasets.find(d => d.name === this.hash.get('pdata'));
     }
