@@ -6,7 +6,7 @@ import dataProjections, {
   pairedArrayDataGet,
 } from './map/data-projections/'
 import { ZonedDateTime } from './temporal.js'
-import { findClosestDateInAscendingList } from './utility.js'
+import { findClosestDateInAscendingList, throwIfNotOk } from './utility.js'
 import { Float16Array } from '@petamoriken/float16'
 
 const now = new Date()
@@ -76,6 +76,7 @@ class Dataset {
         signal,
         headers: { 'Cache-Control': 'no-cache' },
       })
+      throwIfNotOk(response)
       let reader = response.body.getReader()
 
       while (true) {

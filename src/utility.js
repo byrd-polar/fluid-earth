@@ -1,6 +1,14 @@
 export async function fetchJson(url, options) {
   let response = await fetch(url, options);
+  throwIfNotOk(response);
   return response.json();
+}
+
+export function throwIfNotOk(response) {
+  if (!response.ok) {
+    let { status, statusText, url } = response;
+    throw new Error(`${`${status} ${statusText}`.trim()} - ${url}`);
+  }
 }
 
 export function findClosestDateInAscendingList(date, candidates) {
