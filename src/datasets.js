@@ -1,3 +1,4 @@
+import intervals from './intervals.js'
 import { validOscarDates } from './oscar.js'
 import colormaps from './map/colormaps/index.js'
 import dataProjections, {
@@ -11,23 +12,6 @@ import { Float16Array } from '@petamoriken/float16'
 const zeroProxy = new Proxy({}, { get() { return 0 } })
 const nanDataArray = new Float16Array([-Infinity])
 const zeroDataArray = new Float16Array([0])
-
-const intervals = {
-  'custom:NONE': {},
-  'custom:OSCAR': {},
-  'hourly': {
-    roundTo: 'hour',
-    duration: { hours: 1 },
-  },
-  'daily': {
-    roundTo: 'day',
-    duration: { days: 1 },
-  },
-  'monthly-aggregate': {
-    roundTo: { smallestUnit: 'month', roundingMode: 'floor' },
-    duration: { months: 1 },
-  },
-}
 
 class Dataset {
   constructor(core)  { this.core = core ?? {} }
