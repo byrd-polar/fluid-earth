@@ -24,30 +24,24 @@
   let svgScaleElement;
   let svgScaleWidth;
 
-  $: createAxis(
-    svgScaleElement, svgScaleWidth,
-    griddedDomain, griddedScale, griddedData.originalUnit, griddedUnit,
-  );
-  $: cssLut = generateLut(griddedColormap);
-
-  function createAxis(element, width, domain, scale, originalUnit, unit) {
-    if (!element) return;
-
-    let scaleFn = scale === 'log' ? scaleLog : scaleLinear;
+  $: if (svgScaleElement) {
+    let scaleFn = griddedScale === 'log' ? scaleLog : scaleLinear;
+    let conversion = v => convert(v, griddedData.originalUnit, griddedUnit);
     let axis = axisBottom(
       scaleFn()
-        .domain(domain.map(v => convert(v, originalUnit, unit)))
-        .range([-0.5, width - 0.5])
+        .domain(griddedDomain.map(conversion))
+        .range([-0.5, svgScaleWidth - 0.5])
     );
-    d3.select(element).call(axis);
+    d3.select(svgScaleElement).call(axis);
   }
 
-  function generateLut(colormap) {
-    return colormap.lut.map(colorArray => `rgb(${colorArray.join()})`).join();
-  }
+  $: cssLut = griddedColormap.lut.map(arr => `rgb(${arr.join()})`).join();
 
   $: qty = Qty.parse(griddedData.originalUnit);
   $: unitList = qty ? preferredUnits[qty.kind()] : null;
+
+  $: name = simplifiedMode ? simpleTranslate(griddedName) : griddedName;
+  $: title = capitalizeFirstLetter(`${name} (${prettyUnit(griddedUnit)})`)
 
   function toggleUnit() {
     if (!unitList) return;
@@ -62,11 +56,6 @@
 
     toggleUnit();
   }
-
-  function formatTitle(name, griddedUnit, simplifiedMode) {
-    if (simplifiedMode) name = simpleTranslate(name);
-    return capitalizeFirstLetter(`${name} (${prettyUnit(griddedUnit)})`)
-  }
 </script>
 
 <section
@@ -79,7 +68,7 @@
     placement: 'top',
   }}
 >
-  <h3>{formatTitle(griddedName, griddedUnit, simplifiedMode)}</h3>
+  <h3>{title}</h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"
     bind:clientWidth={svgScaleWidth}
