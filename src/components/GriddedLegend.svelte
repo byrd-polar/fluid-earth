@@ -21,25 +21,25 @@
   export let preferredUnits;
   export let simplifiedMode;
 
-  let svgScale;
+  let svgScaleElement;
   let svgScaleWidth;
 
   $: createAxis(
-    svgScale, svgScaleWidth,
-    griddedDomain, griddedData.originalUnit, griddedUnit,
+    svgScaleElement, svgScaleWidth,
+    griddedDomain, griddedScale, griddedData.originalUnit, griddedUnit,
   );
   $: cssLut = generateLut(griddedColormap);
 
-  function createAxis(elem, width, domain, originalUnit, griddedUnit) {
-    if (!elem) return;
+  function createAxis(element, width, domain, scale, originalUnit, unit) {
+    if (!element) return;
 
-    let scale = griddedScale === 'log' ? scaleLog : scaleLinear;
+    let scaleFn = scale === 'log' ? scaleLog : scaleLinear;
     let axis = axisBottom(
-      scale()
-        .domain(domain.map(v => convert(v, originalUnit, griddedUnit)))
+      scaleFn()
+        .domain(domain.map(v => convert(v, originalUnit, unit)))
         .range([-0.5, width - 0.5])
     );
-    d3.select(elem).call(axis);
+    d3.select(element).call(axis);
   }
 
   function generateLut(colormap) {
@@ -84,7 +84,7 @@
     style="background: linear-gradient(to right, {cssLut});"
     bind:clientWidth={svgScaleWidth}
   ></div>
-  <svg bind:this={svgScale}></svg>
+  <svg bind:this={svgScaleElement}></svg>
 </section>
 
 <style>
