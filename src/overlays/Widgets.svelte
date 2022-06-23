@@ -23,7 +23,7 @@
   export let griddedColormap;
   export let griddedDomain;
   export let griddedScale;
-  export let griddedOriginalUnit;
+  export let griddedData;
   export let griddedUnit;
 
   export let preferredUnits;
@@ -58,9 +58,9 @@
         {griddedColormap}
         {griddedDomain}
         {griddedScale}
-        {griddedUnit}
-        {griddedOriginalUnit}
-        bind:preferredUnits
+        {griddedData}
+        bind:griddedUnit
+        {preferredUnits}
         {simplifiedMode}
       />
     {/if}

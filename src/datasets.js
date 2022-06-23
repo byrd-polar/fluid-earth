@@ -181,7 +181,6 @@ export class GriddedDataset extends Dataset {
     this.originalUnit = core.originalUnit ?? ''
     this.scale        = core.scale ?? 'linear'
     this.dataProps    = {
-      unit: this.unit,
       originalUnit: this.originalUnit,
       get(lonLat) { return singleArrayDataGet(this, lonLat) },
       ...this.dataProps,

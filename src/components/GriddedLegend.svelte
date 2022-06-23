@@ -6,6 +6,7 @@
   import {
     convert,
     prettyUnit,
+    validUnit,
     capitalizeFirstLetter,
     simpleTranslate,
   } from '../utility.js';
@@ -15,7 +16,7 @@
   export let griddedColormap;
   export let griddedDomain;
   export let griddedScale;
-  export let griddedOriginalUnit;
+  export let griddedData;
   export let griddedUnit;
   export let preferredUnits;
   export let simplifiedMode;
@@ -23,16 +24,19 @@
   let svgScale;
   let svgScaleWidth;
 
-  $: createAxis(svgScale, svgScaleWidth, griddedDomain, griddedUnit);
+  $: createAxis(
+    svgScale, svgScaleWidth,
+    griddedDomain, griddedData.originalUnit, griddedUnit,
+  );
   $: cssLut = generateLut(griddedColormap);
 
-  function createAxis(elem, width, domain, griddedUnit) {
+  function createAxis(elem, width, domain, originalUnit, griddedUnit) {
     if (!elem) return;
 
     let scale = griddedScale === 'log' ? scaleLog : scaleLinear;
     let axis = axisBottom(
       scale()
-        .domain(domain.map(v => convert(v, griddedOriginalUnit, griddedUnit)))
+        .domain(domain.map(v => convert(v, originalUnit, griddedUnit)))
         .range([-0.5, width - 0.5])
     );
     d3.select(elem).call(axis);
@@ -42,14 +46,14 @@
     return colormap.lut.map(colorArray => `rgb(${colorArray.join()})`).join();
   }
 
-  $: qty = Qty.parse(griddedOriginalUnit);
+  $: qty = Qty.parse(griddedData.originalUnit);
   $: unitList = qty ? preferredUnits[qty.kind()] : null;
 
   function toggleUnit() {
     if (!unitList) return;
 
-    unitList.push(unitList.shift()); // rotate list
-    preferredUnits = preferredUnits;
+    unitList.push(unitList.shift()); // rotate list in preferredUnits
+    griddedUnit = validUnit(griddedUnit, preferredUnits);
   }
 
   // simulate html button functionality
