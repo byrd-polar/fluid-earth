@@ -113,7 +113,7 @@
   let cursor = null;
 
   let previousGriddedDataset, previousParticleDataset;
-  let currentlySetGriddedDataset;
+  let currentlySetGriddedDataset = griddedDataset;
 
   function setGriddedVariables(dataset, simplifiedMode) {
     currentlySetGriddedDataset = dataset;
@@ -141,8 +141,6 @@
   }
 
   function applyMode(simplifiedMode) {
-    if (!currentlySetGriddedDataset) return;
-
     setGriddedVariables(currentlySetGriddedDataset, simplifiedMode);
   }
 
