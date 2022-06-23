@@ -147,6 +147,8 @@
   $: applyMode(simplifiedMode);
 
   onMount(async () => {
+    loadDatasets();
+
     vectorData = await fetchJson('/tera/topology.json.br');
     vectorColors = {
       ne_50m_coastline: [255, 255, 255, 1],
@@ -154,8 +156,6 @@
       ne_50m_rivers_lake_centerlines: [255, 255, 255, 0.5],
       ne_50m_graticules_10: [255, 255, 255, 0.1],
     };
-
-    loadDatasets();
 
     // fade out splash screen from index.html after loading
     const splashElement = document.getElementById('splash');
