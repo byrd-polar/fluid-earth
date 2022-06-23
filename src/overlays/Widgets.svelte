@@ -58,7 +58,7 @@
         {griddedColormap}
         {griddedDomain}
         {griddedScale}
-        {griddedData}
+        griddedOriginalUnit={griddedData.originalUnit}
         bind:griddedUnit
         {preferredUnits}
         {simplifiedMode}

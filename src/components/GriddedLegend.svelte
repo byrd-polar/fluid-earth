@@ -17,7 +17,7 @@
   export let griddedColormap;
   export let griddedDomain;
   export let griddedScale;
-  export let griddedData;
+  export let griddedOriginalUnit;
   export let griddedUnit;
   export let preferredUnits;
   export let simplifiedMode;
@@ -27,7 +27,7 @@
 
   $: if (svgScaleElement) {
     let scaleFn = griddedScale === 'log' ? scaleLog : scaleLinear;
-    let conversion = v => convert(v, griddedData.originalUnit, griddedUnit);
+    let conversion = v => convert(v, griddedOriginalUnit, griddedUnit);
     let axis = axisBottom(
       scaleFn()
         .domain(griddedDomain.map(conversion))
@@ -38,7 +38,7 @@
 
   $: cssLut = griddedColormap.lut.map(arr => `rgb(${arr.join()})`).join();
 
-  $: qty = Qty.parse(griddedData.originalUnit);
+  $: qty = Qty.parse(griddedOriginalUnit);
   $: unitList = qty ? preferredUnits[qty.kind()] : null;
 
   $: name = simplifiedMode ? simpleTranslate(griddedName) : griddedName;
