@@ -32,7 +32,6 @@ class Dataset {
       }
     })()
     this.missing      = (core.missing ?? []).map(d => new Date(d))
-    this.validDates   = this.computeValidDates()
     this.projection   = dataProjections[core.projection ?? 'GFS']
     this.bytesPerFile = this.width * this.height * 2
 
@@ -40,6 +39,8 @@ class Dataset {
     this.dataProps    = { width, height, projection }
     this.emptyData    = { width: 1, height: 1, projection }
   }
+
+  get validDates() { return this._validDates ??= this.computeValidDates() }
 
   fetchCache = {}
 
