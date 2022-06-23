@@ -35,11 +35,10 @@ class Dataset {
     this.validDates   = this.computeValidDates()
     this.projection   = dataProjections[core.projection ?? 'GFS']
     this.bytesPerFile = this.width * this.height * 2
-    this.dataProps    = {
-      width: this.width,
-      height: this.height,
-      projection: this.projection,
-    }
+
+    let { width, height, projection } = this
+    this.dataProps    = { width, height, projection }
+    this.emptyData    = { width: 1, height: 1, projection }
   }
 
   fetchCache = {}
@@ -52,7 +51,7 @@ class Dataset {
   }
 
   async fetchData(date, signal) {
-    if (!this.path) return this.constructor.emptyData
+    if (!this.path) return this.emptyData
 
     let dateString = date.toISOString()
     let cachedResponse = this.fetchCache[dateString]
@@ -180,16 +179,12 @@ export class GriddedDataset extends Dataset {
     this.unit         = core.unit ?? ''
     this.originalUnit = core.originalUnit ?? ''
     this.scale        = core.scale ?? 'linear'
-    this.dataProps    = {
+    this.emptyData    = {
+      floatArray: nanDataArray,
+      get(lonLat) { return NaN },
       originalUnit: this.originalUnit,
-      get(lonLat) { return singleArrayDataGet(this, lonLat) },
-      ...this.dataProps,
+      ...this.emptyData,
     }
-  }
-
-  static emptyData = {
-    floatArray: nanDataArray,
-    ...new GriddedDataset().dataProps,
   }
 
   static filter(inventory) {
@@ -201,6 +196,8 @@ export class GriddedDataset extends Dataset {
   bufferToData(buffer) {
     return {
       floatArray: new Float16Array(buffer),
+      get(lonLat) { return singleArrayDataGet(this, lonLat) },
+      originalUnit: this.originalUnit,
       ...this.dataProps,
     }
   }
@@ -216,16 +213,12 @@ export class ParticleDataset extends Dataset {
     this.particleCount    = core.particleCount ?? 0
     this.particleDisplay  = core.particleDisplay ?? zeroProxy
     this.bytesPerFile     = 2 * this.bytesPerFile
-    this.dataProps        = {
-      get(lonLat) { return pairedArrayDataGet(this, lonLat) },
-      ...this.dataProps,
+    this.emptyData        = {
+      uVelocities: zeroDataArray,
+      vVelocities: zeroDataArray,
+      get(lonLat) { return 0 },
+      ...this.emptyData,
     }
-  }
-
-  static emptyData = {
-    uVelocities: zeroDataArray,
-    vVelocities: zeroDataArray,
-    ...new ParticleDataset().dataProps,
   }
 
   static filter(inventory) {
@@ -238,6 +231,7 @@ export class ParticleDataset extends Dataset {
     return {
       uVelocities: new Float16Array(buffer.slice(0, buffer.byteLength / 2)),
       vVelocities: new Float16Array(buffer.slice(buffer.byteLength / 2)),
+      get(lonLat) { return pairedArrayDataGet(this, lonLat) },
       ...this.dataProps,
     }
   }

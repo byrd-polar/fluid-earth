@@ -80,12 +80,12 @@
   let zoom = hash.zoom ?? 1.5;
   $: portraitBasedZoom = $mobile;
 
-  let griddedData = GriddedDataset.emptyData;
+  let griddedData = griddedDataset.emptyData;
   let griddedName = griddedDataset.name;
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
   let griddedScale = griddedDataset.scale;
-  let griddedUnit = '';
+  let griddedUnit = griddedDataset.unit;
   let preferredUnits = {
     speed: ['km/h', 'm/s', 'kn', 'mph'],
     temperature: ['tempC', 'tempF', 'tempK'],
@@ -98,7 +98,7 @@
     ],
   };
 
-  let particleData = ParticleDataset.emptyData;
+  let particleData = particleDataset.emptyData;
 
   let vectorData = { objects: {} };
   let vectorColors = {
@@ -201,7 +201,7 @@
       } catch(e) {
         if (e.name === 'AbortError') return;
         console.error(e);
-        data = GriddedDataset.emptyData;
+        data = griddedDataset.emptyData;
       } finally {
         griddedLoading = false;
       }
@@ -233,7 +233,8 @@
         data = await particleDataset.fetchData(valid, signal);
       } catch(e) {
         if (e.name === 'AbortError') return;
-        data = ParticleDataset.emptyData;
+        console.error(e);
+        data = particleDataset.emptyData;
       } finally {
         particleLoading = false;
       }
