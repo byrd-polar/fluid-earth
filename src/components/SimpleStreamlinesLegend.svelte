@@ -1,22 +1,24 @@
 <script>
   import Play from 'carbon-icons-svelte/lib/PlayOutlineFilled.svelte';
   import Pause from 'carbon-icons-svelte/lib/PauseOutlineFilled.svelte';
-  import { capitalizeFirstLetter, simpleTranslate } from '../utility.js';
+  import {
+    capitalizeFirstLetter,
+    simpleTranslate,
+    handleLikeButton,
+  } from '../utility.js';
   import tooltip from '../tooltip.js';
 
   export let particleName;
   export let particlesPaused;
 
-  function handleKeydown(e) {
-    if (!(e.code === 'Space' || e.code === 'Enter')) return;
-
-    particlesPaused = !particlesPaused
+  function togglePaused() {
+    particlesPaused = !particlesPaused;
   }
 </script>
 
 <section
-  on:click={() => particlesPaused = !particlesPaused}
-  on:keydown={handleKeydown}
+  on:click={togglePaused}
+  on:keydown={handleLikeButton(togglePaused)}
   use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
   tabindex="0"
 >

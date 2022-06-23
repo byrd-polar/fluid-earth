@@ -1,6 +1,6 @@
 <script>
   import tooltip from '../tooltip.js';
-  import { fix24 } from '../utility.js';
+  import { fix24, handleLikeButton } from '../utility.js';
 
   export let displayDate;
   export let utc;
@@ -21,16 +21,14 @@
     timeZoneName: 'short',
   };
 
-  function handleKeydown(e) {
-    if (!(e.code === 'Space' || e.code === 'Enter')) return;
-
-    utc = !utc
+  function toggleUtc() {
+    utc = !utc;
   }
 </script>
 
 <section
-  on:click={() => utc = !utc}
-  on:keydown={handleKeydown}
+  on:click={toggleUtc}
+  on:keydown={handleLikeButton(toggleUtc)}
   use:tooltip={{ content: 'Change timezone', placement: 'bottom'}}
   tabindex="0"
 >

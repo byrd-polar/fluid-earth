@@ -9,6 +9,7 @@
     validUnit,
     capitalizeFirstLetter,
     simpleTranslate,
+    handleLikeButton,
   } from '../utility.js';
   import tooltip from '../tooltip.js';
 
@@ -49,18 +50,11 @@
     unitList.push(unitList.shift()); // rotate list in preferredUnits
     griddedUnit = validUnit(griddedUnit, preferredUnits);
   }
-
-  // simulate html button functionality
-  function handleKeydown(e) {
-    if (!(e.code === 'Space' || e.code === 'Enter')) return;
-
-    toggleUnit();
-  }
 </script>
 
 <section
   on:click={toggleUnit}
-  on:keydown={handleKeydown}
+  on:keydown={handleLikeButton(toggleUnit)}
   tabindex="0"
   class:canchange={unitList}
   use:tooltip={{

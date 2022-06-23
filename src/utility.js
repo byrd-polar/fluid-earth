@@ -22,6 +22,10 @@ export function findClosestDateInAscendingList(date, candidates) {
   return candidates[0];
 }
 
+export function handleLikeButton(fn) {
+  return e => (e.code === 'Space' || e.code === 'Enter') ? fn() : undefined;
+}
+
 import Qty from 'js-quantities/esm';
 
 // Convert a value between units

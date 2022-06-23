@@ -1,5 +1,5 @@
 <script>
-  import { capitalizeFirstLetter } from '../utility.js';
+  import { capitalizeFirstLetter, handleLikeButton } from '../utility.js';
   import tooltip from '../tooltip.js';
   import { prng_alea } from 'esm-seedrandom/esm/'
 
@@ -7,10 +7,8 @@
   export let particleDisplay;
   export let particlesPaused;
 
-  function handleKeydown(e) {
-    if (!(e.code === 'Space' || e.code === 'Enter')) return;
-
-    particlesPaused = !particlesPaused
+  function togglePaused() {
+    particlesPaused = !particlesPaused;
   }
 
   let prng = prng_alea('Milankovitch');
@@ -22,8 +20,8 @@
 </script>
 
 <section
-  on:click={() => particlesPaused = !particlesPaused}
-  on:keydown={handleKeydown}
+  on:click={togglePaused}
+  on:keydown={handleLikeButton(togglePaused)}
   use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
   tabindex="0"
 >
