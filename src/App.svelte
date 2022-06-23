@@ -66,7 +66,7 @@
   // always equal to date unless date is re-assigned in updateGriddedData
   $: anchorDate = date;
 
-  // see comment in onMount
+  // see comment in loadDatasets
   let updateGriddedData = () => {};
   let updateParticleData = () => {};
 
@@ -79,6 +79,9 @@
   let centerLatitude = hash.lat ?? randlat();
   let zoom = hash.zoom ?? 1.5;
   $: portraitBasedZoom = $mobile;
+
+  let vectorData = { objects: {} };
+  let vectorColors = {};
 
   let griddedData = griddedDataset.emptyData;
   let griddedName = griddedDataset.name;
@@ -99,16 +102,6 @@
   };
 
   let particleData = particleDataset.emptyData;
-
-  let vectorData = { objects: {} };
-  let vectorColors = {
-    // update the following if sources for topology.json change
-    ne_50m_coastline: [255, 255, 255, 1],
-    ne_50m_lakes: [255, 255, 255, 1],
-    ne_50m_rivers_lake_centerlines: [255, 255, 255, 0.5],
-    ne_50m_graticules_10: [255, 255, 255, 0.1],
-  };
-
   let particleName = particleDataset.name;
   let particlesPaused = false;
   let particleLifetime = particleDataset.particleLifetime;
@@ -156,15 +149,28 @@
   $: applyMode(simplifiedMode);
 
   onMount(async () => {
-    await Promise.all([loadTopology(), loadDatasets()]);
-    removeSplash();
+    vectorData = await fetchJson('/tera/topology.json.br');
+    vectorColors = {
+      ne_50m_coastline: [255, 255, 255, 1],
+      ne_50m_lakes: [255, 255, 255, 1],
+      ne_50m_rivers_lake_centerlines: [255, 255, 255, 0.5],
+      ne_50m_graticules_10: [255, 255, 255, 0.1],
+    };
+
+    loadDatasets();
+
+    // fade out splash screen from index.html after loading
+    const splashElement = document.getElementById('splash');
+    if (!splashElement) return;
+
+    splashElement.classList.add('faded');
+    setTimeout(
+      () => splashElement.remove(),
+      1000 * parseFloat(getComputedStyle(splashElement)['transitionDuration'])
+    );
   });
 
-  async function loadTopology() {
-    vectorData = await fetchJson('/tera/topology.json.br');
-  }
-
-  async function loadDatasets() {
+  function loadDatasets() {
     // Methods for updating gridded and particle data in response to date or
     // dataset changes. Defined here so that they aren't triggered multiple
     // times during the initial mount due to a Svelte bug with bindings.
@@ -257,18 +263,6 @@
       griddedAssignments = () => {};
       particleAssignments = () => {};
       initialLoad = false;
-    }
-  }
-
-  function removeSplash() {
-    // fade out and remove splash screen from index.html after loading
-    const splashElement = document.getElementById('splash');
-    if (splashElement) {
-      splashElement.classList.add('faded');
-      setTimeout(
-        () => splashElement.remove(),
-        1000 * parseFloat(getComputedStyle(splashElement)['transitionDuration'])
-      );
     }
   }
 

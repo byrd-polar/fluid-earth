@@ -135,6 +135,7 @@
       griddedScale,
       griddedBaseColor,
       vectorData,
+      vectorColors,
     backgroundNeedsRedraw = true;
 
   let trailsNeedReset;
