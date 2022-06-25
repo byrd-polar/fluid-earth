@@ -4,6 +4,7 @@ import { grib1 } from '../file-conversions.js';
 import { typical_metadata, output_path, run_all } from '../utility.js';
 import { rm } from 'fs/promises';
 import { setTimeout as sleep } from 'timers/promises';
+import { parentPort } from 'worker_threads'
 import 'dotenv/config'
 
 const name = 'reanalysis-era5-single-levels-monthly-means';
@@ -71,6 +72,7 @@ async function download_cds(name, request, auth) {
     await sleep(sleep_time);
     sleep_time = Math.min(sleep_time * 1.5, 120e3);
     reply = await get_json(task_url, { auth });
+    parentPort?.postMessage('keepalive');
   }
 
   if (reply.state !== 'completed') throw `Error: ${reply.error.message}`;

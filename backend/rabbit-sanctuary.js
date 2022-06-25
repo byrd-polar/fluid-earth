@@ -79,7 +79,8 @@ export class RabbitSanctuary {
 async function do_rabbit_things(module, time) {
   await new Promise((resolve, reject) => {
     let worker = new Worker(absolute_path('./rabbit.js'), { argv: [module] });
-    let timeout = setTimeout(() => worker.terminate(), ms_from_minutes(time));
+    let timeout = reset_timeout(worker, time);
+    worker.on('message', () => timeout = reset_timeout(worker, time, timeout));
     worker.on('error', reject);
     worker.on('exit', exitCode => {
       if (exitCode === 0) {
@@ -94,6 +95,11 @@ async function do_rabbit_things(module, time) {
 
 function log(module, str) {
   console.log(`${basename(module, '.js')}: ${str}`);
+}
+
+function reset_timeout(worker, time, previous_timeout) {
+  clearTimeout(previous_timeout);
+  return setTimeout(() => worker.terminate(), ms_from_minutes(time));
 }
 
 function ms_from_minutes(minutes) {
