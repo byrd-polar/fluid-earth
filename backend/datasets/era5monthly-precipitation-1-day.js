@@ -1,4 +1,4 @@
-export const name = 'total precipitation';
+export const name = 'average precipitation per day';
 
 export const metadata = {
   unit: 'mm',
