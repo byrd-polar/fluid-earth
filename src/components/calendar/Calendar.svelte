@@ -79,9 +79,9 @@
 
   let focusHandler, calendar, hasFocus;
 
-  async function handleFocus() {
+  function handleFocus() {
     header = updateHeader(date, utc, picker); // ensure selected box is visible
-    await focusOnSelected();
+    focusOnSelected();
   }
 
   $: updateFocusHandler(hasFocus);
@@ -92,7 +92,7 @@
     focusHandler.setAttribute('tabindex', hasFocus ? -1 : 0);
   }
 
-  async function handleKeydown(e) {
+  function handleKeydown(e) {
     let duration, mathFn;
 
     if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
@@ -122,7 +122,7 @@
     };
 
     date = griddedDataset.closestValidDate(newDate, opts);
-    await focusOnSelected();
+    focusOnSelected();
   }
 
   async function focusOnSelected() {
