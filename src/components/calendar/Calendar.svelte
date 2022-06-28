@@ -77,19 +77,11 @@
     });
   }
 
-  let focusHandler, calendar, hasFocus;
+  let calendar, hasFocus;
 
   function handleFocus() {
     header = updateHeader(date, utc, picker); // ensure selected box is visible
     focusOnSelected();
-  }
-
-  $: updateFocusHandler(hasFocus);
-
-  function updateFocusHandler(hasFocus) {
-    if (!focusHandler) return;
-
-    focusHandler.setAttribute('tabindex', hasFocus ? -1 : 0);
   }
 
   function handleKeydown(e) {
@@ -158,9 +150,8 @@
 </div>
 
 <div
-  bind:this={focusHandler}
   on:focus={handleFocus}
-  tabindex="0"
+  tabindex={hasFocus ? -1 : 0}
 >
 </div>
 
