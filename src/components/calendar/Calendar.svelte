@@ -63,10 +63,10 @@
     return b.date < box.date;
   }
 
-  function format(dt, formatter) {
-    if (typeof formatter === 'function') return formatter(dt, utc);
+  function format(box, formatter, utc) {
+    if (typeof formatter === 'function') return formatter(box, utc);
 
-    return dt.date.toLocaleString([], {
+    return box.date.toLocaleString([], {
       timeZone: utc ? 'UTC' : undefined,
       ...formatter,
     });
@@ -102,7 +102,7 @@
 
     e.preventDefault();
 
-    let newDate = new ZonedDateTime(date, utc)[mathFn](duration).date;
+    let newDate = zdt[mathFn](duration).date;
     let validDate = griddedDataset.closestValidDate(newDate, condition);
     if (validDate) date = validDate;
 
@@ -129,7 +129,7 @@
     <ChevronLeft size={32} />
   </button>
   <div>
-    {format(header, picker.headerFormat)}
+    {format(header, picker.headerFormat, utc)}
   </div>
   <button
     on:click={() => header = nextHeader}
@@ -171,7 +171,7 @@
       disabled={!enabled}
       tabindex={selected ? 0 : -1}
     >
-      {format(box, picker.boxFormat)}
+      {format(box, picker.boxFormat, utc)}
     </button>
   {/each}
 </div>
