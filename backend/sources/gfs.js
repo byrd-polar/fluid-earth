@@ -51,12 +51,13 @@ export function increment_state(current_state) {
   return { forecast, offset, system };
 }
 
-export const base_url = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/gfs/prod/';
+export const base_url = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/';
 
 function gfs_url({ forecast, offset, system }) {
   let fdt = Datetime.from(forecast);
 
   return base_url
+    + 'gfs/prod/'
     + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
     + `atmos/${system}.t${fdt.p_hour}z.`
     + `pgrb2.0p25.f${offset.toString().padStart(3, '0')}`;

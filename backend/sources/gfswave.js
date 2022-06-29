@@ -25,6 +25,7 @@ function gfswave_url({ forecast, offset, system }) {
   let fdt = Datetime.from(forecast);
 
   return base_url
+    + 'gfs/prod/'
     + `${system}.${fdt.year}${fdt.p_month}${fdt.p_day}/${fdt.p_hour}/`
     + `wave/gridded/${system}wave.t${fdt.p_hour}z.`
     + `global.0p25.f${offset.toString().padStart(3, '0')}.grib2`;

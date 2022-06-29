@@ -27,7 +27,8 @@ export async function forage(current_state, datasets) {
 
   let input = await download(
     base_url
-    + `sst.${dt.year}${dt.p_month}${dt.p_day}/`
+    + 'nsst/prod/'
+    + `nsst.${dt.year}${dt.p_month}${dt.p_day}/`
     + 'rtgssthr_grb_0.083_awips.grib2'
   );
 
