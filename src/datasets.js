@@ -5,6 +5,7 @@ import dataProjections, {
   singleArrayDataGet,
   pairedArrayDataGet,
 } from './map/data-projections/'
+import { clamp } from './math.js'
 import { ZonedDateTime } from './temporal.js'
 import { findClosestDateInAscendingList, throwIfNotOk } from './utility.js'
 import { Float16Array } from '@petamoriken/float16'
@@ -107,37 +108,30 @@ class Dataset {
     return data
   }
 
-  closestValidDate(date, oscarOptions={}) {
-    if (date <= this.start) return this.start
-    if (date >= this.end) return this.end
+  closestValidDate(date, condition=(() => true)) {
+    let candidate
 
     switch(this.interval) {
       case intervals['custom:NONE']:
-        return date
+        candidate = date
+        break
 
       case intervals['custom:OSCAR']:
-        let {
-          preserveMonth=false,
-          preserveUTCMonth=false,
-          excludedDate=undefined,
-        } = oscarOptions
-
-        let candidates = this.validDates.filter(c => {
-          return (!preserveMonth || c.getMonth() === date.getMonth())
-              && (!preserveUTCMonth || c.getUTCMonth() === date.getUTCMonth())
-              && (!excludedDate || c.getTime() !== excludedDate.getTime())
-        })
-        return findClosestDateInAscendingList(date, candidates)
+        candidate = findClosestDateInAscendingList(date, this.validDates)
+        break
 
       default:
-        let closest = new ZonedDateTime(date, true)
+        candidate = new ZonedDateTime(date, true)
           .round(this.interval.roundTo)
           .date
-
-        return this.isMissingDate(closest)
-          ? findClosestDateInAscendingList(date, this.validDates)
-          : closest
+        break
     }
+
+    candidate = clamp(candidate, this.start, this.end)
+
+    return (this.isMissingDate(candidate) || !condition(candidate))
+      ? findClosestDateInAscendingList(date, this.validDates.filter(condition))
+      : candidate
   }
 
   computeValidDates() {
@@ -239,8 +233,8 @@ export class ParticleDataset extends Dataset {
 
   // same as super except returns null if closest date is not "close enough",
   // i.e. too before this.start or too after this.end
-  closestValidDate(date, oscarOptions={}) {
-    let closest = super.closestValidDate(date, oscarOptions)
+  closestValidDate(date, condition) {
+    let closest = super.closestValidDate(date, condition)
 
     switch(this.interval) {
       case intervals['custom:NONE']:

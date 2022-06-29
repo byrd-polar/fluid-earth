@@ -25,47 +25,39 @@
 
   $: picker = pickers[pickerMode];
 
-  $: header = updateHeader(date, utc, picker);
+  $: zdt = new ZonedDateTime(date, utc);
+
+  let header;
+  $: updateHeader(zdt, picker);
   $: prevHeader = header.subtract(picker.headerInterval);
   $: nextHeader = header.add(picker.headerInterval);
 
   $: length = picker.boxDimensions.reduce((x, y) => x * y);
   $: base = picker.boxOffset ? header.add(picker.boxOffset(header)) : header;
-  $: boxes = Array.from({length}, (_, i) => {
-    return base.add(multiply(picker.boxInterval, i));
-  });
+  $: boxGenFn = (_, i) => base.add(multiply(picker.boxInterval, i));
+  $: boxes = Array.from({length}, boxGenFn);
+  $: selectedBox = zdt.round(picker.boxSelectedRoundTo);
 
-  let oldHeader;
+  function updateHeader(zdt, picker) {
+    let newHeader = zdt.round(picker.headerRoundTo);
+    if (header?.equals(newHeader)) return;
 
-  function updateHeader(date, utc, picker) {
-    let newHeader = new ZonedDateTime(date, utc).round(picker.headerRoundTo);
-    if (oldHeader && oldHeader.equals(newHeader)) {
-      return oldHeader;
-    } else {
-      oldHeader = newHeader;
-      return newHeader;
-    }
+    header = newHeader;
   }
 
   function selectDate(box) {
-    date = selectedDate(box, griddedDataset);
+    let d = Object.fromEntries(picker.boxSelect.map(unit => [unit, box[unit]]));
+    let v = date => date >= box.date && date < box.add(picker.boxInterval).date;
+    let validDate = griddedDataset.closestValidDate(zdt.with(d).date, v);
+    if (validDate) date = validDate;
   }
 
-  function selectedDate(box, griddedDataset) {
-    let blend = new ZonedDateTime(date, utc).with(Object.fromEntries(
-      picker.boxSelect.map(unit => [unit, box[unit]]))).date;
+  function boxIsEnabled(box, griddedDataset, utc, picker, header) {
+    let a = griddedDataset.closestValidDate(box.date, date => date >= box.date);
+    if (!a) return false;
 
-    let opts = {
-      preserveMonth: !utc && pickerMode === 'months',
-      preserveUTCMonth: utc && pickerMode === 'months',
-    };
-
-    return griddedDataset.closestValidDate(blend, opts);
-  }
-
-  function isSelectedIf(box, date) {
-    return box.equals(
-      new ZonedDateTime(date, utc).round(picker.boxSelectedRoundTo));
+    let b = new ZonedDateTime(a, utc).subtract(picker.boxInterval);
+    return b.date < box.date && picker.boxEnabled(box, header);
   }
 
   function format(dt, formatter) {
@@ -80,12 +72,12 @@
   let calendar, hasFocus;
 
   function handleFocus() {
-    header = updateHeader(date, utc, picker); // ensure selected box is visible
+    updateHeader(zdt, picker); // ensure selected box is visible
     focusOnSelected();
   }
 
   function handleKeydown(e) {
-    let duration, mathFn;
+    let duration, mathFn, condition;
 
     if (['ArrowLeft', 'ArrowRight'].includes(e.key)) {
       duration = picker.boxInterval;
@@ -97,8 +89,10 @@
 
     if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {
       mathFn = 'subtract';
+      condition = d => d < date;
     } else if (['ArrowRight', 'ArrowDown', 'PageDown'].includes(e.key)) {
       mathFn = 'add';
+      condition = d => d > date;
     }
 
     if (!(duration && mathFn)) return;
@@ -106,14 +100,9 @@
     e.preventDefault();
 
     let newDate = new ZonedDateTime(date, utc)[mathFn](duration).date;
-    let preserveMonth = duration['months'] || duration['years'];
-    let opts = {
-      preserveMonth: !utc && preserveMonth,
-      preserveUTCMonth: utc && preserveMonth,
-      excludedDate: date,
-    };
+    let validDate = griddedDataset.closestValidDate(newDate, condition);
+    if (validDate) date = validDate;
 
-    date = griddedDataset.closestValidDate(newDate, opts);
     focusOnSelected();
   }
 
@@ -169,9 +158,8 @@
   on:keydown={handleKeydown}
 >
   {#each boxes as box, i (pickerMode + i)}
-    {@const selected = isSelectedIf(box, date)}
-    {@const enabled = isSelectedIf(box, selectedDate(box, griddedDataset))
-                   && picker.boxEnabled(box, header)}
+    {@const selected = box.equals(selectedBox)}
+    {@const enabled = boxIsEnabled(box, griddedDataset, utc, picker, header)}
     <button
       class="box"
       class:hour={pickerMode === 'hours'}
