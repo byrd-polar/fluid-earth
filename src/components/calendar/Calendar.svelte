@@ -53,11 +53,14 @@
   }
 
   function boxIsEnabled(box, griddedDataset, utc, picker, header) {
+    if (!picker.boxEnabled(box, header)) return false;
+    if (box.date > griddedDataset.end) return false;
+
     let a = griddedDataset.closestValidDate(box.date, date => date >= box.date);
     if (!a) return false;
 
     let b = new ZonedDateTime(a, utc).subtract(picker.boxInterval);
-    return b.date < box.date && picker.boxEnabled(box, header);
+    return b.date < box.date;
   }
 
   function format(dt, formatter) {
