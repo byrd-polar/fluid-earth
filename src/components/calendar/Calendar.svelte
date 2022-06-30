@@ -15,15 +15,23 @@
   export let utc;
 
   let pickerMode = 'days';
-  $: pickers = {
+  let pickers = {
     years: yearPicker,
     months: monthPicker,
     days: dayPicker,
     hours: hourPicker,
   };
-  $: options = Object.keys(pickers);
-
+  $: options = getOptions(griddedDataset.interval);
+  $: if (!options.includes(pickerMode)) {
+    pickerMode = options[options.length - 1];
+  }
   $: picker = pickers[pickerMode];
+
+  function getOptions(interval) {
+    let all = Object.keys(pickers);
+    let index = all.findIndex(p => p === interval.smallestPickerMode);
+    return all.slice(0, index + 1);
+  }
 
   $: zdt = new ZonedDateTime(date, utc);
 

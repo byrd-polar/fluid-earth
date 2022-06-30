@@ -1,27 +1,32 @@
 export default Object.freeze({
   'custom:NONE': {
+    smallestPickerMode: 'hours',
     dateFormat: instantDateFormat,
     timeFormat: instantTimeFormat,
   },
   'custom:OSCAR': {
+    smallestPickerMode: 'days',
     dateFormat: instantDateFormat,
     timeFormat: instantTimeFormat,
   },
   'hourly': {
     roundTo: 'hour',
     duration: { hours: 1 },
+    smallestPickerMode: 'hours',
     dateFormat: instantDateFormat,
     timeFormat: instantTimeFormat,
   },
   'daily': {
     roundTo: 'day',
     duration: { days: 1 },
+    smallestPickerMode: 'days',
     dateFormat: instantDateFormat,
     timeFormat: instantTimeFormat,
   },
   'monthly-aggregate': {
     roundTo: { smallestUnit: 'month', roundingMode: 'floor' },
     duration: { months: 1 },
+    smallestPickerMode: 'months',
     dateFormat: aggregateMonthDateFormat,
     utcOnly: true,
   },
