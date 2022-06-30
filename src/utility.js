@@ -77,13 +77,6 @@ export function capitalizeFirstLetter(str) {
   return str[0].toUpperCase() + str.substring(1);
 }
 
-// Fix the toLocaleTimeString output on Chromium-based browsers
-export function fix24(timeString) {
-  if (timeString === '24:00 UTC') return '00:00 UTC';
-
-  return timeString;
-}
-
 // Translate dataset names into "plain english"
 export function simpleTranslate(name) {
   const translations = {

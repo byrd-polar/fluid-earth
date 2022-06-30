@@ -19,6 +19,8 @@
   export let particleName;
   export let particleDisplay;
 
+  export let griddedInterval;
+
   export let griddedName;
   export let griddedColormap;
   export let griddedDomain;
@@ -41,6 +43,7 @@
     />
     <TimeDisplay
       {displayDate}
+      {griddedInterval}
       bind:utc
     />
   </div>

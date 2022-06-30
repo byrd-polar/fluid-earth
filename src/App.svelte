@@ -84,6 +84,7 @@
   let vectorColors = {};
 
   let griddedData = griddedDataset.emptyData;
+  let griddedInterval = griddedDataset.interval;
   let griddedName = griddedDataset.name;
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
@@ -120,6 +121,7 @@
     dataset = simplifiedMode ? simplifyDataset(dataset) : dataset;
     if (previousGriddedDataset === dataset) return;
 
+    griddedInterval = dataset.interval;
     griddedName = dataset.name;
     griddedDomain = dataset.domain;
     griddedScale = dataset.scale;
@@ -445,6 +447,7 @@
     <Widgets
       bind:openedMenu
       {displayDate}
+      {griddedInterval}
       bind:utc
       bind:zoom
       {minZoom}

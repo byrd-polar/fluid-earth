@@ -1,46 +1,48 @@
 <script>
   import tooltip from '../tooltip.js';
-  import { fix24, handleLikeButton } from '../utility.js';
+  import { handleLikeButton } from '../utility.js';
 
   export let displayDate;
+  export let griddedInterval;
   export let utc;
 
-  $: dateOptions = {
-    timeZone: utc ? 'UTC' : undefined,
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  };
+  $: utcOnly = griddedInterval.utcOnly;
+  $: enforceUtcOnly(utcOnly);
 
-  $: timeOptions = {
-    timeZone: utc ? 'UTC' : undefined,
-    hour12: utc ? false : undefined,
-    hour: 'numeric',
-    minute: 'numeric',
-    timeZoneName: 'short',
-  };
+  let _utc;
+
+  function enforceUtcOnly(utcOnly) {
+    if (utcOnly) {
+      _utc = utc;
+      utc = true;
+    } else {
+      utc = _utc;
+    }
+  }
 
   function toggleUtc() {
-    utc = !utc;
+    if (!utcOnly) utc = !utc;
   }
 </script>
 
 <section
   on:click={toggleUtc}
   on:keydown={handleLikeButton(toggleUtc)}
-  use:tooltip={{ content: 'Change timezone', placement: 'bottom'}}
+  class:canchange={!utcOnly}
+  use:tooltip={{
+    content: utcOnly ? 'No alternate timezones available' : 'Change timezone',
+    placement: 'bottom',
+  }}
   tabindex="0"
 >
-  <h3 class="date">{displayDate.toLocaleString([], dateOptions)}</h3>
-  <h3 class="time">
-    {fix24(displayDate.toLocaleString([], timeOptions))}
-  </h3>
+  <h3 class="date">{griddedInterval.dateFormat(displayDate, utc)}</h3>
+  {#if griddedInterval.timeFormat}
+    <h3 class="time">{griddedInterval.timeFormat(displayDate, utc)}</h3>
+  {/if}
 </section>
 
 <style>
   section {
-    cursor: pointer;
     border-radius: 4px;
     -webkit-tap-highlight-color: transparent;
     transition: background-color 0.25s ease 0s;
@@ -54,6 +56,10 @@
 
   section:focus:not(:focus-visible):not(:hover) {
     background-color: inherit;
+  }
+
+  section.canchange {
+    cursor: pointer;
   }
 
   h3 {
