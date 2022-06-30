@@ -24,14 +24,7 @@ class Dataset {
     this.height       = core.height ?? 1
     this.start        = new Date(core.start ?? now)
     this.end          = new Date(core.end ?? now)
-    this.interval     = (() => {
-      switch(core.intervalInHours) {
-        case 1: return intervals.hourly
-        case 24: return intervals.daily
-        case 'custom:OSCAR': return intervals['custom:OSCAR']
-        default: return intervals[core.interval] ?? intervals['custom:NONE']
-      }
-    })()
+    this.interval     = intervals[core.interval] ?? intervals['custom:NONE']
     this.missing      = (core.missing ?? []).map(d => new Date(d))
     this.projection   = dataProjections[core.projection ?? 'GFS']
     this.bytesPerFile = this.width * this.height * 2
