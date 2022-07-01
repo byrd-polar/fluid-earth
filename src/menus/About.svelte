@@ -183,6 +183,10 @@ Data sources include:
   <dd><a href="https://gmao.gsfc.nasa.gov/GEOS_systems/">
     Goddard Earth Observing System</a> (GEOS)
 
+  <dt>Climate
+  <dd><a href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means">
+    Copernicus Climate Change Service</a> (ERA5)
+
   <dt>Locations
   <dd>"<a href="https://simplemaps.com/data/world-cities">
     Basic World Cities Database</a>" by
