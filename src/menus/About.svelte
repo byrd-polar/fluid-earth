@@ -171,17 +171,24 @@ Data sources include:
   <dd><a href="https://www.emc.ncep.noaa.gov/emc/pages/numerical_forecast_systems/gfs.php">
     Global Forecast System</a> (GFS)
 
-  <dt>Ocean Currents
+  <dt>Ocean currents
   <dd><a href="https://www.esr.org/research/oscar/oscar-surface-currents/">
     Ocean Surface Current Analysis Real-time</a> (OSCAR)
 
-  <dt>Sea Surface Temperature
+  <dt>Sea surface temperature
   <dd><a href="https://www.nco.ncep.noaa.gov/pmb/products/sst/">
     Real Time Global Sea Surface Temperature</a> (RTGSST)
 
-  <dt>Gases and Aerosols
+  <dt>Gases &amp; aerosols
   <dd><a href="https://gmao.gsfc.nasa.gov/GEOS_systems/">
     Goddard Earth Observing System</a> (GEOS)
+
+  <dt>Locations
+  <dd>"<a href="https://simplemaps.com/data/world-cities">
+    Basic World Cities Database</a>" by
+    <a href="https://simplemaps.com">Pareto Software, LLC</a>, used under
+    <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+    with text reformatted from original
 </dl>
 </details>
 
@@ -226,13 +233,6 @@ As required, here are the
 and
 <a href="/legal/MODIFICATIONS">modifications</a> to
 these libraries.
-<p>
-Location search data in the Markers menu is from the
-"<a href="https://simplemaps.com/data/world-cities">
-Basic World Cities Database</a>" by
-<a href="https://simplemaps.com">Pareto Software, LLC</a>, used under
-<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-with text reformatted from original.
 </details>
 
 </div>
