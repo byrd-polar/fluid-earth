@@ -33,6 +33,10 @@ const normal = {
     name => name.startsWith('geopotential height'),
   'wave period':
     name => name === 'primary wave mean period',
+  'avg. temperature':
+    name => name.startsWith('average temperature'),
+  'avg. precipitation':
+    name => name.startsWith('average precipitation'),
 
   undefined: () => false,
 };
@@ -68,6 +72,10 @@ const simple = {
     name => name.startsWith('carbon monoxide'),
   'dust':
     name => name.startsWith('dust'),
+  'avg. temperature':
+    name => name.startsWith('average temperature'),
+  'avg. precipitation':
+    name => name.startsWith('average precipitation'),
 
   undefined: () => false,
 };

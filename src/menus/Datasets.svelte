@@ -62,7 +62,9 @@
     let names = griddedNames.filter(vFilters[variable]);
     return names.find(name => hFilters[h](name));
   });
-  $: animationOptions = animations.filter(a => {
+  $: animationOptions = topic === 'climate'
+    ? ['none']
+    : animations.filter(a => {
     let datasets = pDatasets
       .filter(d => hFilters[height](d.name) || d.name === 'none');
     return datasets.find(d => {

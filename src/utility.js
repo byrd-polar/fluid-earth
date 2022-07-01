@@ -145,6 +145,16 @@ export function simplifyDataset(griddedDataset) {
       scale: 'linear',
       domain: [0, 900],
     },
+    'avg. temperature' : {
+      colormap: 'TEMP',
+      scale: 'linear',
+      domain: [273.15 - 80, 273.15 + 55],
+    },
+    'avg. precipitation': {
+      colormap: 'PRECIP_6H',
+      scale: 'linear',
+      domain: [0, 0.05],
+    },
   };
 
   let core = {};

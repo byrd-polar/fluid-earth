@@ -8,6 +8,7 @@ const normal = {
          || name.includes('surface')
          || name.includes('wave')
          || name.startsWith('precipitation')
+         || name.startsWith('average precipitation')
          || name.startsWith('sunshine'),
   '850 mb':
     name => name.includes('at 850 mb'),
@@ -36,6 +37,7 @@ const simple = {
          || name.includes('surface')
          || name.includes('wave')
          || name.startsWith('precipitation')
+         || name.startsWith('average precipitation')
          || name.startsWith('sunshine'),
   'cloud':
     name => name.includes('at 500 mb'),
