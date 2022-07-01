@@ -28,7 +28,6 @@
   export let griddedData;
   export let griddedUnit;
 
-  export let preferredUnits;
   export let particlesPaused;
 
   export let simplifiedMode;
@@ -63,7 +62,6 @@
         {griddedScale}
         griddedOriginalUnit={griddedData.originalUnit}
         bind:griddedUnit
-        {preferredUnits}
         {simplifiedMode}
       />
     {/if}

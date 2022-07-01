@@ -1,6 +1,6 @@
 <script>
   import Pin from '../components/Pin.svelte';
-  import { convert, prettyUnit } from '../utility.js';
+  import { convert, prettyUnit } from '../units.js';
   import { scaleSequential, scaleSequentialLog } from 'd3-scale';
   import { interpolateRgbBasis } from 'd3-interpolate';
   import { color } from 'd3-color';

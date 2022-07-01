@@ -4,7 +4,8 @@
   import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled.svelte';
   import Close from 'carbon-icons-svelte/lib/Close.svelte';
   import { slide, fade } from 'svelte/transition';
-  import { convert, prettyUnit, prettyLatLon } from '../utility.js';
+  import { convert, prettyUnit } from '../units.js';
+  import { prettyLatLon } from '../utility.js';
   import tooltip from '../tooltip.js';
 
   export let pins;

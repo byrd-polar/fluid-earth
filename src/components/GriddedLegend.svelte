@@ -2,11 +2,11 @@
   import * as d3 from 'd3-selection';
   import { axisBottom } from 'd3-axis';
   import { scaleLinear, scaleLog } from 'd3-scale';
-  import Qty from 'js-quantities/esm';
   import {
-    convert,
-    prettyUnit,
-    validUnit,
+    convert, prettyUnit,
+    hasDial, getUnitFromDial, rotateDial,
+  } from '../units.js';
+  import {
     capitalizeFirstLetter,
     simpleTranslate,
     handleLikeButton,
@@ -19,7 +19,6 @@
   export let griddedScale;
   export let griddedOriginalUnit;
   export let griddedUnit;
-  export let preferredUnits;
   export let simplifiedMode;
 
   let svgScaleElement;
@@ -38,17 +37,14 @@
 
   $: cssLut = griddedColormap.lut.map(arr => `rgb(${arr.join()})`).join();
 
-  $: qty = Qty.parse(griddedOriginalUnit);
-  $: unitList = qty ? preferredUnits[qty.kind()] : null;
+  $: canchange = hasDial(griddedUnit)
 
   $: name = simplifiedMode ? simpleTranslate(griddedName) : griddedName;
   $: title = capitalizeFirstLetter(`${name} (${prettyUnit(griddedUnit)})`)
 
   function toggleUnit() {
-    if (!unitList) return;
-
-    unitList.push(unitList.shift()); // rotate list in preferredUnits
-    griddedUnit = validUnit(griddedUnit, preferredUnits);
+    rotateDial(griddedUnit);
+    griddedUnit = getUnitFromDial(griddedUnit);
   }
 </script>
 
@@ -56,9 +52,9 @@
   on:click={toggleUnit}
   on:keydown={handleLikeButton(toggleUnit)}
   tabindex="0"
-  class:canchange={unitList}
+  class:canchange
   use:tooltip={{
-    content: unitList ? 'Change units' : 'No alternate units available',
+    content: canchange ? 'Change units' : 'No alternate units available',
     placement: 'top',
   }}
 >

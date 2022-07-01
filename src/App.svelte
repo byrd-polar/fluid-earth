@@ -24,7 +24,8 @@
 
   import { GriddedDataset, ParticleDataset } from './datasets.js';
   import { randlon, randlat } from './math.js';
-  import { fetchJson, validUnit, simplifyDataset } from './utility.js';
+  import { getUnitFromDial } from './units.js';
+  import { fetchJson, simplifyDataset } from './utility.js';
   import { currentDate, mobile } from './stores.js';
 
   import { onMount } from 'svelte';
@@ -90,17 +91,6 @@
   let griddedDomain = griddedDataset.domain;
   let griddedScale = griddedDataset.scale;
   let griddedUnit = griddedDataset.unit;
-  let preferredUnits = {
-    speed: ['km/h', 'm/s', 'kn', 'mph'],
-    temperature: ['tempC', 'tempF', 'tempK'],
-    pressure: ['hPa', 'atm', 'mmHg', 'inHg'],
-    length: ['m', 'ft'],
-    area_density: [
-      '0.01 Mg/m^2', // cm of rainfall
-      '0.0254 Mg/m^2', // inches of rainfall
-      'kg/m^2',
-    ],
-  };
 
   let particleData = particleDataset.emptyData;
   let particleName = particleDataset.name;
@@ -126,7 +116,7 @@
     griddedDomain = dataset.domain;
     griddedScale = dataset.scale;
     griddedColormap = dataset.colormap;
-    griddedUnit = validUnit(dataset.unit, preferredUnits);
+    griddedUnit = getUnitFromDial(dataset.unit);
 
     previousGriddedDataset = dataset;
   }
@@ -458,7 +448,6 @@
       {griddedScale}
       {griddedData}
       bind:griddedUnit
-      {preferredUnits}
       {particleName}
       {particleDisplay}
       bind:particlesPaused

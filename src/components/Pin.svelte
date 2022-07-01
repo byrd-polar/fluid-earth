@@ -3,7 +3,8 @@
   import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled.svelte';
   import tooltip from '../tooltip.js';
   import { clipped } from '../map/projections/';
-  import { convert, prettyUnit, prettyLatLon } from '../utility.js';
+  import { convert, prettyUnit } from '../units.js';
+  import { prettyLatLon } from '../utility.js';
 
   export let pins;
   export let pin;

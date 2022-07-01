@@ -26,36 +26,6 @@ export function handleLikeButton(fn) {
   return e => (e.code === 'Space' || e.code === 'Enter') ? fn() : undefined;
 }
 
-import Qty from 'js-quantities/esm';
-
-// Convert a value between units
-export function convert(value, originalUnit, newUnit) {
-  if (!isFinite(value) || originalUnit === newUnit) return value;
-
-  return Qty(`${value} ${originalUnit}`).to(newUnit).scalar;
-}
-
-// Make a pretty string for a unit from the 'js-quantities' library
-export function prettyUnit(unit) {
-  switch (unit) {
-    case 'tempK': return 'K';
-    case 'tempC': return '°C';
-    case 'tempF': return '°F';
-    case '0.0254 Mg/m^2': return 'in';
-    case '0.01 Mg/m^2': return 'cm';
-    // using Unicode instead of <sup> mainly because of text-shadow issues
-    default: return unit.replace('^2', '²').replace('^3', '³');
-  }
-}
-
-// Find an acceptable value for griddedUnit
-export function validUnit(compatibleUnit, preferredUnits) {
-  let qty = Qty.parse(compatibleUnit);
-  let unitList = qty ? preferredUnits[qty.kind()] : null;
-
-  return unitList ? unitList[0] : compatibleUnit;
-}
-
 // Calculate a generic pin label for an object in the `pins` array
 export function genericLabel(pins) {
   let genericPins = pins.filter(pin => pin.label.match(/Location [0-9]+/));
