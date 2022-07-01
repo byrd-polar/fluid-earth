@@ -17,8 +17,6 @@ const shared_metadata = {
 };
 
 export async function forage(current_state, datasets) {
-  throw 'Temporarily disabled'
-
   let { date, last_updated } = current_state;
   let dt = date
     ? Datetime.from(date).add({ months: 1 })
