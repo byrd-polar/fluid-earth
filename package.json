@@ -34,7 +34,6 @@
     "vite": "^2.9.4"
   },
   "dependencies": {
-    "@okrad/svelte-progressbar": "^1.11.3",
     "@petamoriken/float16": "^3.6.3",
     "@slightlyoff/lite-vimeo": "^0.1.2",
     "carbon-icons-svelte": "^11.0.1",

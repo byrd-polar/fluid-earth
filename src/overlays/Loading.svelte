@@ -1,23 +1,21 @@
 <script>
-  import ProgressBar from '@okrad/svelte-progressbar';
   import { addDatasetFetchListener } from '../datasets.js';
 
-  let series = [{
-    perc: 0,
-    color: getComputedStyle(document.body)
-      .getPropertyValue('--primary-color')
-      .substring(1),
-  }];
-  let closed = true;
+  let progress = 0;
+  let total = 0;
 
-  addDatasetFetchListener(({ progress, total }) => {
-    closed = (total === 0);
-    series[0].perc = closed ? 0 : Math.floor(100 * progress / total);
-  });
+  addDatasetFetchListener(status => ({ progress, total } = status));
+
+  $: closed = (total === 0);
+  $: percent = closed ? 100 : 100 * progress / total;
+  $: style = 'background: linear-gradient(to right,'
+    + `var(--primary-color) ${percent - 3}%, #1d1d1d ${percent + 3}%);`
 </script>
 
-<div class:closed>
-  <ProgressBar rx="0" width="200" height="20" {series} />
+<div>
+  <span class:closed {style}>
+    {Math.floor(percent)} %
+  </span>
 </div>
 
 <style>
@@ -26,11 +24,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Hack to get svg mask to display properly on Chromium */
-    z-index: 0;
   }
 
-  div.closed {
-    visibility: hidden;
+  span {
+    text-align: center;
+    color: white;
+    width: 220px;
+    border-radius: 4px;
+    box-shadow: 0 0 2px black;
+    transition: opacity 0.3s;
+  }
+
+  span.closed {
+    transition: none;
+    opacity: 0;
   }
 </style>
