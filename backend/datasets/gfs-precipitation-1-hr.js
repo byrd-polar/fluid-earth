@@ -1,8 +1,8 @@
 export const name = 'precipitation in previous hour';
 
 export const metadata = {
-  unit: 'kg/m^2',
-  originalUnit: 'kg/m^2',
+  unit: 'mm',
+  originalUnit: 'mm',
   domain: [0, 50],
   colormap: 'TURBO',
 };
