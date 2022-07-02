@@ -130,7 +130,7 @@
 <div class="header">
   <button
     on:click={() => header = prevHeader}
-    disabled={header.date < griddedDataset.start}
+    disabled={header.date <= griddedDataset.start}
     aria-label={`Prev ${picker.headerUnit}`}
     tabindex="-1"
   >
