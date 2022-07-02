@@ -69,6 +69,8 @@ export function simpleTranslate(name) {
     'wind at 500 mb'                        : 'wind at cloud level',
     'wind at 200 mb'                        : 'wind at cruise level',
     'ocean surface currents'                : 'sea surface currents',
+    'average temperature at 2 m above ground':
+    'average temperature near surface',
   };
   return translations[name] || name;
 }
