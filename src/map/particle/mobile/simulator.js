@@ -44,7 +44,24 @@ export default class ParticleSimulatorMobile extends ParticleSimulator {
     this._buffers.draw = this._createDrawBuffer();
     this._textures.simA = this._createSimATexture(),
     this._textures.simB = this._createSimBTexture(),
-    this._framebuffers = this._createFramebuffers();
+    this._framebuffers.simA = this._createSimFramebuffer(this._textures.simA);
+    this._framebuffers.simB = this._createSimFramebuffer(this._textures.simB);
+  }
+
+  set lifetime(l) {
+    this._lifetime = l;
+
+    this._gl.deleteTexture(this._textures.simA.longitudes);
+    this._gl.deleteTexture(this._textures.simA.latitudes);
+    this._gl.deleteTexture(this._textures.simA.lifetimes);
+    this._gl.deleteTexture(this._textures.simA.speeds);
+    this._gl.deleteFramebuffer(this._framebuffers.simA.longitudes.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simA.latitudes.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simA.lifetimes.framebuffer);
+    this._gl.deleteFramebuffer(this._framebuffers.simA.speeds.framebuffer);
+
+    this._textures.simA = this._createSimATexture();
+    this._framebuffers.simA = this._createSimFramebuffer(this._textures.simA);
   }
 
   step(sharedUniforms, timeDelta, rate) {
@@ -160,7 +177,7 @@ export default class ParticleSimulatorMobile extends ParticleSimulator {
     };
   }
 
-  // see above
+  // see above; actually multiple textures
   _createSimBTexture() {
     let sharedOptions = {
       minMag: this._gl.NEAREST,
@@ -175,45 +192,26 @@ export default class ParticleSimulatorMobile extends ParticleSimulator {
     };
   }
 
-  _createSimFramebuffers() {
+  // see above; actually multiple framebuffers
+  _createSimFramebuffer(texture) {
     let dim = Math.sqrt(this._count);
     return {
-      simA: {
-        longitudes: twgl.createFramebufferInfo(this._gl,
-          [{ attachment: this._textures.simA.longitudes }],
-          dim, dim
-        ),
-        latitudes: twgl.createFramebufferInfo(this._gl,
-          [{ attachment: this._textures.simA.latitudes }],
-          dim, dim
-        ),
-        lifetimes: twgl.createFramebufferInfo(this._gl,
-          [{ attachment: this._textures.simA.lifetimes }],
-          dim, dim
-        ),
-        speeds: twgl.createFramebufferInfo(this._gl,
-          [{ attachment: this._textures.simA.speeds }],
-          dim, dim
-        ),
-      },
-      simB: {
-        longitudes: twgl.createFramebufferInfo(this._gl,
-          [{ attachment: this._textures.simB.longitudes }],
-          dim, dim
-        ),
-        latitudes: twgl.createFramebufferInfo(this._gl,
-          [{ attachment: this._textures.simB.latitudes }],
-          dim, dim
-        ),
-        lifetimes: twgl.createFramebufferInfo(this._gl,
-          [{ attachment: this._textures.simB.lifetimes }],
-          dim, dim
-        ),
-        speeds: twgl.createFramebufferInfo(this._gl,
-          [{ attachment: this._textures.simB.speeds }],
-          dim, dim
-        ),
-      },
+      longitudes: twgl.createFramebufferInfo(this._gl,
+        [{ attachment: texture.longitudes }],
+        dim, dim
+      ),
+      latitudes: twgl.createFramebufferInfo(this._gl,
+        [{ attachment: texture.latitudes }],
+        dim, dim
+      ),
+      lifetimes: twgl.createFramebufferInfo(this._gl,
+        [{ attachment: texture.lifetimes }],
+        dim, dim
+      ),
+      speeds: twgl.createFramebufferInfo(this._gl,
+        [{ attachment: texture.speeds }],
+        dim, dim
+      ),
     };
   }
 }

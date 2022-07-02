@@ -57,21 +57,20 @@ export default class ParticleSimulator {
     this._gl.deleteFramebuffer(this._framebuffers.simB.framebuffer);
 
     this._buffers.draw = this._createDrawBuffer();
-    this._textures.simA = this._createSimATexture(),
-    this._textures.simB = this._createSimBTexture(),
-    this._framebuffers = this._createFramebuffers();
+    this._textures.simA = this._createSimATexture();
+    this._textures.simB = this._createSimBTexture();
+    this._framebuffers.simA = this._createSimFramebuffer(this._textures.simA);
+    this._framebuffers.simB = this._createSimFramebuffer(this._textures.simB);
   }
 
   set lifetime(l) {
     this._lifetime = l;
 
-    this._gl.deleteBuffer(this._buffers.draw.indices);
     this._gl.deleteTexture(this._textures.simA);
     this._gl.deleteFramebuffer(this._framebuffers.simA.framebuffer);
-    this._gl.deleteFramebuffer(this._framebuffers.simB.framebuffer);
 
     this._textures.simA = this._createSimATexture();
-    this._framebuffers = this._createFramebuffers();
+    this._framebuffers.simA = this._createSimFramebuffer(this._textures.simA);
   }
 
   set data(d) {
@@ -328,7 +327,8 @@ export default class ParticleSimulator {
 
   _createFramebuffers() {
     return {
-      ...this._createSimFramebuffers(),
+      simA: this._createSimFramebuffer(this._textures.simA),
+      simB: this._createSimFramebuffer(this._textures.simB),
       particleTrailsA: this._createParticleTrailsFramebuffer(
         this._textures.particleTrailsA,
       ),
@@ -338,21 +338,13 @@ export default class ParticleSimulator {
     };
   }
 
-  _createSimFramebuffers() {
-    return {
-      simA: twgl.createFramebufferInfo(
-        this._gl,
-        [{ attachment: this._textures.simA }],
-        Math.sqrt(this._count),
-        Math.sqrt(this._count),
-      ),
-      simB: twgl.createFramebufferInfo(
-        this._gl,
-        [{ attachment: this._textures.simB }],
-        Math.sqrt(this._count),
-        Math.sqrt(this._count),
-      ),
-    };
+  _createSimFramebuffer(texture) {
+    return twgl.createFramebufferInfo(
+      this._gl,
+      [{ attachment: texture }],
+      Math.sqrt(this._count),
+      Math.sqrt(this._count),
+    );
   }
 
   _createParticleTrailsFramebuffer(texture) {
