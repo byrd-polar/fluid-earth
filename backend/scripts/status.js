@@ -56,6 +56,10 @@ up.assert(
   state.sources.rtgssthr, 'date',
   47 * hours, 'RTGSSTHR is delayed',
 );
+up.assert(
+  state.sources.era5monthly, 'date',
+  70 * days, 'ERA5-monthly is delayed',
+);
 
 if (!up.down) console.log('\nAll sources up to date.');
 
