@@ -24,9 +24,10 @@
 
   import { GriddedDataset, ParticleDataset } from './datasets.js';
   import { randlon, randlat } from './math.js';
-  import { getUnitFromDial } from './units.js';
-  import { fetchJson, simplifyDataset } from './utility.js';
+  import { simplify, translate } from './smode.js';
   import { currentDate, mobile } from './stores.js';
+  import { getUnitFromDial } from './units.js';
+  import { fetchJson } from './utility.js';
 
   import { onMount } from 'svelte';
 
@@ -103,13 +104,11 @@
   let pins = hash.pins ?? [];
   let cursor = null;
 
-  let previousGriddedDataset, previousParticleDataset;
-  let currentlySetGriddedDataset = griddedDataset;
+  let previousGriddedDataset = griddedDataset;
+  let previousParticleDataset = particleDataset;
 
   function setGriddedVariables(dataset, simplifiedMode) {
-    currentlySetGriddedDataset = dataset;
-    dataset = simplifiedMode ? simplifyDataset(dataset) : dataset;
-    if (previousGriddedDataset === dataset) return;
+    dataset = simplifiedMode ? simplify(dataset) : dataset;
 
     griddedInterval = dataset.interval;
     griddedName = dataset.name;
@@ -117,23 +116,20 @@
     griddedScale = dataset.scale;
     griddedColormap = dataset.colormap;
     griddedUnit = getUnitFromDial(dataset.unit);
-
-    previousGriddedDataset = dataset;
   }
 
-  function setParticleVariables(dataset) {
-    if (previousParticleDataset === dataset) return;
-
-    particleName = dataset.name;
+  function setParticleVariables(dataset, simplifiedMode) {
+    particleName = simplifiedMode ? translate(dataset.name) : dataset.name;
     particleLifetime = dataset.particleLifetime;
     particleCount = dataset.particleCount;
     particleDisplay = dataset.particleDisplay;
-
-    previousParticleDataset = dataset;
   }
 
   function applyMode(simplifiedMode) {
-    setGriddedVariables(currentlySetGriddedDataset, simplifiedMode);
+    setGriddedVariables(previousGriddedDataset, simplifiedMode);
+
+    let dataset = previousParticleDataset;
+    particleName = simplifiedMode ? translate(dataset.name) : dataset.name;
   }
 
   $: applyMode(simplifiedMode);
@@ -204,6 +200,10 @@
 
       griddedAssignments = () => {
         griddedData = data;
+
+        if (previousGriddedDataset === griddedDataset) return;
+        previousGriddedDataset = griddedDataset;
+
         setGriddedVariables(griddedDataset, simplifiedMode);
       };
 
@@ -237,7 +237,11 @@
 
       particleAssignments = () => {
         particleData = data;
-        setParticleVariables(particleDataset);
+
+        if (previousParticleDataset === particleDataset) return;
+        previousParticleDataset = particleDataset;
+
+        setParticleVariables(particleDataset, simplifiedMode);
       };
 
       // wait until complementary gridded dataset is finished loading before
@@ -335,7 +339,6 @@
     bind:particleDataset
     {utc}
     {griddedDataset}
-    {simplifiedMode}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Projections">

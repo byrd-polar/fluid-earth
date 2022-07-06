@@ -8,7 +8,6 @@
   export let utc;
   export let griddedDataset;
   export let particleDataset;
-  export let simplifiedMode;
 
   let playerActive, fps;
   let validDates = griddedDataset.validDates; // reactive via RangeSettings
@@ -35,7 +34,6 @@
 <summary><h2>Timelapse</h2></summary>
 <Player
   {utc}
-  {simplifiedMode}
   {validDates}
   {griddedDataset}
   bind:date

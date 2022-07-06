@@ -6,11 +6,7 @@
     convert, prettyUnit,
     hasDial, getUnitFromDial, rotateDial,
   } from '../units.js';
-  import {
-    capitalizeFirstLetter,
-    simpleTranslate,
-    handleLikeButton,
-  } from '../utility.js';
+  import { capitalizeFirstLetter, handleLikeButton } from '../utility.js';
   import tooltip from '../tooltip.js';
 
   export let griddedName;
@@ -19,7 +15,6 @@
   export let griddedScale;
   export let griddedOriginalUnit;
   export let griddedUnit;
-  export let simplifiedMode;
 
   let svgScaleElement;
   let svgScaleWidth;
@@ -37,10 +32,7 @@
 
   $: cssLut = griddedColormap.lut.map(arr => `rgb(${arr.join()})`).join();
 
-  $: canchange = hasDial(griddedUnit)
-
-  $: name = simplifiedMode ? simpleTranslate(griddedName) : griddedName;
-  $: title = capitalizeFirstLetter(`${name} (${prettyUnit(griddedUnit)})`)
+  $: canchange = hasDial(griddedUnit);
 
   function toggleUnit() {
     rotateDial(griddedUnit);
@@ -58,7 +50,9 @@
     placement: 'top',
   }}
 >
-  <h3>{title}</h3>
+  <h3>
+    {`${capitalizeFirstLetter(griddedName)} (${prettyUnit(griddedUnit)})`}
+  </h3>
   <div
     style="background: linear-gradient(to right, {cssLut});"
     bind:clientWidth={svgScaleWidth}

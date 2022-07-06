@@ -62,7 +62,6 @@
         {griddedScale}
         griddedOriginalUnit={griddedData.originalUnit}
         bind:griddedUnit
-        {simplifiedMode}
       />
     {/if}
     {#if particleName !== 'none'}

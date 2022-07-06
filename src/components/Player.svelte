@@ -6,13 +6,12 @@
   import RangeSlider from 'svelte-range-slider-pips';
   import { ParticleDataset } from '../datasets.js';
   import tooltip from '../tooltip.js';
-  import { capitalizeFirstLetter, simpleTranslate } from '../utility.js';
+  import { capitalizeFirstLetter } from '../utility.js';
   import prettyMilliseconds from 'pretty-ms';
   import { tick } from 'svelte';
 
   export let validDates;
   export let utc;
-  export let simplifiedMode;
 
   export let griddedDataset;
   export let particleDataset;
@@ -29,8 +28,6 @@
     day: 'numeric',
   };
 
-  $: name = griddedDataset.name;
-  $: title = simplifiedMode ? simpleTranslate(name) : name;
   $: range = validDates[validDates.length - 1] - validDates[0];
 
   let playing = false;
@@ -148,7 +145,7 @@
       <Play size={32} />
     {/if}
   </button>
-  <h3>{capitalizeFirstLetter(title)}</h3>
+  <h3>{capitalizeFirstLetter(griddedDataset.name)}</h3>
   <p>{prettyMilliseconds(range, {verbose: true})} starting on
   {validDates[0].toLocaleString([], dateOptions)}</p>
   <RangeSlider
