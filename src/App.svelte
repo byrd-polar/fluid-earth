@@ -29,6 +29,14 @@
   import { getUnitFromDial } from './units.js';
   import { fetchJson } from './utility.js';
 
+  import Help from 'carbon-icons-svelte/lib/Help.svelte';
+  import Location from 'carbon-icons-svelte/lib/Location.svelte';
+  import ChartLineSmooth from 'carbon-icons-svelte/lib/ChartLineSmooth.svelte';
+  import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
+  import ChoroplethMap from 'carbon-icons-svelte/lib/ChoroplethMap.svelte';
+  import RequestQuote from 'carbon-icons-svelte/lib/RequestQuote.svelte';
+  import Debug from 'carbon-icons-svelte/lib/Debug.svelte';
+
   import { onMount } from 'svelte';
 
   export let gDatasets;
@@ -54,23 +62,22 @@
     = hash.gdata
     ?? gDatasets.find(d => d.name === 'temperature at 2 m above ground')
     ?? gDatasets[0];
+  let displayedGriddedDataset = griddedDataset;
 
   let particleDataset
     = hash.pdata
     ?? pDatasets.find(d => d.name === 'wind at 10 m above ground')
     ?? pDatasets[0];
+  let displayedParticleDataset = particleDataset;
+
+  let timeDataset = getTimeDataset(griddedDataset, particleDataset);
+  let displayedTimeDataset = timeDataset;
 
   let date = hash.date ?? (__production__ || !__using_local_data_files__)
     ? griddedDataset.closestValidDate($currentDate)
     : griddedDataset.end;
-  let displayDate = date;
-
-  // always equal to date unless date is re-assigned in updateGriddedData
-  $: anchorDate = date;
-
-  // see comment in loadDatasets
-  let updateGriddedData = () => {};
-  let updateParticleData = () => {};
+  let anchorDate = date;
+  let displayedDate = date;
 
   let projection = hash.proj ?? projections.VERTICAL_PERSPECTIVE;
   let forwardProjectionFunction = projection.function;
@@ -80,13 +87,11 @@
   let centerLongitude = hash.lon ?? randlon();
   let centerLatitude = hash.lat ?? randlat();
   let zoom = hash.zoom ?? 1.5;
-  $: portraitBasedZoom = $mobile;
 
   let vectorData = { objects: {} };
   let vectorColors = {};
 
   let griddedData = griddedDataset.emptyData;
-  let griddedInterval = griddedDataset.interval;
   let griddedName = griddedDataset.name;
   let griddedColormap = griddedDataset.colormap;
   let griddedDomain = griddedDataset.domain;
@@ -104,175 +109,7 @@
   let pins = hash.pins ?? [];
   let cursor = null;
 
-  let previousGriddedDataset = griddedDataset;
-  let previousParticleDataset = particleDataset;
-
-  function setGriddedVariables(dataset, simplifiedMode) {
-    dataset = simplifiedMode ? simplify(dataset) : dataset;
-
-    griddedInterval = dataset.interval;
-    griddedName = dataset.name;
-    griddedDomain = dataset.domain;
-    griddedScale = dataset.scale;
-    griddedColormap = dataset.colormap;
-    griddedUnit = getUnitFromDial(dataset.unit);
-  }
-
-  function setParticleVariables(dataset, simplifiedMode) {
-    particleName = simplifiedMode ? translate(dataset.name) : dataset.name;
-    particleLifetime = dataset.particleLifetime;
-    particleCount = dataset.particleCount;
-    particleDisplay = dataset.particleDisplay;
-  }
-
-  function applyMode(simplifiedMode) {
-    setGriddedVariables(previousGriddedDataset, simplifiedMode);
-
-    let dataset = previousParticleDataset;
-    particleName = simplifiedMode ? translate(dataset.name) : dataset.name;
-  }
-
-  $: applyMode(simplifiedMode);
-
-  onMount(async () => {
-    loadDatasets();
-
-    vectorData = await fetchJson('/tera/topology.json.br');
-    vectorColors = {
-      ne_50m_coastline: [255, 255, 255, 1],
-      ne_50m_lakes: [255, 255, 255, 1],
-      ne_50m_rivers_lake_centerlines: [255, 255, 255, 0.5],
-      ne_50m_graticules_10: [255, 255, 255, 0.1],
-    };
-
-    // fade out splash screen from index.html after loading
-    const splashElement = document.getElementById('splash');
-    if (!splashElement) return;
-
-    splashElement.classList.add('faded');
-    setTimeout(
-      () => splashElement.remove(),
-      1000 * parseFloat(getComputedStyle(splashElement)['transitionDuration'])
-    );
-  });
-
-  function loadDatasets() {
-    // Methods for updating gridded and particle data in response to date or
-    // dataset changes. Defined here so that they aren't triggered multiple
-    // times during the initial mount due to a Svelte bug with bindings.
-
-    let griddedLoading = false;
-    let particleLoading = false;
-    let griddedController;
-    let particleController;
-    let griddedAssignments = () => {};
-    let particleAssignments = () => {};
-    let initialLoad = true;
-
-    updateGriddedData = async (griddedDataset) => {
-      // Ensure that original date is switched back to if switching to and back
-      // from a griddedDataset with different values for closestValidDate
-      if (anchorDate.getTime() !== date.getTime()) {
-        date = anchorDate;
-      }
-
-      let valid = griddedDataset.closestValidDate(date);
-      if (valid.getTime() !== date.getTime()) {
-        date = valid;
-      }
-
-      griddedController?.abort();
-      griddedController = new AbortController();
-      let { signal } = griddedController;
-
-      griddedLoading = true;
-
-      let data;
-      try {
-        data = await griddedDataset.fetchData(date, signal);
-      } catch(e) {
-        if (e.name === 'AbortError') return;
-        console.error(e);
-        data = griddedDataset.emptyData;
-      } finally {
-        griddedLoading = false;
-      }
-
-      griddedAssignments = () => {
-        griddedData = data;
-
-        if (previousGriddedDataset === griddedDataset) return;
-        previousGriddedDataset = griddedDataset;
-
-        setGriddedVariables(griddedDataset, simplifiedMode);
-      };
-
-      // wait until complementary particle dataset is finished loading before
-      // updating the map (avoids partial updates), except on initial load
-      if (!particleLoading || initialLoad) assignVariables();
-    };
-
-    updateParticleData = async (particleDataset) => {
-      let valid = particleDataset.closestValidDate(date);
-      if (!valid) {
-        particleDataset = ParticleDataset.none;
-      }
-
-      particleController?.abort();
-      particleController = new AbortController();
-      let { signal } = particleController;
-
-      particleLoading = true;
-
-      let data;
-      try {
-        data = await particleDataset.fetchData(valid, signal);
-      } catch(e) {
-        if (e.name === 'AbortError') return;
-        console.error(e);
-        data = particleDataset.emptyData;
-      } finally {
-        particleLoading = false;
-      }
-
-      particleAssignments = () => {
-        particleData = data;
-
-        if (previousParticleDataset === particleDataset) return;
-        previousParticleDataset = particleDataset;
-
-        setParticleVariables(particleDataset, simplifiedMode);
-      };
-
-      // wait until complementary gridded dataset is finished loading before
-      // updating the map (avoids partial updates), except on initial load
-      if (!griddedLoading || initialLoad) assignVariables();
-    };
-
-    // update both gridded and particle datasets at the same time (if necessary)
-    function assignVariables() {
-      displayDate = date;
-      griddedAssignments();
-      particleAssignments();
-      griddedAssignments = () => {};
-      particleAssignments = () => {};
-      initialLoad = false;
-    }
-  }
-
-  $: date, updateGriddedData(griddedDataset);
-  $: date, updateParticleData(particleDataset);
-
-  // Find new icons from: https://ibm.github.io/carbon-icons-svelte/
-  //
-  // Not using { Icon } import syntax for significantly faster build times
-  import Help from 'carbon-icons-svelte/lib/Help.svelte';
-  import Location from 'carbon-icons-svelte/lib/Location.svelte';
-  import ChartLineSmooth from 'carbon-icons-svelte/lib/ChartLineSmooth.svelte';
-  import Calendar from 'carbon-icons-svelte/lib/Calendar.svelte';
-  import ChoroplethMap from 'carbon-icons-svelte/lib/ChoroplethMap.svelte';
-  import RequestQuote from 'carbon-icons-svelte/lib/RequestQuote.svelte';
-  import Debug from 'carbon-icons-svelte/lib/Debug.svelte';
+  $: portraitBasedZoom = $mobile;
 
   $: menus = [
     { name: 'Help & About', icon: Help },
@@ -283,14 +120,129 @@
     kioskMode ? null : { name: 'Feedback', icon: RequestQuote },
     __production__ ? null : { name: 'Developer-Only Tools', icon: Debug },
   ].filter(m => m !== null);
+
+  $: applyMode(simplifiedMode);
+
+  $: anchorDate = date;
+  $: timeDataset = getTimeDataset(griddedDataset, particleDataset);
+  $: fixDate(timeDataset);
+
+  $: hideParticlesIfTooFar(date);
+  $: updateDataAndVariables(date);
+
+  function applyMode(simplifiedMode) {
+    let dataset = displayedGriddedDataset;
+
+    dataset = simplifiedMode ? simplify(dataset) : dataset;
+    griddedName = dataset.name;
+    griddedDomain = dataset.domain;
+    griddedScale = dataset.scale;
+    griddedColormap = dataset.colormap;
+
+    dataset = displayedParticleDataset;
+    particleName = simplifiedMode ? translate(dataset.name) : dataset.name;
+  }
+
+  function getTimeDataset(griddedDataset, particleDataset) {
+    return griddedDataset === GriddedDataset.none
+        && particleDataset !== particleDataset.none
+        ? particleDataset
+        : griddedDataset;
+  }
+
+  function fixDate(timeDataset) {
+    date = timeDataset.closestValidDate(anchorDate);
+  }
+
+  function hideParticlesIfTooFar(date) {
+    if (!particleDataset.isCloseDate(date))
+      particleDataset = ParticleDataset.none;
+  }
+
+  let notYetMounted = true;
+  let controller;
+
+  async function updateDataAndVariables(date) {
+    if (notYetMounted) return;
+
+    controller?.abort();
+    controller = new AbortController();
+    let { signal } = controller;
+
+    let datasets = [griddedDataset, particleDataset];
+    let data = await Promise.all(datasets.map(d => getData(d, date, signal)));
+    if (!data[0] || !data[1]) return;
+
+    if (griddedData !== data[0]) griddedData = data[0];
+    if (particleData !== data[1]) particleData = data[1];
+
+    if (griddedDataset !== displayedGriddedDataset) {
+      displayedGriddedDataset = griddedDataset;
+
+      let dataset = simplifiedMode ? simplify(griddedDataset) : griddedDataset;
+      griddedName = dataset.name;
+      griddedDomain = dataset.domain;
+      griddedScale = dataset.scale;
+      griddedColormap = dataset.colormap;
+      griddedUnit = getUnitFromDial(dataset.unit);
+    }
+
+    if (particleDataset !== displayedParticleDataset) {
+      displayedParticleDataset = particleDataset;
+
+      let dataset = particleDataset;
+      particleName = simplifiedMode ? translate(dataset.name) : dataset.name;
+      particleLifetime = dataset.particleLifetime;
+      particleCount = dataset.particleCount;
+      particleDisplay = dataset.particleDisplay;
+    }
+
+    if (displayedDate.getTime() !== date.getTime())
+      displayedDate = date;
+
+    if (displayedTimeDataset !== timeDataset)
+      displayedTimeDataset = timeDataset;
+  }
+
+  async function getData(dataset, date, signal) {
+    try {
+      return await dataset.fetchData(date, signal);
+    } catch(e) {
+      if (e.name === 'AbortError') return false;
+      console.error(e);
+      return dataset.emptyData;
+    }
+  }
+
+  onMount(async () => {
+    notYetMounted = false;
+    await fetchVectorData();
+    fadeSplashScreen();
+  });
+
+  async function fetchVectorData() {
+    vectorData = await fetchJson('/tera/topology.json.br');
+    vectorColors = {
+      ne_50m_coastline: [255, 255, 255, 1],
+      ne_50m_lakes: [255, 255, 255, 1],
+      ne_50m_rivers_lake_centerlines: [255, 255, 255, 0.5],
+      ne_50m_graticules_10: [255, 255, 255, 0.1],
+    };
+  }
+
+  function fadeSplashScreen() {
+    const splashElement = document.getElementById('splash');
+    if (!splashElement) return;
+
+    splashElement.classList.add('faded');
+    setTimeout(
+      () => splashElement.remove(),
+      1000 * parseFloat(getComputedStyle(splashElement)['transitionDuration'])
+    );
+  }
 </script>
 
 <div class="wrapper">
-<!--
-  Note: for the attributes/props in the components below, {variable} is
-  shorthand for variable={variable} and bind:variable is shorthand for
-  bind:variable={variable}
--->
 <Hash
   bind:date
   bind:griddedDataset
@@ -338,7 +290,7 @@
     bind:date
     bind:particleDataset
     {utc}
-    {griddedDataset}
+    {timeDataset}
   />
 </Menu>
 <Menu bind:openedMenu menuName="Projections">
@@ -439,8 +391,8 @@
     <Loading />
     <Widgets
       bind:openedMenu
-      {displayDate}
-      {griddedInterval}
+      {displayedDate}
+      {displayedTimeDataset}
       bind:utc
       bind:zoom
       {minZoom}

@@ -11,7 +11,7 @@
   import * as hourPicker from './hourPicker.js';
 
   export let date;
-  export let griddedDataset;
+  export let timeDataset;
   export let utc;
 
   let pickerMode = 'days';
@@ -21,7 +21,7 @@
     days: dayPicker,
     hours: hourPicker,
   };
-  $: options = getOptions(griddedDataset.interval);
+  $: options = getOptions(timeDataset.interval);
   $: if (!options.includes(pickerMode)) {
     pickerMode = options[options.length - 1];
   }
@@ -56,15 +56,15 @@
   function selectDate(box) {
     let d = Object.fromEntries(picker.boxSelect.map(unit => [unit, box[unit]]));
     let v = date => date >= box.date && date < box.add(picker.boxInterval).date;
-    let validDate = griddedDataset.closestValidDate(zdt.with(d).date, v);
+    let validDate = timeDataset.closestValidDate(zdt.with(d).date, v);
     if (validDate) date = validDate;
   }
 
-  function boxIsEnabled(box, griddedDataset, utc, picker, header) {
+  function boxIsEnabled(box, timeDataset, utc, picker, header) {
     if (!picker.boxEnabled(box, header)) return false;
-    if (box.date > griddedDataset.end) return false;
+    if (box.date > timeDataset.end) return false;
 
-    let a = griddedDataset.closestValidDate(box.date, date => date >= box.date);
+    let a = timeDataset.closestValidDate(box.date, date => date >= box.date);
     if (!a) return false;
 
     let b = new ZonedDateTime(a, utc).subtract(picker.boxInterval);
@@ -111,7 +111,7 @@
     e.preventDefault();
 
     let newDate = zdt[mathFn](duration).date;
-    let validDate = griddedDataset.closestValidDate(newDate, condition);
+    let validDate = timeDataset.closestValidDate(newDate, condition);
     if (validDate) date = validDate;
 
     focusOnSelected();
@@ -130,7 +130,7 @@
 <div class="header">
   <button
     on:click={() => header = prevHeader}
-    disabled={header.date <= griddedDataset.start}
+    disabled={header.date <= timeDataset.start}
     aria-label={`Prev ${picker.headerUnit}`}
     tabindex="-1"
   >
@@ -141,7 +141,7 @@
   </div>
   <button
     on:click={() => header = nextHeader}
-    disabled={nextHeader.date > griddedDataset.end}
+    disabled={nextHeader.date > timeDataset.end}
     aria-label={`Next ${picker.headerUnit}`}
     tabindex="-1"
   >
@@ -170,7 +170,7 @@
 >
   {#each boxes as box, i (pickerMode + i)}
     {@const selected = box.equals(selectedBox)}
-    {@const enabled = boxIsEnabled(box, griddedDataset, utc, picker, header)}
+    {@const enabled = boxIsEnabled(box, timeDataset, utc, picker, header)}
     <button
       class="box"
       class:hour={pickerMode === 'hours'}

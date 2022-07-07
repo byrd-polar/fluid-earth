@@ -48,7 +48,7 @@ class Dataset {
   async fetchData(date, signal) {
     if (!this.path) return this.emptyData
 
-    let dateString = date.toISOString()
+    let dateString = this.closestValidDate(date).toISOString()
     let cachedResponse = this.fetchCache[dateString]
     if (cachedResponse) return cachedResponse
 
@@ -224,25 +224,19 @@ export class ParticleDataset extends Dataset {
     }
   }
 
-  // same as super except returns null if closest date is not "close enough",
-  // i.e. too before this.start or too after this.end
-  closestValidDate(date, condition) {
-    let closest = super.closestValidDate(date, condition)
+  isCloseDate(date) {
+    let closest = super.closestValidDate(date)
 
     switch(this.interval) {
       case intervals['custom:NONE']:
-        return closest
+        return true
 
       case intervals['custom:OSCAR']:
         return Math.abs(closest - date) < 6 * 24 * 60 * 60 * 1000
-          ? closest
-          : null
 
       default:
         let zdt = new ZonedDateTime(date, true).round(this.interval.roundTo)
         return zdt.date.getTime() === closest.getTime()
-          ? closest
-          : null
     }
   }
 }

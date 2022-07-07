@@ -6,17 +6,17 @@
 
   export let date;
   export let utc;
-  export let griddedDataset;
+  export let timeDataset;
   export let particleDataset;
 
   let playerActive, fps;
-  let validDates = griddedDataset.validDates; // reactive via RangeSettings
+  let validDates = timeDataset.validDates; // reactive via RangeSettings
 </script>
 
 <details open>
 <summary><h2>Jump to</h2></summary>
 <TimeJumper
-  {griddedDataset}
+  {timeDataset}
   bind:date
 />
 </details>
@@ -24,18 +24,19 @@
 <details open>
 <summary><h2>Time Picker</h2></summary>
 <Calendar
-  {griddedDataset}
+  {timeDataset}
   bind:date
   {utc}
 />
 </details>
 
+{#if timeDataset.type === 'gridded'}
 <details>
 <summary><h2>Timelapse</h2></summary>
 <Player
   {utc}
   {validDates}
-  {griddedDataset}
+  griddedDataset={timeDataset}
   bind:date
   bind:particleDataset
   bind:sliding={playerActive}
@@ -45,10 +46,11 @@
   {date}
   {utc}
   {playerActive}
-  {griddedDataset}
+  griddedDataset={timeDataset}
   bind:validDates
   bind:fps
 />
 </details>
+{/if}
 
 <svelte:options immutable={true} />

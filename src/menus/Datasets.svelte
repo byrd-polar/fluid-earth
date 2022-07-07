@@ -70,7 +70,7 @@
     return datasets.find(d => {
       return aFilters[a](d.name)
           && gDataset
-          && d.closestValidDate(gDataset.closestValidDate(date));
+          && d.isCloseDate(gDataset.closestValidDate(date));
     });
   });
 

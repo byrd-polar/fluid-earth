@@ -9,7 +9,8 @@
 
   export let openedMenu;
 
-  export let displayDate;
+  export let displayedDate;
+  export let displayedTimeDataset;
   export let utc;
 
   export let zoom;
@@ -18,8 +19,6 @@
 
   export let particleName;
   export let particleDisplay;
-
-  export let griddedInterval;
 
   export let griddedName;
   export let griddedColormap;
@@ -41,8 +40,8 @@
       {kioskMode}
     />
     <TimeDisplay
-      {displayDate}
-      {griddedInterval}
+      {displayedDate}
+      {displayedTimeDataset}
       bind:utc
     />
   </div>

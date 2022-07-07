@@ -4,19 +4,19 @@
   import Shuffle from 'carbon-icons-svelte/lib/Shuffle.svelte';
   import { currentDate } from '../stores.js';
 
-  export let griddedDataset;
+  export let timeDataset;
   export let date;
 
-  $: nowDate = griddedDataset.closestValidDate($currentDate);
+  $: nowDate = timeDataset.closestValidDate($currentDate);
 
   function now() {
     date = nowDate;
   }
 
   function random() {
-    date = griddedDataset.closestValidDate(new Date(
-      griddedDataset.start.getTime() +
-      Math.random() * (griddedDataset.end - griddedDataset.start)
+    date = timeDataset.closestValidDate(new Date(
+      timeDataset.start.getTime() +
+      Math.random() * (timeDataset.end - timeDataset.start)
     ));
   }
 </script>

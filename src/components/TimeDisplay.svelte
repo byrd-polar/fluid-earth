@@ -2,11 +2,12 @@
   import tooltip from '../tooltip.js';
   import { handleLikeButton } from '../utility.js';
 
-  export let displayDate;
-  export let griddedInterval;
+  export let displayedDate;
+  export let displayedTimeDataset;
   export let utc;
 
-  $: utcOnly = griddedInterval.utcOnly;
+  $: interval = displayedTimeDataset.interval;
+  $: utcOnly = interval.utcOnly;
   $: enforceUtcOnly(utcOnly);
 
   let _utc;
@@ -35,9 +36,9 @@
   }}
   tabindex="0"
 >
-  <h3 class="date">{griddedInterval.dateFormat(displayDate, utc)}</h3>
-  {#if griddedInterval.timeFormat}
-    <h3 class="time">{griddedInterval.timeFormat(displayDate, utc)}</h3>
+  <h3 class="date">{interval.dateFormat(displayedDate, utc)}</h3>
+  {#if interval.timeFormat}
+    <h3 class="time">{interval.timeFormat(displayedDate, utc)}</h3>
   {/if}
 </section>
 
