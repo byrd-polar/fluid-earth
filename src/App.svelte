@@ -128,7 +128,7 @@
   $: fixDate(timeDataset);
 
   $: hideParticlesIfTooFar(date);
-  $: updateDataAndVariables(date);
+  $: updateDataAndVariables(griddedDataset, particleDataset, date);
 
   function applyMode(simplifiedMode) {
     let dataset = displayedGriddedDataset;
@@ -151,7 +151,9 @@
   }
 
   function fixDate(timeDataset) {
-    date = timeDataset.closestValidDate(anchorDate);
+    let valid = timeDataset.closestValidDate(anchorDate);
+    if (date.getTime() !== valid.getTime())
+      date = valid;
   }
 
   function hideParticlesIfTooFar(date) {
@@ -162,7 +164,7 @@
   let notYetMounted = true;
   let controller;
 
-  async function updateDataAndVariables(date) {
+  async function updateDataAndVariables(griddedDataset, particleDataset, date) {
     if (notYetMounted) return;
 
     controller?.abort();
