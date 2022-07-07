@@ -161,13 +161,18 @@
       particleDataset = ParticleDataset.none;
   }
 
-  let notYetMounted = true;
-  let controller;
+  let controller = new AbortController();
+  let timesCalled = 0;
 
   async function updateDataAndVariables(griddedDataset, particleDataset, date) {
-    if (notYetMounted) return;
+    // ignore the calls to this on initial page load;
+    // update the data eagerly in onMount instead
+    if (timesCalled < 2) {
+      timesCalled++;
+      return;
+    }
 
-    controller?.abort();
+    controller.abort();
     controller = new AbortController();
     let { signal } = controller;
 
@@ -206,6 +211,16 @@
       displayedTimeDataset = timeDataset;
   }
 
+  onMount(() => {
+    let { signal } = controller;
+    getData(griddedDataset, date, signal)
+      .then(data => { if (data) griddedData = data });
+    getData(particleDataset, date, signal)
+      .then(data => { if (data) particleData = data });
+
+    fetchVectorData().then(fadeSplashScreen);
+  });
+
   async function getData(dataset, date, signal) {
     try {
       return await dataset.fetchData(date, signal);
@@ -215,12 +230,6 @@
       return dataset.emptyData;
     }
   }
-
-  onMount(async () => {
-    notYetMounted = false;
-    await fetchVectorData();
-    fadeSplashScreen();
-  });
 
   async function fetchVectorData() {
     vectorData = await fetchJson('/tera/topology.json.br');
