@@ -167,10 +167,7 @@
   async function updateDataAndVariables(griddedDataset, particleDataset, date) {
     // ignore the calls to this on initial page load;
     // update the data eagerly in onMount instead
-    if (timesCalled < 2) {
-      timesCalled++;
-      return;
-    }
+    if (timesCalled < 2) { timesCalled++; return; }
 
     controller.abort();
     controller = new AbortController();
@@ -223,7 +220,7 @@
 
   async function getData(dataset, date, signal) {
     try {
-      return await dataset.fetchData(date, signal);
+      return dataset.fetchData(date, signal);
     } catch(e) {
       if (e.name === 'AbortError') return false;
       console.error(e);
