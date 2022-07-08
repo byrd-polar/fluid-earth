@@ -37,8 +37,6 @@
   import RequestQuote from 'carbon-icons-svelte/lib/RequestQuote.svelte';
   import Debug from 'carbon-icons-svelte/lib/Debug.svelte';
 
-  import { onMount } from 'svelte';
-
   export let gDatasets;
   export let pDatasets;
 
@@ -166,7 +164,7 @@
 
   async function updateDataAndVariables(griddedDataset, particleDataset, date) {
     // ignore the calls to this on initial page load;
-    // update the data eagerly in onMount instead
+    // update the data manually below instead
     if (timesCalled < 2) { timesCalled++; return; }
 
     controller.abort();
@@ -208,16 +206,6 @@
       displayedTimeDataset = timeDataset;
   }
 
-  onMount(() => {
-    let { signal } = controller;
-    getData(griddedDataset, date, signal)
-      .then(data => { if (data) griddedData = data });
-    getData(particleDataset, date, signal)
-      .then(data => { if (data) particleData = data });
-
-    fetchVectorData().then(fadeSplashScreen);
-  });
-
   async function getData(dataset, date, signal) {
     try {
       return dataset.fetchData(date, signal);
@@ -227,6 +215,14 @@
       return dataset.emptyData;
     }
   }
+
+  griddedDataset.fetchData(date, controller.signal)
+    .then(data => griddedData = data)
+
+  particleDataset.fetchData(date, controller.signal)
+    .then(data => particleData = data)
+
+  fetchVectorData().then(fadeSplashScreen);
 
   async function fetchVectorData() {
     vectorData = await fetchJson('/tera/topology.json.br');
