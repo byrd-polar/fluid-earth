@@ -26,14 +26,22 @@ export async function forage(current_state, datasets) {
 
   let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
 
-  let input = await download_cds(name, {
-    format: 'grib',
-    product_type: 'monthly_averaged_reanalysis',
-    year: dt.year,
-    month: dt.p_month,
-    time: '00:00',
-    variable: datasets.map(d => d.variable),
-  }, process.env.CDS_API_KEY);
+  let input;
+  try {
+    input = await download_cds(name, {
+      format: 'grib',
+      product_type: 'monthly_averaged_reanalysis',
+      year: dt.year,
+      month: dt.p_month,
+      time: '00:00',
+      variable: datasets.map(d => d.variable),
+    }, process.env.CDS_API_KEY);
+  } catch(e) {
+    if (e === 'Error: no data is available within your requested subset') {
+      return { new_state: { ...current_state, last_updated } };
+    }
+    throw e;
+  }
 
   await run_all(datasets.map((dataset, i) => async () => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
