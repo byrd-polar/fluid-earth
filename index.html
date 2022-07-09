@@ -49,6 +49,8 @@
     window.addEventListener('error', function (e) { showError(e.message) });
     window.addEventListener('unhandledrejection', function (e) { showError(e.reason) });
   </script>
+  <link rel="preload" href="/tera/inventory.json.br" as="fetch" type="application/json" crossorigin>
+  <link rel="preload" href="/tera/topology.json.br" as="fetch" type="application/json" crossorigin>
   <script type="module" src='/src/main.js'></script>
 </head>
 <body>
