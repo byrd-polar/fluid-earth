@@ -146,7 +146,7 @@ function copyLicenseAndPatches() {
 
       const party = 'dist/legal/THIRD_PARTY';
       await appendFile(party, '\n\n\n---\n\n');
-      await appendFile(party, await readFile('src/map/colormaps/VENDORED'));
+      await appendFile(party, await readFile('./VENDORED'));
 
       let patchDir = 'patches/';
       let modFile = 'dist/legal/MODIFICATIONS';
