@@ -1,0 +1,36 @@
+html {
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  --primary-color: #173e41;
+  --primary-color-light: #378D95;
+  --secondary-color: rgba(66, 66, 77);
+  --secondary-color-transparent: rgba(66, 66, 77, 0.8);
+  --secondary-color-dark: #202124;
+  --input-color: rgba(70,70,70,0.8);
+  --input-color-opaque: #464646;
+  --range-handle: var(--primary-color-light);
+  --range-handle-focus: var(--primary-color-light);
+  color-scheme: dark;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  display: flex;
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+a {
+  color: var(--primary-color-light);
+  -webkit-tap-highlight-color: initial;
+}
+
+sup {
+  line-height: 0;
+}
