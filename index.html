@@ -29,7 +29,49 @@
   <meta property="twitter:site" content="@ByrdPolar">
   <meta property="twitter:title" content="Fluid Earth">
 
-  <link rel="stylesheet" href="/global.css">
+  <style>
+    html {
+      /* based on GitHub's system font stack */
+      font-family: -apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+      line-height: 1.5;
+    }
+    body {
+      margin: 0;
+    }
+    #splash h1 {
+      font-size: 32px;
+    }
+    #splash h1 img {
+      vertical-align: text-bottom;
+      margin-right: 0.125em;
+    }
+    #splash .errmsg {
+      width: 80%;
+      text-align: center;
+      margin-top: 0;
+    }
+    #splash {
+      background-color: black;
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      z-index: 5;
+      opacity: 1;
+      transition: opacity 0.5s;
+      --sk-size: 40px;
+      --sk-color: #378D95;
+    }
+    #splash.faded {
+      opacity: 0;
+    }
+    /* SpinKit loading indicator */
+    .sk-swing{width:var(--sk-size);height:var(--sk-size);position:relative;animation:sk-swing 1.8s infinite linear}.sk-swing-dot{width:45%;height:45%;position:absolute;top:0;left:0;right:0;margin:auto;background-color:var(--sk-color);border-radius:100%;animation:sk-swing-dot 2s infinite ease-in-out}.sk-swing-dot:nth-child(2){top:auto;bottom:0;animation-delay:-1s}@keyframes sk-swing{to{transform:rotate(360deg)}}@keyframes sk-swing-dot{0%,to{transform:scale(.2)}50%{transform:scale(1)}}
+  </style>
   <script>
     if (window.location.hostname === 'fluid-earth.byrd.osu.edu') {
       var stats = document.createElement('script');

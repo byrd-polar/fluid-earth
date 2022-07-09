@@ -1,3 +1,4 @@
+import './app.css';
 import App from './App.svelte';
 import { GriddedDataset, ParticleDataset } from './datasets.js';
 import { fetchJson } from './utility.js';
