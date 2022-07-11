@@ -23,6 +23,7 @@ const brotliCompress = promisify(_brotliCompress);
 export const parent_output_dir = await create_dir('../public/tera');
 export const sources_state_dir = await create_dir('./state/sources');
 export const datasets_state_dir = await create_dir('./state/datasets');
+export const perm_cache_dir = await create_dir('./cache');
 export const cache_dir = await create_dir(join(tmpdir(), 'fev2r-cache'));
 
 async function create_dir(relative_path) {

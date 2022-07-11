@@ -1,10 +1,17 @@
 import { Datetime } from '../datetime.js';
 import { download, get_json, post_json } from '../download.js'
-import { grib1 } from '../file-conversions.js';
-import { typical_metadata, output_path, run_all } from '../utility.js';
-import { rm } from 'fs/promises';
+import { grib1, grib1_normal, grib1_anomaly } from '../file-conversions.js';
+import {
+  output_path,
+  run_all,
+  perm_cache_dir,
+  typical_metadata,
+} from '../utility.js';
+import { access, rm } from 'fs/promises';
+import { join } from 'path';
 import { setTimeout as sleep } from 'timers/promises';
 import { parentPort } from 'worker_threads'
+import { v4 as uuidv4 } from 'uuid';
 import 'dotenv/config'
 
 const name = 'reanalysis-era5-single-levels-monthly-means';
@@ -17,7 +24,7 @@ const shared_metadata = {
 };
 
 export async function forage(current_state, datasets) {
-  let { date, last_updated } = current_state;
+  let { date, last_updated, normals={} } = current_state;
   let dt = date
     ? Datetime.from(date).add({ months: 1 })
     : Datetime.from('1959-01-01');
@@ -46,12 +53,44 @@ export async function forage(current_state, datasets) {
 
   await run_all(datasets.map((dataset, i) => async () => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
-    let record_number = variables.findIndex(dataset.variable) + 1;
-    await grib1(input, output, { record_number });
+    let record_number = variables.findIndex(v => v === dataset.variable) + 1;
+
+    if (dataset.anomaly) {
+      let normal = await get_normal(normals, dt, dataset.variable);
+      await grib1_anomaly(normal, input, output, { record_number });
+
+    } else {
+      await grib1(input, output, { record_number });
+    }
   }));
   await rm(input);
 
-  return { metadatas, new_state: { date, last_updated } };
+  return { metadatas, new_state: { date, last_updated, normals } };
+}
+
+const count = 30;
+const starting_year = 1991;
+
+async function get_normal(normals, dt, variable) {
+  normals[variable] ??= {};
+  let month = dt.p_month;
+  let normal = normals[variable][month];
+  if (normal) return normal;
+
+  let input = await download_cds(name, {
+    format: 'grib',
+    product_type: 'monthly_averaged_reanalysis',
+    year: Array.from({ length: count }, (_, i) => i + starting_year),
+    month,
+    time: '00:00',
+    variable,
+  }, process.env.CDS_API_KEY);
+  let output = join(perm_cache_dir, uuidv4());
+  normals[variable][month] = output;
+
+  await grib1_normal(count, input, output, { record_number: 'all' });
+
+  return output;
 }
 
 const base_url = 'https://cds.climate.copernicus.eu/api/v2';
