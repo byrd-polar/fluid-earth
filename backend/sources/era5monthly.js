@@ -25,6 +25,7 @@ export async function forage(current_state, datasets) {
   last_updated = await verify_update_needed(name, dt, last_updated);
 
   let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
+  let variables = [...new Set(datasets.map(d => d.variable))];
 
   let input;
   try {
@@ -34,7 +35,7 @@ export async function forage(current_state, datasets) {
       year: dt.year,
       month: dt.p_month,
       time: '00:00',
-      variable: datasets.map(d => d.variable),
+      variable: variables,
     }, process.env.CDS_API_KEY);
   } catch(e) {
     if (e === 'Error: no data is available within your requested subset') {
@@ -45,7 +46,8 @@ export async function forage(current_state, datasets) {
 
   await run_all(datasets.map((dataset, i) => async () => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
-    await grib1(input, output, { record_number: i + 1 });
+    let record_number = variables.findIndex(dataset.variable) + 1;
+    await grib1(input, output, { record_number });
   }));
   await rm(input);
 
