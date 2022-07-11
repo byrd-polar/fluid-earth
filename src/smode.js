@@ -5,26 +5,17 @@ import { GriddedDataset } from './datasets.js'
 // old Fluid Earth Viewer for simplified mode "smode"
 
 const translations = {
-  'temperature at 2 m above ground'        : 'temperature near surface',
-  'temperature at 500 mb'                  : 'temperature at cloud level',
-  'temperature at 200 mb'                  : 'temperature at cruise level',
-  'relative humidity at 2 m above ground'  : 'humidity near surface',
-  'relative humidity at 500 mb'            : 'humidity at cloud level',
-  'relative humidity at 200 mb'            : 'humidity at cruise level',
-  'mean sea level pressure'                : 'pressure at sea level',
-  'total precipitable water'               : 'water in atmosphere',
-  'total cloud water'                      : 'water in clouds',
-  'total ozone'                            : 'ozone in atmosphere',
-  'significant wave height'                : 'wave height',
-  'wind speed at 10 m above ground'        : 'wind speed near surface',
-  'wind speed at 500 mb'                   : 'wind speed at cloud level',
-  'wind speed at 200 mb'                   : 'wind speed at cruise level',
-  'ocean surface currents speed'           : 'speed of sea surface currents',
-  'wind at 10 m above ground'              : 'wind near surface',
-  'wind at 500 mb'                         : 'wind at cloud level',
-  'wind at 200 mb'                         : 'wind at cruise level',
-  'ocean surface currents'                 : 'sea surface currents',
-  'average temperature at 2 m above ground': 'average temperature near surface',
+  'at 2 m above ground'          : 'near surface',
+  'at 10 m above ground'         : 'near surface',
+  'at 500 mb'                    : 'at cloud level',
+  'at 200 mb'                    : 'at cruise level',
+  'mean sea level pressure'      : 'pressure at sea level',
+  'total precipitable water'     : 'water in atmosphere',
+  'total cloud water'            : 'water in clouds',
+  'total ozone'                  : 'ozone in atmosphere',
+  'significant wave height'      : 'wave height',
+  'ocean surface currents speed' : 'speed of sea surface currents',
+  'ocean surface currents'       : 'sea surface currents',
 }
 
 const simplifiedDatasetCoresByVariable = {
@@ -124,5 +115,8 @@ export function simplify(griddedDataset) {
 }
 
 export function translate(name) {
-  return translations[name] ?? name
+  for (const [original, translation] of Object.entries(translations)) {
+    name = name.replace(original, translation)
+  }
+  return name
 }
