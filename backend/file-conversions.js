@@ -1,4 +1,4 @@
-import { brotli, cache_dir, write_file_atomically } from './utility.js';
+import { brotli, temp_cache_dir, write_file_atomically } from './utility.js';
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
@@ -88,7 +88,7 @@ async function gfs_combine_grib(input, output, options, combine_fn) {
 }
 
 async function grib1_to_arr(input, record_number=1) {
-  let temp_file = join(cache_dir, uuidv4());
+  let temp_file = join(temp_cache_dir, uuidv4());
   await spawn_cmd('wgrib', [
     input,
     '-d', record_number,
