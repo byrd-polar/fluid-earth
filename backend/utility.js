@@ -97,7 +97,7 @@ export async function run_all(promise_functions, max_concurrency=tp_size) {
     let finished_count = -max_concurrency;
     let queue = [...promise_functions];
     let rejected = false;
-    let reject_and_stop = () => { reject(); rejected = true };
+    let reject_and_stop = e => { reject(e); rejected = true };
     let tick = () => {
       if (rejected) return;
       if (++finished_count === promise_functions.length) resolve();
