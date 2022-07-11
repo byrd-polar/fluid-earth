@@ -14,6 +14,32 @@ export async function grib1(input, output, options={}) {
   await write_array_to_file(output, array, options.compression_level);
 }
 
+export async function grib1_normal(count, input, output, options={}) {
+  let arr = await grib1_to_arr(input, options.record_number);
+
+  let length = arr.length / count;
+  let array = Float64Array.from({ length }, (_, i) => {
+    return Array.from({ length: count }, (_, j) => {
+      let v = arr[j * length + i];
+      return is_magic_nan(v) ? NaN : v;
+    }).reduce((a, b) => a + b) / count;
+  });
+
+  await write_file_atomically(output, array);
+}
+
+export async function grib1_anomaly(normal, input, output, options={}) {
+  let arr = await grib1_to_arr(input, options.record_number);
+  let n_arr = await f64_to_arr(normal);
+
+  let array = arr.map((v, i) => {
+    v = is_magic_nan(v) ? NaN : v;
+    return nan_for_glsl(isNaN, v - n_arr[i], options.factor);
+  });
+
+  await write_array_to_file(output, array, options.compression_level);
+}
+
 export async function grib2(input, output, options={}) {
   let arr = await grib2_to_arr(input, options.match, options.limit);
   let array = arr.map(v => nan_for_glsl(is_magic_nan, v, options.factor));
@@ -72,7 +98,12 @@ async function grib1_to_arr(input, record_number=1) {
   ]);
   let buffer = await readFile(temp_file);
   await rm(temp_file);
-  return float32array_from_buffer(buffer);
+  return typedarray_from_buffer(buffer, Float32Array);
+}
+
+async function f64_to_arr(input) {
+  let buffer = await readFile(input);
+  return typedarray_from_buffer(buffer, Float64Array);
 }
 
 const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
@@ -88,7 +119,7 @@ async function grib2_to_arr(input, match='.*', limit=1) {
     '-order', 'we:sn',
     '-ncpu', '1',
   ]);
-  return float32array_from_buffer(buffer);
+  return typedarray_from_buffer(buffer, Float32Array);
 }
 
 async function netcdf_to_arr(input, variables, flatten=true) {
@@ -148,6 +179,10 @@ async function write_array_to_file(output, array, compression_level=11) {
   await write_file_atomically(output, compressed_buffer);
 }
 
-function float32array_from_buffer(buffer) {
-  return new Float32Array(buffer.buffer, buffer.byteOffset, buffer.length / 4);
+function typedarray_from_buffer(buffer, type) {
+  return new type(
+    buffer.buffer,
+    buffer.byteOffset,
+    buffer.length / type.BYTES_PER_ELEMENT,
+  );
 }
