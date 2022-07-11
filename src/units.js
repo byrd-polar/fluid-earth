@@ -8,9 +8,9 @@ export function convert(value, originalUnit, newUnit) {
 
 export function prettyUnit(unit) {
   switch (unit) {
-    case 'tempK': return 'K'
-    case 'tempC': return '°C'
-    case 'tempF': return '°F'
+    case 'tempK': case 'degK': return 'K'
+    case 'tempC': case 'degC': return '°C'
+    case 'tempF': case 'degF': return '°F'
     case '0.0254 Mg/m^2': return 'in'
     case '0.01 Mg/m^2': return 'cm'
     // using Unicode instead of <sup> mainly because of text-shadow issues
@@ -21,6 +21,7 @@ export function prettyUnit(unit) {
 const unitDials = [
   ['km/h', 'mph', 'm/s', 'kn'],
   ['tempC', 'tempF', 'tempK'],
+  ['degC', 'degF', 'degK'],
   ['hPa', 'atm', 'mmHg', 'inHg'],
   ['km', 'mi'],
   ['m', 'ft'],

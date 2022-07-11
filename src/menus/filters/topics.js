@@ -23,7 +23,9 @@ const normal = {
          || variableFilters.normal['wave period'](name),
   'climate':
     name => variableFilters.normal['avg. temperature'](name)
-         || variableFilters.normal['avg. precipitation'](name),
+         || variableFilters.normal['avg. temperature anomaly'](name)
+         || variableFilters.normal['avg. precipitation'](name)
+         || variableFilters.normal['avg. precipitation anomaly'](name),
 
   undefined: () => false,
 };

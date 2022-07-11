@@ -34,9 +34,13 @@ const normal = {
   'wave period':
     name => name === 'primary wave mean period',
   'avg. temperature':
-    name => name.startsWith('average temperature'),
+    name => name === 'average temperature at 2 m above ground',
+  'avg. temperature anomaly':
+    name => name === 'average temperature at 2 m above ground anomaly',
   'avg. precipitation':
-    name => name.startsWith('average precipitation'),
+    name => name === 'average precipitation per day',
+  'avg. precipitation anomaly':
+    name => name === 'average precipitation per day anomaly',
 
   undefined: () => false,
 };
@@ -73,9 +77,13 @@ const simple = {
   'dust':
     name => name.startsWith('dust'),
   'avg. temperature':
-    name => name.startsWith('average temperature'),
+    name => name === 'average temperature at 2 m above ground',
+  'avg. temperature anomaly':
+    name => name === 'average temperature at 2 m above ground anomaly',
   'avg. precipitation':
-    name => name.startsWith('average precipitation'),
+    name => name === 'average precipitation per day',
+  'avg. precipitation anomaly':
+    name => name === 'average precipitation per day anomaly',
 
   undefined: () => false,
 };
