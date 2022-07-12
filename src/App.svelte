@@ -71,9 +71,9 @@
   let timeDataset = getTimeDataset(griddedDataset, particleDataset);
   let displayedTimeDataset = timeDataset;
 
-  let date = hash.date ?? (__production__ || !__using_local_data_files__)
+  let date = hash.date ?? ((__production__ || !__using_local_data_files__)
     ? griddedDataset.closestValidDate($currentDate)
-    : griddedDataset.end;
+    : griddedDataset.end);
   let anchorDate = date;
   let displayedDate = date;
 
