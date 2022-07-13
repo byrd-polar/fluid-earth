@@ -1,10 +1,10 @@
-diff --git a/node_modules/vite/dist/node/chunks/dep-80fe9c6b.js b/node_modules/vite/dist/node/chunks/dep-80fe9c6b.js
-index 61d8e2c..be856c9 100644
---- a/node_modules/vite/dist/node/chunks/dep-80fe9c6b.js
-+++ b/node_modules/vite/dist/node/chunks/dep-80fe9c6b.js
-@@ -18623,6 +18623,10 @@ function copyDir(srcDir, destDir) {
-         const destFile = path__default.resolve(destDir, file);
-         const stat = fs__default.statSync(srcFile);
+diff --git a/node_modules/vite/dist/node/chunks/dep-561c5231.js b/node_modules/vite/dist/node/chunks/dep-561c5231.js
+index cd14c84..11b7599 100644
+--- a/node_modules/vite/dist/node/chunks/dep-561c5231.js
++++ b/node_modules/vite/dist/node/chunks/dep-561c5231.js
+@@ -11994,6 +11994,10 @@ function copyDir(srcDir, destDir) {
+         const destFile = path$n.resolve(destDir, file);
+         const stat = fs$l.statSync(srcFile);
          if (stat.isDirectory()) {
 +            if (file === 'tera') {
 +                fs__default.symlinkSync(srcFile, destFile);
@@ -13,7 +13,7 @@ index 61d8e2c..be856c9 100644
              copyDir(srcFile, destFile);
          }
          else {
-@@ -49717,6 +49721,10 @@ const sirvOptions = (headers) => {
+@@ -39438,6 +39442,10 @@ const sirvOptions = (headers) => {
              if (/\.[tj]sx?$/.test(pathname)) {
                  res.setHeader('Content-Type', 'application/javascript');
              }

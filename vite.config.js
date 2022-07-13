@@ -12,6 +12,9 @@ import {
 import { platform } from 'os';
 import dedent from 'dedent';
 
+// print dev server address as `localhost` for Node.js versions < 17
+import dns from 'dns'
+dns.setDefaultResultOrder('verbatim');
 
 // https://vitejs.dev/config/
 export default async ({ _, mode }) => {
@@ -133,8 +136,6 @@ function commentHtml(text) {
         .replace('<!-- insert build and license info -->', text)
         // fix built-in transform spacing
         .replace('  \n  <script', '  <script')
-        .replace(/    <link/g, '  <link')
-        .replace('  </head>', '</head>');
     }
   };
 }
