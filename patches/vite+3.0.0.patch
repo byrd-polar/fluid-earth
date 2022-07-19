@@ -1,5 +1,5 @@
 diff --git a/node_modules/vite/dist/node/chunks/dep-561c5231.js b/node_modules/vite/dist/node/chunks/dep-561c5231.js
-index cd14c84..11b7599 100644
+index cd14c84..45375c7 100644
 --- a/node_modules/vite/dist/node/chunks/dep-561c5231.js
 +++ b/node_modules/vite/dist/node/chunks/dep-561c5231.js
 @@ -11994,6 +11994,10 @@ function copyDir(srcDir, destDir) {
@@ -7,7 +7,7 @@ index cd14c84..11b7599 100644
          const stat = fs$l.statSync(srcFile);
          if (stat.isDirectory()) {
 +            if (file === 'tera') {
-+                fs__default.symlinkSync(srcFile, destFile);
++                fs$l.symlinkSync(srcFile, destFile);
 +                continue;
 +            }
              copyDir(srcFile, destFile);
