@@ -1,4 +1,4 @@
-import variableFilters from './menus/filters/variables.js'
+import variableFilters from './components/datasets/variables.js'
 import { GriddedDataset } from './datasets.js'
 
 // Creates datasets with the original colormaps/scales/domains/names from the
