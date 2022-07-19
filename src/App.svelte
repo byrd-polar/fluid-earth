@@ -208,7 +208,7 @@
 
   async function getData(dataset, date, signal) {
     try {
-      return dataset.fetchData(date, signal);
+      return await dataset.fetchData(date, signal);
     } catch(e) {
       if (e.name === 'AbortError') return false;
       console.error(e);
