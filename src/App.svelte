@@ -287,6 +287,10 @@
     bind:griddedDataset
     bind:particleDataset
     {simplifiedMode}
+    {displayedGriddedDataset}
+    bind:griddedColormap
+    bind:griddedDomain
+    bind:griddedScale
   />
 </Menu>
 <Menu bind:openedMenu menuName="Time Machine">
