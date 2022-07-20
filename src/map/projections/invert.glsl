@@ -4,6 +4,7 @@
 #pragma glslify: p3 = require(./orthographic/invert.glsl)
 #pragma glslify: p4 = require(./vertical-perspective/invert.glsl)
 #pragma glslify: p5 = require(./stereographic/invert.glsl)
+#pragma glslify: p6 = require(./mollweide/invert.glsl)
 
 #pragma glslify: export(invertProject)
 
@@ -36,5 +37,7 @@ void invertProject(
     p4(displayCoord, lonLat0, lonLat, zoom);
   } else if (projection == 5) {
     p5(displayCoord, lonLat0, lonLat);
+  } else if (projection == 6) {
+    p6(displayCoord, lonLat0, lonLat);
   }
 }

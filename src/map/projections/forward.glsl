@@ -4,6 +4,7 @@
 #pragma glslify: p3 = require(./orthographic/forward.glsl)
 #pragma glslify: p4 = require(./vertical-perspective/forward.glsl)
 #pragma glslify: p5 = require(./stereographic/forward.glsl)
+#pragma glslify: p6 = require(./mollweide/forward.glsl)
 
 #pragma glslify: export(forwardProject)
 
@@ -35,6 +36,8 @@ void forwardProject(
     p4(displayCoord, lonLat0, lonLat, clip, zoom);
   } else if (projection == 5) {
     p5(displayCoord, lonLat0, lonLat, clip);
+  } else if (projection == 6) {
+    p6(displayCoord, lonLat0, lonLat, clip);
   }
 
   displayCoord.y -= yTranslate;

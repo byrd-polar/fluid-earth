@@ -45,6 +45,12 @@ export default Object.freeze({
     function: d3.geoStereographic().clipAngle(null),
     particleSizeFactor: 0.5,
   },
+  MOLLWEIDE: {
+    name: 'Mollweide',
+    id: 6,
+    function: d4.geoMollweide(),
+    translateY: true,
+  },
 });
 
 
