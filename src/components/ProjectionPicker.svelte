@@ -44,4 +44,8 @@
   label:focus-within, label:hover {
     filter: brightness(125%);
   }
+
+  input {
+    accent-color: var(--primary-color-light);
+  }
 </style>

@@ -286,4 +286,8 @@ tradeoffs and use cases.
     margin: 1em 0 0.25em;
     font-size: 1em;
   }
+
+  input {
+    accent-color: var(--primary-color-light);
+  }
 </style>
