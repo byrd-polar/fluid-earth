@@ -24,8 +24,8 @@
   );
   $: value = griddedData.get(lonLat);
   $: point = forwardProjectionFunction(lonLat);
-  $: x = point?.[0] - span?.clientWidth / 2 ?? -100;
-  $: y = point?.[1] - span?.clientHeight * 1.25 ?? -100;
+  $: x = point?.[0] - span?.clientWidth / 2;
+  $: y = point?.[1] - span?.clientHeight * 1.25;
   $: bgColor = isNaN(value) ? '#333' : valueToColor(value);
   $: bgHex = color(bgColor).formatHex();
   $: textColor = ['#000', '#fff'].reduce((a, b) => {
@@ -36,7 +36,8 @@
 <span
   bind:this={span}
   style="
-    left: {x}px; top: {y}px;
+    left: {isNaN(x) ? -100 : x}px;
+    top: {isNaN(y) ? -100 : y}px;
     background: {bgColor};
     color: {textColor};
   "
