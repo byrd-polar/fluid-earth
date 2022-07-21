@@ -9,6 +9,11 @@ const float M = sqrt(3.0) / 2.0;
 const int iterations = 12;
 
 void equalEarth(in vec2 coord, in vec2 lonLat0, out vec2 lonLat) {
+  if (abs(coord.y) > sqrt(2.0)) {
+    lonLat = vec2(100, 100);
+    return;
+  }
+
   float l = coord.y;
   float l2 = l * l;
   float l6 = l2 * l2 * l2;
