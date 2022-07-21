@@ -1,6 +1,7 @@
 <script>
   import projections from '../map/projections/';
   import Button from '../components/Button.svelte';
+  import ProjectionPicker from '../components/ProjectionPicker.svelte';
 
   export let projection;
   export let centerLongitude;
@@ -62,6 +63,12 @@
     </Button>
   {/each}
 </div>
+</details>
+
+
+<details>
+<summary><h2>More Projections</h2></summary>
+<ProjectionPicker bind:projection />
 </details>
 
 <style>
