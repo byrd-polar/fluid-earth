@@ -10,6 +10,7 @@
   import { clamp } from '../math.js';
   import colormaps, { types } from '../map/colormaps/';
   import projections from '../map/projections/';
+  import { uniqueId } from '../utility.js';
 
   export let minZoom;
   export let maxZoom;
@@ -40,6 +41,11 @@
   export let griddedColormap;
 
   export let projection;
+
+  const griddedRadioName = uniqueId();
+  const particleRadioName = uniqueId();
+  const colormapRadioName = uniqueId();
+  const projectionRadioName = uniqueId();
 </script>
 
 <details open>
@@ -153,7 +159,7 @@ user interface components.
   <label>
     <input
       type="radio"
-      name="griddedDataset"
+      name={griddedRadioName}
       bind:group={griddedDataset}
       value={dataset}
     >
@@ -166,7 +172,7 @@ user interface components.
   <label>
     <input
       type="radio"
-      name="particleDataset"
+      name={particleRadioName}
       bind:group={particleDataset}
       value={dataset}
     >
@@ -196,6 +202,7 @@ presented with different colors.
     <label>
       <input
         type="radio"
+        name={colormapRadioName}
         bind:group={griddedColormap}
         value={map}
       >
@@ -221,6 +228,7 @@ tradeoffs and use cases.
 <label>
   <input
     type="radio"
+    name={projectionRadioName}
     bind:group={projection}
     value={p}
   >

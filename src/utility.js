@@ -46,3 +46,9 @@ export function prettyLatLon(latitude, longitude) {
 export function capitalizeFirstLetter(str) {
   return str[0].toUpperCase() + str.substring(1);
 }
+
+let id = 0;
+
+export function uniqueId() {
+  return id++;
+}
