@@ -58,6 +58,13 @@ export default Object.freeze({
     distortionProperty: 'equal-area',
     translateY: true,
   },
+  WINKEL_TRIPEL: {
+    name: 'Winkel tripel',
+    id: 7,
+    function: d4.geoWinkel3(),
+    distortionProperty: 'compromise',
+    translateY: true,
+  },
 });
 
 
