@@ -65,6 +65,13 @@ export default Object.freeze({
     distortionProperty: 'compromise',
     translateY: true,
   },
+  ROBINSON: {
+    name: 'Robinson',
+    id: 8,
+    function: d4.geoRobinson(),
+    distortionProperty: 'compromise',
+    translateY: true,
+  },
 });
 
 
