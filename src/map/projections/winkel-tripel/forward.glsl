@@ -3,9 +3,8 @@
 
 const float halfPi = radians(90.0);
 
-void winkelTripel(out vec2 coord, in vec2 lonLat0, in vec2 lonLat,
-    out bool clip) {
-  rotate(lonLat0, lonLat, clip);
+void winkelTripel(out vec2 coord, in vec2 lonLat0, in vec2 lonLat) {
+  rotate(lonLat0, lonLat);
 
   float c = cos(lonLat.y);
   float a = acos(c * cos(lonLat.x / 2.0));

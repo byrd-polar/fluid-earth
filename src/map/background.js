@@ -1,6 +1,8 @@
 import * as twgl from 'twgl.js';
 import * as topojson from 'topojson-client';
 
+import { modulo } from '../math.js';
+
 import griddedVert from './gridded.vert';
 import griddedFrag from './gridded.frag';
 import vectorVert from './vector.vert';
@@ -27,9 +29,11 @@ export default class MapBackground {
     this._gl.getExtension('OES_texture_float');
 
     this._programs = this._createPrograms();
-    this._buffers = this._createBuffers(options.vectorData);
+    this._buffers = this._createBuffers();
     this._textures = this._createTextures();
     this._framebuffers = this._createFramebuffers();
+
+    this._meshes = this._createMeshes(options.vectorData);
 
     this._mapDataToColors();
     this._dataNeedsRecolor = false;
@@ -71,10 +75,7 @@ export default class MapBackground {
   }
 
   set vectorData(d) {
-    Object.values(this._buffers.vectors).forEach(vector =>  {
-      this._gl.deleteBuffer(vector.indices);
-    });
-    this._buffers.vectors = this._createVectorBuffers(d);
+    this._meshes = this._createMeshes(d);
   }
 
   drawGriddedData(sharedUniforms) {
@@ -92,13 +93,25 @@ export default class MapBackground {
 
   drawVectorData(sharedUniforms, colors) {
     for (const [name, color] of Object.entries(colors)) {
-      let bufferInfo = this._buffers.vectors[name];
-      if (bufferInfo !== undefined) {
-        glDraw(this._gl, this._programs.vector, bufferInfo, {
-          u_color: color.map((v, i) => i === 3 ? v : v / 255),
-          ...sharedUniforms,
-        }, this._gl.LINES);
-      }
+      let mesh = this._meshes[name];
+      if (!mesh) continue;
+
+      let x = modulo(sharedUniforms.u_lon0 + 180, 360, 180);
+
+      let t = performance.now();
+      let bufferInfo = createBufferInfoFromMesh(this._gl, mesh, ([a, b]) => {
+        let lon1 = a[0] + 360;
+        let lon2 = b[0] + 360;
+        return (x >= lon1 && x >= lon2) || (x <= lon1 && x <= lon2);
+      });
+      console.log(performance.now() - t);
+
+      glDraw(this._gl, this._programs.vector, bufferInfo, {
+        u_color: color.map((v, i) => i === 3 ? v : v / 255),
+        ...sharedUniforms,
+      }, this._gl.LINES);
+
+      this._gl.deleteBuffer(bufferInfo.indices);
     }
   }
 
@@ -116,22 +129,22 @@ export default class MapBackground {
     };
   }
 
-  _createBuffers(vectorData) {
+  _createBuffers() {
     let gridded = twgl.createBufferInfoFromArrays(this._gl, griddedArrays);
     return {
       gridded: gridded,
-      vectors: this._createVectorBuffers(vectorData),
       colormap: gridded,
     };
   }
 
-  _createVectorBuffers(data) {
-    let buffers = {};
+  _createMeshes(data) {
+    let meshes = {};
 
-    for (const [name, obj] of Object.entries(data.objects)) {
-      buffers[name] = createBufferInfoFromTopojson(this._gl, data, obj);
+    for (const [name, object] of Object.entries(data.objects)) {
+      meshes[name] = topojson.mesh(data, object);
     }
-    return buffers;
+
+    return meshes;
   }
 
   _createTextures() {
@@ -216,27 +229,28 @@ export default class MapBackground {
   }
 }
 
-function createBufferInfoFromTopojson(gl, data, object) {
-  let mesh = topojson.mesh(data, object);
+function createBufferInfoFromMesh(gl, mesh, filter=(() => true)) {
   let currentIndex = 0;
   let indices = [];
+  let { coordinates } = mesh;
 
-  for (let i = 0; i < mesh.coordinates.length; i++) {
-    let lastIndexOfLineSegment = currentIndex + mesh.coordinates[i].length - 1;
-
-    for(; currentIndex < lastIndexOfLineSegment; currentIndex++) {
-      indices.push(currentIndex);
-      indices.push(currentIndex + 1);
+  for (let i = 0; i < coordinates.length; i++) {
+    for (let j = 0; j < coordinates[i].length - 1; j++) {
+      if (filter(coordinates[i].slice(j, j + 2))) {
+        indices.push(currentIndex);
+        indices.push(currentIndex + 1);
+      }
+      currentIndex++;
     }
-    currentIndex = lastIndexOfLineSegment + 1;
+    currentIndex++;
   }
 
   let arrays = {
     a_lonLat: {
       numComponents: 2,
-      data: mesh.coordinates.flat(2),
+      data: coordinates.flat(2),
     },
-    indices: indices,
+    indices,
   };
 
   return twgl.createBufferInfoFromArrays(gl, arrays);

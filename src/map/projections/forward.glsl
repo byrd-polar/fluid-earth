@@ -27,23 +27,23 @@ void forwardProject(
   }
 
   if (projection == 0) {
-    p0(displayCoord, lonLat0, lonLat, clip);
+    p0(displayCoord, lonLat0, lonLat);
   } else if (projection == 1) {
-    p1(displayCoord, lonLat0, lonLat, clip);
+    p1(displayCoord, lonLat0, lonLat);
   } else if (projection == 2) {
-    p2(displayCoord, lonLat0, lonLat, clip);
+    p2(displayCoord, lonLat0, lonLat);
   } else if (projection == 3) {
     p3(displayCoord, lonLat0, lonLat, clip);
   } else if (projection == 4) {
     p4(displayCoord, lonLat0, lonLat, clip, zoom);
   } else if (projection == 5) {
-    p5(displayCoord, lonLat0, lonLat, clip);
+    p5(displayCoord, lonLat0, lonLat);
   } else if (projection == 6) {
-    p6(displayCoord, lonLat0, lonLat, clip);
+    p6(displayCoord, lonLat0, lonLat);
   } else if (projection == 7) {
-    p7(displayCoord, lonLat0, lonLat, clip);
+    p7(displayCoord, lonLat0, lonLat);
   } else if (projection == 8) {
-    p8(displayCoord, lonLat0, lonLat, clip);
+    p8(displayCoord, lonLat0, lonLat);
   }
 
   displayCoord.y -= yTranslate;
