@@ -75,6 +75,9 @@ export default class MapBackground {
   }
 
   set vectorData(d) {
+    for (const mesh of Object.values(this._meshes)) {
+      this._gl.deleteBuffer(mesh.bufferInfo.indices);
+    }
     this._meshes = this._createMeshes(d);
   }
 
@@ -96,22 +99,23 @@ export default class MapBackground {
       let mesh = this._meshes[name];
       if (!mesh) continue;
 
-      let x = modulo(sharedUniforms.u_lon0 + 180, 360, 180);
-
-      let t = performance.now();
-      let bufferInfo = createBufferInfoFromMesh(this._gl, mesh, ([a, b]) => {
-        let lon1 = a[0] + 360;
-        let lon2 = b[0] + 360;
-        return (x >= lon1 && x >= lon2) || (x <= lon1 && x <= lon2);
-      });
-      console.log(performance.now() - t);
+      // cut lines crossing the anti-meridian if map projection is cylindrical
+      let bufferInfo;
+      if (sharedUniforms.u_translateY) {
+        let filter = createAntimeridianFilter(sharedUniforms.u_lon0);
+        bufferInfo = createBufferInfoFromMesh(this._gl, mesh, filter);
+      } else {
+        bufferInfo = mesh.bufferInfo;
+      }
 
       glDraw(this._gl, this._programs.vector, bufferInfo, {
         u_color: color.map((v, i) => i === 3 ? v : v / 255),
         ...sharedUniforms,
       }, this._gl.LINES);
 
-      this._gl.deleteBuffer(bufferInfo.indices);
+      if (sharedUniforms.u_translateY) {
+        this._gl.deleteBuffer(bufferInfo.indices);
+      }
     }
   }
 
@@ -139,11 +143,15 @@ export default class MapBackground {
 
   _createMeshes(data) {
     let meshes = {};
-
     for (const [name, object] of Object.entries(data.objects)) {
-      meshes[name] = topojson.mesh(data, object);
+      let coordinates = topojson.mesh(data, object).coordinates;
+      let mesh = {
+        coordinates,
+        data: coordinates.flat(2),
+      };
+      mesh.bufferInfo = createBufferInfoFromMesh(this._gl, mesh);
+      meshes[name] = mesh;
     }
-
     return meshes;
   }
 
@@ -236,7 +244,7 @@ function createBufferInfoFromMesh(gl, mesh, filter=(() => true)) {
 
   for (let i = 0; i < coordinates.length; i++) {
     for (let j = 0; j < coordinates[i].length - 1; j++) {
-      if (filter(coordinates[i].slice(j, j + 2))) {
+      if (filter(coordinates[i][j], coordinates[i][j + 1])) {
         indices.push(currentIndex);
         indices.push(currentIndex + 1);
       }
@@ -248,10 +256,21 @@ function createBufferInfoFromMesh(gl, mesh, filter=(() => true)) {
   let arrays = {
     a_lonLat: {
       numComponents: 2,
-      data: coordinates.flat(2),
+      data: mesh.data,
     },
     indices,
   };
 
   return twgl.createBufferInfoFromArrays(gl, arrays);
+}
+
+const e = 1e-3;
+
+function createAntimeridianFilter(meridian) {
+  let x = modulo(meridian + 180, 360, 180);
+  return (a, b) => {
+    let lon1 = a[0] + 360;
+    let lon2 = b[0] + 360;
+    return (x-e > lon1 && x-e > lon2) || (x+e < lon1 && x+e < lon2);
+  }
 }
