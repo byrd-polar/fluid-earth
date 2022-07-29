@@ -267,10 +267,7 @@ function createBufferInfoFromMesh(gl, mesh, filter=(() => true)) {
 const e = 1e-3;
 
 function createAntimeridianFilter(meridian) {
-  let x = modulo(meridian + 180, 360, 180);
-  return (a, b) => {
-    let lon1 = a[0] + 360;
-    let lon2 = b[0] + 360;
-    return (x-e > lon1 && x-e > lon2) || (x+e < lon1 && x+e < lon2);
-  }
+  // doesn't handle lines crossing +-180 degrees longitude
+  let x = modulo(meridian + 180, 360, -180);
+  return (a, b) => ((x-e > a[0] && x-e > b[0]) || (x+e < a[0] && x+e < b[0]));
 }
