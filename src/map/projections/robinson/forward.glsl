@@ -4,8 +4,8 @@
 
 const float pi = radians(180.0);
 
-void robinson(out vec2 coord, in vec2 lonLat0, in vec2 lonLat, out bool clip) {
-  rotate(lonLat0, lonLat, clip);
+void robinson(out vec2 coord, in vec2 lonLat0, in vec2 lonLat) {
+  rotate(lonLat0, lonLat);
 
   float i = min(18.0, abs(lonLat.y) * 36.0 / pi);
   float di = i - floor(i);

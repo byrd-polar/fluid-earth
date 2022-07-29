@@ -5,8 +5,8 @@ const float sqrt2 = sqrt(2.0);
 const float halfPi = radians(90.0);
 const float pi = radians(180.0);
 
-void mollweide(out vec2 coord, in vec2 lonLat0, in vec2 lonLat, out bool clip) {
-  rotate(lonLat0, lonLat, clip);
+void mollweide(out vec2 coord, in vec2 lonLat0, in vec2 lonLat) {
+  rotate(lonLat0, lonLat);
 
   float s = pi * sin(lonLat.y);
   float theta = lonLat.y;
