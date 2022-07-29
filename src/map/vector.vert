@@ -32,8 +32,6 @@ void main() {
       u_translateY
   );
 
-  // determines if fragment shader should not render line to avoid lines
-  // wrapping across the map from the anti-meridian or map edge
   if (clip) {
     v_clip = 1.0;
   } else {
