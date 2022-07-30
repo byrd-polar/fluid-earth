@@ -19,7 +19,7 @@ void main() {
 
   // Check for -Infinities and use a consistent color for them
   // (not using NaN because of lack of support in some implementations)
-  if (value < -1e99) {
+  if (value < -1e25) {
     color = u_baseColor;
     return;
   }
