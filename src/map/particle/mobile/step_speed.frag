@@ -1,3 +1,4 @@
+#version 300 es
 // Copied from ../step.frag, with parts not relating to speed step removed
 precision highp float;
 
@@ -20,7 +21,8 @@ uniform int u_particleDataProjection;
 uniform float u_particleLifetime;
 uniform float u_timeDelta;
 
-varying vec2 v_position;
+in vec2 v_position;
+out vec4 color;
 
 const vec2 DIM = vec2(360.0, 180.0); // size of map in longitude and latitude
 const vec2 DIM_2 = vec2(180.0, 90.0);
@@ -53,5 +55,5 @@ void main() {
     speed = 0.0;
   }
 
-  gl_FragColor = encode(speed, MAX_SPEED, 0.0);
+  color = encode(speed, MAX_SPEED, 0.0);
 }

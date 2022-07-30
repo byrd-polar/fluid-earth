@@ -1,3 +1,4 @@
+#version 300 es
 // Fragment shader for the gridded data layer
 
 precision highp float;
@@ -17,7 +18,8 @@ uniform sampler2D u_texture;
 uniform float u_gridWidth;
 uniform float u_gridHeight;
 
-varying vec2 v_position;
+in vec2 v_position;
+out vec4 color;
 
 const float PI = radians(180.0);
 const float PI_2 = radians(90.0);
@@ -54,7 +56,7 @@ void main() {
     || lonLat.y >  PI_2
     || lonLat.y < -PI_2
   ) {
-    gl_FragColor = vec4(0, 0, 0, 0); // transparent
+    color = vec4(0, 0, 0, 0); // transparent
     return;
   }
 
@@ -67,5 +69,5 @@ void main() {
       u_griddedDataProjection
   );
 
-  gl_FragColor = texture2D(u_texture, textureCoord);
+  color = texture(u_texture, textureCoord);
 }

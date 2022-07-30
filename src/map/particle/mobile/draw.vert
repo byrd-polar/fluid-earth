@@ -1,3 +1,4 @@
+#version 300 es
 // Copied from ../draw.vert, modified to read RGBA instead of float textures
 
 #pragma glslify: forwardProject = require(../../projections/forward.glsl)
@@ -5,7 +6,7 @@
 #pragma glslify: decode = require(./decode.glsl)
 #pragma glslify: MAX_SPEED = require(./speed.glsl)
 
-attribute vec2 a_particleIndex;
+in vec2 a_particleIndex;
 
 uniform sampler2D u_particleLongitudes;
 uniform sampler2D u_particleLatitudes;
@@ -23,8 +24,8 @@ uniform bool u_translateY;
 
 uniform float u_size;
 
-varying float v_clip;
-varying float v_speed;
+out float v_clip;
+out float v_speed;
 
 const float PI_2 = radians(90.0);
 

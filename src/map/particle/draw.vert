@@ -1,10 +1,11 @@
+#version 300 es
 // Vertex shader for the particle data layer
 //
 // essentially the same as the vertex shader for the vector layer
 
 #pragma glslify: forwardProject = require(../projections/forward.glsl)
 
-attribute vec2 a_particleIndex;
+in vec2 a_particleIndex;
 uniform sampler2D u_particlePositions;
 uniform float u_particleCountSqrt;
 
@@ -18,8 +19,8 @@ uniform bool u_translateY;
 
 uniform float u_size;
 
-varying float v_clip;
-varying float v_speed;
+out float v_clip;
+out float v_speed;
 
 const float PI_2 = radians(90.0);
 
@@ -29,7 +30,7 @@ void main() {
   vec2 lonLat0 = radians(vec2(u_lon0, u_lat0));
 
   vec2 texCoord = a_particleIndex / u_particleCountSqrt;
-  vec4 data = texture2D(u_particlePositions, texCoord);
+  vec4 data = texture(u_particlePositions, texCoord);
   vec2 lonLat = radians(data.rg);
   v_speed = data.a;
 

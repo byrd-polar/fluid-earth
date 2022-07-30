@@ -1,3 +1,4 @@
+#version 300 es
 // Copied from ../step.frag, with parts not relating to latitude step removed
 precision highp float;
 
@@ -22,7 +23,8 @@ uniform float u_particleLifetime;
 uniform float u_timeDelta;
 uniform float u_rate;
 
-varying vec2 v_position;
+in vec2 v_position;
+out vec4 color;
 
 const vec2 DIM = vec2(360.0, 180.0); // size of map in longitude and latitude
 const vec2 DIM_2 = vec2(180.0, 90.0);
@@ -64,5 +66,5 @@ void main() {
   // keep lonLat values in range
   lonLat.y = clamp(lonLat.y, -DIM_2.y, DIM_2.y);
 
-  gl_FragColor = encode(lonLat.y, DIM.y, -DIM_2.y);
+  color = encode(lonLat.y, DIM.y, -DIM_2.y);
 }
