@@ -23,15 +23,7 @@ export default class ParticleSimulator {
 
     // private variables (no setters)
     this._gl = gl;
-    this._webgl2 = options.webgl2;
     this._gl.enable(gl.BLEND);
-    // these are promoted extensions in webgl2, so we don't need to load them
-    // in the case we are using webgl2
-    if (!this._webgl2) {
-      this._ext = this._gl.getExtension('OES_texture_half_float');
-      this._gl.getExtension('OES_texture_half_float_linear');
-      this._gl.getExtension('OES_texture_float');
-    }
     this._gl.getExtension('OES_texture_float_linear');
 
     this._programs = this._createPrograms();
@@ -39,12 +31,7 @@ export default class ParticleSimulator {
     this._textures = this._createTextures();
     this._framebuffers = this._createFramebuffers();
 
-    this._majorPerformanceCaveat = options.majorPerformanceCaveat;
-    if (this._majorPerformanceCaveat) {
-      this._gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-    } else {
-      this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    }
+    this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   }
 
   set count(c) {
@@ -153,21 +140,14 @@ export default class ParticleSimulator {
     // first, draw previous background (slightly faded) to empty texture
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);
 
-    if (this._majorPerformanceCaveat) {
-      this._gl.clear(this._gl.COLOR_BUFFER_BIT);
-      opacity /= 4;
-    } else {
-      this._gl.disable(this._gl.BLEND);
-    }
+    this._gl.disable(this._gl.BLEND);
 
     glDraw(this._gl, this._programs.texture, this._buffers.texture, {
       u_texture: this._textures.particleTrailsA,
       u_fade: fade,
     });
 
-    if (!this._majorPerformanceCaveat) {
-      this._gl.enable(this._gl.BLEND);
-    }
+    this._gl.enable(this._gl.BLEND);
 
     // then, draw new particle positions on top of that
     this.draw(sharedUniforms, size, opacity, opacitySpeedDecay);

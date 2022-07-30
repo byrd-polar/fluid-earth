@@ -13,7 +13,7 @@ uniform vec4 u_baseColor;
 varying vec2 v_position;
 
 void main() {
-  float value = texture2D(u_data, (v_position + 1.0) / 2.0).a;
+  float value = texture2D(u_data, (v_position + 1.0) / 2.0).r;
 
   // Check for -Infinities and use a consistent color for them
   // (not using NaN because of lack of support in some implementations)
