@@ -23,15 +23,7 @@ export default class ParticleSimulator {
 
     // private variables (no setters)
     this._gl = gl;
-    this._webgl2 = options.webgl2;
     this._gl.enable(gl.BLEND);
-    // these are promoted extensions in webgl2, so we don't need to load them
-    // in the case we are using webgl2
-    if (!this._webgl2) {
-      this._ext = this._gl.getExtension('OES_texture_half_float');
-      this._gl.getExtension('OES_texture_half_float_linear');
-      this._gl.getExtension('OES_texture_float');
-    }
     this._gl.getExtension('OES_texture_float_linear');
 
     this._programs = this._createPrograms();
@@ -39,12 +31,7 @@ export default class ParticleSimulator {
     this._textures = this._createTextures();
     this._framebuffers = this._createFramebuffers();
 
-    this._majorPerformanceCaveat = options.majorPerformanceCaveat;
-    if (this._majorPerformanceCaveat) {
-      this._gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-    } else {
-      this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    }
+    this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   }
 
   set count(c) {
@@ -153,21 +140,14 @@ export default class ParticleSimulator {
     // first, draw previous background (slightly faded) to empty texture
     twgl.bindFramebufferInfo(this._gl, this._framebuffers.particleTrailsB);
 
-    if (this._majorPerformanceCaveat) {
-      this._gl.clear(this._gl.COLOR_BUFFER_BIT);
-      opacity /= 4;
-    } else {
-      this._gl.disable(this._gl.BLEND);
-    }
+    this._gl.disable(this._gl.BLEND);
 
     glDraw(this._gl, this._programs.texture, this._buffers.texture, {
       u_texture: this._textures.particleTrailsA,
       u_fade: fade,
     });
 
-    if (!this._majorPerformanceCaveat) {
-      this._gl.enable(this._gl.BLEND);
-    }
+    this._gl.enable(this._gl.BLEND);
 
     // then, draw new particle positions on top of that
     this.draw(sharedUniforms, size, opacity, opacitySpeedDecay);
@@ -204,11 +184,8 @@ export default class ParticleSimulator {
   }
 
   _createPrograms() {
-    let simFrag2 = this._webgl2 ?
-      simFrag.replace(/\)\.a;/g, ').r;') :
-      simFrag;
     return {
-      sim: twgl.createProgramInfo(this._gl, [simVert, simFrag2]),
+      sim: twgl.createProgramInfo(this._gl, [simVert, simFrag]),
       draw: twgl.createProgramInfo(this._gl, [drawVert, drawFrag]),
       texture: twgl.createProgramInfo(this._gl, [textureVert, textureFrag]),
     };
@@ -250,8 +227,8 @@ export default class ParticleSimulator {
       random: twgl.createTexture(this._gl, {
         src: randomArray(1, Math.pow(randomTextureSize, 2)),
         type: this._gl.FLOAT,
-        format: this._webgl2 ? this._gl.RED : this._gl.ALPHA,
-        internalFormat: this._webgl2 ? this._gl.R32F : this._gl.ALPHA,
+        format: this._gl.RED,
+        internalFormat: this._gl.R32F,
         minMag: this._gl.NEAREST,
         width: randomTextureSize,
         height: randomTextureSize,
@@ -269,7 +246,7 @@ export default class ParticleSimulator {
     return twgl.createTexture(this._gl, {
       type: this._gl.FLOAT,
       format: this._gl.RGBA,
-      internalFormat: this._webgl2 ? this._gl.RGBA32F : this._gl.RGBA,
+      internalFormat: this._gl.RGBA32F,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
@@ -285,7 +262,7 @@ export default class ParticleSimulator {
     return twgl.createTexture(this._gl, {
       type: this._gl.FLOAT,
       format: this._gl.RGBA,
-      internalFormat: this._webgl2 ? this._gl.RGBA32F : this._gl.RGBA,
+      internalFormat: this._gl.RGBA32F,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
@@ -293,24 +270,13 @@ export default class ParticleSimulator {
   }
 
   _createVectorFieldTexture(src) {
-    let type, format, internalFormat;
-
-    if (this._data.uVelocities.constructor.name !== 'Float32Array') {
-      src = new Uint16Array(src.buffer);
-      type = this._webgl2 ? this._gl.HALF_FLOAT : this._ext.HALF_FLOAT_OES;
-      format = this._webgl2 ? this._gl.RED : this._gl.ALPHA;
-      internalFormat = this._webgl2 ? this._gl.R16F : this._gl.ALPHA;
-    } else {
-      type = this._gl.FLOAT;
-      format = this._webgl2 ? this._gl.RED : this._gl.ALPHA;
-      internalFormat = this._webgl2 ? this._gl.R32F : this._gl.ALPHA;
-    }
+    let halfFloat = src.constructor.name !== 'Float32Array';
 
     return twgl.createTexture(this._gl, {
-      src,
-      type,
-      format,
-      internalFormat,
+      src:            halfFloat ? new Uint16Array(src.buffer) : src,
+      type:           halfFloat ? this._gl.HALF_FLOAT : this._gl.FLOAT,
+      internalFormat: halfFloat ? this._gl.R16F : this._gl.R32F,
+      format: this._gl.RED,
       minMag: this._gl.LINEAR,
       width: this._data.width,
       height: this._data.height,

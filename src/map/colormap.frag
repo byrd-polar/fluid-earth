@@ -1,3 +1,4 @@
+#version 300 es
 // Fragment shader for "coloring data": converting data to gridded texture using
 // colormap texture
 
@@ -10,15 +11,16 @@ uniform vec2 u_domain;
 uniform int u_scale;
 uniform vec4 u_baseColor;
 
-varying vec2 v_position;
+in vec2 v_position;
+out vec4 color;
 
 void main() {
-  float value = texture2D(u_data, (v_position + 1.0) / 2.0).a;
+  float value = texture(u_data, (v_position + 1.0) / 2.0).r;
 
   // Check for -Infinities and use a consistent color for them
   // (not using NaN because of lack of support in some implementations)
-  if (value < -1e99) {
-    gl_FragColor = u_baseColor;
+  if (value < -1e25) {
+    color = u_baseColor;
     return;
   }
 
@@ -50,5 +52,5 @@ void main() {
   // (the |c|s are the pixels in the u_colormap texture)
   float tOffset = (u_colormapN - 1.0) / u_colormapN * (t - 0.5) + 0.5;
 
-  gl_FragColor = texture2D(u_colormap, vec2(tOffset, 0));
+  color = texture(u_colormap, vec2(tOffset, 0));
 }

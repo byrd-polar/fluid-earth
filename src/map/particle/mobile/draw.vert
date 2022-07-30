@@ -1,3 +1,4 @@
+#version 300 es
 // Copied from ../draw.vert, modified to read RGBA instead of float textures
 
 #pragma glslify: forwardProject = require(../../projections/forward.glsl)
@@ -5,7 +6,7 @@
 #pragma glslify: decode = require(./decode.glsl)
 #pragma glslify: MAX_SPEED = require(./speed.glsl)
 
-attribute vec2 a_particleIndex;
+in vec2 a_particleIndex;
 
 uniform sampler2D u_particleLongitudes;
 uniform sampler2D u_particleLatitudes;
@@ -23,8 +24,8 @@ uniform bool u_translateY;
 
 uniform float u_size;
 
-varying float v_clip;
-varying float v_speed;
+out float v_clip;
+out float v_speed;
 
 const float PI_2 = radians(90.0);
 
@@ -38,10 +39,10 @@ void main() {
 
   vec2 texCoord = a_particleIndex / u_particleCountSqrt;
   vec2 lonLat = radians(vec2(
-    decode(texture2D(u_particleLongitudes, texCoord), DIM.x, -DIM_2.x),
-    decode(texture2D(u_particleLatitudes, texCoord), DIM.y, -DIM_2.y)
+    decode(texture(u_particleLongitudes, texCoord), DIM.x, -DIM_2.x),
+    decode(texture(u_particleLatitudes, texCoord), DIM.y, -DIM_2.y)
   ));
-  v_speed = decode(texture2D(u_particleSpeeds, texCoord), MAX_SPEED, 0.0);
+  v_speed = decode(texture(u_particleSpeeds, texCoord), MAX_SPEED, 0.0);
 
   bool clip; // true if vertex will not be rendered
 

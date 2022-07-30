@@ -1,8 +1,9 @@
+#version 300 es
 // Vertex shader for the vector data layer
 
 #pragma glslify: forwardProject = require(./projections/forward.glsl)
 
-attribute vec2 a_lonLat;
+in vec2 a_lonLat;
 
 uniform float u_canvasRatio;
 uniform float u_lon0;
@@ -11,7 +12,7 @@ uniform float u_zoom;
 uniform int u_projection;
 uniform bool u_translateY;
 
-varying float v_clip;
+out float v_clip;
 
 const float PI_2 = radians(90.0);
 

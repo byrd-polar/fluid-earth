@@ -96,8 +96,6 @@
   export let canvasRatio = 1;
   export let MAX_TEXTURE_SIZE = Infinity;
 
-  let mpcTestCanvas;
-  let webgl2TestCanvas;
   let backgroundCanvas;
   let particleCanvas;
 
@@ -149,27 +147,8 @@
     trailsNeedReset = true;
 
   onMount(() => {
-    // Work around an issue with software-based webgl not being able to do blend
-    // particles properly with `premultipledAlpha: true` (the default). This
-    // value for premultipledAlpha is needed as an additional workaround for
-    // Safari, which does not properly render `premultipledAlpha: false`.
-    const majorPerformanceCaveat = (mpcTestCanvas.getContext('webgl', {
-      failIfMajorPerformanceCaveat: true,
-    }) === null);
-    mpcTestCanvas.remove();
-
-    // Upgrade to webgl2 if supported so that the particle simulator works on
-    // devices that support webgl2 but not OES_texture_float. Using a separate
-    // canvas because getting context twice from the same canvas causes some
-    // weird behavior across browsers.
-    const webgl2 = (webgl2TestCanvas.getContext('webgl2') !== null);
-    const webglVersion = webgl2 ? 'webgl2' : 'webgl';
-    webgl2TestCanvas.remove();
-
-    backgroundGl = backgroundCanvas.getContext(webglVersion, { alpha: true });
-    particleGl = particleCanvas.getContext(webglVersion, {
-      premultipliedAlpha: !majorPerformanceCaveat,
-    });
+    backgroundGl = backgroundCanvas.getContext('webgl2', { alpha: true });
+    particleGl = particleCanvas.getContext('webgl2');
 
     MAX_TEXTURE_SIZE = backgroundGl.getParameter(backgroundGl.MAX_TEXTURE_SIZE);
 
@@ -180,22 +159,18 @@
       scale: griddedScale,
       baseColor: griddedBaseColor,
       vectorData: vectorData,
-      webgl2: webgl2,
     });
 
     let particleSimulatorOptions = {
       count: particleCount || 1,
       lifetime: particleLifetime,
       data: particleData,
-      majorPerformanceCaveat: majorPerformanceCaveat,
-      webgl2: webgl2,
     };
 
     // Use a different particle simulator for older devices that don't support
     // rendering to float textures at all and for mobile devices because of
     // issues rendering to float textures despite supporting the extension.
-    let canRenderToFloat = particleGl.getExtension('EXT_color_buffer_float')
-                        || particleGl.getExtension('WEBGL_color_buffer_float');
+    let canRenderToFloat = particleGl.getExtension('EXT_color_buffer_float');
 
     if (!canRenderToFloat || navigator.userAgent.includes("Mobi")) {
       particleSimulator =
@@ -347,8 +322,6 @@
 </script>
 
 <div class="layers">
-  <canvas bind:this={mpcTestCanvas} hidden/>
-  <canvas bind:this={webgl2TestCanvas} hidden/>
   <slot name="background"></slot>
   <canvas bind:this={backgroundCanvas}/>
   <canvas bind:this={particleCanvas}/>
