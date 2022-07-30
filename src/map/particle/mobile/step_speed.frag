@@ -45,8 +45,8 @@ void main() {
   );
 
   vec2 velocity;
-  velocity.x = texture2D(u_vectorFieldU, textureCoord).a;
-  velocity.y = texture2D(u_vectorFieldV, textureCoord).a;
+  velocity.x = texture2D(u_vectorFieldU, textureCoord).r;
+  velocity.y = texture2D(u_vectorFieldV, textureCoord).r;
   float speed = length(velocity);
 
   if (lifetime > u_particleLifetime) {

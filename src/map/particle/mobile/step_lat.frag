@@ -48,11 +48,11 @@ void main() {
       u_particleDataProjection
   );
 
-  float velocity = texture2D(u_vectorFieldV, textureCoord).a;
+  float velocity = texture2D(u_vectorFieldV, textureCoord).r;
 
   if (lifetime > u_particleLifetime) {
     // "randomly" relocate particle to keep grid "full"
-    float ry = texture2D(u_random, mod(id - u_randLonLatOffsets.yx, 1.0)).a;
+    float ry = texture2D(u_random, mod(id - u_randLonLatOffsets.yx, 1.0)).r;
 
     lonLat.y = (DIM.y / radians(DIM.y)) * asin(2.0 * ry - 1.0);
   } else {

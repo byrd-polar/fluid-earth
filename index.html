@@ -115,11 +115,9 @@
     showError('This browser is not supported.');
   </script>
   <script>
-    if (typeof globalThis === undefined) {
+    if ( typeof globalThis === undefined
+      || document.querySelector('canvas').getContext('webgl2') === null) {
       showError('This browser is not supported.');
-    }
-    if (document.querySelector('canvas').getContext('webgl2') === null) {
-      showError('This browser might not be supported.');
     }
   </script>
 </body>

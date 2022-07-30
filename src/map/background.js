@@ -103,7 +103,7 @@ export default class MapBackground {
     return {
       gridded: twgl.createProgramInfo(this._gl, [griddedVert, griddedFrag]),
       vector: twgl.createProgramInfo(this._gl, [vectorVert, vectorFrag]),
-      colormap: twgl.createProgramInfo(this._gl, [griddedVert, colormapFrag2]),
+      colormap: twgl.createProgramInfo(this._gl, [griddedVert, colormapFrag]),
     };
   }
 
@@ -144,12 +144,12 @@ export default class MapBackground {
 
   _createDataTexture() {
     let halfFloat = this._data.floatArray.constructor.name !== 'Float32Array';
-    let buffer = this._data.floatArray.buffer;
+    let src = this._data.floatArray;
 
     return twgl.createTexture(this._gl, {
-      src:            halfFloat ? new Uint16Array(buffer) : buffer,
-      type:           halfFloat ? this._gl.HALF_FLOAT     : this._gl.FLOAT,
-      internalFormat: halfFloat ? this._gl.R16F           : this._gl.R32F,
+      src:            halfFloat ? new Uint16Array(src.buffer) : src,
+      type:           halfFloat ? this._gl.HALF_FLOAT : this._gl.FLOAT,
+      internalFormat: halfFloat ? this._gl.R16F : this._gl.R32F,
       format: this._gl.RED,
       minMag: this._gl.NEAREST, // don't filter between data points
       width: this._data.width,

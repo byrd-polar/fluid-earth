@@ -165,7 +165,6 @@
       count: particleCount || 1,
       lifetime: particleLifetime,
       data: particleData,
-      webgl2: webgl2,
     };
 
     // Use a different particle simulator for older devices that don't support
