@@ -9,9 +9,7 @@ uniform vec4 u_color;
 out vec4 color;
 
 void main() {
-  if (v_clip > 0.0 || fwidth(v_t) < 1e-2) {
-    color = vec4(0, 0, 0, 0); // transparent
-  } else {
-    color = u_color;
-  }
+  color = v_clip > 0.0 || fwidth(v_t) < 1e-2
+    ? vec4(0, 0, 0, 0) // transparent
+    : u_color;
 }
