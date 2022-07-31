@@ -1,3 +1,4 @@
+import { Float16Array } from '@petamoriken/float16';
 import * as twgl from 'twgl.js';
 
 import simVert from '../gridded.vert';
@@ -21,7 +22,9 @@ export default class ParticleSimulator {
     this._gl = gl;
     this._gl.enable(gl.BLEND);
     this._gl.getExtension('OES_texture_float_linear');
-    this._gl.getExtension('EXT_color_buffer_float');
+    if (!this._gl.getExtension('EXT_color_buffer_float')) {
+      this._ext = this._gl.getExtension('EXT_color_buffer_half_float');
+    }
 
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers();
@@ -241,14 +244,16 @@ export default class ParticleSimulator {
   }
 
   _createSimATexture() {
+    let TypedArray = this._ext ? Float16Array : Float32Array;
+
     return twgl.createTexture(this._gl, {
       type: this._gl.FLOAT,
       format: this._gl.RGBA,
-      internalFormat: this._gl.RGBA32F,
+      internalFormat: this._ext?.RGBA16F_EXT ?? this._gl.RGBA32F,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
-      src: Float32Array.from({ length: this._count * 4 }, (_, i) => {
+      src: TypedArray.from({ length: this._count * 4 }, (_, i) => {
         switch(i % 4) {
           case 0: return randlon();
           case 1: return randlat();
@@ -263,7 +268,7 @@ export default class ParticleSimulator {
     return twgl.createTexture(this._gl, {
       type: this._gl.FLOAT,
       format: this._gl.RGBA,
-      internalFormat: this._gl.RGBA32F,
+      internalFormat: this._ext?.RGBA16F_EXT ?? this._gl.RGBA32F,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
