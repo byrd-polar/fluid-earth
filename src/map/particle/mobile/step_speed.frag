@@ -30,10 +30,10 @@ const vec2 DIM_2 = vec2(180.0, 90.0);
 void main() {
   vec2 id = (v_position + 1.0) / 2.0; // 2D "id" in between (0,0) and (1,1)
   vec2 lonLat = vec2(
-    decode(texture2D(u_particleLongitudes, id), DIM.x, -DIM_2.x),
-    decode(texture2D(u_particleLatitudes, id), DIM.y, -DIM_2.y)
+    decode(texture(u_particleLongitudes, id), DIM.x, -DIM_2.x),
+    decode(texture(u_particleLatitudes, id), DIM.y, -DIM_2.y)
   );
-  float lifetime = decode(texture2D(u_particleLifetimes, id),
+  float lifetime = decode(texture(u_particleLifetimes, id),
       u_particleLifetime, 0.0);
   lifetime += u_timeDelta;
 
@@ -47,8 +47,8 @@ void main() {
   );
 
   vec2 velocity;
-  velocity.x = texture2D(u_vectorFieldU, textureCoord).r;
-  velocity.y = texture2D(u_vectorFieldV, textureCoord).r;
+  velocity.x = texture(u_vectorFieldU, textureCoord).r;
+  velocity.y = texture(u_vectorFieldV, textureCoord).r;
   float speed = length(velocity);
 
   if (lifetime > u_particleLifetime) {

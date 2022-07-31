@@ -34,10 +34,10 @@ const float M_PER_DEG = 111319.5;
 void main() {
   vec2 id = (v_position + 1.0) / 2.0; // 2D "id" in between (0,0) and (1,1)
   vec2 lonLat = vec2(
-    decode(texture2D(u_particleLongitudes, id), DIM.x, -DIM_2.x),
-    decode(texture2D(u_particleLatitudes, id), DIM.y, -DIM_2.y)
+    decode(texture(u_particleLongitudes, id), DIM.x, -DIM_2.x),
+    decode(texture(u_particleLatitudes, id), DIM.y, -DIM_2.y)
   );
-  float lifetime = decode(texture2D(u_particleLifetimes, id),
+  float lifetime = decode(texture(u_particleLifetimes, id),
       u_particleLifetime, 0.0);
   lifetime += u_timeDelta;
 
@@ -50,11 +50,11 @@ void main() {
       u_particleDataProjection
   );
 
-  float velocity = texture2D(u_vectorFieldV, textureCoord).r;
+  float velocity = texture(u_vectorFieldV, textureCoord).r;
 
   if (lifetime > u_particleLifetime) {
     // "randomly" relocate particle to keep grid "full"
-    float ry = texture2D(u_random, mod(id - u_randLonLatOffsets.yx, 1.0)).r;
+    float ry = texture(u_random, mod(id - u_randLonLatOffsets.yx, 1.0)).r;
 
     lonLat.y = (DIM.y / radians(DIM.y)) * asin(2.0 * ry - 1.0);
   } else {

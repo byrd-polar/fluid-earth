@@ -39,10 +39,10 @@ void main() {
 
   vec2 texCoord = a_particleIndex / u_particleCountSqrt;
   vec2 lonLat = radians(vec2(
-    decode(texture2D(u_particleLongitudes, texCoord), DIM.x, -DIM_2.x),
-    decode(texture2D(u_particleLatitudes, texCoord), DIM.y, -DIM_2.y)
+    decode(texture(u_particleLongitudes, texCoord), DIM.x, -DIM_2.x),
+    decode(texture(u_particleLatitudes, texCoord), DIM.y, -DIM_2.y)
   ));
-  v_speed = decode(texture2D(u_particleSpeeds, texCoord), MAX_SPEED, 0.0);
+  v_speed = decode(texture(u_particleSpeeds, texCoord), MAX_SPEED, 0.0);
 
   bool clip; // true if vertex will not be rendered
 

@@ -15,7 +15,7 @@ out vec4 color;
 
 void main() {
   vec2 id = (v_position + 1.0) / 2.0; // 2D "id" in between (0,0) and (1,1)
-  float lifetime = decode(texture2D(u_particleLifetimes, id),
+  float lifetime = decode(texture(u_particleLifetimes, id),
       u_particleLifetime, 0.0);
   lifetime += u_timeDelta;
 
