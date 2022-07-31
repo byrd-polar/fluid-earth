@@ -200,26 +200,14 @@ export default class MapBackground {
 
 function createBufferInfoFromTopojson(gl, data, object) {
   let mesh = topojson.mesh(data, object);
-  let currentIndex = 0;
-  let indices = [];
+  let points = [];
 
-  for (let i = 0; i < mesh.coordinates.length; i++) {
-    let lastIndexOfLineSegment = currentIndex + mesh.coordinates[i].length - 1;
-
-    for(; currentIndex < lastIndexOfLineSegment; currentIndex++) {
-      indices.push(currentIndex);
-      indices.push(currentIndex + 1);
+  for (const line of mesh.coordinates) {
+    for (let i = 0; i < line.length - 1; i++) {
+      points.push(...line[i], 0, ...line[i + 1], 1);
     }
-    currentIndex = lastIndexOfLineSegment + 1;
   }
-
-  let arrays = {
-    a_lonLat: {
-      numComponents: 2,
-      data: mesh.coordinates.flat(2),
-    },
-    indices: indices,
-  };
-
-  return twgl.createBufferInfoFromArrays(gl, arrays);
+  return twgl.createBufferInfoFromArrays(gl, {
+    a_lonLat: { numComponents: 3, data: points },
+  });
 }
