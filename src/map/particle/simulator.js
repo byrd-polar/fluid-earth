@@ -8,11 +8,7 @@ import textureVert from '../gridded.vert';
 import textureFrag from './texture.frag';
 
 import { glDraw, griddedArrays } from '../webgl.js';
-import {
-  randomLongitudeArray,
-  randomLatitudeArray,
-  randomArray,
-} from './random.js';
+import { randlon, randlat } from '../../math.js';
 
 export default class ParticleSimulator {
   constructor(gl, options) {
@@ -223,10 +219,11 @@ export default class ParticleSimulator {
 
   _createTextures() {
     const randomTextureSize = 128;
+    const length = Math.pow(randomTextureSize, 2);
 
     return {
       random: twgl.createTexture(this._gl, {
-        src: randomArray(1, Math.pow(randomTextureSize, 2)),
+        src: Float32Array.from({ length }, () => Math.random()),
         type: this._gl.FLOAT,
         format: this._gl.RED,
         internalFormat: this._gl.R32F,
@@ -251,11 +248,14 @@ export default class ParticleSimulator {
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
-      src: interleave4(
-        randomLongitudeArray(this._count),
-        randomLatitudeArray(this._count),
-        randomArray(this._lifetime, this._count),
-      ),
+      src: Float32Array.from({ length: this._count * 4 }, (_, i) => {
+        switch(i % 4) {
+          case 0: return randlon();
+          case 1: return randlat();
+          case 2: return this._lifetime * Math.random();
+          default: return 0;
+        }
+      }),
     });
   }
 
@@ -326,22 +326,4 @@ export default class ParticleSimulator {
   _roundToSquareNumber(x) {
     return Math.pow(Math.floor(Math.sqrt(x)), 2);
   }
-}
-
-function interleave4(arrayR, arrayG, arrayB, arrayA) {
-  let interleaved = new Float32Array(4 * arrayR.length);
-
-  for (let i = 0; i < interleaved.length; i++) {
-    if (i % 4 === 0) {
-      interleaved[i] = arrayR[i/4];
-    } else if (i % 4 === 1) {
-      interleaved[i] = arrayG[Math.floor(i/4)];
-    } else if (i % 4 === 2 && arrayB) {
-      interleaved[i] = arrayB[Math.floor(i/4)];
-    } else if (arrayA) {
-      interleaved[i] = arrayA[Math.floor(i/4)];
-    }
-  }
-
-  return interleaved;
 }
