@@ -35,12 +35,7 @@ void main() {
       u_translateY
   );
 
-  if (clip) {
-    v_clip = 1.0;
-  } else {
-    v_clip = 0.0;
-  }
-
+  v_clip = clip ? 1.0 : 0.0;
   v_t = a_lonLat.z * u_zoom * u_screenRatio;
 
   displayCoord = u_zoom * displayCoord / PI_2;
