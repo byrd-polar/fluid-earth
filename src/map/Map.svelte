@@ -4,7 +4,6 @@
 
   import MapBackground from './background.js';
   import ParticleSimulator from './particle/simulator.js';
-  import ParticleSimulatorMobile from './particle/mobile/simulator.js';
 
   import projections, { proj, clipped, reproj } from './projections/';
   import dataProjections from './data-projections/';
@@ -161,24 +160,11 @@
       vectorData: vectorData,
     });
 
-    let particleSimulatorOptions = {
+    particleSimulator = new ParticleSimulator(particleGl, {
       count: particleCount || 1,
       lifetime: particleLifetime,
       data: particleData,
-    };
-
-    // Use a different particle simulator for older devices that don't support
-    // rendering to float textures at all and for mobile devices because of
-    // issues rendering to float textures despite supporting the extension.
-    let canRenderToFloat = particleGl.getExtension('EXT_color_buffer_float');
-
-    if (!canRenderToFloat || navigator.userAgent.includes("Mobi")) {
-      particleSimulator =
-        new ParticleSimulatorMobile(particleGl, particleSimulatorOptions);
-    } else {
-      particleSimulator =
-        new ParticleSimulator(particleGl, particleSimulatorOptions);
-    }
+    });
 
     updateResolution(backgroundGl, true);
     updateResolution(particleGl, true);
