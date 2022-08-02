@@ -242,13 +242,13 @@ export default class ParticleSimulator {
 
   _createSimATexture() {
     return twgl.createTexture(this._gl, {
-      type: this._gl.INT,
+      type: this._gl.UNSIGNED_INT,
       format: this._gl.RGBA_INTEGER,
-      internalFormat: this._gl.RGBA32I,
+      internalFormat: this._gl.RGBA32UI,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
-      src: new Int32Array(
+      src: new Uint32Array(
         Float32Array.from({ length: this._count * 4 }, (_, i) => {
           switch(i % 4) {
             case 0: return randlon();
@@ -263,9 +263,9 @@ export default class ParticleSimulator {
 
   _createSimBTexture() {
     return twgl.createTexture(this._gl, {
-      type: this._gl.INT,
+      type: this._gl.UNSIGNED_INT,
       format: this._gl.RGBA_INTEGER,
-      internalFormat: this._gl.RGBA32I,
+      internalFormat: this._gl.RGBA32UI,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
