@@ -22,9 +22,7 @@ export default class ParticleSimulator {
     this._gl = gl;
     this._gl.enable(gl.BLEND);
     this._gl.getExtension('OES_texture_float_linear');
-    if (!this._gl.getExtension('EXT_color_buffer_float')) {
-      this._ext = this._gl.getExtension('EXT_color_buffer_half_float');
-    }
+    this._ext = this._gl.getExtension('EXT_color_buffer_half_float');
 
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers();
@@ -244,29 +242,32 @@ export default class ParticleSimulator {
   }
 
   _createSimATexture() {
-    let TypedArray = this._ext ? Float16Array : Float32Array;
+    let length = this._count * 4;
+    let mapFn = (_, i) => {
+      switch(i % 4) {
+        case 0: return randlon();
+        case 1: return randlat();
+        case 2: return this._lifetime * Math.random();
+        default: return 0;
+      }
+    };
 
     return twgl.createTexture(this._gl, {
-      type: this._gl.FLOAT,
+      type: this._ext ? this._gl.HALF_FLOAT : this._gl.FLOAT,
       format: this._gl.RGBA,
       internalFormat: this._ext?.RGBA16F_EXT ?? this._gl.RGBA32F,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
-      src: TypedArray.from({ length: this._count * 4 }, (_, i) => {
-        switch(i % 4) {
-          case 0: return randlon();
-          case 1: return randlat();
-          case 2: return this._lifetime * Math.random();
-          default: return 0;
-        }
-      }),
+      src: this._ext
+        ? new Uint16Array(Float16Array.from({ length }, mapFn).buffer)
+        : Float32Array.from({ length }, mapFn)
     });
   }
 
   _createSimBTexture() {
     return twgl.createTexture(this._gl, {
-      type: this._gl.FLOAT,
+      type: this._ext ? this._gl.HALF_FLOAT : this._gl.FLOAT,
       format: this._gl.RGBA,
       internalFormat: this._ext?.RGBA16F_EXT ?? this._gl.RGBA32F,
       minMag: this._gl.NEAREST,
