@@ -4,7 +4,7 @@ precision highp float;
 
 #pragma glslify: projectToTexture = require(../data-projections/)
 
-uniform sampler2D u_particleData;
+uniform highp isampler2D u_particleData;
 uniform sampler2D u_vectorFieldU;
 uniform sampler2D u_vectorFieldV;
 uniform sampler2D u_random;
@@ -20,7 +20,7 @@ uniform float u_timeDelta;
 uniform float u_rate;
 
 in vec2 v_position;
-out vec4 color;
+out ivec4 color;
 
 const vec2 DIM = vec2(360.0, 180.0); // size of map in longitude and latitude
 const vec2 DIM_2 = vec2(180.0, 90.0);
@@ -29,7 +29,7 @@ const float M_PER_DEG = 111319.5;
 
 void main() {
   vec2 id = (v_position + 1.0) / 2.0; // 2D "id" in between (0,0) and (1,1)
-  vec4 data = texture(u_particleData, id);
+  vec4 data = intBitsToFloat(texture(u_particleData, id));
   vec2 lonLat = data.rg;
   float lifetime = data.b + u_timeDelta;
 
@@ -68,5 +68,5 @@ void main() {
   lonLat.x = mod(lonLat.x + DIM_2.x, DIM.x) - DIM_2.x;
   lonLat.y = clamp(lonLat.y, -DIM_2.y, DIM_2.y);
 
-  color = vec4(lonLat, lifetime, speed);
+  color = floatBitsToInt(vec4(lonLat, lifetime, speed));
 }
