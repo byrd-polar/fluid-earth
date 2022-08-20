@@ -109,6 +109,8 @@
   let backgroundGl;
   let particleGl;
 
+  let webglError = false;
+
   let mapBackground = {};
   $: mapBackground.data = splitIfNeeded(griddedData);
   $: mapBackground.colormap = griddedColormap;
@@ -148,6 +150,11 @@
   onMount(() => {
     backgroundGl = backgroundCanvas.getContext('webgl2', { alpha: true });
     particleGl = particleCanvas.getContext('webgl2');
+
+    if (!backgroundGl) {
+      webglError = true;
+      return;
+    }
 
     MAX_TEXTURE_SIZE = backgroundGl.getParameter(backgroundGl.MAX_TEXTURE_SIZE);
 
@@ -312,6 +319,15 @@
   <canvas bind:this={backgroundCanvas}/>
   <canvas bind:this={particleCanvas}/>
   <slot></slot>
+  {#if webglError}
+    <div class="error">
+      <p>Could not display globe.</p>
+      <p>
+        Please
+        <a href="https://get.webgl.org/webgl2/">upgrade for WebGL2</a>.
+      </p>
+    </div>
+  {/if}
 </div>
 
 <style>
@@ -337,6 +353,20 @@
     width: 100%;
     height: 100%;
     position: absolute;
+  }
+
+  div.error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    pointer-events: none;
+  }
+
+  p {
+    pointer-events: auto;
+    margin-top: 0;
   }
 </style>
 

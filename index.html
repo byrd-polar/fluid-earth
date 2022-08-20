@@ -106,7 +106,6 @@
       <div class="sk-swing-dot"></div>
     </div>
     <p class="errmsg" hidden></p>
-    <canvas hidden></canvas>
   </div>
   <script>
     document.querySelector('.sk-swing').removeAttribute('hidden');
@@ -115,8 +114,7 @@
     showError('This browser is not supported.');
   </script>
   <script>
-    if ( typeof globalThis === undefined
-      || document.querySelector('canvas').getContext('webgl2') === null) {
+    if (typeof globalThis === undefined) {
       showError('This browser is not supported.');
     }
   </script>
