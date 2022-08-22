@@ -1,8 +1,8 @@
-diff --git a/node_modules/vite/dist/node/chunks/dep-561c5231.js b/node_modules/vite/dist/node/chunks/dep-561c5231.js
-index cd14c84..45375c7 100644
---- a/node_modules/vite/dist/node/chunks/dep-561c5231.js
-+++ b/node_modules/vite/dist/node/chunks/dep-561c5231.js
-@@ -11994,6 +11994,10 @@ function copyDir(srcDir, destDir) {
+diff --git a/node_modules/vite/dist/node/chunks/dep-0fc8e132.js b/node_modules/vite/dist/node/chunks/dep-0fc8e132.js
+index 54ffaf0..0ae10f7 100644
+--- a/node_modules/vite/dist/node/chunks/dep-0fc8e132.js
++++ b/node_modules/vite/dist/node/chunks/dep-0fc8e132.js
+@@ -12002,6 +12002,10 @@ function copyDir(srcDir, destDir) {
          const destFile = path$n.resolve(destDir, file);
          const stat = fs$l.statSync(srcFile);
          if (stat.isDirectory()) {
@@ -13,7 +13,7 @@ index cd14c84..45375c7 100644
              copyDir(srcFile, destFile);
          }
          else {
-@@ -39438,6 +39442,10 @@ const sirvOptions = (headers) => {
+@@ -39580,6 +39584,10 @@ const sirvOptions = (headers) => {
              if (/\.[tj]sx?$/.test(pathname)) {
                  res.setHeader('Content-Type', 'application/javascript');
              }
