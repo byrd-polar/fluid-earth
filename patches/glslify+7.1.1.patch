@@ -1,0 +1,13 @@
+diff --git a/node_modules/glslify/index.js b/node_modules/glslify/index.js
+index 7bb9ede..3942421 100644
+--- a/node_modules/glslify/index.js
++++ b/node_modules/glslify/index.js
+@@ -45,7 +45,7 @@ function iface () {
+     if (!opts) opts = {}
+     var depper = gdeps(opts)
+     var deps = depper.inline(src, opts.basedir || basedir)
+-    return bundle(deps)
++    return { source: bundle(deps), deps }
+   }
+   function file(filename, opts) {
+     if (!opts) opts = {}

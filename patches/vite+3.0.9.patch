@@ -1,5 +1,5 @@
 diff --git a/node_modules/vite/dist/node/chunks/dep-0fc8e132.js b/node_modules/vite/dist/node/chunks/dep-0fc8e132.js
-index 54ffaf0..0ae10f7 100644
+index 54ffaf0..653c4d4 100644
 --- a/node_modules/vite/dist/node/chunks/dep-0fc8e132.js
 +++ b/node_modules/vite/dist/node/chunks/dep-0fc8e132.js
 @@ -12002,6 +12002,10 @@ function copyDir(srcDir, destDir) {
@@ -24,3 +24,39 @@ index 54ffaf0..0ae10f7 100644
              if (headers) {
                  for (const name in headers) {
                      res.setHeader(name, headers[name]);
+@@ -40203,7 +40211,7 @@ function importAnalysisPlugin(config) {
+                 // properly finish the request with a 504 sent to the browser.
+                 throwOutdatedRequest(importer);
+             }
+-            if (!imports.length) {
++            if (!imports.length && !this._addedImports) {
+                 importerModule.isSelfAccepting = false;
+                 isDebug$1 &&
+                     debug$7(`${timeFrom(start)} ${picocolors.exports.dim(`[no imports] ${prettyImporter}`)}`);
+@@ -40224,7 +40232,7 @@ function importAnalysisPlugin(config) {
+                 ? new Map()
+                 : null;
+             const toAbsoluteUrl = (url) => path$n.posix.resolve(path$n.posix.dirname(importerModule.url), url);
+-            const normalizeUrl = async (url, pos) => {
++            const normalizeUrl = async (url, pos, forceSkipImportAnalysis) => {
+                 if (base !== '/' && url.startsWith(base)) {
+                     url = url.replace(base, '/');
+                 }
+@@ -40303,7 +40311,7 @@ function importAnalysisPlugin(config) {
+                     // up-to-date version of this module.
+                     try {
+                         // delay setting `isSelfAccepting` until the file is actually used (#7870)
+-                        const depModule = await moduleGraph.ensureEntryFromUrl(url, ssr, canSkipImportAnalysis(url));
++                        const depModule = await moduleGraph.ensureEntryFromUrl(url, ssr, canSkipImportAnalysis(url) || forceSkipImportAnalysis);
+                         if (depModule.lastHMRTimestamp > 0) {
+                             url = injectQuery(url, `t=${depModule.lastHMRTimestamp}`);
+                         }
+@@ -40518,7 +40526,7 @@ function importAnalysisPlugin(config) {
+                 // attached by pluginContainer.addWatchFile
+                 const pluginImports = this._addedImports;
+                 if (pluginImports) {
+-                    (await Promise.all([...pluginImports].map((id) => normalizeUrl(id, 0)))).forEach(([url]) => importedUrls.add(url));
++                    (await Promise.all([...pluginImports].map((id) => normalizeUrl(id, 0, true)))).forEach(([url]) => importedUrls.add(url));
+                 }
+                 // HMR transforms are no-ops in SSR, so an `accept` call will
+                 // never be injected. Avoid updating the `isSelfAccepting`

@@ -1,0 +1,27 @@
+diff --git a/node_modules/rollup-plugin-glslify/index.js b/node_modules/rollup-plugin-glslify/index.js
+index 85474ec..2c1e423 100644
+--- a/node_modules/rollup-plugin-glslify/index.js
++++ b/node_modules/rollup-plugin-glslify/index.js
+@@ -58,7 +58,12 @@ module.exports = function glslify(userOptions = {}) {
+                 options
+             );
+ 
+-            code = compile(code, fileOptions);
++            const { source, deps } = compile(code, fileOptions);
++            code = source;
++
++            for (const dep of deps.filter(dep => !dep.entry)) {
++              this.addWatchFile(dep.file);
++            }
+ 
+             if (typeof options.compress === 'function') {
+                 code = options.compress(code);
+@@ -67,7 +72,7 @@ module.exports = function glslify(userOptions = {}) {
+             }
+ 
+             return {
+-                code: `export default ${JSON.stringify(code)}; // eslint-disable-line`,
++                code: `export default ${JSON.stringify(source)}; // eslint-disable-line`,
+                 map: { mappings: '' }
+             };
+         }
