@@ -6,7 +6,7 @@ Group=outreach
 UMask=0002
 WorkingDirectory=/export/data/fev2r/repository
 Environment=UV_THREADPOOL_SIZE=16
-ExecStart=/usr/bin/npm run tera
+ExecStart=/usr/local/bin/npm run tera
 Restart=on-failure
 
 [Install]
