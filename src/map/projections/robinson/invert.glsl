@@ -8,7 +8,7 @@ void robinson(in vec2 coord, in vec2 lonLat0, out vec2 lonLat) {
   int i0;
   vec2 a, b, c;
 
-  for (int j = 0; j < 50; j++) {
+  for (int j = 0; j < 5; j++) {
     i = min(18.0, abs(phi / 5.0));
     di = i - floor(i);
     i0 = int(floor(i));
