@@ -7,6 +7,12 @@ const float PI = radians(180.0);
 //
 // based on https://gis.stackexchange.com/questions/10808/manually-transforming-rotated-lat-lon-to-regular-lat-lon
 void rotate(in vec2 lonLat0, inout vec2 lonLat) {
+  if (lonLat0.y == 0.0) {
+    lonLat.x -= lonLat0.x;
+    lonLat.x = mod(lonLat.x + PI, 2.0 * PI) - PI;
+    return;
+  }
+
   vec3 xyzCoord = vec3(
     cos(lonLat.x) * cos(lonLat.y),
     sin(lonLat.x) * cos(lonLat.y),
