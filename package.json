@@ -47,7 +47,6 @@
     "dotenv": "^16.0.1",
     "esm-seedrandom": "github:shanewholloway/js-esm-seedrandom",
     "focus-trap": "^7.0.0",
-    "interactjs": "^1.10.17",
     "js-quantities": "^1.7.6",
     "pretty-bytes": "^6.0.0",
     "pretty-ms": "^8.0.0",

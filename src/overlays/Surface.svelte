@@ -1,6 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  import interact from 'interactjs';
   import { reproj } from '../map/projections/';
   import { clamp, modulo } from '../math.js';
   import { genericLabel } from '../utility.js';
@@ -20,92 +19,71 @@
 
   export let kioskMode;
 
-  let interactionSurfaceElement;
-  let baseScale;
-  let pointerEvent;
+  let clientHeight = 1080;
+  let dragCoords = null;
+  let cursorEvent = null;
 
   // For ensuring scale of gestures is properly relative to actual size of
   // rendered map; see the screenRatio variable in Map.svelte for details
-  function getPanFactor(e) {
-    let screenRatio = e.target.clientHeight / 1080;
-    let computedZoom = (portraitBasedZoom ? canvasRatio : 1) * zoom;
-    return 0.25 / computedZoom / screenRatio;
+  $: screenRatio = clientHeight / 1080;
+  $: computedZoom = (portraitBasedZoom ? canvasRatio : 1) * zoom;
+  $: panFactor = 0.25 / computedZoom / screenRatio;
+
+  $: cursor = cursorEvent
+    ? getLocation(cursorEvent, inverseProjectionFunction)
+    : null;
+
+  function handlePointerdown(e) {
+    e.target.setPointerCapture(e.pointerId);
+    dragCoords = { x: e.clientX, y: e.clientY };
+    cursorEvent = null;
   }
 
-  // Get lon-lat coordinates of pointer from event
-  function getLocation(e, inverseProjectionFunction) {
-    if (!e) return null;
+  function handlePointerup(e) {
+    if (!dragCoords) return;
 
-    let rect = e.target.getBoundingClientRect();
-    let point = [e.clientX - rect.left, e.clientY - rect.top];
-    let lonLat = inverseProjectionFunction(point);
-    return lonLat ? { longitude: lonLat[0], latitude: lonLat[1] } : null;
+    e.target.releasePointerCapture(e.pointerId)
+    dragCoords = null;
+    cursorEvent = e;
   }
 
-  // make performing the 'hold' gesture on high ppi devices possible
-  interact.pointerMoveTolerance(5);
-
-  onMount(() => {
-    interact(interactionSurfaceElement)
-      .styleCursor(false)
-      .draggable({
-        inertia: true,
-        listeners: {
-          move (e) {
-            let panFactor = getPanFactor(e);
-            let lon = centerLongitude - panFactor * e.dx;
-            let lat = centerLatitude + panFactor * e.dy;
-            centerLongitude = modulo(lon, 360, -180);
-            centerLatitude = clamp(lat, -90, 90);
-          },
-        },
-      })
-      .gesturable({
-        listeners: {
-          start (e) {
-            baseScale = zoom;
-          },
-          move (e) {
-            zoom = clamp(baseScale * e.scale, minZoom, maxZoom);
-          },
-        }
-      })
-      .on('hold', e => {
-        let location = getLocation(e, inverseProjectionFunction);
-
-        if (location && !kioskMode) {
-          pins = [{ label: genericLabel(pins), ...location }, ...pins];
-        }
-      });
-    interactionSurfaceElement.addEventListener('wheel', handleWheel);
-
-    // Workaround for browser chrome hiding/appearing too eagerly on Firefox on
-    // Android, disables zooming with wheel if Firefox on Android is detected
-    let ua = navigator.userAgent;
-    if (ua.includes("Firefox") && ua.includes("Android")) {
-      interactionSurfaceElement.removeEventListener('wheel', handleWheel);
+  function handlePointermove(e) {
+    if (!dragCoords) {
+      cursorEvent = e;
+      return;
     }
-  });
+    let lon = centerLongitude - panFactor * (e.clientX - dragCoords.x);
+    let lat = centerLatitude + panFactor * (e.clientY - dragCoords.y);
+    centerLongitude = modulo(lon, 360, -180);
+    centerLatitude = clamp(lat, -90, 90);
+    dragCoords = { x: e.clientX, y: e.clientY };
+  }
 
   function handleWheel(e) {
     let z = e.deltaY > 0 ? zoom / 1.1 : zoom * 1.1;
     zoom = clamp(z, minZoom, maxZoom);
   }
 
-  function handlePointer(e) {
-    if (e.pointerType === 'touch') return;
-
-    pointerEvent = e.type === 'pointerleave' ? null : e;
+  function getLocation(e, inverseProjectionFunction) {
+    let rect = e.target.getBoundingClientRect();
+    let point = [e.clientX - rect.left, e.clientY - rect.top];
+    let lonLat = inverseProjectionFunction(point);
+    return lonLat ? { longitude: lonLat[0], latitude: lonLat[1] } : null;
   }
-
-  $: cursor = getLocation(pointerEvent, inverseProjectionFunction);
 </script>
 
+<!--
+  Listening for mouseup and contextmenu to work around
+  https://bugzilla.mozilla.org/show_bug.cgi?id=1684355
+-->
 <div
-  bind:this={interactionSurfaceElement}
-  on:pointermove={handlePointer}
-  on:pointerenter={handlePointer}
-  on:pointerleave={handlePointer}
+  bind:clientHeight
+  on:pointerdown={handlePointerdown}
+  on:pointerup={handlePointerup}
+  on:contextmenu={handlePointerup}
+  on:mouseup={handlePointerup}
+  on:pointermove={handlePointermove}
+  on:wheel={handleWheel}
 ></div>
 
 <style>
