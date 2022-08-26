@@ -20,8 +20,8 @@
   export let kioskMode;
 
   let clientHeight = 1080;
-  let dragCoords = null;
-  let cursorEvent = null;
+  let dragPointers = new Map();
+  let hoverPointer = null;
 
   // For ensuring scale of gestures is properly relative to actual size of
   // rendered map; see the screenRatio variable in Map.svelte for details
@@ -29,34 +29,56 @@
   $: computedZoom = (portraitBasedZoom ? canvasRatio : 1) * zoom;
   $: panFactor = 0.25 / computedZoom / screenRatio;
 
-  $: cursor = cursorEvent
-    ? getLocation(cursorEvent, inverseProjectionFunction)
+  $: cursor = hoverPointer
+    ? getLocation(hoverPointer, inverseProjectionFunction)
     : null;
 
   function handlePointerdown(e) {
     e.target.setPointerCapture(e.pointerId);
-    dragCoords = { x: e.clientX, y: e.clientY };
-    cursorEvent = null;
+    dragPointers.set(e.pointerId, e);
+    hoverPointer = null;
   }
 
   function handlePointerup(e) {
-    if (!dragCoords) return;
+    if (!dragPointers.has(e.pointerId)) return;
 
-    e.target.releasePointerCapture(e.pointerId)
-    dragCoords = null;
-    cursorEvent = e;
+    e.target.releasePointerCapture(e.pointerId);
+    if (dragPointers.delete(e.pointerId) && dragPointers.size === 0) {
+      hoverPointer = e;
+    }
+  }
+
+  // Workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1684355
+  function clearDragpointers(e) {
+    for (let id of dragPointers.keys()) {
+      dragPointers.delete(id);
+      e.target.releasePointerCapture(id);
+    }
   }
 
   function handlePointermove(e) {
-    if (!dragCoords) {
-      cursorEvent = e;
+    let o1 = dragPointers.get(e.pointerId);
+    if (!o1) {
+      hoverPointer = e;
       return;
     }
-    let lon = centerLongitude - panFactor * (e.clientX - dragCoords.x);
-    let lat = centerLatitude + panFactor * (e.clientY - dragCoords.y);
-    centerLongitude = modulo(lon, 360, -180);
-    centerLatitude = clamp(lat, -90, 90);
-    dragCoords = { x: e.clientX, y: e.clientY };
+    switch (dragPointers.size) {
+      case 1:
+        let lon = centerLongitude - panFactor * (e.clientX - o1.clientX);
+        let lat = centerLatitude + panFactor * (e.clientY - o1.clientY);
+        centerLongitude = modulo(lon, 360, -180);
+        centerLatitude = clamp(lat, -90, 90);
+        break;
+      case 2:
+        break;
+    }
+    dragPointers.set(e.pointerId, e);
+  }
+
+  function handlePointerleave(e) {
+    if (e.pointerId === hoverPointer?.pointerId) {
+      hoverPointer = null;
+    }
   }
 
   function handleWheel(e) {
@@ -72,17 +94,14 @@
   }
 </script>
 
-<!--
-  Listening for mouseup and contextmenu to work around
-  https://bugzilla.mozilla.org/show_bug.cgi?id=1684355
--->
 <div
   bind:clientHeight
   on:pointerdown={handlePointerdown}
   on:pointerup={handlePointerup}
-  on:contextmenu={handlePointerup}
-  on:mouseup={handlePointerup}
+  on:contextmenu={clearDragpointers}
+  on:mouseup={clearDragpointers}
   on:pointermove={handlePointermove}
+  on:pointerleave={handlePointerleave}
   on:wheel={handleWheel}
 ></div>
 
