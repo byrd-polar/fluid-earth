@@ -40,10 +40,10 @@
   }
 
   function handlePointerup(e) {
-    if (!dragPointers.has(e.pointerId)) return;
+    if (!dragPointers.delete(e.pointerId)) return;
 
     e.target.releasePointerCapture(e.pointerId);
-    if (dragPointers.delete(e.pointerId) && dragPointers.size === 0) {
+    if (dragPointers.size === 0) {
       hoverPointer = e;
     }
   }
