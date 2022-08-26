@@ -59,7 +59,7 @@
   function handlePointermove(e) {
     let o1 = dragPointers.get(e.pointerId);
     if (!o1) {
-      hoverPointer = e;
+      if (dragPointers.size === 0) hoverPointer = e;
       return;
     }
     switch (dragPointers.size) {
