@@ -70,6 +70,11 @@
         centerLatitude = clamp(lat, -90, 90);
         break;
       case 2:
+        let o2Key = [...dragPointers.keys()].find(id => id !== e.pointerId);
+        let o2 = dragPointers.get(o2Key);
+        let d1 = Math.hypot(o1.clientX - o2.clientX, o1.clientY - o2.clientY);
+        let d2 = Math.hypot(e.clientX - o2.clientX, e.clientY - o2.clientY);
+        zoom = clamp((1 + 0.005 * (d2 - d1)) * zoom, minZoom, maxZoom);
         break;
     }
     dragPointers.set(e.pointerId, e);
