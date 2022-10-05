@@ -14,12 +14,12 @@
   export let timeDataset;
   export let utc;
 
-  let pickerMode = 'days';
+  let pickerMode = 'day';
   let pickers = {
-    years: yearPicker,
-    months: monthPicker,
-    days: dayPicker,
-    hours: hourPicker,
+    year: yearPicker,
+    month: monthPicker,
+    day: dayPicker,
+    hour: hourPicker,
   };
   $: options = getOptions(timeDataset.interval);
   $: if (!options.includes(pickerMode)) {
@@ -173,7 +173,7 @@
     {@const enabled = boxIsEnabled(box, timeDataset, utc, picker, header)}
     <button
       class="box"
-      class:hour={pickerMode === 'hours'}
+      class:hour={pickerMode === 'hour'}
       class:selected={selected && enabled}
       on:click={() => { if (!selected) selectDate(box) }}
       disabled={!enabled}
