@@ -6,8 +6,12 @@ export const mobile = readable(mediaQuery.matches, set => {
 
   const updateMobile = () => set(mediaQuery.matches);
   window.addEventListener('resize', updateMobile);
+  window.addEventListener('orientationchange', updateMobile);
 
-  return () => window.removeEventListener('resize', updateMobile);
+  return () => {
+    window.removeEventListener('resize', updateMobile);
+    window.removeEventListener('orientationchange', updateMobile);
+  }
 });
 
 export const currentDate = readable(new Date(), set => {
