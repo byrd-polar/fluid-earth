@@ -105,7 +105,7 @@ export function simplify(griddedDataset) {
 
   for (const prop in griddedDatasetCore) core[prop] = griddedDatasetCore[prop]
   for (const prop in simplifiedCore) core[prop] = simplifiedCore[prop]
-  core.name = translate(core.name)
+  core.name = core.name ? translate(core.name) : undefined
   core.smode = true
 
   let simplifiedDataset = new GriddedDataset(core)
