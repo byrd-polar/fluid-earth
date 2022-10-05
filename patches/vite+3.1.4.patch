@@ -1,8 +1,8 @@
-diff --git a/node_modules/vite/dist/node/chunks/dep-0fc8e132.js b/node_modules/vite/dist/node/chunks/dep-0fc8e132.js
-index 54ffaf0..653c4d4 100644
---- a/node_modules/vite/dist/node/chunks/dep-0fc8e132.js
-+++ b/node_modules/vite/dist/node/chunks/dep-0fc8e132.js
-@@ -12002,6 +12002,10 @@ function copyDir(srcDir, destDir) {
+diff --git a/node_modules/vite/dist/node/chunks/dep-6b3a5aff.js b/node_modules/vite/dist/node/chunks/dep-6b3a5aff.js
+index df421ac..64649b2 100644
+--- a/node_modules/vite/dist/node/chunks/dep-6b3a5aff.js
++++ b/node_modules/vite/dist/node/chunks/dep-6b3a5aff.js
+@@ -12017,6 +12017,10 @@ function copyDir(srcDir, destDir) {
          const destFile = path$n.resolve(destDir, file);
          const stat = fs$l.statSync(srcFile);
          if (stat.isDirectory()) {
@@ -13,7 +13,7 @@ index 54ffaf0..653c4d4 100644
              copyDir(srcFile, destFile);
          }
          else {
-@@ -39580,6 +39584,10 @@ const sirvOptions = (headers) => {
+@@ -37057,6 +37061,10 @@ const sirvOptions = (headers) => {
              if (/\.[tj]sx?$/.test(pathname)) {
                  res.setHeader('Content-Type', 'application/javascript');
              }
@@ -24,7 +24,7 @@ index 54ffaf0..653c4d4 100644
              if (headers) {
                  for (const name in headers) {
                      res.setHeader(name, headers[name]);
-@@ -40203,7 +40211,7 @@ function importAnalysisPlugin(config) {
+@@ -37535,7 +37543,7 @@ function importAnalysisPlugin(config) {
                  // properly finish the request with a 504 sent to the browser.
                  throwOutdatedRequest(importer);
              }
@@ -32,8 +32,8 @@ index 54ffaf0..653c4d4 100644
 +            if (!imports.length && !this._addedImports) {
                  importerModule.isSelfAccepting = false;
                  isDebug$1 &&
-                     debug$7(`${timeFrom(start)} ${picocolors.exports.dim(`[no imports] ${prettyImporter}`)}`);
-@@ -40224,7 +40232,7 @@ function importAnalysisPlugin(config) {
+                     debug$9(`${timeFrom(start)} ${picocolors.exports.dim(`[no imports] ${prettyImporter}`)}`);
+@@ -37556,7 +37564,7 @@ function importAnalysisPlugin(config) {
                  ? new Map()
                  : null;
              const toAbsoluteUrl = (url) => path$n.posix.resolve(path$n.posix.dirname(importerModule.url), url);
@@ -42,16 +42,16 @@ index 54ffaf0..653c4d4 100644
                  if (base !== '/' && url.startsWith(base)) {
                      url = url.replace(base, '/');
                  }
-@@ -40303,7 +40311,7 @@ function importAnalysisPlugin(config) {
+@@ -37634,7 +37642,7 @@ function importAnalysisPlugin(config) {
                      // up-to-date version of this module.
                      try {
                          // delay setting `isSelfAccepting` until the file is actually used (#7870)
--                        const depModule = await moduleGraph.ensureEntryFromUrl(url, ssr, canSkipImportAnalysis(url));
-+                        const depModule = await moduleGraph.ensureEntryFromUrl(url, ssr, canSkipImportAnalysis(url) || forceSkipImportAnalysis);
+-                        const depModule = await moduleGraph.ensureEntryFromUrl(unwrapId(url), ssr, canSkipImportAnalysis(url));
++                        const depModule = await moduleGraph.ensureEntryFromUrl(unwrapId(url), ssr, canSkipImportAnalysis(url) || forceSkipImportAnalysis);
                          if (depModule.lastHMRTimestamp > 0) {
                              url = injectQuery(url, `t=${depModule.lastHMRTimestamp}`);
                          }
-@@ -40518,7 +40526,7 @@ function importAnalysisPlugin(config) {
+@@ -37849,7 +37857,7 @@ function importAnalysisPlugin(config) {
                  // attached by pluginContainer.addWatchFile
                  const pluginImports = this._addedImports;
                  if (pluginImports) {
