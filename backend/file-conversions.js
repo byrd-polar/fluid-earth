@@ -108,7 +108,7 @@ async function f64_to_arr(input) {
 
 const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
 
-async function grib2_to_arr(input, match='.*', limit=1) {
+async function grib2_to_arr(input, match='.', limit=1) {
   let buffer = await spawn_cmd('wgrib2', [
     input,
     '-match', match,
