@@ -131,7 +131,7 @@ async function netcdf_to_arr(input, variables, flatten=true) {
   let string = buffer.toString();
   let arrays = variables.split(',').map(v => {
     return string
-      .match(new RegExp(` ${v} =\n(.*?);`, 's'))[1]
+      .match(new RegExp(` ${v} =\r?\n(.*?);`, 's'))[1]
       .split(',')
       .map(x => parseFloat(x));
   });
