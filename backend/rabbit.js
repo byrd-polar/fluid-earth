@@ -10,6 +10,7 @@ import {
 } from './utility.js';
 import { readdir } from 'fs/promises';
 import { basename, join, relative } from 'path';
+import { pathToFileURL } from 'url';
 
 let heart = { last_beat: new Date().toISOString() };
 let heart_file = join(parent_output_dir, 'heart.json');
@@ -20,7 +21,7 @@ const datasets_dir = absolute_path('./datasets');
 let source_path = process.argv[2];
 let source = basename(source_path, '.js');
 
-let { forage } = await import(source_path);
+let { forage } = await import(pathToFileURL(source_path));
 
 let state_file = join(sources_state_dir, `${source}.json`);
 let current_state = await read_json(state_file, {});
@@ -35,7 +36,7 @@ let datasets = (await Promise.all(dataset_files.map(async file => {
   await mkdir_p(output_dir);
   return {
     output_dir,
-    ...(await import(join(datasets_dir, file))),
+    ...(await import(pathToFileURL(join(datasets_dir, file)))),
     state_file,
     current_state: await read_json(state_file, {}),
   };
