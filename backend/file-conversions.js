@@ -3,7 +3,6 @@ import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
 import { readFile, rm } from 'fs/promises';
-import { platform } from 'os';
 import { join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -106,14 +105,12 @@ async function f64_to_arr(input) {
   return typedarray_from_buffer(buffer, Float64Array);
 }
 
-const devnull = platform() === 'win32' ? 'NUL' : '/dev/null';
-
 async function grib2_to_arr(input, match='.', limit=1) {
   let buffer = await spawn_cmd('wgrib2', [
     input,
     '-match', match,
     '-limit', limit,
-    '-inv', devnull,
+    '-inv', '/dev/null',
     '-bin', '-',
     '-no_header',
     '-order', 'we:sn',
