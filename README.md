@@ -37,7 +37,20 @@ Changes to files in `src` will be automatically displayed from the dev server.
 - [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/)
 - [NetCDF](https://www.unidata.ucar.edu/downloads/netcdf/)
 
-Complete the frontend-only setup, then in a separate terminal tab/window:
+First, complete the frontend-only setup.
+
+Then, [create an account](https://cds.climate.copernicus.eu/user/register) to
+access CDS. Once logged in, [accept the Copernicus
+license](https://cds.climate.copernicus.eu/cdsapp/#!/terms/licence-to-use-copernicus-products)
+and use your [CDS API key](https://cds.climate.copernicus.eu/api-how-to) to
+create a `.env` file in the root of this Git repository with the following
+content, replacing the `X`s with your key:
+
+```env
+CDS_API_KEY=XXXXXX:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+```
+
+Finally, in a separate terminal tab/window:
 
 ```sh
 npm run tera
