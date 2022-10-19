@@ -57,6 +57,7 @@ up.assert(
 up.assert(
   state.sources.oscar, 'date',
   8 * days, 'OSCAR is delayed',
+  true,
 );
 up.assert(
   state.sources.rtgssthr, 'date',
