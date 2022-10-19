@@ -36,6 +36,7 @@ Changes to files in `src` will be automatically displayed from the dev server.
 - [wgrib](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html)
 - [wgrib2](https://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/)
 - [NetCDF](https://www.unidata.ucar.edu/downloads/netcdf/)
+- [Deno](https://deno.land/#installation)
 
 First, complete the frontend-only setup.
 
