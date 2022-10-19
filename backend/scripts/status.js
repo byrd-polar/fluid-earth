@@ -9,12 +9,18 @@ const days = 24 * hours;
 class Up {
   now = new Date();
   down = false;
+  snoozed = false;
 
-  assert(obj, prop, max_delay, message) {
+  assert(obj, prop, max_delay, message, snooze=false) {
     if (this.now - new Date(obj[prop]) > max_delay) {
-      console.log(`\n${message}.`);
+      console.log(`\n${message}.${snooze ? ' [snoozed]' : ''}`);
       console.log(obj);
-      this.down = true;
+
+      if (snooze) {
+        this.snoozed = true;
+      } else {
+        this.down = true;
+      }
     }
   }
 }
@@ -61,6 +67,6 @@ up.assert(
   70 * days, 'ERA5-monthly is delayed',
 );
 
-if (!up.down) console.log('\nAll sources up to date.');
+if (!up.down && !up.snoozed) console.log('\nAll sources up to date.');
 
 Deno.exit(up.down ? 1 : 0);
