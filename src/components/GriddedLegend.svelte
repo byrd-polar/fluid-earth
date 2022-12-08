@@ -4,7 +4,7 @@
   import { scaleLinear, scaleLog } from 'd3-scale';
   import {
     convert, prettyUnit,
-    hasDial, getUnitFromDial, rotateDial,
+    hasDial, getUnitFromDial, rotateDial, isDiscreteUnit,
   } from '../units.js';
   import { capitalizeFirstLetter, handleLikeButton } from '../utility.js';
   import tooltip from '../tooltip.js';
@@ -22,11 +22,14 @@
   $: if (svgScaleElement) {
     let scaleFn = griddedScale === 'log' ? scaleLog : scaleLinear;
     let conversion = v => convert(v, griddedOriginalUnit, griddedUnit);
-    let axis = axisBottom(
+    let axisBeforeTicks = axisBottom(
       scaleFn()
         .domain(griddedDomain.map(conversion))
         .range([-0.5, svgScaleWidth - 0.5])
     );
+    console.log(griddedDomain.map(conversion))
+    let tickCount = griddedDomain.map(conversion)[1] - griddedDomain.map(conversion)[0]
+    let axis = isDiscreteUnit(griddedUnit) ? axisBeforeTicks.ticks(tickCount) : axisBeforeTicks
     d3.select(svgScaleElement).call(axis);
   }
 
