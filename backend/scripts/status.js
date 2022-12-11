@@ -57,7 +57,6 @@ up.assert(
 up.assert(
   state.sources.oscar, 'date',
   8 * days, 'OSCAR is delayed',
-  true,
 );
 up.assert(
   state.sources.rtgssthr, 'date',
@@ -66,6 +65,7 @@ up.assert(
 up.assert(
   state.sources.era5monthly, 'date',
   70 * days, 'ERA5-monthly is delayed',
+  true,
 );
 
 if (!up.down && !up.snoozed) console.log('\nAll sources up to date.');
