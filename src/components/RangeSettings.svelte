@@ -1,30 +1,17 @@
 <script>
   import prettyBytes from 'pretty-bytes';
 
-  export let date;
   export let utc;
-  export let playerActive;
-  export let griddedDataset;
   export let validDates;
-  export let fps = 5;
+  export let datesAfterStartLength;
+  export let loadSize;
 
-  let start = date, timepoints = 10, interval = 1;
-
-  $: date, updateStart();
-
-  $: datesAfterStart = griddedDataset.validDates.filter(d => d >= start);
-
-  $: validDates = datesAfterStart
-    .filter((_, i) => i % (interval || 1) === 0)
-    .slice(0, (timepoints || 2));
+  export let fps;
+  export let start;
+  export let timepoints;
+  export let interval;
 
   $: end = validDates[validDates.length - 1];
-
-  function updateStart() {
-    if (playerActive) return;
-
-    start = date;
-  }
 
   $: dateOptions = {
     timeZone: utc ? 'UTC' : undefined,
@@ -36,8 +23,6 @@
     minute: 'numeric',
     timeZoneName: 'short',
   };
-
-  $: loadSize = validDates.length * griddedDataset.bytesPerFile;
 </script>
 
 <div>
@@ -50,7 +35,7 @@
     type="number"
     bind:value={timepoints}
     min={2}
-    max={Math.max(datesAfterStart.length, 2)}
+    max={Math.max(datesAfterStartLength, 2)}
     step={1}
   >
   <label for="range-interval">Interval (step size):</label>
@@ -59,7 +44,7 @@
     type="number"
     bind:value={interval}
     min={1}
-    max={Math.max(datesAfterStart.length - 1, 1)}
+    max={Math.max(datesAfterStartLength - 1, 1)}
     step={1}
   />
   <p>
