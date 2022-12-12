@@ -30,6 +30,13 @@ export default Object.freeze({
     dateFormat: aggregateMonthDateFormat,
     utcOnly: true,
   },
+  'yearly-aggregate': {
+    roundTo: { smallestUnit: 'year', roundingMode: 'floor' },
+    duration: { years: 1 },
+    smallestPickerMode: 'year',
+    dateFormat: aggregateYearDateFormat,
+    utcOnly: true,
+  },
 })
 
 function instantDateFormat(date, utc) {
@@ -60,4 +67,11 @@ function aggregateMonthDateFormat(date) {
     year: 'numeric',
     month: 'long',
   })
+}
+
+function aggregateYearDateFormat(date) {
+  return date.toLocaleDateString([], {
+   timeZone: 'UTC',
+   year: 'numeric'
+ })
 }
