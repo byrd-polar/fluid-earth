@@ -1,5 +1,5 @@
 diff --git a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
-index 1f12c22..49f889a 100755
+index 2010e76..b590735 100644
 --- a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
 +++ b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
 @@ -18,6 +18,15 @@
@@ -70,8 +70,8 @@ index 1f12c22..49f889a 100755
 +    top: 4px;
      bottom: auto;
      transform: translateY(-50%) translateX(-50%);
-     z-index: 2;
-@@ -634,7 +643,7 @@
+     outline-offset: 2px;
+@@ -637,7 +646,7 @@
      transform: translateY(-50%) translateX(50%);
    }
    :global(.rangeSlider.vertical .rangeHandle) {
@@ -80,7 +80,7 @@ index 1f12c22..49f889a 100755
      top: auto;
      transform: translateY(50%) translateX(-50%);
    }
-@@ -647,7 +656,7 @@
+@@ -650,7 +659,7 @@
      left: 0;
      top: 0;
      display: block;
@@ -89,16 +89,20 @@ index 1f12c22..49f889a 100755
      height: 100%;
      width: 100%;
      transition: box-shadow 0.2s ease;
-@@ -673,7 +682,7 @@
+@@ -676,10 +685,10 @@
      opacity: 0.4;
    }
-   :global(.rangeSlider.range:not(.min):not(.max) .rangeNub) {
+   :global(.rangeSlider.range .rangeNub) {
 -    border-radius: 10em 10em 10em 1.6em;
 +    border-radius: 160px 160px 160px 26px;
    }
+   :global(.rangeSlider.range.min .rangeNub) {
+-      border-radius: 10em  1.6em 10em 10em;
++    border-radius: 160px 26px 160px 160px;
+   }
    :global(.rangeSlider.range .rangeHandle:nth-of-type(1) .rangeNub) {
      transform: rotate(-135deg);
-@@ -703,36 +712,35 @@
+@@ -709,39 +718,38 @@
      display: block;
      position: absolute;
      left: 50%;
@@ -124,6 +128,10 @@ index 1f12c22..49f889a 100755
 -    top: -0.2em;
 +    top: -3px;
      transform: translate(-50%, -100%);
+   }
+   :global(.rangeSlider .rangeHandle.active:focus-visible .rangeFloat) {
+-    top: -0.35em;
++    top: -6px;
    }
    :global(.rangeSlider .rangeBar) {
      position: absolute;
