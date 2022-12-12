@@ -9,8 +9,27 @@
   export let timeDataset;
   export let particleDataset;
 
-  let playerActive, fps;
-  let validDates = timeDataset.validDates; // reactive via RangeSettings
+  let playerActive = false;
+  let fps = 5;
+  let start = date;
+  let timepoints = 10;
+  let interval = 1;
+
+  $: date, updateStart();
+
+  function updateStart() {
+    if (playerActive) return;
+
+    start = date;
+  }
+
+  $: datesAfterStart = timeDataset.validDates.filter(d => d >= start);
+  $: validDates = datesAfterStart
+    .filter((_, i) => i % (interval || 1) === 0)
+    .slice(0, (timepoints || 2));
+
+  $: datesAfterStartLength = datesAfterStart.length;
+  $: loadSize = validDates.length * timeDataset.bytesPerFile;
 </script>
 
 <details open>
@@ -43,12 +62,14 @@
   {fps}
 />
 <RangeSettings
-  {date}
   {utc}
-  {playerActive}
-  griddedDataset={timeDataset}
-  bind:validDates
+  {validDates}
+  {datesAfterStartLength}
+  {loadSize}
   bind:fps
+  bind:start
+  bind:timepoints
+  bind:interval
 />
 </details>
 {/if}
