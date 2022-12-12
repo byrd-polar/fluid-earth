@@ -187,6 +187,10 @@ Data sources include:
   <dd><a href="https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means">
     Copernicus Climate Change Service</a> (ERA5)
 
+  <dt>Permafrost
+    <dd><a href="https://doi.pangaea.de/10.1594/PANGAEA.888600">
+      Northern Hemisphere permafrost map</a> (Obu et al., 2018. Alfred Wegener Institute, Helmholtz Centre for Polar and Marine Research)
+
   <dt>Locations
   <dd>"<a href="https://simplemaps.com/data/world-cities">
     Basic World Cities Database</a>" by
