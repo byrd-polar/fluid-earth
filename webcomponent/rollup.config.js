@@ -1,7 +1,7 @@
 import svelte from 'rollup-plugin-svelte';
 import glslify from 'rollup-plugin-glslify';
 import resolve from '@rollup/plugin-node-resolve';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import dedent from 'dedent';
 
 const preamble = dedent`
