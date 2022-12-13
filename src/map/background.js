@@ -139,6 +139,7 @@ export default class MapBackground {
       min: this._gl.LINEAR,
       width: this._data.width,
       height: this._data.height,
+      auto: false,
     });
   }
 
