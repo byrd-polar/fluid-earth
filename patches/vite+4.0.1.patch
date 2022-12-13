@@ -1,19 +1,8 @@
 diff --git a/node_modules/vite/dist/node/chunks/dep-2285ba4f.js b/node_modules/vite/dist/node/chunks/dep-2285ba4f.js
-index 559c171..ac26680 100644
+index 559c171..6cd4fe8 100644
 --- a/node_modules/vite/dist/node/chunks/dep-2285ba4f.js
 +++ b/node_modules/vite/dist/node/chunks/dep-2285ba4f.js
-@@ -11970,6 +11970,10 @@ function copyDir(srcDir, destDir) {
-         const destFile = path$o.resolve(destDir, file);
-         const stat = fs$l.statSync(srcFile);
-         if (stat.isDirectory()) {
-+            if (file === 'tera') {
-+                fs$l.symlinkSync(srcFile, destFile);
-+                continue;
-+            }
-             copyDir(srcFile, destFile);
-         }
-         else {
-@@ -40066,6 +40070,10 @@ const sirvOptions = ({ headers, shouldServe, }) => {
+@@ -40066,6 +40066,10 @@ const sirvOptions = ({ headers, shouldServe, }) => {
              if (/\.[tj]sx?$/.test(pathname)) {
                  res.setHeader('Content-Type', 'application/javascript');
              }
