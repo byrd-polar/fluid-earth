@@ -27,7 +27,6 @@
         .domain(griddedDomain.map(conversion))
         .range([-0.5, svgScaleWidth - 0.5])
     );
-    console.log(griddedDomain.map(conversion))
     let tickCount = griddedDomain.map(conversion)[1] - griddedDomain.map(conversion)[0]
     let axis = isDiscreteUnit(griddedUnit) ? axisBeforeTicks.ticks(tickCount) : axisBeforeTicks
     d3.select(svgScaleElement).call(axis);
