@@ -66,4 +66,15 @@ void projectToTexture(
       textureCoord = vec2(0.0, 0.5);
     }
   }
+  // PERMAFROST
+  else if (projection == 4) {
+    textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
+
+    float xOffset = 0.5 + 0.5 / gridWidth;
+    float yOffset = 0.5 / gridHeight;
+    float yScale = -(gridHeight - 1.0) / gridHeight;
+
+    textureCoord.x = mod(textureCoord.x + xOffset, 1.0);
+    textureCoord.y = yScale * (textureCoord.y + yOffset - 0.5) + 0.5;
+  }
 }
