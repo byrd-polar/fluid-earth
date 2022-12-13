@@ -1,15 +1,15 @@
 diff --git a/node_modules/vite/dist/node/chunks/dep-2285ba4f.js b/node_modules/vite/dist/node/chunks/dep-2285ba4f.js
-index 559c171..6cd4fe8 100644
+index 559c171..8fb4dad 100644
 --- a/node_modules/vite/dist/node/chunks/dep-2285ba4f.js
 +++ b/node_modules/vite/dist/node/chunks/dep-2285ba4f.js
-@@ -40066,6 +40066,10 @@ const sirvOptions = ({ headers, shouldServe, }) => {
-             if (/\.[tj]sx?$/.test(pathname)) {
-                 res.setHeader('Content-Type', 'application/javascript');
-             }
-+            // custom mime type
-+            if (pathname.endsWith('.fp16.br')) {
-+                res.setHeader('Content-Type', 'application/octet-stream');
-+            }
-             if (headers) {
-                 for (const name in headers) {
-                     res.setHeader(name, headers[name]);
+@@ -40047,6 +40047,10 @@ function sirv (dir, opts={}) {
+ 			res.setHeader('Vary', 'Accept-Encoding');
+ 		}
+ 
++		if (pathname.endsWith('.fp16.br')) {
++		  res.setHeader('Content-Type', 'application/octet-stream');
++		}
++
+ 		setHeaders(res, pathname, data.stats);
+ 		send$2(req, res, data.abs, data.stats, data.headers);
+ 	};
