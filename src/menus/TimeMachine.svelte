@@ -73,5 +73,3 @@
 />
 </details>
 {/if}
-
-<svelte:options immutable={true} />

@@ -272,5 +272,3 @@
     border: solid 2px var(--primary-color-light);
   }
 </style>
-
-<svelte:options immutable={true} />
