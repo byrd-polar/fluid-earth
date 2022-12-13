@@ -289,6 +289,7 @@ export default class ParticleSimulator {
       minMag: this._gl.NEAREST,
       width: this._gl.canvas.width * window.devicePixelRatio,
       height: this._gl.canvas.height * window.devicePixelRatio,
+      auto: false,
     });
   }
 
