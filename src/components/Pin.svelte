@@ -3,7 +3,7 @@
   import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled.svelte';
   import tooltip from '../tooltip.js';
   import { clipped } from '../map/projections/';
-  import { convert, prettyUnit } from '../units.js';
+  import { convert, isDiscreteUnit, isLeadingUnit, prettyUnit } from '../units.js';
   import { prettyLatLon } from '../utility.js';
 
   export let pins;
@@ -53,8 +53,13 @@
         {#if isNaN(value)}
           No data
         {:else}
-          {convert(value, griddedData.originalUnit, griddedUnit).toFixed(1)}
-          {prettyUnit(griddedUnit)}
+          {#if isLeadingUnit(griddedUnit)}
+            {prettyUnit(griddedUnit)}
+          {/if}
+          {convert(value, griddedData.originalUnit, griddedUnit).toFixed(isDiscreteUnit(griddedUnit) ? 0 : 1)}
+          {#if !isLeadingUnit(griddedUnit)}
+            {prettyUnit(griddedUnit)}
+          {/if}
         {/if}
       </strong><br>
       <small class="plain">
