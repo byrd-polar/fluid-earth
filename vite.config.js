@@ -7,9 +7,18 @@ import { promisify } from 'util';
 import { exec as _exec } from 'child_process';
 const exec = promisify(_exec);
 import {
-  access, appendFile, copyFile, readdir, readFile, writeFile
+  access,
+  appendFile,
+  copyFile,
+  mkdir,
+  readdir,
+  readFile,
+  stat,
+  symlink,
+  writeFile,
 } from 'fs/promises';
 import { platform } from 'os';
+import { resolve } from 'path';
 import dedent from 'dedent';
 
 // print dev server address as `localhost` for Node.js versions < 17
@@ -83,6 +92,8 @@ export default async ({ _, mode }) => {
       },
     }),
     copyLicenseAndPatches(),
+    // symlink public/tera instead of copying it
+    customCopyPublicDir(),
   ];
 
   // Optionally enable https for local dev, install
@@ -116,6 +127,7 @@ export default async ({ _, mode }) => {
       },
       chunkSizeWarningLimit: 900,
       sourcemap: true,
+      copyPublicDir: false,
     },
     plugins,
     server: {
@@ -164,4 +176,31 @@ function copyLicenseAndPatches() {
       }
     }
   };
+}
+
+function customCopyPublicDir() {
+  return {
+    async generateBundle() {
+      await copyDir('public', 'dist', true);
+    }
+  }
+}
+
+async function copyDir(srcDir, destDir, symlinkTera=false) {
+  await mkdir(destDir, { recursive: true });
+
+  for (let path of await readdir(srcDir)) {
+    let src = resolve(srcDir, path);
+    let dest = resolve(destDir, path);
+
+    if (symlinkTera && path === 'tera') {
+      await symlink(src, dest);
+
+    } else if ((await stat(src)).isDirectory()) {
+      await copyDir(src, dest);
+
+    } else {
+      await copyFile(src, dest);
+    }
+  }
 }
