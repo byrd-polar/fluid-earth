@@ -149,6 +149,7 @@
   </button>
 </div>
 
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div
   on:focus={handleFocus}
   tabindex={hasFocus ? -1 : 0}

@@ -34,6 +34,7 @@
     content: utcOnly ? 'No alternate timezones available' : 'Change timezone',
     placement: 'bottom',
   }}
+  role="button"
   tabindex="0"
 >
   <h3 class="date">{interval.dateFormat(displayedDate, utc)}</h3>

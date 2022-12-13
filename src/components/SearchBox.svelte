@@ -99,6 +99,7 @@
     {#if options.length > 0}
       <ul>
         {#each options as option}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
           <li
             class:considered={candidateOption === option}
             on:click={() => { select(option) }}

@@ -127,6 +127,7 @@
     </a>
   </footer>
 </aside>
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   class="scrim"
   class:open={drawerOpen}
