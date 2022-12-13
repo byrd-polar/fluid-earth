@@ -163,9 +163,9 @@
   let timesCalled = 0;
 
   async function updateDataAndVariables(griddedDataset, particleDataset, date) {
-    // ignore the calls to this on initial page load;
+    // ignore the call to this on initial page load;
     // update the data manually below instead
-    if (timesCalled < 2) { timesCalled++; return; }
+    if (timesCalled < 1) { timesCalled++; return; }
 
     controller.abort();
     controller = new AbortController();
