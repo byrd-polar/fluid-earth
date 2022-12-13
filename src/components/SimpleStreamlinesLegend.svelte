@@ -16,6 +16,7 @@
   on:click={togglePaused}
   on:keydown={handleLikeButton(togglePaused)}
   use:tooltip={{ content: 'Pause/play animation', placement: 'top'}}
+  role="button"
   tabindex="0"
 >
   <h3>{capitalizeFirstLetter(particleName)}</h3>

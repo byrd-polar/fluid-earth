@@ -43,6 +43,7 @@
 <section
   on:click={toggleUnit}
   on:keydown={handleLikeButton(toggleUnit)}
+  role="button"
   tabindex="0"
   class:canchange
   use:tooltip={{
