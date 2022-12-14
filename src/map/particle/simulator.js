@@ -278,7 +278,7 @@ export default class ParticleSimulator {
       type:           halfFloat ? this._gl.HALF_FLOAT : this._gl.FLOAT,
       internalFormat: halfFloat ? this._gl.R16F : this._gl.R32F,
       format: this._gl.RED,
-      minMag: this._gl.LINEAR,
+      minMag: this._gl.NEAREST,
       width: this._data.width,
       height: this._data.height,
     });
