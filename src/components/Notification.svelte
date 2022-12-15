@@ -1,7 +1,5 @@
 <script>
-  import Close from 'carbon-icons-svelte/lib/CloseOutline.svelte';
   import { fade } from 'svelte/transition';
-  import { mobile } from '../stores.js';
 
   export let openedMenu;
   export let kioskMode;
@@ -24,12 +22,14 @@
 {#if !dismissed}
   <div class="wrapper" out:fade={{ duration: 250 }}>
     <section>
-      <button class="action" on:click={action}>
-        Welcome{#if !$mobile}{' to the new Fluid Earth'}{/if}!
-        Click here to view the tutorial.
+      <div>
+        Welcome to the new Fluid Earth!
+      </div>
+      <button on:click={action}>
+        View tutorial
       </button>
-      <button class="dismiss" on:click={dismiss} aria-label="Close notification">
-        <Close size={24} />
+      <button on:click={dismiss} aria-label="Close notification">
+        Dismiss
       </button>
     </section>
   </div>
@@ -42,7 +42,8 @@
   }
 
   section {
-    background: var(--secondary-color);
+    background: hsl(0 0% 8% / 0.8);
+    backdrop-filter: blur(5px);
     filter: drop-shadow(0 0 0.125em black);
 
     border-radius: 4px;
@@ -50,27 +51,28 @@
     margin: 0 auto;
 
     -webkit-tap-highlight-color: transparent;
-    cursor: pointer;
     pointer-events: auto;
 
-    display: flex;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  section div {
+    grid-column: 1 / span 2;
+    padding: 0.5em 1em;
   }
 
   button {
     all: unset;
-    background: inherit;
-    padding: 0.5em;
     transition: filter 0.25s ease 0s;
+    text-align: center;
+    color: var(--primary-color-light);
+    padding: 0.5em;
+    cursor: pointer;
   }
 
   button:focus, button:hover {
-    filter: brightness(125%);
-  }
-
-  button.dismiss {
-    display: flex;
-    align-items: center;
+    background: hsl(0 0% 0% / 0.3);
   }
 
   @media (max-width: 576px) {
