@@ -4,7 +4,9 @@
   export let openedMenu;
   export let kioskMode;
 
-  let dismissed = false;
+  const storageKey = 'fev2r-welcome-notification-dismissed';
+
+  let dismissed = localStorage.getItem(storageKey) === 'true';
 
   function action() {
     openedMenu = 'Help & About';
@@ -17,6 +19,11 @@
   function dismiss() {
     dismissed = true;
   }
+
+  function dismissByUser() {
+    dismiss();
+    localStorage.setItem(storageKey, 'true')
+  }
 </script>
 
 {#if !dismissed}
@@ -28,7 +35,7 @@
       <button on:click={action}>
         View tutorial
       </button>
-      <button on:click={dismiss} aria-label="Close notification">
+      <button on:click={dismissByUser}>
         Dismiss
       </button>
     </section>
