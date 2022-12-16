@@ -45,6 +45,7 @@ up.assert(
 up.assert(
   state.sources.geos, 'forecast',
   18 * hours, 'GEOS is delayed',
+  true,
 );
 up.assert(
   state.sources.gfs, 'forecast',
