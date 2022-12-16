@@ -21,7 +21,6 @@ export default class ParticleSimulator {
     this._gl = gl;
     this._gl.enable(gl.BLEND);
     this._gl.getExtension('OES_texture_float_linear');
-    this._gl.getExtension('EXT_color_buffer_float');
 
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers();
@@ -242,28 +241,30 @@ export default class ParticleSimulator {
 
   _createSimATexture() {
     return twgl.createTexture(this._gl, {
-      type: this._gl.FLOAT,
-      format: this._gl.RGBA,
-      internalFormat: this._gl.RGBA32F,
+      type: this._gl.INT,
+      format: this._gl.RGBA_INTEGER,
+      internalFormat: this._gl.RGBA32I,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
-      src: Float32Array.from({ length: this._count * 4 }, (_, i) => {
-        switch(i % 4) {
-          case 0: return randlon();
-          case 1: return randlat();
-          case 2: return this._lifetime * Math.random();
-          default: return 0;
-        }
-      }),
+      src: new Int32Array(
+        Float32Array.from({ length: this._count * 4 }, (_, i) => {
+          switch(i % 4) {
+            case 0: return randlon();
+            case 1: return randlat();
+            case 2: return this._lifetime * Math.random();
+            default: return 0;
+          }
+        }).buffer
+      ),
     });
   }
 
   _createSimBTexture() {
     return twgl.createTexture(this._gl, {
-      type: this._gl.FLOAT,
-      format: this._gl.RGBA,
-      internalFormat: this._gl.RGBA32F,
+      type: this._gl.INT,
+      format: this._gl.RGBA_INTEGER,
+      internalFormat: this._gl.RGBA32I,
       minMag: this._gl.NEAREST,
       width: Math.sqrt(this._count),
       height: Math.sqrt(this._count),
