@@ -1,5 +1,6 @@
 [Unit]
 Description=Fluid Earth Tera Data File Generator
+RequiresMountsFor=/export/data/fev2r/repository /usr/local/bin/npm
 
 [Service]
 Group=outreach
