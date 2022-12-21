@@ -1,7 +1,7 @@
-diff --git a/node_modules/d3-geo-projection/src/satellite.js b/node_modules/d3-geo-projection/src/satellite.js
-index d184386..d6ff552 100644
---- a/node_modules/d3-geo-projection/src/satellite.js
-+++ b/node_modules/d3-geo-projection/src/satellite.js
+diff --git a/src/satellite.js b/src/satellite.js
+index d184386731333020e54f63156c6359455b08dfb5..d6ff5521405fc5c7124b7b49a746b507d819a3cd 100644
+--- a/src/satellite.js
++++ b/src/satellite.js
 @@ -1,5 +1,5 @@
  import {geoProjectionMutator as projectionMutator} from "d3-geo";
 -import {acos, asin, atan2, cos, degrees, radians, sin, sqrt} from "./math.js";

@@ -1,7 +1,7 @@
-diff --git a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
-index 2010e76..b590735 100644
---- a/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
-+++ b/node_modules/svelte-range-slider-pips/src/RangeSlider.svelte
+diff --git a/src/RangeSlider.svelte b/src/RangeSlider.svelte
+index 2010e761d02ec7e7221e9cfe2148bf2d8aca301b..b590735f9e5d99f6bb311c6e7986b9367d578a39 100644
+--- a/src/RangeSlider.svelte
++++ b/src/RangeSlider.svelte
 @@ -18,6 +18,15 @@
    export let reversed = false;
    export let hoverable = true;

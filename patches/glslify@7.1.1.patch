@@ -1,7 +1,7 @@
-diff --git a/node_modules/glslify/index.js b/node_modules/glslify/index.js
-index 7bb9ede..3942421 100644
---- a/node_modules/glslify/index.js
-+++ b/node_modules/glslify/index.js
+diff --git a/index.js b/index.js
+index 7bb9ede9700c322d39a403d41cbc3c1057db1bf6..3942421195cc3fb26bb2692016eef922160f3b7c 100644
+--- a/index.js
++++ b/index.js
 @@ -45,7 +45,7 @@ function iface () {
      if (!opts) opts = {}
      var depper = gdeps(opts)

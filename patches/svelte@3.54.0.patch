@@ -1,7 +1,7 @@
-diff --git a/node_modules/svelte/compiler.mjs b/node_modules/svelte/compiler.mjs
-index ae273a5..5fd5d5d 100644
---- a/node_modules/svelte/compiler.mjs
-+++ b/node_modules/svelte/compiler.mjs
+diff --git a/compiler.mjs b/compiler.mjs
+index ae273a5aaae4757c4a31b432f9f7af997361f0c6..5fd5d5d523234ac7e4a2cd2e26992be6a58ec37f 100644
+--- a/compiler.mjs
++++ b/compiler.mjs
 @@ -46405,9 +46405,6 @@ function process_component_options(component, nodes) {
                          if (tag && !regex_valid_tag_name.test(tag)) {
                              return component.error(attribute, compiler_errors.invalid_tag_property);
@@ -12,10 +12,10 @@ index ae273a5..5fd5d5d 100644
                          component_options.tag = tag;
                          break;
                      }
-diff --git a/node_modules/svelte/internal/index.mjs b/node_modules/svelte/internal/index.mjs
-index 1c8f851..117010b 100644
---- a/node_modules/svelte/internal/index.mjs
-+++ b/node_modules/svelte/internal/index.mjs
+diff --git a/internal/index.mjs b/internal/index.mjs
+index 1c8f8517c64927d66b9f7ea600b167fd82b19877..117010b7fb94b4473bf9ac0820fdd0913a997883 100644
+--- a/internal/index.mjs
++++ b/internal/index.mjs
 @@ -698,40 +698,9 @@ function is_crossorigin() {
      return crossorigin;
  }
