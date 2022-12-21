@@ -19,12 +19,13 @@ email [gravina.2@osu.edu](mailto:gravina.2@osu.edu).
 
 - [git](https://git-scm.com/)
 - [Node.js](https://nodejs.org)
+- [pnpm](https://pnpm.io/installation#using-corepack)
 
 ```sh
 git clone https://github.com/byrd-polar/fluid-earth
 cd fluid-earth
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 Changes to files in `src` will be automatically displayed from the dev server.
@@ -54,7 +55,7 @@ CDS_API_KEY=XXXXXX:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 Finally, in a separate terminal tab/window:
 
 ```sh
-npm run tera
+pnpm run tera
 ```
 
 To develop against the remote backend again (as in the frontend-only setup),
@@ -63,15 +64,15 @@ remove  the `public/tera` directory.
 ### Building frontend for production
 
 ```sh
-npm run build
-npm run preview
+pnpm run build
+pnpm run preview
 ```
 
 ### Updating local development environment
 
 ```sh
 git pull https://github.com/byrd-polar/fluid-earth
-npm install
+pnpm install
 ```
 
 ## Web component

@@ -1,7 +1,7 @@
-diff --git a/node_modules/rollup-plugin-glslify/index.js b/node_modules/rollup-plugin-glslify/index.js
-index 85474ec..75f9c8a 100644
---- a/node_modules/rollup-plugin-glslify/index.js
-+++ b/node_modules/rollup-plugin-glslify/index.js
+diff --git a/index.js b/index.js
+index 85474ec0aeaed7104ccd6b4784541ed7c85220dc..2c1e423d1b155e457d974935f5049fad65165f03 100644
+--- a/index.js
++++ b/index.js
 @@ -58,7 +58,12 @@ module.exports = function glslify(userOptions = {}) {
                  options
              );

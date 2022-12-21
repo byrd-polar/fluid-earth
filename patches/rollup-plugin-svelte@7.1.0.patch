@@ -1,7 +1,7 @@
-diff --git a/node_modules/rollup-plugin-svelte/index.js b/node_modules/rollup-plugin-svelte/index.js
-index 1e4836e..c44e578 100644
---- a/node_modules/rollup-plugin-svelte/index.js
-+++ b/node_modules/rollup-plugin-svelte/index.js
+diff --git a/index.js b/index.js
+index 1e4836ee257c7327d9711ecdc9a08067c5014d13..c44e5788f8af687dfa1bdf6d353383caa6475f88 100644
+--- a/index.js
++++ b/index.js
 @@ -130,15 +130,5 @@ module.exports = function (options = {}) {
  
  			return compiled.js;

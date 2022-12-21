@@ -1,7 +1,7 @@
-diff --git a/node_modules/esm-seedrandom/LICENSE b/node_modules/esm-seedrandom/LICENSE
+diff --git a/LICENSE b/LICENSE
 index 561dff2..486c72e 100644
---- a/node_modules/esm-seedrandom/LICENSE
-+++ b/node_modules/esm-seedrandom/LICENSE
+--- a/LICENSE
++++ b/LICENSE
 @@ -1,6 +1,6 @@
 -
  Copyright 2020 Shane Holloway. (ES Module port)
@@ -15,10 +15,10 @@ index 561dff2..486c72e 100644
  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -
-diff --git a/node_modules/esm-seedrandom/package.json b/node_modules/esm-seedrandom/package.json
+diff --git a/package.json b/package.json
 index 99e77b2..470dae8 100644
---- a/node_modules/esm-seedrandom/package.json
-+++ b/node_modules/esm-seedrandom/package.json
+--- a/package.json
++++ b/package.json
 @@ -11,7 +11,8 @@
      "type": "git",
      "url": "git://github.com/shanewholloway/js-esm-seedrandom.git"

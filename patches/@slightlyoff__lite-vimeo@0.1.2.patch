@@ -1,0 +1,12 @@
+diff --git a/lite-vimeo.js b/lite-vimeo.js
+index c003b4942aa8b4db5a5efa32a801c50e07ea2f8e..bcb404b41ca30af17f512b658b4f760866d63bac 100644
+--- a/lite-vimeo.js
++++ b/lite-vimeo.js
+@@ -142,6 +142,7 @@ let LiteVimeoEmbed = /** @class */ (() => {
+           border-radius: 10%;
+           transition: all 0.2s cubic-bezier(0, 0, 0.2, 1);
+           border: 0;
++          cursor: pointer;
+         }
+         #frame:hover .lvo-playbtn {
+           background-color: rgb(98, 175, 237);

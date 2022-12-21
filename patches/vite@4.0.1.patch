@@ -1,7 +1,7 @@
-diff --git a/node_modules/vite/dist/node/chunks/dep-2285ba4f.js b/node_modules/vite/dist/node/chunks/dep-2285ba4f.js
-index 559c171..8fb4dad 100644
---- a/node_modules/vite/dist/node/chunks/dep-2285ba4f.js
-+++ b/node_modules/vite/dist/node/chunks/dep-2285ba4f.js
+diff --git a/dist/node/chunks/dep-2285ba4f.js b/dist/node/chunks/dep-2285ba4f.js
+index 559c17176b5056262d43d88cbf8d19d391399dce..8fb4dad241647623378146b45baa641fbf8e6237 100644
+--- a/dist/node/chunks/dep-2285ba4f.js
++++ b/dist/node/chunks/dep-2285ba4f.js
 @@ -40047,6 +40047,10 @@ function sirv (dir, opts={}) {
  			res.setHeader('Vary', 'Accept-Encoding');
  		}

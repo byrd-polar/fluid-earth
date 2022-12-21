@@ -1,7 +1,7 @@
-diff --git a/node_modules/js-quantities/build/quantities.mjs b/node_modules/js-quantities/build/quantities.mjs
-index 1a25dde..a340af4 100644
---- a/node_modules/js-quantities/build/quantities.mjs
-+++ b/node_modules/js-quantities/build/quantities.mjs
+diff --git a/build/quantities.mjs b/build/quantities.mjs
+index 1a25dded9c6b6faa01063609d7acd87973133619..a340af405ee2cea481e71c980898a55e0a2803db 100644
+--- a/build/quantities.mjs
++++ b/build/quantities.mjs
 @@ -338,6 +338,7 @@ var UNITS = {
    /* concentration */
    "<molar>" : [["M","molar"], 1000, "concentration", ["<mole>"], ["<meter>","<meter>","<meter>"]],

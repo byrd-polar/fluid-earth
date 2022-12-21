@@ -1,7 +1,7 @@
-diff --git a/node_modules/svelte-toggle/src/Toggle.svelte b/node_modules/svelte-toggle/src/Toggle.svelte
-index 4afded6..4665079 100644
---- a/node_modules/svelte-toggle/src/Toggle.svelte
-+++ b/node_modules/svelte-toggle/src/Toggle.svelte
+diff --git a/src/Toggle.svelte b/src/Toggle.svelte
+index 4afded6b8ad4f690942534b944c6426d787ba54a..4665079f69f89b6cc34dd07c2d09e3990261105a 100644
+--- a/src/Toggle.svelte
++++ b/src/Toggle.svelte
 @@ -106,11 +106,11 @@
  
    button {
