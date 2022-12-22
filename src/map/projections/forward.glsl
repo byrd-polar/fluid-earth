@@ -26,6 +26,8 @@ void forwardProject(
     lonLat0.y = 0.0;
   }
 
+  clip = false;
+
   if (projection == 0) {
     p0(displayCoord, lonLat0, lonLat);
   } else if (projection == 1) {
