@@ -1,5 +1,5 @@
 diff --git a/compiler.mjs b/compiler.mjs
-index ae273a5aaae4757c4a31b432f9f7af997361f0c6..5fd5d5d523234ac7e4a2cd2e26992be6a58ec37f 100644
+index 4001701a51b1674f6804065c707da8c2f4487228..2ce743befa8b9bad1f868ad6c8026fc39fc4c3e2 100644
 --- a/compiler.mjs
 +++ b/compiler.mjs
 @@ -46405,9 +46405,6 @@ function process_component_options(component, nodes) {
@@ -13,7 +13,7 @@ index ae273a5aaae4757c4a31b432f9f7af997361f0c6..5fd5d5d523234ac7e4a2cd2e26992be6
                          break;
                      }
 diff --git a/internal/index.mjs b/internal/index.mjs
-index 1c8f8517c64927d66b9f7ea600b167fd82b19877..117010b7fb94b4473bf9ac0820fdd0913a997883 100644
+index 5d78ec819021957ed45bdf0c27ad4902a55fb570..29102787e1598ff2d19c8a68da16a0613df64b4a 100644
 --- a/internal/index.mjs
 +++ b/internal/index.mjs
 @@ -698,40 +698,9 @@ function is_crossorigin() {
