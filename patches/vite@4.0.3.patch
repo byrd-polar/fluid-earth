@@ -1,0 +1,15 @@
+diff --git a/dist/node/chunks/dep-0bae2027.js b/dist/node/chunks/dep-0bae2027.js
+index ff6ec9e01ef065d44ec77e48c14b07e916b38751..8f459b9e33e93ef57a38a28b2358f07159a5e568 100644
+--- a/dist/node/chunks/dep-0bae2027.js
++++ b/dist/node/chunks/dep-0bae2027.js
+@@ -38952,6 +38952,10 @@ function sirv (dir, opts={}) {
+ 			res.setHeader('Vary', 'Accept-Encoding');
+ 		}
+ 
++		if (pathname.endsWith('.fp16.br')) {
++		  res.setHeader('Content-Type', 'application/octet-stream');
++		}
++
+ 		setHeaders(res, pathname, data.stats);
+ 		send$2(req, res, data.abs, data.stats, data.headers);
+ 	};
