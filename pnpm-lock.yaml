@@ -479,6 +479,9 @@ packages:
     resolution: {integrity: sha512-K/neYsnwGkC1sjI0UInSyuxybPsBPXZF+g18l7XtzW37Jfzzcw4YjMd/rnqP5QRONtjuvGN6nGeCemKfeWkPGg==}
     peerDependencies:
       '@types/geojson': '*'
+    peerDependenciesMeta:
+      '@types/geojson':
+        optional: true
     dev: true
 
   /@types/concat-stream/1.6.1:
