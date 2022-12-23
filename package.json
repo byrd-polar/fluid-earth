@@ -78,6 +78,9 @@
       "tippy.js@6.3.7": "patches/tippy.js@6.3.7.patch",
       "vite@4.0.3": "patches/vite@4.0.3.patch",
       "esm-seedrandom@3.0.5": "patches/esm-seedrandom@3.0.5.patch"
+    },
+    "peerDependencyRules": {
+      "ignoreMissing": ["@types/*"]
     }
   }
 }
