@@ -1,4 +1,4 @@
-name: Fluid Earth Tera Status Check
+name: Fluid Earth Tera Status Check (job fails when status changes)
 on:
   schedule:
     - cron: '38 * * * *'
@@ -12,4 +12,19 @@ jobs:
         with:
           deno-version: v1.x
       - name: Check if Fluid Earth Tera backend is up and up-to-date
-        run: $GITHUB_WORKSPACE/backend/scripts/status.js
+        run: $GITHUB_WORKSPACE/backend/scripts/status.js > $RUNNER_TEMP/out.txt
+      - uses: actions/cache/restore@v3
+        with:
+          path: ${{ runner.temp }}/previous-out.txt
+          key: tera-status-check-previous-output-${{ github.run_id }}
+          restore-keys: tera-status-check-previous-output-
+      - name: Print status check result and compare result with previous result
+        run: |
+          cat $RUNNER_TEMP/out.txt
+          diff $RUNNER_TEMP/previous-out.txt $RUNNER_TEMP/out.txt > /dev/null
+      - name: Save new result to cache
+        if: failure()
+        uses: actions/cache/save@v3
+        with:
+          path: ${{ runner.temp }}/out.txt
+          key: tera-status-check-previous-output-${{ github.run_id }}
