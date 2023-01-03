@@ -1,7 +1,5 @@
 # [Fluid Earth](https://fluid-earth.byrd.osu.edu/)
 
-[![Fluid Earth Tera Status Check](https://github.com/byrd-polar/fluid-earth/actions/workflows/tera-status-check.yml/badge.svg)](https://github.com/byrd-polar/fluid-earth/actions/workflows/tera-status-check.yml)
-
 ## About
 
 Fluid Earth is developed and maintained by The Ohio State University's Byrd
