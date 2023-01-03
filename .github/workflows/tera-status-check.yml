@@ -22,9 +22,12 @@ jobs:
         run: |
           cat $RUNNER_TEMP/out.txt
           diff $RUNNER_TEMP/previous-out.txt $RUNNER_TEMP/out.txt > /dev/null
+      - name: Prepare new result for cache
+        if: failure()
+        run: mv $RUNNER_TEMP/out.txt $RUNNER_TEMP/previous-out.txt
       - name: Save new result to cache
         if: failure()
         uses: actions/cache/save@v3
         with:
-          path: ${{ runner.temp }}/out.txt
+          path: ${{ runner.temp }}/previous-out.txt
           key: tera-status-check-previous-output-${{ github.run_id }}
