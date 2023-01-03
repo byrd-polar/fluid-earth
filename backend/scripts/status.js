@@ -9,18 +9,12 @@ const days = 24 * hours;
 class Up {
   now = new Date();
   down = false;
-  snoozed = false;
 
-  assert(obj, prop, max_delay, message, snooze=false) {
+  assert(obj, prop, max_delay, message) {
     if (this.now - new Date(obj[prop]) > max_delay) {
-      console.log(`\n${message}.${snooze ? ' [snoozed]' : ''}`);
+      console.log(`\n${message}.`);
       console.log(obj);
-
-      if (snooze) {
-        this.snoozed = true;
-      } else {
-        this.down = true;
-      }
+      this.down = true;
     }
   }
 }
@@ -69,6 +63,6 @@ up.assert(
   true,
 );
 
-if (!up.down && !up.snoozed) console.log('\nAll sources up to date.');
+if (!up.down) console.log('\nAll sources up to date.');
 
 Deno.exit(up.down ? 1 : 0);
