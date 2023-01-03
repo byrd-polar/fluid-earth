@@ -27,7 +27,6 @@ async function get(filename) {
 const up = new Up();
 
 console.log(`Checking status of ${tera_url} ...`);
-console.log({ now: up.now.toISOString() });
 
 let heart = await get('heart.json');
 let state = await get('state.json');
@@ -64,5 +63,3 @@ up.assert(
 );
 
 if (!up.down) console.log('\nAll sources up to date.');
-
-Deno.exit(up.down ? 1 : 0);
