@@ -1,4 +1,6 @@
-# [Fluid Earth](https://fluid-earth.byrd.osu.edu/)
+# Fluid Earth
+
+[![A visualization of swirling winds over the United States and Canada](https://fluid-earth.byrd.osu.edu/images/banner.png)](https://fluid-earth.byrd.osu.edu/#gdata=wind+speed+at+500+mb&pdata=wind+at+500+m&smode=false)
 
 ## About
 
