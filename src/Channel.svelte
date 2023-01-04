@@ -1,35 +1,33 @@
 <script>
-  import { tick } from 'svelte';
-
   export let centerLatitude;
   export let centerLongitude;
   export let zoom;
-  export let cursor;
 
   let channel = new BroadcastChannel('app_state');
-  let reactivityEnabled = true;
+  let foreignAppState = null;
 
-  $: broadcast({
+  channel.onmessage = e => foreignAppState = e.data;
+
+  // non-object variables only to prevent loops
+  $: localAppState = {
     centerLatitude,
     centerLongitude,
     zoom,
-    cursor,
-  });
-
-  function broadcast(appState) {
-    if (reactivityEnabled) channel.postMessage(appState);
-  }
-
-  channel.onmessage = async e => {
-    reactivityEnabled = false;
-
-    centerLatitude = e.data.centerLatitude;
-    centerLongitude = e.data.centerLongitude;
-    zoom = e.data.zoom;
-    cursor = e.data.cursor;
-
-    await tick();
-
-    reactivityEnabled = true;
   };
+
+  $: localAppState, foreignAppState, update();
+
+  function update() {
+    if (foreignAppState === null) {
+      channel.postMessage(localAppState);
+      return;
+    }
+
+    let fas = foreignAppState;
+    foreignAppState = null;
+
+    centerLatitude = fas.centerLatitude;
+    centerLongitude = fas.centerLongitude;
+    zoom = fas.zoom;
+  }
 </script>

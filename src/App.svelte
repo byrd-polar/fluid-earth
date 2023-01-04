@@ -268,7 +268,6 @@
   bind:centerLatitude
   bind:centerLongitude
   bind:zoom
-  bind:cursor
 />
 <Navbar
   {menus}
