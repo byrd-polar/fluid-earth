@@ -1,5 +1,6 @@
 <script>
   import Hash, { HashAppState } from './Hash.svelte';
+  import Channel from './Channel.svelte';
   import Navbar from './Navbar.svelte';
   import Drawer from './Drawer.svelte';
   import Menu from './Menu.svelte';
@@ -262,6 +263,12 @@
   {pDatasets}
   {minZoom}
   {maxZoom}
+/>
+<Channel
+  bind:centerLatitude
+  bind:centerLongitude
+  bind:zoom
+  bind:cursor
 />
 <Navbar
   {menus}
