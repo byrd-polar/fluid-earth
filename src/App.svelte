@@ -264,11 +264,13 @@
   {minZoom}
   {maxZoom}
 />
-<Channel
-  bind:centerLatitude
-  bind:centerLongitude
-  bind:zoom
-/>
+{#if 'BroadcastChannel' in window}
+  <Channel
+    bind:centerLatitude
+    bind:centerLongitude
+    bind:zoom
+  />
+{/if}
 <Navbar
   {menus}
   bind:openedMenu
