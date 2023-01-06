@@ -1,6 +1,7 @@
 [Unit]
 Description=Fluid Earth Tera Data File Generator
 RequiresMountsFor=/export/data/fev2r/repository /usr/local/bin/npm
+After=nss-user-lookup.target
 
 [Service]
 Group=outreach
