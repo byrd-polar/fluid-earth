@@ -99,7 +99,8 @@ export function proj(
   // special case for vertical perspective projection, based on the constant in
   // ./vertical-perspective/forward.glsl
   if (projection.id === 4) {
-    f = f.distance(1 + 7 / zoom);
+    let dist = 1 + 7 / zoom;
+    f = f.distance(dist).clipAngle(Math.acos(1 / dist) * 180 / Math.PI);
   }
 
   return f;

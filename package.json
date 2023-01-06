@@ -67,7 +67,6 @@
     "patchedDependencies": {
       "@slightlyoff/lite-vimeo@0.1.2": "patches/@slightlyoff__lite-vimeo@0.1.2.patch",
       "carbon-icons-svelte@11.4.0": "patches/carbon-icons-svelte@11.4.0.patch",
-      "d3-geo-projection@4.0.0": "patches/d3-geo-projection@4.0.0.patch",
       "glslify@7.1.1": "patches/glslify@7.1.1.patch",
       "js-quantities@1.7.6": "patches/js-quantities@1.7.6.patch",
       "rollup-plugin-glslify@1.3.1": "patches/rollup-plugin-glslify@1.3.1.patch",
