@@ -4,6 +4,7 @@ RequiresMountsFor=/export/data/fev2r/repository /usr/local/bin/npm
 After=nss-user-lookup.target
 
 [Service]
+User=gravina.2
 Group=outreach
 UMask=0002
 WorkingDirectory=/export/data/fev2r/repository
