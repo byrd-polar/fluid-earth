@@ -269,6 +269,7 @@
     bind:centerLatitude
     bind:centerLongitude
     bind:zoom
+    bind:date
   />
 {/if}
 <Navbar
