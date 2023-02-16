@@ -1,14 +1,18 @@
 <script>
   import ZoomIn from 'carbon-icons-svelte/lib/ZoomIn.svelte';
   import ZoomOut from 'carbon-icons-svelte/lib/ZoomOut.svelte';
+  import Shuffle from 'carbon-icons-svelte/lib/Shuffle.svelte';
+  import LocationCurrent from 'carbon-icons-svelte/lib/LocationCurrent.svelte';
   import Tweener from '../tweener.js';
   import { cubicOut } from 'svelte/easing';
-  import { clamp } from '../math.js';
+  import { clamp, randlon, randlat } from '../math.js';
   import tooltip from '../tooltip.js';
 
   export let zoom;
   export let minZoom;
   export let maxZoom;
+  export let centerLongitude;
+  export let centerLatitude;
 
   let tweener = new Tweener(z => zoom = z, {
     duration: 500,
@@ -18,6 +22,53 @@
   function smoothZoom(zoomIn) {
     let newZoom = zoomIn ? zoom * 2 : zoom / 2;
     tweener.tween(zoom, clamp(newZoom, minZoom, maxZoom));
+  }
+
+  async function moveToMyLocation() {
+    try {
+      let location = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          pos => resolve(pos.coords),
+          reject,
+          { maximumAge: Infinity },
+        );
+      });
+      await moveTo(location);
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
+  // TODO: refactor to remove duplication with src/menus/Locations.svelte
+
+  let opts = {
+    duration: 800,
+    easing: cubicOut,
+  }
+
+  let lonTweener = new Tweener(c => centerLongitude = c, opts);
+  let latTweener = new Tweener(c => centerLatitude = c, opts);
+  let zoomTweener = new Tweener(z => zoom = z, opts);
+
+  async function moveTo(city) {
+    let zoomOutIn = zoom > 1.5;
+    let originalZoom = zoom;
+
+    if (zoomOutIn) await zoomTweener.tween(zoom, 1.5);
+
+    // ensure the shorter way around is taken (across the anti-meridian)
+    if (centerLongitude - city.longitude > 180) {
+      centerLongitude -= 360;
+    } else if (city.longitude - centerLongitude > 180) {
+      centerLongitude += 360;
+    }
+
+    await Promise.all([
+      lonTweener.tween(centerLongitude, city.longitude),
+      latTweener.tween(centerLatitude, city.latitude),
+    ]);
+
+    if (zoomOutIn) await zoomTweener.tween(zoom, originalZoom);
   }
 </script>
 
@@ -35,6 +86,20 @@
     use:tooltip={{content: 'Zoom out', placement: 'left'}}
   >
     <ZoomOut size={24} />
+  </button>
+  <button
+    aria-label="Fly to my location"
+    on:click={moveToMyLocation}
+    use:tooltip={{content: 'Fly to my location', placement: 'left'}}
+  >
+    <LocationCurrent size={24} />
+  </button>
+  <button
+    aria-label="Fly to random location"
+    on:click={() => moveTo({ longitude: randlon(), latitude: randlat() })}
+    use:tooltip={{content: 'Fly to random location', placement: 'left'}}
+  >
+    <Shuffle size={24} />
   </button>
 </div>
 

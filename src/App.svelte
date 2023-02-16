@@ -398,6 +398,8 @@
       {displayedDate}
       {displayedTimeDataset}
       bind:utc
+      bind:centerLatitude
+      bind:centerLongitude
       bind:zoom
       {minZoom}
       {maxZoom}

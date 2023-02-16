@@ -13,6 +13,9 @@
   export let displayedTimeDataset;
   export let utc;
 
+  export let centerLatitude;
+  export let centerLongitude;
+
   export let zoom;
   export let minZoom;
   export let maxZoom;
@@ -47,6 +50,8 @@
   </div>
   {#if !$mobile}
     <SideControls
+      bind:centerLatitude
+      bind:centerLongitude
       bind:zoom
       {minZoom}
       {maxZoom}
