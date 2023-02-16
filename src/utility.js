@@ -1,3 +1,10 @@
+export async function fetchPreloadedJson(url) {
+  return fetchJson(url, {
+    mode: 'no-cors',
+    credentials: 'include',
+  })
+}
+
 export async function fetchJson(url, options) {
   let response = await fetch(url, options);
   throwIfNotOk(response);
