@@ -27,7 +27,7 @@
   import { simplify, translate } from './smode.js';
   import { currentDate, mobile } from './stores.js';
   import { getUnitFromDial } from './units.js';
-  import { fetchJson } from './utility.js';
+  import { fetchPreloadedJson } from './utility.js';
 
   import Help from 'carbon-icons-svelte/lib/Help.svelte';
   import Location from 'carbon-icons-svelte/lib/Location.svelte';
@@ -225,7 +225,7 @@
   fetchVectorData().then(fadeSplashScreen);
 
   async function fetchVectorData() {
-    vectorData = await fetchJson('/tera/topology.json.br');
+    vectorData = await fetchPreloadedJson('/tera/topology.json.br');
     vectorColors = {
       ne_50m_coastline: [255, 255, 255, 1],
       ne_50m_lakes: [255, 255, 255, 1],
