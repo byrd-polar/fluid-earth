@@ -24,18 +24,25 @@
     tweener.tween(zoom, clamp(newZoom, minZoom, maxZoom));
   }
 
+  let location = null;
+  let loading = false;
+
   async function moveToMyLocation() {
     try {
-      let location = await new Promise((resolve, reject) => {
+      loading = true;
+      location ??= await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
           pos => resolve(pos.coords),
           reject,
-          { maximumAge: Infinity },
         );
       });
-      await moveTo(location);
     } catch(e) {
       console.error(e)
+    } finally {
+      loading = false;
+    }
+    if (location) {
+      await moveTo(location);
     }
   }
 
@@ -91,6 +98,8 @@
     aria-label="Fly to my location"
     on:click={moveToMyLocation}
     use:tooltip={{content: 'Fly to my location', placement: 'left'}}
+    class:loading
+    disabled={loading}
   >
     <LocationCurrent size={24} />
   </button>
@@ -135,5 +144,31 @@
 
   button:focus:not(:focus-visible):not(:hover) {
     filter: none;
+  }
+
+  button.loading {
+    position: relative;
+  }
+
+  button.loading::after {
+    content: "";
+    border: 3px solid transparent;
+    border-right-color: var(--primary-color-light);
+    width: 34px;
+    height: 34px;
+    left: 0;
+    top: 0;
+    position: absolute;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0turns);
+    }
+    to {
+      transform: rotate(1turn);
+    }
   }
 </style>
