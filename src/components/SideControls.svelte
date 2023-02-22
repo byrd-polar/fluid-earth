@@ -108,7 +108,8 @@
     background: var(--secondary-color-dark);
     display: flex;
     flex-direction: column;
-    margin-left: auto;
+    gap: 8px;
+    margin: auto 0 auto auto;
     pointer-events: auto;
     padding: 8px 4px 8px 8px;
     border-radius: 24px 0 0 24px;
@@ -123,10 +124,6 @@
     padding: 8px;
     cursor: pointer;
     transition: filter 0.25s ease 0s;
-  }
-
-  button + button {
-    margin-top: 8px;
   }
 
   button:focus, button:hover {
