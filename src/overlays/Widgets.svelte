@@ -48,15 +48,6 @@
       bind:utc
     />
   </div>
-  {#if !$mobile}
-    <SideControls
-      bind:centerLatitude
-      bind:centerLongitude
-      bind:zoom
-      {minZoom}
-      {maxZoom}
-    />
-  {/if}
   <div class="bottom">
     {#if griddedName !== 'none'}
       <GriddedLegend
@@ -84,6 +75,17 @@
     {/if}
   </div>
 </div>
+{#if !$mobile}
+  <div class="side-controls-wrapper">
+    <SideControls
+      bind:centerLatitude
+      bind:centerLongitude
+      bind:zoom
+      {minZoom}
+      {maxZoom}
+    />
+  </div>
+{/if}
 
 <style>
   div :global(h3),
@@ -115,6 +117,10 @@
 
   div.bottom {
     flex-wrap: wrap-reverse;
+  }
+
+  div.side-controls-wrapper {
+    pointer-events: none;
   }
 
   @media (max-width: 576px) {
