@@ -1,4 +1,4 @@
-#!/bin/env -S deno run --allow-net
+#!/bin/env -S deno run --allow-net --no-npm
 
 const tera_url = 'https://fluid-earth.byrd.osu.edu/tera/';
 
