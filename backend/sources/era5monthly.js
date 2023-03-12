@@ -89,6 +89,7 @@ async function get_normal(normals, dt, variable) {
   normals[variable][month] = output;
 
   await grib1_normal(count, input, output, { record_number: 'all' });
+  await rm(input);
 
   return output;
 }
