@@ -27,7 +27,7 @@ export async function destructive_cat(files) {
       for await (let chunk of stream) yield chunk;
   }, createWriteStream(file));
 
-  for (let input_file of files) await rm(input_file);
+  await Promise.all(files.map(input_file => rm(input_file)));
 
   return file;
 }
