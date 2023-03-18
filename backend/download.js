@@ -1,14 +1,13 @@
-import { temp_cache_dir } from './utility.js';
+import { get_temp_file } from './utility.js';
 import { Buffer } from 'buffer';
 import { createReadStream, createWriteStream } from 'fs';
 import { rm, writeFile } from 'fs/promises';
 import { get, request } from 'https';
 import { join, basename } from 'path';
 import { pipeline } from 'stream/promises';
-import { v4 as uuidv4 } from 'uuid';
 
 export async function download(url, options={}, unique_path=true) {
-  let file = join(temp_cache_dir, unique_path ? uuidv4() : basename(url));
+  let file = get_temp_file(unique_path ? undefined : basename(url));
   let response = await download_as_stream(url, options);
 
   if (response.headers['content-type'].startsWith('multipart/byteranges')) {
@@ -20,7 +19,7 @@ export async function download(url, options={}, unique_path=true) {
 }
 
 export async function destructive_cat(files) {
-  let file = join(temp_cache_dir, uuidv4());
+  let file = get_temp_file();
 
   await pipeline(async function* () {
     for (let stream of files.map(input_file => createReadStream(input_file)))

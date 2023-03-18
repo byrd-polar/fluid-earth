@@ -1,6 +1,6 @@
 import { Datetime } from './datetime.js';
 import { createHash } from 'crypto';
-import { createReadStream } from 'fs';
+import { createReadStream, rmSync } from 'fs';
 import {
   mkdir,
   mkdtemp,
@@ -17,6 +17,7 @@ import { resolve, join, dirname, sep, basename } from 'path';
 import { Readable } from 'stream';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
+import { v4 as uuidv4 } from 'uuid';
 import { brotliCompress as _brotliCompress, constants } from 'zlib';
 const brotliCompress = promisify(_brotliCompress);
 
@@ -24,11 +25,23 @@ export const parent_output_dir = await create_dir('../public/tera');
 export const sources_state_dir = await create_dir('./state/sources');
 export const datasets_state_dir = await create_dir('./state/datasets');
 export const perm_cache_dir = await create_dir('./cache');
-export const temp_cache_dir = await create_dir(join(tmpdir(), 'fev2r-cache'));
+const temp_cache_dir = await create_dir(join(tmpdir(), 'fev2r-cache'));
+
+const possible_temp_files = [];
+
+process.on('uncaughtExceptionMonitor', () => {
+  for (let file of possible_temp_files) rmSync(file, { force: true });
+});
 
 async function create_dir(relative_path) {
   let path = absolute_path(relative_path);
   await mkdir_p(path);
+  return path;
+}
+
+export function get_temp_file(filename=undefined) {
+  let path = join(temp_cache_dir, filename ?? uuidv4());
+  possible_temp_files.push(path);
   return path;
 }
 
