@@ -34,6 +34,11 @@ export async function forage(current_state, datasets) {
   let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
   let variables = [...new Set(datasets.map(d => d.variable))];
 
+  // Work around an issue with the CDS API where data for certain months is
+  // truncated if variables are in a particular order (e.g. total_precipitation
+  // before 2m_temperature for 2023-02)
+  variables.sort();
+
   let input;
   try {
     input = await download_cds(name, {
