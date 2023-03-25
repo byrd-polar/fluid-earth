@@ -112,6 +112,7 @@
   div {
     touch-action: none;
     pointer-events: auto;
+    user-select: none;
   }
 
   div:active {
