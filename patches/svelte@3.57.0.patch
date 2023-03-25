@@ -1,8 +1,8 @@
 diff --git a/compiler.mjs b/compiler.mjs
-index 4001701a51b1674f6804065c707da8c2f4487228..2ce743befa8b9bad1f868ad6c8026fc39fc4c3e2 100644
+index fdd3597a744e41e05ab9b3ed64b69a0dd0962f80..ca3ad011994f5fe1278eff191f92d233b64d4c89 100644
 --- a/compiler.mjs
 +++ b/compiler.mjs
-@@ -46405,9 +46405,6 @@ function process_component_options(component, nodes) {
+@@ -47414,9 +47414,6 @@ function process_component_options(component, nodes) {
                          if (tag && !regex_valid_tag_name.test(tag)) {
                              return component.error(attribute, compiler_errors.invalid_tag_property);
                          }
@@ -13,10 +13,10 @@ index 4001701a51b1674f6804065c707da8c2f4487228..2ce743befa8b9bad1f868ad6c8026fc3
                          break;
                      }
 diff --git a/internal/index.mjs b/internal/index.mjs
-index 5d78ec819021957ed45bdf0c27ad4902a55fb570..29102787e1598ff2d19c8a68da16a0613df64b4a 100644
+index 97139811ed69efe6a8e2deb6618f1e31dde4f0f7..f63d79ebcd6e5b36a09edcda63d419413c0e79ea 100644
 --- a/internal/index.mjs
 +++ b/internal/index.mjs
-@@ -698,40 +698,9 @@ function is_crossorigin() {
+@@ -760,43 +760,9 @@ function is_crossorigin() {
      return crossorigin;
  }
  function add_resize_listener(node, fn) {
@@ -42,6 +42,9 @@ index 5d78ec819021957ed45bdf0c27ad4902a55fb570..29102787e1598ff2d19c8a68da16a061
 -        iframe.src = 'about:blank';
 -        iframe.onload = () => {
 -            unsubscribe = listen(iframe.contentWindow, 'resize', fn);
+-            // make sure an initial resize event is fired _after_ the iframe is loaded (which is asynchronous)
+-            // see https://github.com/sveltejs/svelte/issues/4233
+-            fn();
 -        };
 -    }
 -    append(node, iframe);
