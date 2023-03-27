@@ -26,7 +26,7 @@ const normal = {
          || variableFilters.normal['avg. temperature anomaly'](name)
          || variableFilters.normal['avg. precipitation'](name)
          || variableFilters.normal['avg. precipitation anomaly'](name)
-         || variableFilters.normal['permafrost zones'](name),
+         || variableFilters.normal['permafrost probability'](name),
 
   undefined: () => false,
 };
