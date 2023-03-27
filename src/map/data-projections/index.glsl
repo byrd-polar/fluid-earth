@@ -1,4 +1,5 @@
 #pragma glslify: export(projectToTexture)
+#pragma glslify: rotate = require(../projections/rotate/forward.glsl)
 
 const float PI = radians(180.0);
 const float PI_2 = radians(90.0);
@@ -68,13 +69,22 @@ void projectToTexture(
   }
   // PERMAFROST
   else if (projection == 4) {
-    textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
+    vec2 lonLat0 = vec2(0.0, PI_2);
+    rotate(lonLat0, lonLat);
 
-    float xOffset = 0.5 + 0.5 / gridWidth;
-    float yOffset = 0.5 / gridHeight;
-    float yScale = -(gridHeight - 1.0) / gridHeight;
+    float cy = cos(lonLat.y);
+    float k = 1.0 + cos(lonLat.x) * cy;
 
-    textureCoord.x = mod(textureCoord.x + xOffset, 1.0);
-    textureCoord.y = yScale * (textureCoord.y + yOffset - 0.5) + 0.5;
+    float s = 0.598;
+    float r = gridWidth / gridHeight;
+
+    textureCoord.x = s * cy * sin(lonLat.x) / k + 0.5;
+    textureCoord.y = -s * r * sin(lonLat.y) / k + 0.4695;
+
+    // get a NaN (actually -Infinity) value for areas outside of texture
+    if (textureCoord.y > 1.0 || textureCoord.y < 0.0 ||
+        textureCoord.x > 1.0 || textureCoord.x < 0.0) {
+      textureCoord = vec2(0.0, 0.5);
+    }
   }
 }

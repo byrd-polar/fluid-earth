@@ -41,8 +41,8 @@ const normal = {
     name => name === 'average precipitation per day',
   'avg. precipitation anomaly':
     name => name === 'average precipitation per day anomaly',
-  'permafrost zones':
-    name => name === 'permafrost zones',
+  'permafrost probability':
+    name => name === 'permafrost probability',
 
   undefined: () => false,
 };
@@ -86,8 +86,8 @@ const simple = {
     name => name === 'average precipitation per day',
   'avg. precipitation anomaly':
     name => name === 'average precipitation per day anomaly',
-  'permafrost zones':
-    name => name === 'permafrost zones',
+  'permafrost probability':
+    name => name === 'permafrost probability',
 
   undefined: () => false,
 };
