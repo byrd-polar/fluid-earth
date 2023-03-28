@@ -70,16 +70,33 @@ export default Object.freeze({
   PERMAFROST: {
     id: 4,
     function: (data, lonLat) => {
-      const wRes = data.width / 360;
-      const hRes = (data.height - 1) / 180;
+      lonLat = lonLat.map(v => v * Math.PI / 180);
+      lonLat = rotateToNorthPole(lonLat);
 
-      const col = Math.round((lonLat[0] + 360 + 180) * wRes) % data.width;
-      const row = (data.height - 1) - Math.round((lonLat[1] + 90) * hRes);
+      const cy = Math.cos(lonLat[1]);
+      const k = 1 + Math.cos(lonLat[0]) * cy;
+
+      const s = 0.598;
+      const r = data.width / data.height;
+
+      const x = s * cy * Math.sin(lonLat[0]) / k + 0.5;
+      const y = -s * r * Math.sin(lonLat[1]) / k + 0.4695;
+
+      const col = Math.round(x * data.width - 0.5) % data.width;
+      const row = Math.round(y * data.height - 0.5);
 
       return row * data.width + col;
     },
   },
 });
+
+function rotateToNorthPole(lonLat) {
+  let x = Math.cos(lonLat[0]) * Math.cos(lonLat[1]);
+  let y = Math.sin(lonLat[0]) * Math.cos(lonLat[1]);
+  let z = Math.sin(lonLat[1]);
+
+  return [Math.atan2(y, z), Math.asin(-x)];
+}
 
 // given a griddedData object and a lonLat, return the value at that point
 export function singleArrayDataGet(griddedData, lonLat) {
