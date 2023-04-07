@@ -83,17 +83,21 @@ export default class MapBackground {
       this._mapDataToColors();
       this._dataNeedsRecolor = false;
     }
-    let textures = Object.fromEntries(
-      // our shader supports 16 textures, the webgl2 minimum
-      this._textures.gridded.map((t, i) => [`u_texture${i}`, t]).slice(0, 16)
-    );
-    glDraw(this._gl, this._programs.gridded, this._buffers.gridded, {
-      ...textures,
-      u_gridWidth: this._data.width,
-      u_gridHeight: this._data.height,
-      u_maxTextureSize: this._maxTextureSize,
-      ...sharedUniforms,
-    });
+    for (let i = 0; i < this._textures.gridded.length / 16; i++) {
+      let textures = Object.fromEntries(
+        this._textures.gridded
+          .slice(i * 16, i * 16 + 16)
+          .map((t, j) => [`u_texture${j}`, t])
+      );
+      glDraw(this._gl, this._programs.gridded, this._buffers.gridded, {
+        ...textures,
+        u_gridWidth: this._data.width,
+        u_gridHeight: this._data.height,
+        u_maxTextureSize: this._maxTextureSize,
+        u_textureBatchNumber: i,
+        ...sharedUniforms,
+      });
+    }
   }
 
   drawVectorData(sharedUniforms, colors) {

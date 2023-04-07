@@ -35,6 +35,7 @@ uniform sampler2D u_texture15;
 uniform float u_gridWidth;
 uniform float u_gridHeight;
 uniform int u_maxTextureSize;
+uniform int u_textureBatchNumber;
 
 in vec2 v_position;
 out vec4 color;
@@ -102,6 +103,8 @@ void main() {
 
   int texNum = row / u_maxTextureSize;
   ivec2 coord = ivec2(col, row - texNum * u_maxTextureSize);
+
+  texNum -= u_textureBatchNumber * 16;
 
   if (texNum == 0) {
     color = texelFetch(u_texture0, coord, 0);
