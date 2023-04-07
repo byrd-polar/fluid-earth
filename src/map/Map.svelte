@@ -93,7 +93,6 @@
 
   export let syncWithAnimationHook = () => {};
   export let canvasRatio = 1;
-  export let MAX_TEXTURE_SIZE = Infinity;
 
   let backgroundCanvas;
   let particleCanvas;
@@ -112,7 +111,7 @@
   let webglError = false;
 
   let mapBackground = {};
-  $: mapBackground.data = splitIfNeeded(griddedData);
+  $: mapBackground.data = griddedData;
   $: mapBackground.colormap = griddedColormap;
   $: mapBackground.domain = griddedDomain;
   $: mapBackground.scale = griddedScale;
@@ -155,8 +154,6 @@
       webglError = true;
       return;
     }
-
-    MAX_TEXTURE_SIZE = backgroundGl.getParameter(backgroundGl.MAX_TEXTURE_SIZE);
 
     mapBackground = new MapBackground(backgroundGl, {
       data: griddedData,
@@ -292,26 +289,6 @@
   }
 
   const arrayCache = new Map();
-
-  function splitIfNeeded(griddedData) {
-    if ( griddedData.width <= MAX_TEXTURE_SIZE
-      || griddedData.width % 2 !== 0) return griddedData;
-
-    let array;
-    if (arrayCache.has(griddedData.floatArray)) {
-      array = arrayCache.get(griddedData.floatArray);
-    } else {
-      array = new Uint16Array(griddedData.floatArray.buffer)
-        .filter((_, i) => i % 2 === 0);
-      arrayCache.set(griddedData.floatArray, array);
-    }
-
-    return {
-      ...griddedData,
-      floatArray: array,
-      width: griddedData.width / 2,
-    };
-  }
 </script>
 
 <div class="layers">
