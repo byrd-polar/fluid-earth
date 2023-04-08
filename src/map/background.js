@@ -23,7 +23,7 @@ export default class MapBackground {
     this._gl.enable(gl.BLEND);
     this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-    this._maxTextureSize = rendererStartsWith(gl, 'Adreno')
+    this._maxTextureSize = getRenderer(gl).startsWith('Adreno')
       ? 1040
       : gl.getParameter(gl.MAX_TEXTURE_SIZE);
     this._dataTextureDimensions = getDataTextureDimensions(
@@ -238,18 +238,16 @@ export default class MapBackground {
   }
 }
 
-function rendererStartsWith(gl, string) {
-  if (gl.getParameter(gl.RENDERER).startsWith(string)) {
-    return true;
-  }
-  let debugRenderInfo = gl.getExtension('WEBGL_debug_renderer_info');
-  if (debugRenderInfo) {
-    let renderer = gl.getParameter(debugRenderInfo.UNMASKED_RENDERER_WEBGL);
-    if (renderer.startsWith(string)) {
-      return true;
+function getRenderer(gl) {
+  let renderer = gl.getParameter(gl.RENDERER);
+  // WEBGL_debug_renderer_info is deprecated in Firefox
+  if (!navigator.userAgent.includes('Gecko/')) {
+    let debugRenderInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    if (debugRenderInfo) {
+      renderer = gl.getParameter(debugRenderInfo.UNMASKED_RENDERER_WEBGL);
     }
   }
-  return false;
+  return renderer;
 }
 
 function getDataTextureDimensions(data, max) {
