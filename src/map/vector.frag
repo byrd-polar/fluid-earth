@@ -1,7 +1,7 @@
 #version 300 es
 // Fragment shader for the vector data layer
 
-precision mediump float;
+precision highp float;
 
 in float v_clip;
 in float v_t;
