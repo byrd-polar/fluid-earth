@@ -1,5 +1,6 @@
 #version 300 es
 // Fragment shader for particle simulation
+
 precision highp float;
 precision highp int;
 precision highp sampler2D;
