@@ -2,7 +2,8 @@
 // Fragment shader for drawing a texture straight to the canvas, used in
 // creating particle trails
 
-precision mediump float;
+precision highp float;
+precision highp sampler2D;
 
 uniform sampler2D u_texture;
 uniform float u_fade;

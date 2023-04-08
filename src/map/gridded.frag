@@ -3,6 +3,7 @@
 
 precision highp float;
 precision highp int;
+precision highp sampler2D;
 
 #pragma glslify: invertProject = require(./projections/invert.glsl)
 #pragma glslify: projectToTexture = require(./data-projections/)

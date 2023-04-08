@@ -3,6 +3,8 @@
 // colormap texture
 
 precision highp float;
+precision highp int;
+precision highp sampler2D;
 
 uniform sampler2D u_data;
 uniform sampler2D u_colormap;
