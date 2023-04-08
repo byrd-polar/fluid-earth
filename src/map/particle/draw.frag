@@ -2,7 +2,7 @@
 // Fragment shader for the particle data layer
 // makes particles round instead of squares
 
-precision mediump float;
+precision highp float;
 
 uniform vec4 u_color;
 uniform float u_opacitySpeedDecay;

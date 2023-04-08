@@ -1,10 +1,13 @@
 #version 300 es
 // Fragment shader for particle simulation
 precision highp float;
+precision highp int;
+precision highp sampler2D;
+precision highp isampler2D;
 
 #pragma glslify: projectToTexture = require(../data-projections/)
 
-uniform highp isampler2D u_particleData;
+uniform isampler2D u_particleData;
 uniform sampler2D u_vectorFieldU;
 uniform sampler2D u_vectorFieldV;
 uniform sampler2D u_random;
