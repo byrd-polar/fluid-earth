@@ -2,6 +2,7 @@ import { brotli, get_temp_file, write_file_atomically } from './utility.js';
 import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
+import { fromArrayBuffer } from 'geotiff';
 import { readFile, rm } from 'fs/promises';
 import { join } from 'path';
 
@@ -71,6 +72,13 @@ export async function netcdf_speed(input, output, options={}) {
   await write_array_to_file(output, array, options.compression_level);
 }
 
+export async function tiff(input, output, options={}) {
+  let arr = await tiff_to_arr(input);
+  let array = arr.map(v => nan_for_glsl(is_magic_nan_2, v, options.factor));
+
+  await write_array_to_file(output, array, options.compression_level);
+}
+
 async function gfs_combine_grib(input, output, options, combine_fn) {
   let arr = await grib2_to_arr(input, options.match, options.limit);
 
@@ -134,6 +142,14 @@ async function netcdf_to_arr(input, variables, flatten=true) {
   return flatten ? [].concat(...arrays) : arrays;
 }
 
+async function tiff_to_arr(input) {
+  let buffer = await readFile(input);
+  let tiff = await fromArrayBuffer(buffer.buffer);
+  let image = await tiff.getImage();
+  let rasters = await image.readRasters();
+  return rasters[0];
+}
+
 async function spawn_cmd(command, args) {
   return new Promise((resolve, reject) => {
     let child = spawn(command, args);
@@ -162,6 +178,10 @@ async function spawn_cmd(command, args) {
 
 function is_magic_nan(val) {
   return val > 9.9989e20;
+}
+
+function is_magic_nan_2(val) {
+  return val === -3.4028230607370965e+38;
 }
 
 function nan_for_glsl(is_nan_fn, val, factor=1) {

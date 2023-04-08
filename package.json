@@ -22,6 +22,7 @@
     "chokidar": "^3.5.3",
     "csv-parse": "^5.3.6",
     "dedent": "^0.7.0",
+    "geotiff": "^2.0.7",
     "mapshaper": "0.6.25",
     "node-stream-zip": "^1.15.0",
     "rollup": "^3.20.2",
