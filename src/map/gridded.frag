@@ -33,8 +33,8 @@ uniform sampler2D u_texture13;
 uniform sampler2D u_texture14;
 uniform sampler2D u_texture15;
 
-uniform float u_gridWidth;
-uniform float u_gridHeight;
+uniform int u_gridWidth;
+uniform int u_gridHeight;
 uniform int u_maxTextureSize;
 uniform int u_textureBatchNumber;
 
@@ -84,20 +84,19 @@ void main() {
   projectToTexture(
       textureCoord,
       lonLat,
-      u_gridWidth,
-      u_gridHeight,
+      float(u_gridWidth),
+      float(u_gridHeight),
       u_griddedDataProjection
   );
 
-  float maxSize = float(u_maxTextureSize);
-  if (u_gridWidth <= maxSize && u_gridHeight <= maxSize) {
+  if (u_gridWidth <= u_maxTextureSize && u_gridHeight <= u_maxTextureSize) {
     color = texture(u_texture0, textureCoord);
     return;
   }
 
-  int r = int(textureCoord.y * u_gridHeight);
-  int c = int(textureCoord.x * u_gridWidth);
-  int idx = r * int(u_gridWidth) + c;
+  int r = int(textureCoord.y * float(u_gridHeight));
+  int c = int(textureCoord.x * float(u_gridWidth));
+  int idx = r * u_gridWidth + c;
 
   int row = idx / u_maxTextureSize;
   int col = idx - row * u_maxTextureSize;
