@@ -23,9 +23,7 @@ export default class MapBackground {
     this._gl.enable(gl.BLEND);
     this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-    this._maxTextureSize = getRenderer(gl).startsWith('Adreno')
-      ? 1040
-      : gl.getParameter(gl.MAX_TEXTURE_SIZE);
+    this._maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
     this._dataTextureDimensions = getDataTextureDimensions(
       this._data, this._maxTextureSize);
 
@@ -236,18 +234,6 @@ export default class MapBackground {
     // switch rendering destination back to canvas
     twgl.bindFramebufferInfo(this._gl, null);
   }
-}
-
-function getRenderer(gl) {
-  let renderer = gl.getParameter(gl.RENDERER);
-  // WEBGL_debug_renderer_info is deprecated in Firefox
-  if (!navigator.userAgent.includes('Gecko/')) {
-    let debugRenderInfo = gl.getExtension('WEBGL_debug_renderer_info');
-    if (debugRenderInfo) {
-      renderer = gl.getParameter(debugRenderInfo.UNMASKED_RENDERER_WEBGL);
-    }
-  }
-  return renderer;
 }
 
 function getDataTextureDimensions(data, max) {
