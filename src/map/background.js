@@ -23,7 +23,8 @@ export default class MapBackground {
     this._gl.enable(gl.BLEND);
     this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     this._maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
-    this._dataTextureDimensions = this._getDataTextureDimensions();
+    this._dataTextureDimensions = getDataTextureDimensions(
+      this._data, this._maxTextureSize);
 
     this._programs = this._createPrograms();
     this._buffers = this._createBuffers(options.vectorData);
@@ -41,7 +42,8 @@ export default class MapBackground {
     this._textures.data.forEach(t => this._gl.deleteTexture(t));
     this._gl.deleteFramebuffer(this._framebuffers.gridded.framebuffer);
 
-    this._dataTextureDimensions = this._getDataTextureDimensions();
+    this._dataTextureDimensions = getDataTextureDimensions(
+      this._data, this._maxTextureSize);
 
     this._textures.gridded = this._createGriddedTextures();
     this._textures.data = this._createDataTextures();
@@ -188,26 +190,6 @@ export default class MapBackground {
     });
   }
 
-  _getDataTextureDimensions() {
-    let { width, height } = this._data;
-    if (width <= this._maxTextureSize && height <= this._maxTextureSize) {
-      return [{ width, height }];
-    }
-
-    let pixelCount = this._data.width * this._data.height;
-    let maxPixelsPerTexture = Math.pow(this._maxTextureSize, 2);
-    let length = Math.floor(pixelCount / maxPixelsPerTexture);
-
-    width = this._maxTextureSize;
-    height = this._maxTextureSize;
-    let lastHeight = Math.ceil((pixelCount % maxPixelsPerTexture) / width) + 1;
-
-    return [
-      ...Array(length).fill({ width, height }),
-      { width, height: lastHeight },
-    ];
-  }
-
   _createColormapTexture() {
     return twgl.createTexture(this._gl, {
       src: this._colormap.lut.flat(),
@@ -251,6 +233,23 @@ export default class MapBackground {
     // switch rendering destination back to canvas
     twgl.bindFramebufferInfo(this._gl, null);
   }
+}
+
+function getDataTextureDimensions(data, max) {
+  if (data.width <= max && data.height <= max) {
+    return [{ width: data.width, height: data.height }];
+  }
+
+  let pixelCount = data.width * data.height;
+  let maxPixelsPerTexture = Math.pow(max, 2);
+  let length = Math.floor(pixelCount / maxPixelsPerTexture);
+
+  let lastHeight = Math.ceil((pixelCount % maxPixelsPerTexture) / max) + 1;
+
+  return [
+    ...Array(length).fill({ width: max, height: max }),
+    { width: max, height: lastHeight },
+  ];
 }
 
 function createBufferInfoFromTopojson(gl, data, object) {
