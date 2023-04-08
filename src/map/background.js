@@ -22,7 +22,10 @@ export default class MapBackground {
     this._gl = gl;
     this._gl.enable(gl.BLEND);
     this._gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    this._maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+
+    this._maxTextureSize = rendererStartsWith(gl, 'Adreno')
+      ? 1040
+      : gl.getParameter(gl.MAX_TEXTURE_SIZE);
     this._dataTextureDimensions = this._getDataTextureDimensions();
 
     this._programs = this._createPrograms();
@@ -251,6 +254,20 @@ export default class MapBackground {
     // switch rendering destination back to canvas
     twgl.bindFramebufferInfo(this._gl, null);
   }
+}
+
+function rendererStartsWith(gl, string) {
+  if (gl.getParameter(gl.RENDERER).startsWith(string)) {
+    return true;
+  }
+  let debugRenderInfo = gl.getExtension('WEBGL_debug_renderer_info');
+  if (debugRenderInfo) {
+    let renderer = gl.getParameter(debugRenderInfo.UNMASKED_RENDERER_WEBGL);
+    if (renderer.startsWith(string)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function createBufferInfoFromTopojson(gl, data, object) {
