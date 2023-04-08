@@ -1,7 +1,7 @@
 #version 300 es
-// Vertex shader for the particle data layer
-//
-// essentially the same as the vertex shader for the vector layer
+// Vertex shader for the particle data layer, essentially the same as the vertex
+// shader for the vector layer
+
 precision highp isampler2D;
 
 #pragma glslify: forwardProject = require(../projections/forward.glsl)

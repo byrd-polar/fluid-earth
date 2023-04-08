@@ -1,6 +1,5 @@
 #version 300 es
 // Fragment shader for the particle data layer
-// makes particles round instead of squares
 
 precision highp float;
 
@@ -11,6 +10,7 @@ in float v_speed;
 out vec4 color;
 
 void main() {
+  // makes particles circles instead of squares
   if (v_clip > 0.0 || length(gl_PointCoord - vec2(0.5)) > 0.5) {
     discard;
   }
