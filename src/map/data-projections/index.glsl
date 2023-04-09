@@ -1,4 +1,5 @@
 #pragma glslify: export(projectToTexture)
+#pragma glslify: p0 = require(../projections/stereographic/forward.glsl)
 
 const float PI = radians(180.0);
 const float PI_2 = radians(90.0);
@@ -68,13 +69,19 @@ void projectToTexture(
   }
   // PERMAFROST
   else if (projection == 4) {
-    textureCoord = (lonLat + vec2(0, PI_2)) / vec2(2.0 * PI, PI);
+    vec2 lonLat0 = vec2(0.0, PI_2);
+    p0(textureCoord, lonLat0, lonLat);
 
-    float xOffset = 0.5 + 0.5 / gridWidth;
-    float yOffset = 0.5 / gridHeight;
-    float yScale = -(gridHeight - 1.0) / gridHeight;
+    textureCoord.x = (textureCoord.x + 0.8407) / 1.6814;
+    textureCoord.y = (-textureCoord.y + 0.7443) / 1.5855;
 
-    textureCoord.x = mod(textureCoord.x + xOffset, 1.0);
-    textureCoord.y = yScale * (textureCoord.y + yOffset - 0.5) + 0.5;
+    textureCoord.x = (textureCoord.x * (gridWidth - 1.0) + 0.5) / gridWidth;
+    textureCoord.y = (textureCoord.y * (gridHeight - 1.0) + 0.5) / gridHeight;
+
+    // get a NaN (actually -Infinity) value for areas outside of texture
+    if (textureCoord.y > 1.0 || textureCoord.y < 0.0 ||
+        textureCoord.x > 1.0 || textureCoord.x < 0.0) {
+      textureCoord = vec2(0.0, 0.5);
+    }
   }
 }
