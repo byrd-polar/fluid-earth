@@ -24,7 +24,9 @@
     }
 
     get gdata() {
-      return this.gDatasets.find(d => d.name === this.hash.get('gdata'));
+      let name = this.hash.get('gdata');
+      if (name === 'permafrost zones') name = 'permafrost probability';
+      return this.gDatasets.find(d => d.name === name);
     }
 
     get pdata() {
