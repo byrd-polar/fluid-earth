@@ -97,14 +97,6 @@ export default Object.freeze({
   },
 });
 
-function rotateToNorthPole(lonLat) {
-  let x = Math.cos(lonLat[0]) * Math.cos(lonLat[1]);
-  let y = Math.sin(lonLat[0]) * Math.cos(lonLat[1]);
-  let z = Math.sin(lonLat[1]);
-
-  return [Math.atan2(y, z), Math.asin(-x)];
-}
-
 // given a griddedData object and a lonLat, return the value at that point
 export function singleArrayDataGet(griddedData, lonLat) {
   const index = griddedData.projection.function(griddedData, lonLat);
