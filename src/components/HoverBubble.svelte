@@ -14,7 +14,7 @@
   export let griddedScale;
   export let griddedColormap;
 
-  let span;
+  let clientWidth, clientHeight;
 
   $: scaleFn = griddedScale === 'log' ? scaleSequentialLog : scaleSequential;
   $: valueToColor = scaleFn(
@@ -26,8 +26,8 @@
   $: value = griddedData.get(lonLat);
   $: label = labelByName(value, griddedName);
   $: point = forwardProjectionFunction(lonLat);
-  $: x = point?.[0] - span?.clientWidth / 2;
-  $: y = point?.[1] - span?.clientHeight * 1.25;
+  $: x = point?.[0] - clientWidth / 2;
+  $: y = point?.[1] - clientHeight * 1.25;
   $: bgColor = isNaN(value) ? '#333' : valueToColor(value);
   $: bgHex = color(bgColor).formatHex();
   $: textColor = ['#000', '#fff'].reduce((a, b) => {
@@ -36,7 +36,8 @@
 </script>
 
 <span
-  bind:this={span}
+  bind:clientWidth
+  bind:clientHeight
   style="
     left: {isNaN(x) ? -100 : x}px;
     top: {isNaN(y) ? -100 : y}px;
