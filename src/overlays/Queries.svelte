@@ -5,6 +5,7 @@
   export let forwardProjectionFunction;
   export let pins;
   export let cursor;
+  export let griddedName;
   export let griddedData;
   export let griddedUnit;
   export let griddedDomain;
@@ -21,6 +22,7 @@
         bind:pins
         {pin}
         {forwardProjectionFunction}
+        {griddedName}
         {griddedData}
         {griddedUnit}
       />
@@ -30,6 +32,7 @@
     <HoverBubble
       {forwardProjectionFunction}
       lonLat={[cursor.longitude, cursor.latitude]}
+      {griddedName}
       {griddedData}
       {griddedDomain}
       {griddedUnit}

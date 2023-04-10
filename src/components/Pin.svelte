@@ -3,16 +3,16 @@
   import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled.svelte';
   import tooltip from '../tooltip.js';
   import { clipped } from '../map/projections/';
-  import { convert, prettyUnit } from '../units.js';
+  import { labelByName, prettyValue } from '../units.js';
   import { prettyLatLon } from '../utility.js';
 
   export let pins;
   export let pin;
   export let forwardProjectionFunction;
+  export let griddedName;
   export let griddedData;
   export let griddedUnit;
 
-  let label = pin.label;
   let lonLat = [pin.longitude, pin.latitude];
   let hovering = false;
 
@@ -21,6 +21,7 @@
   $: clip = point === null;
   $: if (point) [x, y] = point;
   $: value = griddedData.get(lonLat);
+  $: label = labelByName(value, griddedName);
 </script>
 
 
@@ -42,20 +43,15 @@
   {#if hovering}
     <div class="caption">
       <span class="plain">
-        {#if label}
-          {label}
+        {#if pin.label}
+          {pin.label}
         {:else}
           Location {pin.id}
         {/if}
         <br>
       </span>
       <strong class="bold">
-        {#if isNaN(value)}
-          No data
-        {:else}
-          {convert(value, griddedData.originalUnit, griddedUnit).toFixed(1)}
-          {prettyUnit(griddedUnit)}
-        {/if}
+        {prettyValue(value, griddedData.originalUnit, griddedUnit, label)}
       </strong><br>
       <small class="plain">
         {prettyLatLon(pin.latitude, pin.longitude)}

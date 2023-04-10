@@ -1,5 +1,5 @@
 <script>
-  import { convert, prettyUnit } from '../units.js';
+  import { labelByName, prettyValue } from '../units.js';
   import { scaleSequential, scaleSequentialLog } from 'd3-scale';
   import { interpolateRgbBasis } from 'd3-interpolate';
   import { color } from 'd3-color';
@@ -7,6 +7,7 @@
 
   export let forwardProjectionFunction;
   export let lonLat;
+  export let griddedName;
   export let griddedData;
   export let griddedUnit;
   export let griddedDomain;
@@ -23,6 +24,7 @@
     }))
   );
   $: value = griddedData.get(lonLat);
+  $: label = labelByName(value, griddedName);
   $: point = forwardProjectionFunction(lonLat);
   $: x = point?.[0] - span?.clientWidth / 2;
   $: y = point?.[1] - span?.clientHeight * 1.25;
@@ -42,12 +44,7 @@
     color: {textColor};
   "
 >
-  {#if isNaN(value)}
-    No data
-  {:else}
-    {convert(value, griddedData.originalUnit, griddedUnit).toFixed(1)}
-    {prettyUnit(griddedUnit)}
-  {/if}
+  {prettyValue(value, griddedData.originalUnit, griddedUnit, label)}
 </span>
 
 <style>

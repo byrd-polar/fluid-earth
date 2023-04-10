@@ -1,5 +1,29 @@
 import Qty from 'js-quantities/esm'
 
+export function prettyValue(value, originalUnit, newUnit, label) {
+  if (isNaN(value)) return 'No data'
+
+  let number = convert(value, originalUnit, newUnit).toFixed(1)
+  let unit = prettyUnit(newUnit);
+  let numberAndUnit = unit === '%'
+    ? `${number}${unit}`
+    : `${number} ${unit}`;
+  return label
+    ? `${numberAndUnit} (${label})`
+    : `${numberAndUnit}`
+}
+
+export function labelByName(value, name) {
+  if (name === 'permafrost probability') {
+    if (value === 0) return 'none';
+    if (value <= 10) return 'isolated patches';
+    if (value <= 50) return 'sporadic';
+    if (value <= 90) return 'discontinuous';
+    return 'continuous';
+  }
+  return null;
+}
+
 export function convert(value, originalUnit, newUnit) {
   if (!isFinite(value) || originalUnit === newUnit) return value
 
