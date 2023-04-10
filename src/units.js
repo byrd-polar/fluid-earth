@@ -13,7 +13,6 @@ export function prettyUnit(unit) {
     case 'tempF': case 'degF': return '°F'
     case '0.0254 Mg/m^2': return 'in'
     case '0.01 Mg/m^2': return 'cm'
-    case 'id': return 'ID'
     // using Unicode instead of <sup> mainly because of text-shadow issues
     default: return unit.replace('^2', '²').replace('^3', '³')
   }
@@ -28,18 +27,7 @@ const unitDials = [
   ['m', 'ft'],
   ['mm', 'in', 'cm'],
   ['kg/m^2', '0.0254 Mg/m^2', '0.01 Mg/m^2'],
-  ['id'],
 ]
-
-const discreteUnits = ['id']
-export function isDiscreteUnit(unit) {
-  return discreteUnits.includes(unit)
-}
-
-const leadingUnits = ['id']
-export function isLeadingUnit(unit) {
-  return leadingUnits.includes(unit)
-}
 
 export function getUnitFromDial(compatibleUnit) {
   let dial = findDial(compatibleUnit)

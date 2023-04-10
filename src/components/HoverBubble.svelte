@@ -1,5 +1,5 @@
 <script>
-  import { convert, isDiscreteUnit, isLeadingUnit, prettyUnit } from '../units.js';
+  import { convert, prettyUnit } from '../units.js';
   import { scaleSequential, scaleSequentialLog } from 'd3-scale';
   import { interpolateRgbBasis } from 'd3-interpolate';
   import { color } from 'd3-color';
@@ -45,13 +45,8 @@
   {#if isNaN(value)}
     No data
   {:else}
-    {#if isLeadingUnit(griddedUnit)}
-      {prettyUnit(griddedUnit)}
-    {/if}
-    {convert(value, griddedData.originalUnit, griddedUnit).toFixed(isDiscreteUnit(griddedUnit) ? 0 : 1)}
-    {#if !isLeadingUnit(griddedUnit)}
-      {prettyUnit(griddedUnit)}
-    {/if}
+    {convert(value, griddedData.originalUnit, griddedUnit).toFixed(1)}
+    {prettyUnit(griddedUnit)}
   {/if}
 </span>
 
