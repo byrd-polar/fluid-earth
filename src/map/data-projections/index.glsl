@@ -69,17 +69,42 @@ void projectToTexture(
   }
   // PERMAFROST
   else if (projection == 4) {
-    vec2 lonLat0 = vec2(0.0, PI_2);
-    rotate(lonLat0, lonLat);
 
-    float cy = cos(lonLat.y);
-    float k = 1.0 + cos(lonLat.x) * cy;
+    // Derived based on "The Universal Grids and the Transverse Mercator and
+    // Polar Stereographic Map Projections"
+    //
+    // https://earth-info.nga.mil/php/download.php?file=coord-utmups
 
-    float s = 0.598;
-    float r = gridWidth / gridHeight;
+    // WGS 84 constants
+    const float a = 6378137.0;
+    const float e = 0.081819190842621494335;
 
-    textureCoord.x = s * cy * sin(lonLat.x) / k + 0.5;
-    textureCoord.y = -s * r * sin(lonLat.y) / k + 0.4695;
+    // phiToChi (section 2.8)
+    float P = exp(e * atanh(e * sin(lonLat.y)));
+    float x = (1.0 + sin(lonLat.y)) / P;
+    float y = (1.0 - sin(lonLat.y)) * P;
+    float cosChi = 2.0 * cos(lonLat.y) / (x + y);
+    float sinChi = (x - y) / (x + y);
+
+    // standard parallel at 71 degrees, multiplied by 2 / k_90 (section 9.7)
+    float k71 = 1.9390295659155423;
+    float m = k71 * a * cosChi / (1.0 + sinChi);
+
+    // simplied versions of f_1 and f_2 (section 8.1)
+    textureCoord.x = m * sin(lonLat.x);
+    textureCoord.y = -m * cos(lonLat.x);
+
+    // following values from .tfw file
+    textureCoord.x -= -10389109.8424841110;
+    textureCoord.y -= 9199572.4044017550;
+    textureCoord /= 926.6254331383;
+
+    // some sort of map unit conversion?
+    textureCoord /= 5.0;
+
+    // convert from pixels to texture coords
+    textureCoord.x /= gridWidth;
+    textureCoord.y /= -gridHeight;
 
     // get a NaN (actually -Infinity) value for areas outside of texture
     if (textureCoord.y > 1.0 || textureCoord.y < 0.0 ||
