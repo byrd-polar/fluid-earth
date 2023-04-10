@@ -71,19 +71,26 @@ export default Object.freeze({
     id: 4,
     function: (data, lonLat) => {
       lonLat = lonLat.map(v => v * Math.PI / 180);
-      lonLat = rotateToNorthPole(lonLat);
 
-      const cy = Math.cos(lonLat[1]);
-      const k = 1 + Math.cos(lonLat[0]) * cy;
+      // See GLSL implementation for details
 
-      const s = 0.598;
-      const r = data.width / data.height;
+      const a = 6378137.0;
+      const e = 0.081819190842621494335;
 
-      const x = s * cy * Math.sin(lonLat[0]) / k + 0.5;
-      const y = -s * r * Math.sin(lonLat[1]) / k + 0.4695;
+      const P = Math.exp(e * Math.atanh(e * Math.sin(lonLat[1])));
+      const x = (1 + Math.sin(lonLat[1])) / P;
+      const y = (1 - Math.sin(lonLat[1])) * P;
+      const cosChi = 2.0 * Math.cos(lonLat[1]) / (x + y);
+      const sinChi = (x - y) / (x + y);
 
-      const col = Math.round(x * data.width - 0.5) % data.width;
-      const row = Math.round(y * data.height - 0.5);
+      const k71 = 1.9390295659155423;
+      const m = k71 * a * cosChi / (1 + sinChi);
+
+      let col = m * Math.sin(lonLat[0]);
+      let row = -m * Math.cos(lonLat[0]);
+
+      col = Math.floor((col + 10389109.8424841110) / 926.6254331383 / 5);
+      row = Math.floor(-(row - 9199572.4044017550) / 926.6254331383 / 5);
 
       return row * data.width + col;
     },
