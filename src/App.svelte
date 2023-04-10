@@ -387,6 +387,7 @@
       bind:pins
       {cursor}
       {forwardProjectionFunction}
+      {griddedName}
       {griddedData}
       {griddedUnit}
       {griddedDomain}
