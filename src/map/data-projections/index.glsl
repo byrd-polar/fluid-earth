@@ -90,16 +90,17 @@ void projectToTexture(
     float k71 = 1.9390295659155423;
     float m = k71 * a * cosChi / (1.0 + sinChi);
 
-    // simplied versions of f_1 and f_2 (section 8.1)
+    // simplied form of the general polar stereographic projection (section 9.1)
     textureCoord.x = m * sin(lonLat.x);
     textureCoord.y = -m * cos(lonLat.x);
 
-    // following values from .tfw file
+    // following values from the .tfw file inside the .zip file at
+    // https://store.pangaea.de/Publications/ObuJ-etal_2018/UiO_PEX_PERPROB_5.0_20181128_2000_2016_NH.zip
     textureCoord.x -= -10389109.8424841110;
     textureCoord.y -= 9199572.4044017550;
     textureCoord /= 926.6254331383;
 
-    // some sort of map unit conversion?
+    // switch from 1 km scale (.tfw file above) to 5 km scale (.nc file)
     textureCoord /= 5.0;
 
     // convert from pixels to texture coords
