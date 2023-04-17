@@ -1,8 +1,9 @@
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { netcdf } from '../file-conversions.js';
-import { typical_metadata, output_path } from '../utility.js';
-import { rm } from 'fs/promises';
+import { absolute_path, typical_metadata, output_path } from '../utility.js';
+import { readFile, rm } from 'fs/promises';
+import { fileURLToPath } from 'url';
 
 const shared_metadata = {
   width: 1152,
@@ -37,7 +38,8 @@ export async function forage(current_state, datasets) {
     + 'GEOS.fp.fcst.inst1_2d_hwl_Nx.'
     + `${fdt.year}${fdt.p_month}${fdt.p_day}_${fdt.p_hour}+`
     + `${dt.year}${dt.p_month}${dt.p_day}_${dt.p_hour}`
-    + '00.V01.nc4'
+    + '00.V01.nc4',
+    { ca: await readFile(absolute_path('./nccs-nasa-gov-chain.pem')) },
   );
 
   await Promise.all(datasets.map(async dataset => {
