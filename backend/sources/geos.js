@@ -58,9 +58,11 @@ function max_offset_by_forecast_hour(hour) {
   switch(hour) {
     case 6:
     case 18:
+      return 30;
     case 0:
+      return 240;
     case 12:
-      return 3;
+      return 120;
     default:
       throw `Error: invalid forecast hour: ${hour}`;
   }
