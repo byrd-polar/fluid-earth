@@ -12,6 +12,8 @@
         return 'climate_anomolies';
       case 'permafrost probability':
         return 'permafrost_prob';
+      case 'ocean surface currents speed':
+        return 'oscar';
       default:
         return 'default';
     }
@@ -34,6 +36,10 @@
     <dt>&gt;50–90%<dd>discontinuous
     <dt>&gt;90–100%<dd>continuous
   </dl>
+{:else if info === 'oscar'}
+  <p>New data for <b>ocean currents</b> (May 2023 onwards) is currently
+    unavailable.
+  <p>We plan on updating to a new data source sometime in the future.</p>
 {:else if info === 'default'}
   <p class="italics">No additional information for this dataset.</p>
 {/if}
