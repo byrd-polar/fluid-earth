@@ -14,6 +14,7 @@
     "dev": "vite",
     "preview": "vite preview",
     "tera": "node ./backend/main.js",
+    "tera:one": "node ./backend/rabbit.js",
     "tera:clean": "cli-confirm \"Are you sure? (y/N):\" && rimraf public/tera backend/atomic backend/cache backend/state"
   },
   "devDependencies": {
