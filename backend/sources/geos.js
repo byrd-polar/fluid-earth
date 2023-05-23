@@ -38,8 +38,7 @@ export async function forage(current_state, datasets) {
     + 'GEOS.fp.fcst.inst1_2d_hwl_Nx.'
     + `${fdt.year}${fdt.p_month}${fdt.p_day}_${fdt.p_hour}+`
     + `${dt.year}${dt.p_month}${dt.p_day}_${dt.p_hour}`
-    + '00.V01.nc4',
-    { ca: await readFile(absolute_path('./nccs-nasa-gov-chain.pem')) },
+    + '00.V01.nc4'
   );
 
   await Promise.all(datasets.map(async dataset => {
