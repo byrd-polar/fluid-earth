@@ -52,6 +52,7 @@ export function increment_state(current_state) {
 }
 
 export const base_url = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/';
+export const backup_url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/';
 
 function gfs_url({ forecast, offset, system }) {
   let fdt = Datetime.from(forecast);
@@ -96,6 +97,11 @@ async function convert_accum(urls, datasets, dt, offset, compression_level) {
 }
 
 async function download_gfs(url, datasets) {
+  return _download_gfs(url, datasets)
+    .catch(() => _download_gfs(url.replace(base_url, backup_url), datasets));
+}
+
+async function _download_gfs(url, datasets) {
   let idx_url = url + '.idx';
   let idx = await download(idx_url);
   let idx_string = (await readFile(idx)).toString();
