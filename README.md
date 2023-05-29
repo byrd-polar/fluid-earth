@@ -52,6 +52,13 @@ content, replacing the `X`s with your key:
 CDS_API_KEY=XXXXXX:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 ```
 
+Similarly, [create an account](https://urs.earthdata.nasa.gov/users/new) to
+access Earthdata, and add your username and password to `.env`:
+
+```env
+EARTHDATA_LOGIN=username:password
+```
+
 Finally, in a separate terminal tab/window:
 
 ```sh
