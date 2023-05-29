@@ -6,14 +6,19 @@ import { get, request } from 'https';
 import { join, basename } from 'path';
 import { pipeline } from 'stream/promises';
 
-export async function download(url, options={}, unique_path=true) {
+export async function download(
+  url,
+  options={},
+  unique_path=true,
+  transforms=[],
+) {
   let file = get_temp_file(unique_path ? undefined : basename(url));
   let response = await download_as_stream(url, options);
 
   if (response.headers['content-type'].startsWith('multipart/byteranges')) {
     await multipart_byteranges_to_file(file, response);
   } else {
-    await pipeline(response, createWriteStream(file));
+    await pipeline(response, ...transforms, createWriteStream(file));
   }
   return file;
 }
