@@ -56,7 +56,12 @@ export async function post_json(url, json, options={}) {
 
 async function download_as_stream(url, options={}) {
   return new Promise((resolve, reject) => {
-    get(url, options, res => handle_response(res, resolve, reject, url))
+    // handle redirects
+    const callback = res => res.headers.location
+      ? get(res.headers.location, options, callback)
+          .on('error', reject)
+      : handle_response(res, resolve, reject, url);
+    get(url, options, callback)
       .on('error', reject);
   });
 }
