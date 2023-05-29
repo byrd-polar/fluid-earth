@@ -62,7 +62,7 @@ export async function post_json(url, json, options={}) {
 async function download_as_stream(url, options={}) {
   return new Promise((resolve, reject) => {
     // handle redirects
-    const callback = res => res.headers.location
+    const callback = res => [301, 302, 303, 307, 308].includes(res.statusCode)
       ? get(res.headers.location, options, callback)
           .on('error', reject)
       : handle_response(res, resolve, reject, url);
