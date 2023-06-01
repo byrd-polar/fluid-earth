@@ -23,6 +23,13 @@ export default Object.freeze({
     dateFormat: instantDateFormat,
     timeFormat: instantTimeFormat,
   },
+  'daily-aggregate': {
+    roundTo: { smallestUnit: 'day', roundingMode: 'floor' },
+    duration: { days: 1 },
+    smallestPickerMode: 'day',
+    dateFormat: aggregateDayDateFormat,
+    utcOnly: true,
+  },
   'monthly-aggregate': {
     roundTo: { smallestUnit: 'month', roundingMode: 'floor' },
     duration: { months: 1 },
@@ -42,10 +49,10 @@ export default Object.freeze({
 function instantDateFormat(date, utc) {
   return date.toLocaleDateString([], {
     timeZone: utc ? 'UTC' : undefined,
-    weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    weekday: 'long',
   })
 }
 
@@ -59,6 +66,16 @@ function instantTimeFormat(date, utc) {
   })
   // Fix the toLocaleTimeString output on Chromium-based browsers
   return string === '24:00 UTC' ? '00:00 UTC' : string
+}
+
+function aggregateDayDateFormat(date) {
+   return date.toLocaleDateString([], {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long',
+  })
 }
 
 function aggregateMonthDateFormat(date) {
