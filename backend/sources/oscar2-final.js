@@ -15,20 +15,22 @@ export async function forage(current_state, datasets) {
   return oscar2(current_state, datasets, 'final');
 }
 
-const start_years = {
-  final: 1993,
-  interim: 2020,
-  nrt: 2021,
-};
-
 export async function oscar2(current_state, datasets, quality) {
   let { date } = current_state;
   let dt = date
     ? Datetime.from(date).add({ days: 1 })
-    : Datetime.from(`${start_years[quality]}-01-01T00:00:00.000Z`);
+    : get_start_dt(quality);
   date = dt.to_iso_string();
 
-  let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
+  let metadatas = datasets.map(({ metadata }) => {
+    // avoid race conditions caused by multiple sources writing to same metadata
+    if (quality !== 'nrt') return null;
+
+    let start = get_start_dt('final').to_iso_string();
+    let end = dt.to_iso_string();
+    let new_state = { start, end };
+    return { start, end, ...metadata, ...shared_metadata, new_state };
+  });
 
   let token = await get_token(process.env.EARTHDATA_LOGIN);
   let input = await download(
@@ -46,4 +48,14 @@ export async function oscar2(current_state, datasets, quality) {
   await rm(input);
 
   return { metadatas, new_state: { date } };
+}
+
+const start_years = {
+  final: 1993,
+  interim: 2020,
+  nrt: 2021,
+};
+
+function get_start_dt(quality) {
+  return Datetime.from(`${start_years[quality]}-01-01T00:00:00.000Z`);
 }
