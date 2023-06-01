@@ -12,10 +12,20 @@ const shared_metadata = {
 };
 
 export async function forage(current_state, datasets) {
+  return oscar2(current_state, datasets, 'final');
+}
+
+const start_years = {
+  final: 1993,
+  interim: 2020,
+  nrt: 2021,
+};
+
+export async function oscar2(current_state, datasets, quality) {
   let { date } = current_state;
   let dt = date
     ? Datetime.from(date).add({ days: 1 })
-    : Datetime.from('1993-01-01T00:00:00.000Z');
+    : Datetime.from(`${start_years[quality]}-01-01T00:00:00.000Z`);
   date = dt.to_iso_string();
 
   let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
@@ -23,8 +33,9 @@ export async function forage(current_state, datasets) {
   let token = await get_token(process.env.EARTHDATA_LOGIN);
   let input = await download(
     'https://archive.podaac.earthdata.nasa.gov/'
-    + 'podaac-ops-cumulus-protected/OSCAR_L4_OC_FINAL_V2.0/'
-    + `oscar_currents_final_${dt.year}${dt.p_month}${dt.p_day}.nc`,
+    + 'podaac-ops-cumulus-protected/'
+    + `OSCAR_L4_OC_${quality.toUpperCase()}_V2.0/`
+    + `oscar_currents_${quality}_${dt.year}${dt.p_month}${dt.p_day}.nc`,
     { headers: { Authorization: `Bearer ${token}` } },
   );
 
