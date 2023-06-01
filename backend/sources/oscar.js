@@ -45,7 +45,7 @@ export async function forage(current_state, datasets) {
 // See: https://urs.earthdata.nasa.gov/documentation/for_users/user_token#api
 const api_url = 'https://urs.earthdata.nasa.gov/api/users';
 
-async function get_token(earthdata_login) {
+export async function get_token(earthdata_login) {
   let headers = { Authorization: `Basic ${btoa(earthdata_login)}` };
 
   let [{ access_token, expiration_date }] =
