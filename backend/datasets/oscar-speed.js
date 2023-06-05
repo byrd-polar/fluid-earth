@@ -1,4 +1,4 @@
-export const name = 'ocean surface currents speed';
+export const name = '[v1] ocean surface currents speed';
 
 export const metadata = {
   unit: 'm/s',

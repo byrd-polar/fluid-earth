@@ -1,3 +1,3 @@
-export const name = 'ocean surface currents speed v2';
+export const name = 'ocean surface currents speed';
 
 export { metadata, convert } from './oscar-speed.js';
