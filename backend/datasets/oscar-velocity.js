@@ -1,4 +1,4 @@
-export const name = 'ocean surface currents';
+export const name = '[v1] ocean surface currents';
 
 export const metadata = {
   particleLifetime: 10000,
