@@ -37,9 +37,9 @@
     <dt>&gt;90–100%<dd>continuous
   </dl>
 {:else if info === 'oscar'}
-  <p>New data for <b>ocean currents</b> (May 2023 onwards) is currently
-    unavailable.
-  <p>We plan on updating to a new data source sometime in the future.</p>
+  <p><b>Ocean current</b> values are averaged over the UTC day and over the top
+    30 meters of the <a href="https://en.wikipedia.org/wiki/Mixed_layer">mixed
+    layer</a>.</p>
 {:else if info === 'default'}
   <p class="italics">No additional information for this dataset.</p>
 {/if}
