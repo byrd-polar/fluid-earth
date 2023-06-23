@@ -49,8 +49,8 @@ up.assert(
   11 * hours, 'GFS-wave is delayed',
 );
 up.assert(
-  state.sources.oscar, 'date',
-  8 * days, 'OSCAR is delayed',
+  state.sources['oscar2-nrt'], 'date',
+  4 * days, 'OSCAR2 is delayed',
 );
 up.assert(
   state.sources.rtgssthr, 'date',
