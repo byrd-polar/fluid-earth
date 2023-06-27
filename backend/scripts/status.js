@@ -50,7 +50,7 @@ up.assert(
 );
 up.assert(
   state.sources['oscar2-nrt'], 'date',
-  4 * days, 'OSCAR2 is delayed',
+  6 * days, 'OSCAR2 is delayed',
 );
 up.assert(
   state.sources.rtgssthr, 'date',

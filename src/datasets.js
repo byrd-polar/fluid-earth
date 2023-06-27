@@ -229,7 +229,7 @@ export class ParticleDataset extends Dataset {
 
     // allow latest ocean currents to be displayed with latest ocean temps
     if (this.name === 'ocean surface currents') {
-      return Math.abs(closest - date) < 4 * 24 * 60 * 60 * 1000
+      return Math.abs(closest - date) < 6 * 24 * 60 * 60 * 1000
     }
 
     switch(this.interval) {
