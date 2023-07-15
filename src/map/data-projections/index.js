@@ -89,8 +89,10 @@ export default Object.freeze({
       let col = m * Math.sin(lonLat[0]);
       let row = -m * Math.cos(lonLat[0]);
 
-      col = Math.floor((col + 10389109.8424841110) / 926.6254331383 / 5);
-      row = Math.floor(-(row - 9199572.4044017550) / 926.6254331383 / 5);
+      let res = data.width === 4485 ? 5 : 10;
+
+      col = Math.floor((col + 10389109.8424841110) / 926.6254331383 / res);
+      row = Math.floor(-(row - 9199572.4044017550) / 926.6254331383 / res);
 
       return row * data.width + col;
     },
