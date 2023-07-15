@@ -14,7 +14,7 @@ export function prettyValue(value, originalUnit, newUnit, label) {
 }
 
 export function labelByName(value, name) {
-  if (name === 'permafrost probability') {
+  if (name.startsWith('permafrost probability')) {
     if (value === 0) return 'none';
     if (value <= 10) return 'isolated patches';
     if (value <= 50) return 'sporadic';

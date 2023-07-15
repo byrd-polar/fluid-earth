@@ -100,8 +100,8 @@ void projectToTexture(
     textureCoord.y -= 9199572.4044017550;
     textureCoord /= 926.6254331383;
 
-    // switch from 1 km scale (.tfw file above) to 5 km scale (.nc file)
-    textureCoord /= 5.0;
+    // switch from 1 km scale (.tfw file above) to 5 or 10 km scale (.nc file)
+    textureCoord /= (gridWidth == 4485.0) ? 5.0 : 10.0;
 
     // convert from pixels to texture coords
     textureCoord.x /= gridWidth;

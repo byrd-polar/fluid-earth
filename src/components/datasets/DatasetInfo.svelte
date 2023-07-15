@@ -11,6 +11,7 @@
       case 'average precipitation per day anomaly':
         return 'climate_anomolies';
       case 'permafrost probability':
+      case 'permafrost probability [low resolution]':
         return 'permafrost_prob';
       case 'ocean surface currents speed':
         return 'oscar';

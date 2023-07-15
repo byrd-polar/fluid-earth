@@ -43,6 +43,8 @@ const normal = {
     name => name === 'average precipitation per day anomaly',
   'permafrost probability':
     name => name === 'permafrost probability',
+  'permafrost (low res.)':
+    name => name === 'permafrost probability [low resolution]',
 
   undefined: () => false,
 };
@@ -88,6 +90,8 @@ const simple = {
     name => name === 'average precipitation per day anomaly',
   'permafrost probability':
     name => name === 'permafrost probability',
+  'permafrost (low res.)':
+    name => name === 'permafrost probability [low resolution]',
 
   undefined: () => false,
 };
