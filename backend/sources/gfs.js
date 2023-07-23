@@ -90,6 +90,7 @@ async function convert_accum(urls, datasets, dt, offset, compression_level) {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
     await (simple ? grib2 : grib2_acc)(input, output, {
       limit: simple ? 1 : 2,
+      compression_level,
       ...dataset.grib2_options,
     });
   }));
