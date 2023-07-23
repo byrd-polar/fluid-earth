@@ -17,7 +17,7 @@ export async function forage(current_state, datasets) {
   if (forecast) {
     fdt = Datetime.from(forecast);
     offset++;
-    if (offset > max_offset_by_forecast_hour(fdt.hour)) {
+    if (offset > max_offset(fdt, Datetime.now())) {
       fdt = fdt.add({ hours: 6 });
       offset = -2;
     }
@@ -52,8 +52,13 @@ export async function forage(current_state, datasets) {
   return { metadatas, new_state: { forecast, offset } };
 }
 
-function max_offset_by_forecast_hour(hour) {
-  switch(hour) {
+function max_offset(fdt, now) {
+  if (![0, 6, 12, 18].includes(fdt.hour))
+    throw `Error: invalid forecast hour: ${fdt.hour}`;
+
+  if (now > fdt.add({ days: 1 })) return 3;
+
+  switch(fdt.hour) {
     case 6:
     case 18:
       return 30;
@@ -61,7 +66,5 @@ function max_offset_by_forecast_hour(hour) {
       return 240;
     case 12:
       return 120;
-    default:
-      throw `Error: invalid forecast hour: ${hour}`;
   }
 }
