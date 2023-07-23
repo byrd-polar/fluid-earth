@@ -3,7 +3,6 @@ import { Float16Array } from '@petamoriken/float16';
 import { Buffer } from 'buffer';
 import { spawn } from 'child_process';
 import { readFile, rm } from 'fs/promises';
-import { join } from 'path';
 
 export async function grib1(input, output, options={}) {
   let arr = await grib1_to_arr(input, options.record_number);
