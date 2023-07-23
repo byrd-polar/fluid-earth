@@ -1,9 +1,8 @@
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { netcdf } from '../file-conversions.js';
-import { absolute_path, typical_metadata, output_path } from '../utility.js';
-import { readFile, rm } from 'fs/promises';
-import { fileURLToPath } from 'url';
+import { typical_metadata, output_path } from '../utility.js';
+import { rm } from 'fs/promises';
 
 const shared_metadata = {
   width: 1152,

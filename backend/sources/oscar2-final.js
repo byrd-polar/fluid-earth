@@ -1,6 +1,6 @@
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
-import { typical_metadata, output_path } from '../utility.js';
+import { output_path } from '../utility.js';
 import { get_token } from './oscar.js';
 import { rm } from 'fs/promises';
 
