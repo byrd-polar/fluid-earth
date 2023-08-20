@@ -20,7 +20,9 @@ const urls = [
 
 export async function forage(current_state) {
   let source_hash = await hash_of_this_file(import.meta);
-  if (source_hash === current_state.source_hash) throw 'No update needed';
+  if (source_hash === current_state.source_hash) {
+    throw new Error('No update needed');
+  }
 
   let files = await Promise.all(urls.map(url => download(url, {}, false)));
   let output = join(parent_output_dir, 'topology.json.br');

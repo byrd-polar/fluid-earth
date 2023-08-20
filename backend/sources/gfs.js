@@ -131,7 +131,7 @@ async function _download_gfs(url, datasets) {
 
   for (let [match_regex, limit] of match_limits) {
     if (limit > 0)
-      throw `Error: could not match enough '${match_regex}' in ${idx_url}`;
+      throw new Error(`could not match enough '${match_regex}' in ${idx_url}`);
   }
 
   return download(url, { headers: { Range } });

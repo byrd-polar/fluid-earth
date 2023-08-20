@@ -32,7 +32,9 @@ const extra_locations = [
 
 export async function forage(current_state) {
   let source_hash = await hash_of_this_file(import.meta);
-  if (source_hash === current_state.source_hash) throw 'No update needed';
+  if (source_hash === current_state.source_hash) {
+    throw new Error('No update needed');
+  }
 
   let file = await download(url);
   let zip = new StreamZip.async({ file });
