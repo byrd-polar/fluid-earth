@@ -7,7 +7,7 @@ import {
   perm_cache_dir,
   typical_metadata,
 } from '../utility.js';
-import { access, rm } from 'fs/promises';
+import { rm } from 'fs/promises';
 import { join } from 'path';
 import { setTimeout as sleep } from 'timers/promises';
 import { parentPort } from 'worker_threads'
@@ -56,7 +56,7 @@ export async function forage(current_state, datasets) {
     throw e;
   }
 
-  await run_all(datasets.map((dataset, i) => async () => {
+  await run_all(datasets.map(dataset => async () => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
     let record_number = variables.findIndex(v => v === dataset.variable) + 1;
 
