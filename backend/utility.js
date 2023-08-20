@@ -1,10 +1,9 @@
 import { Datetime } from './datetime.js';
 import { createHash } from 'crypto';
-import { createReadStream, rmSync } from 'fs';
+import { rmSync } from 'fs';
 import {
   mkdir,
   mkdtemp,
-  open,
   readdir,
   readFile,
   rename,
@@ -14,7 +13,6 @@ import {
 } from 'fs/promises';
 import { platform, tmpdir } from 'os';
 import { resolve, join, dirname, sep, basename } from 'path';
-import { Readable } from 'stream';
 import { fileURLToPath } from 'url';
 import { promisify } from 'util';
 import { v4 as uuidv4 } from 'uuid';
