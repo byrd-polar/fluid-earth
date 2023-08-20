@@ -15,6 +15,7 @@
     "preview": "vite preview",
     "tera": "node ./backend/main.js",
     "tera:one": "node ./backend/rabbit.js",
+    "tera:get-prod-state": "./backend/scripts/get-prod-state.js",
     "tera:clean": "cli-confirm \"Are you sure? (y/N):\" && rimraf public/tera backend/atomic backend/cache backend/state"
   },
   "devDependencies": {
