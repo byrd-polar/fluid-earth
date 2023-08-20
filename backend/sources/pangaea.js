@@ -22,7 +22,9 @@ const shared_metadata = {
 
 export async function forage(current_state, datasets) {
   let source_hash = await hash_of_this_file(import.meta);
-  if (source_hash === current_state.source_hash) throw 'No update needed';
+  if (source_hash === current_state.source_hash) {
+    throw new Error('No update needed');
+  }
 
   let metadatas = datasets.map(
     ({ metadata }) => ({ ...shared_metadata, ...metadata })

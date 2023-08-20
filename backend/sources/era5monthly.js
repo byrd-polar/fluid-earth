@@ -108,7 +108,9 @@ async function verify_update_needed(name, dt, last_updated) {
     smallestUnit: 'month',
     roundingMode: 'floor',
   });
-  if (last_updated === update_date && getting_latest) throw 'No update needed';
+  if (last_updated === update_date && getting_latest) {
+    throw new Error('No update needed');
+  }
   return update_date;
 }
 
@@ -128,7 +130,7 @@ async function download_cds(name, request, auth) {
     parentPort?.postMessage('keepalive');
   }
 
-  if (reply.state !== 'completed') throw `Error: ${reply.error.message}`;
+  if (reply.state !== 'completed') throw new Error(reply.error.message);
 
   let download_url = reply.location.startsWith('https://')
     ? reply.location

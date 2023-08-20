@@ -54,7 +54,7 @@ export async function forage(current_state, datasets) {
 
 function max_offset(fdt, now) {
   if (![0, 6, 12, 18].includes(fdt.hour))
-    throw `Error: invalid forecast hour: ${fdt.hour}`;
+    throw new Error(`invalid forecast hour: ${fdt.hour}`);
 
   if (now > fdt.add({ days: 1 })) return 3;
 
