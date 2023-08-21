@@ -28,9 +28,6 @@ patchedDependencies:
   tippy.js@6.3.7:
     hash: 25xmuxknaptsc4idmzfteruhmq
     path: patches/tippy.js@6.3.7.patch
-  vite@4.2.1:
-    hash: 4z47pm57iemvqgdkrw24muuswu
-    path: patches/vite@4.2.1.patch
 
 specifiers:
   '@petamoriken/float16': ^3.7.1
@@ -122,7 +119,7 @@ devDependencies:
   rollup-plugin-svelte: 7.1.4_msfiweshunp3yd3mvr5dwr2t24
   svelte: 3.57.0_4gm67c2giq6zyputvzvk4wf6oy
   uuid: 9.0.0
-  vite: 4.2.1_4z47pm57iemvqgdkrw24muuswu
+  vite: 4.2.1
 
 packages:
 
@@ -539,7 +536,7 @@ packages:
       magic-string: 0.29.0
       svelte: 3.57.0_4gm67c2giq6zyputvzvk4wf6oy
       svelte-hmr: 0.15.1_svelte@3.57.0
-      vite: 4.2.1_4z47pm57iemvqgdkrw24muuswu
+      vite: 4.2.1
       vitefu: 0.2.4_vite@4.2.1
     transitivePeerDependencies:
       - supports-color
@@ -2206,7 +2203,7 @@ packages:
     hasBin: true
     dev: true
 
-  /vite/4.2.1_4z47pm57iemvqgdkrw24muuswu:
+  /vite/4.2.1:
     resolution: {integrity: sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -2238,7 +2235,6 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
-    patched: true
 
   /vitefu/0.2.4_vite@4.2.1:
     resolution: {integrity: sha512-fanAXjSaf9xXtOOeno8wZXIhgia+CZury481LsDaV++lSvcU2R9Ch2bPh3PYFyoHW+w9LqAeYRISVQjUIew14g==}
@@ -2248,7 +2244,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.2.1_4z47pm57iemvqgdkrw24muuswu
+      vite: 4.2.1
     dev: true
 
   /wcag-contrast/3.0.0:
