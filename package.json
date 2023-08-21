@@ -79,8 +79,7 @@
       "svelte@3.57.0": "patches/svelte@3.57.0.patch",
       "svelte-range-slider-pips@2.1.1": "patches/svelte-range-slider-pips@2.1.1.patch",
       "svelte-toggle@3.1.0": "patches/svelte-toggle@3.1.0.patch",
-      "tippy.js@6.3.7": "patches/tippy.js@6.3.7.patch",
-      "vite@4.2.1": "patches/vite@4.2.1.patch"
+      "tippy.js@6.3.7": "patches/tippy.js@6.3.7.patch"
     },
     "peerDependencyRules": {
       "ignoreMissing": [
