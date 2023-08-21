@@ -1,7 +1,7 @@
 <script>
   import Button from '../components/Button.svelte';
   import IconButton from '../components/IconButton.svelte';
-  import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled.svelte';
+  import PinIcon from 'carbon-icons-svelte/lib/LocationFilled.svelte';
   import Close from 'carbon-icons-svelte/lib/Close.svelte';
   import { slide, fade } from 'svelte/transition';
   import { convert, prettyUnit } from '../units.js';

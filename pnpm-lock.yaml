@@ -4,9 +4,6 @@ patchedDependencies:
   '@slightlyoff/lite-vimeo@0.1.2':
     hash: a5xcetozjprisz4vjh6z2qcn6e
     path: patches/@slightlyoff__lite-vimeo@0.1.2.patch
-  carbon-icons-svelte@11.4.0:
-    hash: sb6bwcxolomcfbaxeollv5irce
-    path: patches/carbon-icons-svelte@11.4.0.patch
   esm-seedrandom@3.0.5:
     hash: 6gcdzpmuhyfz6r3soy4gimvrvm
     path: patches/esm-seedrandom@3.0.5.patch
@@ -83,7 +80,7 @@ specifiers:
 dependencies:
   '@petamoriken/float16': 3.7.1
   '@slightlyoff/lite-vimeo': 0.1.2_a5xcetozjprisz4vjh6z2qcn6e
-  carbon-icons-svelte: 11.4.0_sb6bwcxolomcfbaxeollv5irce
+  carbon-icons-svelte: 11.4.0
   d3-axis: 3.0.0
   d3-color: 3.1.0
   d3-geo: 3.1.0
@@ -710,10 +707,9 @@ packages:
       get-intrinsic: 1.2.0
     dev: true
 
-  /carbon-icons-svelte/11.4.0_sb6bwcxolomcfbaxeollv5irce:
+  /carbon-icons-svelte/11.4.0:
     resolution: {integrity: sha512-p/llZde2kP2BI9SOqM+QFKGfQnYrW+4dVxF1rAYriEADXDsjt9EYlh+KpQ5qf4JpXAq+e2+TB/r/lIG1xdUbAQ==}
     dev: false
-    patched: true
 
   /caseless/0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}

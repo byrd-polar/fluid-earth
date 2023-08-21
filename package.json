@@ -72,7 +72,6 @@
   "pnpm": {
     "patchedDependencies": {
       "@slightlyoff/lite-vimeo@0.1.2": "patches/@slightlyoff__lite-vimeo@0.1.2.patch",
-      "carbon-icons-svelte@11.4.0": "patches/carbon-icons-svelte@11.4.0.patch",
       "esm-seedrandom@3.0.5": "patches/esm-seedrandom@3.0.5.patch",
       "glslify@7.1.1": "patches/glslify@7.1.1.patch",
       "js-quantities@1.7.6": "patches/js-quantities@1.7.6.patch",
