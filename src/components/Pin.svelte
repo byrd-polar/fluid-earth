@@ -1,8 +1,6 @@
 <script>
   import { fly, fade } from 'svelte/transition';
   import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled.svelte';
-  import tooltip from '../tooltip.js';
-  import { clipped } from '../map/projections/';
   import { labelByName, prettyValue } from '../units.js';
   import { prettyLatLon } from '../utility.js';
 
