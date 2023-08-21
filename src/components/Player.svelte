@@ -249,7 +249,6 @@
   }
 
   div :global(.rangeSlider) {
-    font-size: 16px !important;
     margin-bottom: 1em;
   }
 
