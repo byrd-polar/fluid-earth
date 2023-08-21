@@ -1,6 +1,6 @@
 <script>
   import { fly, fade } from 'svelte/transition';
-  import PinIcon from 'carbon-icons-svelte/lib/LocationHeartFilled.svelte';
+  import PinIcon from 'carbon-icons-svelte/lib/LocationFilled.svelte';
   import { labelByName, prettyValue } from '../units.js';
   import { prettyLatLon } from '../utility.js';
 
@@ -32,12 +32,15 @@
   on:mouseenter={() => hovering = true}
   on:mouseleave={() => hovering = false}
 >
-  <PinIcon
-    size={32}
+  <button
     class="marker"
     style="z-index: {-1e8 + Math.round(y * 8)}"
     on:click={() => pins = pins.filter(p => p !== pin)}
-  />
+    on:focus={() => hovering = true}
+    on:blur={() => hovering = false}
+  >
+    <PinIcon size={32} />
+  </button>
   {#if hovering}
     <div class="caption">
       <span class="plain">
@@ -78,6 +81,14 @@
     color: red;
     cursor: pointer;
     filter: drop-shadow(0 0 0.25em black);
+    display: block;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    background-image: none;
+  }
+
+  div.pin > :global(.marker svg) {
     display: block;
   }
 
