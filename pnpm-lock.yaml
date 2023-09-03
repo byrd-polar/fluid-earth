@@ -21,11 +21,8 @@ patchedDependencies:
     hash: qsnwewirjzlisqst5clin7dyle
     path: patches/rollup-plugin-glslify@1.3.1.patch
   svelte-range-slider-pips@2.1.1:
-    hash: oag6vvgjxeuapzrevc3e56ezqu
+    hash: kb4a7ee3sjeqawxg7c6ii665ri
     path: patches/svelte-range-slider-pips@2.1.1.patch
-  svelte-toggle@3.1.0:
-    hash: cuipz4uimiqcmmi4oo66gtwaym
-    path: patches/svelte-toggle@3.1.0.patch
   svelte@3.57.0:
     hash: 4gm67c2giq6zyputvzvk4wf6oy
     path: patches/svelte@3.57.0.patch
@@ -93,10 +90,10 @@ dependencies:
     version: 8.0.0
   svelte-range-slider-pips:
     specifier: 2.1.1
-    version: 2.1.1(patch_hash=oag6vvgjxeuapzrevc3e56ezqu)
+    version: 2.1.1(patch_hash=kb4a7ee3sjeqawxg7c6ii665ri)
   svelte-toggle:
     specifier: ^3.1.0
-    version: 3.1.0(patch_hash=cuipz4uimiqcmmi4oo66gtwaym)
+    version: 3.1.0
   tippy.js:
     specifier: ^6.3.7
     version: 6.3.7(patch_hash=25xmuxknaptsc4idmzfteruhmq)
@@ -2116,15 +2113,14 @@ packages:
       svelte: 3.57.0(patch_hash=4gm67c2giq6zyputvzvk4wf6oy)
     dev: true
 
-  /svelte-range-slider-pips@2.1.1(patch_hash=oag6vvgjxeuapzrevc3e56ezqu):
+  /svelte-range-slider-pips@2.1.1(patch_hash=kb4a7ee3sjeqawxg7c6ii665ri):
     resolution: {integrity: sha512-fLkhfnyEc4uMOCZCl8IPyC0e9lujrjqdSyrKw28Y8j99YUPZR+pHnSxde7PqhM0ST6eyO4ugh2nFnLZTIoG9aQ==}
     dev: false
     patched: true
 
-  /svelte-toggle@3.1.0(patch_hash=cuipz4uimiqcmmi4oo66gtwaym):
+  /svelte-toggle@3.1.0:
     resolution: {integrity: sha512-2gzDDMDhM+ImDaLEZVlnlHVY1340Y368tT4Qk5IwLnCeRJ4zV3cVwliVGacoHy7iCDukcGXzKwDzG/hTTcaljg==}
     dev: false
-    patched: true
 
   /svelte@3.57.0(patch_hash=4gm67c2giq6zyputvzvk4wf6oy):
     resolution: {integrity: sha512-WMXEvF+RtAaclw0t3bPDTUe19pplMlfyKDsixbHQYgCWi9+O9VN0kXU1OppzrB9gPAvz4NALuoca2LfW2bOjTQ==}
