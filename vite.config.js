@@ -26,7 +26,7 @@ import dns from 'dns'
 dns.setDefaultResultOrder('verbatim');
 
 // https://vitejs.dev/config/
-export default async ({ _, mode }) => {
+export default async ({ mode }) => {
   const production = mode === 'production';
 
   const commit = await (async () => {
