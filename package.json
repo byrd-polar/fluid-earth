@@ -68,7 +68,7 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "pnpm@7.30.3",
+  "packageManager": "pnpm@8.7.1",
   "pnpm": {
     "patchedDependencies": {
       "@slightlyoff/lite-vimeo@0.1.2": "patches/@slightlyoff__lite-vimeo@0.1.2.patch",
