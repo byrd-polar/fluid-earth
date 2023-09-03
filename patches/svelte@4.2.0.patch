@@ -1,0 +1,59 @@
+diff --git a/src/runtime/internal/dom.js b/src/runtime/internal/dom.js
+index 18a5d5d2787b4310bc134a2c2ef4490917631425..bbcd75a8fc5c9fc78c33e3251eda96318889ec4b 100644
+--- a/src/runtime/internal/dom.js
++++ b/src/runtime/internal/dom.js
+@@ -932,51 +932,9 @@ export function is_crossorigin() {
+  * @returns {() => void}
+  */
+ export function add_iframe_resize_listener(node, fn) {
+-	const computed_style = getComputedStyle(node);
+-	if (computed_style.position === 'static') {
+-		node.style.position = 'relative';
+-	}
+-	const iframe = element('iframe');
+-	iframe.setAttribute(
+-		'style',
+-		'display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; ' +
+-			'overflow: hidden; border: 0; opacity: 0; pointer-events: none; z-index: -1;'
+-	);
+-	iframe.setAttribute('aria-hidden', 'true');
+-	iframe.tabIndex = -1;
+-	const crossorigin = is_crossorigin();
+-
+-	/**
+-	 * @type {() => void}
+-	 */
+-	let unsubscribe;
+-	if (crossorigin) {
+-		iframe.src = "data:text/html,<script>onresize=function(){parent.postMessage(0,'*')}</script>";
+-		unsubscribe = listen(
+-			window,
+-			'message',
+-			/** @param {MessageEvent} event */ (event) => {
+-				if (event.source === iframe.contentWindow) fn();
+-			}
+-		);
+-	} else {
+-		iframe.src = 'about:blank';
+-		iframe.onload = () => {
+-			unsubscribe = listen(iframe.contentWindow, 'resize', fn);
+-			// make sure an initial resize event is fired _after_ the iframe is loaded (which is asynchronous)
+-			// see https://github.com/sveltejs/svelte/issues/4233
+-			fn();
+-		};
+-	}
+-	append(node, iframe);
+-	return () => {
+-		if (crossorigin) {
+-			unsubscribe();
+-		} else if (unsubscribe && iframe.contentWindow) {
+-			unsubscribe();
+-		}
+-		detach(iframe);
+-	};
++	const ro = new ResizeObserver(fn);
++	ro.observe(node);
++	return () => ro.disconnect();
+ }
+ export const resize_observer_content_box = /* @__PURE__ */ new ResizeObserverSingleton({
+ 	box: 'content-box'
