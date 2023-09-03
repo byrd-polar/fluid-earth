@@ -74,7 +74,9 @@ export default async ({ mode }) => {
       preventAssignment: true,
     }),
     // For .svelte files
-    svelte(),
+    svelte({
+      preprocess: [customEmToPx()],
+    }),
     // For GLSL .vert and .frag files
     glslify({
       compress: production,
@@ -202,5 +204,24 @@ async function copyDir(srcDir, destDir, symlinkTera=false) {
     } else {
       await copyFile(src, dest);
     }
+  }
+}
+
+function customEmToPx() {
+  const files = [
+    'svelte-toggle/src/Toggle.svelte',
+    'svelte-range-slider-pips/src/RangeSlider.svelte',
+  ];
+  return {
+    name: 'convert em/rem units of third-party components to px',
+    style: ({ content, filename }) => {
+      if (files.find(file => filename.endsWith(file))) {
+        const code = content.replaceAll(
+          /([0-9.]+)r?em/g,
+          (_, value) => `${parseFloat(value) * 16}px`,
+        );
+        return { code };
+      }
+    },
   }
 }
