@@ -1,8 +1,11 @@
+diff --git a/LICENSE-MPL-2.0 b/LICENSE-MPL-2.0
+deleted file mode 100755
+index 14e2f777f6c395e7e04ab4aa306bbcc4b0c1120e..0000000000000000000000000000000000000000
 diff --git a/src/RangeSlider.svelte b/src/RangeSlider.svelte
-index 2010e761d02ec7e7221e9cfe2148bf2d8aca301b..b590735f9e5d99f6bb311c6e7986b9367d578a39 100644
+index 60886c96b312e5e2ee83d7ac624a46ac4512f5c5..58b290a4d9166622621efedd39f518628f96be2a 100755
 --- a/src/RangeSlider.svelte
 +++ b/src/RangeSlider.svelte
-@@ -18,6 +18,15 @@
+@@ -20,6 +20,15 @@
    export let reversed = false;
    export let hoverable = true;
    export let disabled = false;
