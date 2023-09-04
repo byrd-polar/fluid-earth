@@ -319,14 +319,8 @@
     flex: 1;
   }
 
-  div.layers > :global(*) {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-  }
-
-  /* following rules are the equivalent of the above for the web component */
-  div.layers > *, ::slotted(*) {
+  div.layers > :global(*),
+  div.layers > :global(::slotted(*)) { /* for the webcomponent */
     width: 100%;
     height: 100%;
     position: absolute;
@@ -347,4 +341,4 @@
   }
 </style>
 
-<svelte:options tag="earth-map"/>
+<svelte:options customElement="earth-map" />
