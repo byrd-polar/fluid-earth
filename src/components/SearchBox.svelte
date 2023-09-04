@@ -1,7 +1,7 @@
 <script>
   export let label = 'Search:';
   export let placeholder = '';
-  export let loadData = () => [];
+  export let loadData = async () => [];
   export let onSelect = () => {};
   export let maxShown = 9;
 
@@ -93,14 +93,15 @@
 {#if dropdownShown}
 <div class="spacer">
   <div
+    role="presentation"
     class="dropdown"
     on:mousedown|preventDefault
   >
     {#if options.length > 0}
       <ul>
         {#each options as option}
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
           <li
+            role="presentation"
             class:considered={candidateOption === option}
             on:click={() => { select(option) }}
           >

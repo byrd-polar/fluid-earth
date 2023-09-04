@@ -167,7 +167,6 @@
   bind:this={calendar}
   on:focusin={() => hasFocus = true}
   on:focusout={() => hasFocus = false}
-  on:keydown={handleKeydown}
 >
   {#each boxes as box, i (pickerMode + i)}
     {@const selected = box.equals(selectedBox)}
@@ -177,6 +176,7 @@
       class:hour={pickerMode === 'hour'}
       class:selected={selected && enabled}
       on:click={() => { if (!selected) selectDate(box) }}
+      on:keydown={handleKeydown}
       disabled={!enabled}
       tabindex={selected ? 0 : -1}
     >

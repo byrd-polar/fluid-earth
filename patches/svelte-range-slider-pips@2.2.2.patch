@@ -2,7 +2,7 @@ diff --git a/LICENSE-MPL-2.0 b/LICENSE-MPL-2.0
 deleted file mode 100755
 index 14e2f777f6c395e7e04ab4aa306bbcc4b0c1120e..0000000000000000000000000000000000000000
 diff --git a/src/RangeSlider.svelte b/src/RangeSlider.svelte
-index 60886c96b312e5e2ee83d7ac624a46ac4512f5c5..58b290a4d9166622621efedd39f518628f96be2a 100755
+index 60886c96b312e5e2ee83d7ac624a46ac4512f5c5..16cf2bacedd7baeef62fa1044226f2a2bf7d3e50 100755
 --- a/src/RangeSlider.svelte
 +++ b/src/RangeSlider.svelte
 @@ -20,6 +20,15 @@
@@ -21,3 +21,11 @@ index 60886c96b312e5e2ee83d7ac624a46ac4512f5c5..58b290a4d9166622621efedd39f51862
  
    // range pips / values props
    export let pips = false;
+@@ -787,6 +796,7 @@
+ </style>
+ 
+ <div
++  role="presentation"
+   {id}
+   bind:this={slider}
+   class="rangeSlider"

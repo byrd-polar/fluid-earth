@@ -75,7 +75,7 @@ export default async ({ mode }) => {
     }),
     // For .svelte files
     svelte({
-      preprocess: [customEmToPx()],
+      preprocess: [customPreprocess()],
     }),
     // For GLSL .vert and .frag files
     glslify({
@@ -207,19 +207,30 @@ async function copyDir(srcDir, destDir, symlinkTera=false) {
   }
 }
 
-function customEmToPx() {
+// A custom Svelte preprocess for Fluid Earth that does the following:
+// 
+// - converts em/rem units of some third-party components to px
+// - removes <svelte:options> on Map component (only used for webcomponent)
+// 
+function customPreprocess() {
   const files = [
     'svelte-toggle/src/Toggle.svelte',
     'svelte-range-slider-pips/src/RangeSlider.svelte',
   ];
   return {
-    name: 'convert em/rem units of third-party components to px',
+    name: 'Fluid Earth custom Svelte preprocess',
     style: ({ content, filename }) => {
       if (files.find(file => filename.endsWith(file))) {
         const code = content.replaceAll(
           /([0-9.]+)r?em/g,
           (_, value) => `${parseFloat(value) * 16}px`,
         );
+        return { code };
+      }
+    },
+    markup: ({ content, filename }) => {
+      if (filename.endsWith('src/map/Map.svelte')) {
+        const code = content.replaceAll(/^.*customElement=".*$/gm, '');
         return { code };
       }
     },
