@@ -29,8 +29,6 @@
   style="left: {x}px; top: {y}px;"
   in:fly="{{ y: -150, duration: 250 }}"
   out:fade="{{ duration: 250 }}"
-  on:mouseenter={() => hovering = true}
-  on:mouseleave={() => hovering = false}
 >
   <button
     class="marker"
@@ -38,6 +36,8 @@
     on:click={() => pins = pins.filter(p => p !== pin)}
     on:focus={() => hovering = true}
     on:blur={() => hovering = false}
+    on:mouseenter={() => hovering = true}
+    on:mouseleave={() => hovering = false}
   >
     <PinIcon size={32} />
   </button>

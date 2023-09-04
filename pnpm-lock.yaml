@@ -21,7 +21,7 @@ patchedDependencies:
     hash: qsnwewirjzlisqst5clin7dyle
     path: patches/rollup-plugin-glslify@1.3.1.patch
   svelte-range-slider-pips@2.2.2:
-    hash: 5res75u6scwwjnl2muyhfqsxyy
+    hash: 6x3zth5bzp3snvno2l5xduutjy
     path: patches/svelte-range-slider-pips@2.2.2.patch
   svelte@4.2.0:
     hash: uzf77efwm7atpmh3vgtdkpv2kq
@@ -90,7 +90,7 @@ dependencies:
     version: 8.0.0
   svelte-range-slider-pips:
     specifier: 2.2.2
-    version: 2.2.2(patch_hash=5res75u6scwwjnl2muyhfqsxyy)
+    version: 2.2.2(patch_hash=6x3zth5bzp3snvno2l5xduutjy)
   svelte-toggle:
     specifier: ^4.0.0
     version: 4.0.0
@@ -2194,7 +2194,7 @@ packages:
       svelte: 4.2.0(patch_hash=uzf77efwm7atpmh3vgtdkpv2kq)
     dev: true
 
-  /svelte-range-slider-pips@2.2.2(patch_hash=5res75u6scwwjnl2muyhfqsxyy):
+  /svelte-range-slider-pips@2.2.2(patch_hash=6x3zth5bzp3snvno2l5xduutjy):
     resolution: {integrity: sha512-SsiIBpCkBnqvfaHLeIDolTfZlc8m7y93MhlxPKQ90YMZnE/rAxj+IoCrd7LTL/nXA2SCla4IJutSzfwdOtJddA==}
     dev: false
     patched: true

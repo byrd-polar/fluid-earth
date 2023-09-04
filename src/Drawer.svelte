@@ -44,7 +44,7 @@
   }
 
   function handleKeydown(e) {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' && drawerOpen) {
       closeDrawer();
     }
   }
@@ -67,10 +67,11 @@
   }
 </script>
 
+<svelte:window on:keydown={handleKeydown} />
+
 <aside
   class:open={drawerOpen}
   bind:this={drawer}
-  on:keydown={handleKeydown}
 >
   <header>
     <h1>
@@ -127,7 +128,10 @@
     </a>
   </footer>
 </aside>
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore
+  a11y-click-events-have-key-events
+  a11y-no-static-element-interactions
+-->
 <div
   class="scrim"
   class:open={drawerOpen}
