@@ -11,6 +11,9 @@ If you are interested in using Fluid Earth for educational purposes or
 collaborating with us to develop Fluid Earth for a specific application, please
 email [gravina.2@osu.edu](mailto:gravina.2@osu.edu).
 
+For more information, visit the Help & About menu at
+[Fluid Earth](https://fluid-earth.byrd.osu.edu/).
+
 ## Development
 
 ### Frontend-only setup
@@ -88,22 +91,3 @@ Fluid Earth comes with a lightweight web component which can be included in
 webpage contexts where the full application is not needed. Refer to the
 [documentation](webcomponent/README.md) for more info on using the
 web component.
-
-
-## Kiosk mode
-
-Fluid Earth can be run in a kiosk mode that prevents users from navigating away from the application. This requires the Chrome browser. To set up kiosk mode:
-
-- Open Chrome and go to https://fluid-earth.byrd.osu.edu/#dmode=true (or, if you're running your own instance, go to its root page with `#dmode=true` appended at the end).
-
-- Go to the "..." menu in the upper-right corner and click "More Tools", "Create Shortcut".
-
-- Change the text to "Fluid Earth kiosk" and click "Create".
-
-- Right-click the new shortcut and click "Properties". In the "Target" field, scroll to the end and add ` --kiosk` (be sure to include the space). Click OK.
-
-- Double-click the shortcut to open the app.
-
-- Hit "F11" to go to fullscreen.
-
-- Remove the keyboard from the display (since users would be able to use key commands to circumvent kiosk mode).
