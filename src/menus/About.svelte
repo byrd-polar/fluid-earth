@@ -82,6 +82,42 @@ exploring on your own!
 </details>
 
 <details>
+<summary><h2>Related publications</h2></summary>
+<ul>
+  <li>
+  Cervenec, J., Davis, G., Gravina, M. T., & Hamilton, D. (2023). A Tool for
+  Exploring Our Fluid Earth. <i>Phys. Teach.</i> 61, 432–435.
+  <a href=https://doi.org/10.1119/5.0132110>
+    https://doi.org/10.1119/5.0132110
+  </a>
+  </li>
+  <li>
+  Gravina, M. T., Zhan, M., Cai, M., Arens, A., & Cervenec, J. Fluid Earth:
+  Open-source Visualization of Weather and Climate Data. (2022). <i>GIS Lounge.</i>
+  <a href="https://www.gislounge.com/fluid-earth-open-source-visualization-weather-climate-data/">
+    https://www.gislounge.com/fluid-earth-open-source-visualization-weather-climate-data/
+  </a>
+  </li>
+  <li>
+  Fox, J. Peggau, K., Wilson, A., Li, B. Hu, D., Chang, R., Wong, J., & Bossley,
+  C. Interactive data visualizations of Earth's atmosphere: Effects on student
+  engagement and perceived learning. <i>Journal of Geoscience Education.</i> 70,
+  517-529.
+  <a href="https://doi.org/10.1080/10899995.2022.2038963">
+    https://doi.org/10.1080/10899995.2022.2038963
+  </a>
+  </li>
+</ul>
+
+
+
+
+
+
+
+</details>
+
+<details>
 <summary><h2>Our Sponsor</h2></summary>
 <p>
 This project is sponsored by the U.S. National Science Foundation as an
@@ -227,6 +263,19 @@ relating to our site.
 <p>
 IF YOU DO NOT AGREE TO AND ACCEPT THESE TERMS OF USE YOU SHOULD NOT USE THE
 SOFTWARE.
+</details>
+
+<details>
+  <summary><h2>Recommended citation</h2></summary>
+  <p>
+  When citing Fluid Earth in written materials, we recommend the following
+  wording:
+  <p>
+  <p><strong>
+  Fluid Earth, an Educational Tool for Visualizing Earth's Atmosphere, Oceans,
+  and Permafrost from the Education and Outreach Group at the Byrd Polar and
+  Climate Research Center (BPCRC), The Ohio State University (OSU).
+  </strong></p>
 </details>
 
 <details>
