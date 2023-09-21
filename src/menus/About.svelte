@@ -87,7 +87,7 @@ exploring on your own!
   <li>
   Cervenec, J., Davis, G., Gravina, M. T., & Hamilton, D. (2023). A Tool for
   Exploring Our Fluid Earth. <i>Phys. Teach.</i> 61, 432–435.
-  <a href=https://doi.org/10.1119/5.0132110>
+  <a href="https://doi.org/10.1119/5.0132110">
     https://doi.org/10.1119/5.0132110
   </a>
   </li>
@@ -108,13 +108,6 @@ exploring on your own!
   </a>
   </li>
 </ul>
-
-
-
-
-
-
-
 </details>
 
 <details>
