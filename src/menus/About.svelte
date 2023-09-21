@@ -289,12 +289,12 @@ these libraries.
   <summary><h2>Kiosk mode</h2></summary>
   <p>
     Fluid Earth can be run in a "kiosk mode", intended for museum displays,
-    that prevents users from navigating away from the application. This
-    requires the Chrome browser. To set up kiosk mode:
+    that prevents users from navigating away from the application. To set up
+    kiosk mode for Chrome on Windows:
     <ul>
       <li>
         Open Chrome and go to
-        <a href="https://fluid-earth.byrd.osu.edu/#dmode=true">
+        <a href="https://fluid-earth.byrd.osu.edu/#kmode=true">
           https://fluid-earth.byrd.osu.edu/#dmode=true
         </a>.
       </li>
