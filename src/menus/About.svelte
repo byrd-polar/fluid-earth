@@ -243,6 +243,44 @@ and
 these libraries.
 </details>
 
+<details>
+  <summary><h2>Kiosk mode</h2></summary>
+  <p>
+    Fluid Earth can be run in a "kiosk mode", intended for museum displays,
+    that prevents users from navigating away from the application. This
+    requires the Chrome browser. To set up kiosk mode:
+    <ul>
+      <li>
+        Open Chrome and go to
+        <a href="https://fluid-earth.byrd.osu.edu/#dmode=true">
+          https://fluid-earth.byrd.osu.edu/#dmode=true
+        </a>.
+      </li>
+      <li>
+        Go to the "..." menu in the upper-right corner and click "More Tools",
+        "Create Shortcut".
+      </li>
+      <li>
+        Change the text to "Fluid Earth kiosk" and click "Create".
+      </li>
+      <li>
+        Right-click the new shortcut and click "Properties". In the "Target"
+        field, scroll to the end and add " --kiosk" (be sure to include the
+        space). Click OK.
+      </li>
+      <li>
+        Double-click the shortcut to open the app.
+      </li>
+      <li>
+        Hit "F11" to go to fullscreen.
+      </li>
+      <li>
+        Remove the keyboard from the display (since users would be able to use
+        key commands to circumvent kiosk mode).
+      </li>
+    </ul>
+</details>
+
 </div>
 
 <style>

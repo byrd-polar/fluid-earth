@@ -105,3 +105,5 @@ Fluid Earth can be run in a kiosk mode that prevents users from navigating away 
 - Double-click the shortcut to open the app.
 
 - Hit "F11" to go to fullscreen.
+
+- Remove the keyboard from the display (since users would be able to use key commands to circumvent kiosk mode).
