@@ -295,7 +295,7 @@ these libraries.
       <li>
         Open Chrome and go to
         <a href="https://fluid-earth.byrd.osu.edu/#kmode=true">
-          https://fluid-earth.byrd.osu.edu/#dmode=true
+          https://fluid-earth.byrd.osu.edu/#kmode=true
         </a>.
       </li>
       <li>
