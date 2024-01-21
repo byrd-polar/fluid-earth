@@ -56,6 +56,7 @@
 
   section :global(svg) {
     filter: drop-shadow(0 0 0.25em black);
+    flex-shrink: 0;
   }
 
   section :global(.hidden) {
