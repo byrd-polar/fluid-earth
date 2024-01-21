@@ -1,8 +1,8 @@
 diff --git a/src/runtime/internal/dom.js b/src/runtime/internal/dom.js
-index 18a5d5d2787b4310bc134a2c2ef4490917631425..bbcd75a8fc5c9fc78c33e3251eda96318889ec4b 100644
+index 37cbb314f25f637068b7fc1a9f10d2021eef54e8..2c2069f4ffa8105c69a9f44b1da7d1df08c9e4dd 100644
 --- a/src/runtime/internal/dom.js
 +++ b/src/runtime/internal/dom.js
-@@ -932,51 +932,9 @@ export function is_crossorigin() {
+@@ -940,51 +940,9 @@ export function is_crossorigin() {
   * @returns {() => void}
   */
  export function add_iframe_resize_listener(node, fn) {

@@ -1,16 +1,16 @@
 diff --git a/LICENSE-MPL-2.0 b/LICENSE-MPL-2.0
-deleted file mode 100755
+deleted file mode 100644
 index 14e2f777f6c395e7e04ab4aa306bbcc4b0c1120e..0000000000000000000000000000000000000000
 diff --git a/src/RangeSlider.svelte b/src/RangeSlider.svelte
-index 60886c96b312e5e2ee83d7ac624a46ac4512f5c5..16cf2bacedd7baeef62fa1044226f2a2bf7d3e50 100755
+index 460bf5c0bb18d349217644b625e4816a0b1ea656..dafbbf129bd599e821f7c3e42e4342fbfc2804af 100644
 --- a/src/RangeSlider.svelte
 +++ b/src/RangeSlider.svelte
-@@ -20,6 +20,15 @@
+@@ -20,7 +20,16 @@
    export let reversed = false;
    export let hoverable = true;
    export let disabled = false;
 +  export let value = values[0];
-+
+ 
 +  // keep value and values in sync with each other
 +  const updateValues = () => { if (value !== values[0]) values = [value] };
 +  const updateValue = () => {
@@ -18,10 +18,11 @@ index 60886c96b312e5e2ee83d7ac624a46ac4512f5c5..16cf2bacedd7baeef62fa1044226f2a2
 +  };
 +  $: value, updateValues();
 +  $: values, updateValue();
- 
++ 
    // range pips / values props
    export let pips = false;
-@@ -787,6 +796,7 @@
+   export let pipstep = undefined;
+@@ -799,6 +808,7 @@
  </style>
  
  <div
