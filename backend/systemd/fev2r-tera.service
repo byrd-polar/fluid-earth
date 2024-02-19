@@ -11,6 +11,7 @@ WorkingDirectory=/export/data/fev2r/repository
 Environment=UV_THREADPOOL_SIZE=16
 ExecStart=/usr/local/bin/npm run tera
 Restart=on-failure
+RestartSec=1min
 
 [Install]
 WantedBy=multi-user.target
