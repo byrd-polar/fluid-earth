@@ -15,7 +15,7 @@ export async function download(
   let file = get_temp_file(unique_path ? undefined : basename(url));
   let response = await download_as_stream(url, options);
 
-  if (response.headers['content-type'].startsWith('multipart/byteranges')) {
+  if (response.headers['content-type']?.startsWith('multipart/byteranges')) {
     await multipart_byteranges_to_file(file, response);
   } else {
     await pipeline(response, ...transforms, createWriteStream(file));
