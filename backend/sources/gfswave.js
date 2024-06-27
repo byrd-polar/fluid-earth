@@ -1,7 +1,7 @@
 import {
   shared_metadata,
   increment_state,
-  base_url,
+  choose_base_url,
   convert_simple,
 } from './gfs.js';
 import { Datetime } from '../datetime.js';
@@ -13,15 +13,16 @@ export async function forage(current_state, datasets) {
 
   let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
 
-  let url = gfswave_url({ forecast, offset, system });
+  let base_url = choose_base_url(current_state);
+  let url = gfswave_url({ forecast, offset, system, base_url });
   let compression_level = system === 'gdas' && offset < 6 ? 11 : 6;
 
   await convert_simple(url, datasets, dt, compression_level);
 
-  return { metadatas, new_state: { forecast, offset, system } };
+  return { metadatas, new_state: { forecast, offset, system, base_url } };
 }
 
-function gfswave_url({ forecast, offset, system }) {
+function gfswave_url({ forecast, offset, system, base_url }) {
   let fdt = Datetime.from(forecast);
 
   return base_url

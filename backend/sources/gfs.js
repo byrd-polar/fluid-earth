@@ -21,19 +21,20 @@ export async function forage(current_state, datasets) {
       : typical_metadata(d, dt, shared_metadata);
   });
 
-  let url = gfs_url({ forecast, offset, system });
+  let base_url = choose_base_url(current_state);
+  let url = gfs_url({ forecast, offset, system, base_url });
   let compression_level = system === 'gdas' && offset < 6 ? 11 : 6;
 
   let simple_datasets = datasets.filter(d => !d.accumulation);
   await convert_simple(url, simple_datasets, dt, compression_level);
 
   if (offset !== 0) {
-    let urls = [url, gfs_url(current_state)];
+    let urls = [url, gfs_url({ ...current_state, base_url })];
     let accum_datasets = datasets.filter(d => d.accumulation);
     await convert_accum(urls, accum_datasets, dt, offset, compression_level);
   }
 
-  return { metadatas, new_state: { forecast, offset, system } };
+  return { metadatas, new_state: { forecast, offset, system, base_url } };
 }
 
 export function increment_state(current_state) {
@@ -51,10 +52,20 @@ export function increment_state(current_state) {
   return { forecast, offset, system };
 }
 
-export const base_url = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/';
-export const backup_url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/';
+const ftpprd_url = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/';
+const nomads_url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/';
 
-function gfs_url({ forecast, offset, system }) {
+export function choose_base_url({ last_successful_update, base_url }) {
+  if (!(base_url && last_successful_update))
+    return ftpprd_url;
+
+  if (new Date() - new Date(last_successful_update) < 5 * 60_000)
+    return base_url;
+
+  return base_url === ftpprd_url ? nomads_url : ftpprd_url;
+}
+
+function gfs_url({ forecast, offset, system, base_url }) {
   let fdt = Datetime.from(forecast);
 
   return base_url
@@ -98,11 +109,6 @@ async function convert_accum(urls, datasets, dt, offset, compression_level) {
 }
 
 async function download_gfs(url, datasets) {
-  return _download_gfs(url, datasets)
-    .catch(() => _download_gfs(url.replace(base_url, backup_url), datasets));
-}
-
-async function _download_gfs(url, datasets) {
   let idx_url = url + '.idx';
   let idx = await download(idx_url);
   let idx_string = (await readFile(idx)).toString();

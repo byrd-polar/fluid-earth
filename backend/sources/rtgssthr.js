@@ -1,4 +1,4 @@
-import { base_url, backup_url } from './gfs.js';
+import { choose_base_url } from './gfs.js';
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
@@ -25,17 +25,17 @@ export async function forage(current_state, datasets) {
 
   let metadatas = datasets.map(d => typical_metadata(d, dt, metadata));
 
+  let base_url = choose_base_url(current_state);
   let url = base_url
     + 'nsst/prod/'
     + `nsst.${dt.year}${dt.p_month}${dt.p_day}/`
     + 'rtgssthr_grb_0.083_awips.grib2';
 
-  let input = await download(url)
-    .catch(() => download(url.replace(base_url, backup_url)));
+  let input = await download(url);
 
   let output = output_path(datasets[0].output_dir, date);
   await grib2(input, output, { compression_level: 11 });
   await rm(input);
 
-  return { metadatas, new_state: { date } };
+  return { metadatas, new_state: { date, base_url } };
 }
