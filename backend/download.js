@@ -73,7 +73,7 @@ async function download_as_stream(url, options={}) {
 
 function handle_response(response, resolve, reject, url) {
   let { statusCode, statusMessage } = response;
-  if ([200, 202, 206].includes(statusCode)) {
+  if ([200, 201, 202, 206].includes(statusCode)) {
     resolve(response);
   } else {
     response.resume();

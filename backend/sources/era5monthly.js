@@ -24,12 +24,11 @@ const shared_metadata = {
 };
 
 export async function forage(current_state, datasets) {
-  let { date, last_updated, normals={} } = current_state;
+  let { date, normals={} } = current_state;
   let dt = date
     ? Datetime.from(date).add({ months: 1 })
     : Datetime.from('1959-01-01');
   date = dt.to_iso_string();
-  last_updated = await verify_update_needed(name, dt, last_updated);
 
   let metadatas = datasets.map(d => typical_metadata(d, dt, shared_metadata));
   let variables = [...new Set(datasets.map(d => d.variable))];
@@ -39,22 +38,15 @@ export async function forage(current_state, datasets) {
   // before 2m_temperature for 2023-02)
   variables.sort();
 
-  let input;
-  try {
-    input = await download_cds(name, {
-      format: 'grib',
-      product_type: 'monthly_averaged_reanalysis',
-      year: dt.year,
-      month: dt.p_month,
-      time: '00:00',
-      variable: variables,
-    }, process.env.CDS_API_KEY);
-  } catch(e) {
-    if (e === 'Error: no data is available within your requested subset') {
-      return { new_state: { ...current_state, last_updated } };
-    }
-    throw e;
-  }
+  let input = await download_cds(name, {
+    product_type: ['monthly_averaged_reanalysis'],
+    variable: variables,
+    year: [`${dt.year}`],
+    month: [dt.p_month],
+    time: ['00:00'],
+    data_format: 'grib',
+    download_format: 'unarchived',
+  }, process.env.CDS_API_KEY);
 
   await run_all(datasets.map(dataset => async () => {
     let output = output_path(dataset.output_dir, dt.to_iso_string());
@@ -70,7 +62,7 @@ export async function forage(current_state, datasets) {
   }));
   await rm(input);
 
-  return { metadatas, new_state: { date, last_updated, normals } };
+  return { metadatas, new_state: { date, normals } };
 }
 
 const count = 30;
@@ -83,12 +75,13 @@ async function get_normal(normals, dt, variable) {
   if (normal) return normal;
 
   let input = await download_cds(name, {
-    format: 'grib',
-    product_type: 'monthly_averaged_reanalysis',
-    year: Array.from({ length: count }, (_, i) => i + starting_year),
-    month,
-    time: '00:00',
-    variable,
+    product_type: ['monthly_averaged_reanalysis'],
+    variable: [variable],
+    year: Array.from({ length: count }, (_, i) => `${i + starting_year}`),
+    month: [month],
+    time: ['00:00'],
+    data_format: 'grib',
+    download_format: 'unarchived',
   }, process.env.CDS_API_KEY);
   let output = join(perm_cache_dir, uuidv4());
   normals[variable][month] = output;
@@ -99,42 +92,41 @@ async function get_normal(normals, dt, variable) {
   return output;
 }
 
-const base_url = 'https://cds.climate.copernicus.eu/api/v2';
+const base_url = 'https://cds-beta.climate.copernicus.eu/api';
 
-async function verify_update_needed(name, dt, last_updated) {
-  let ui_resources_url = `${base_url}.ui/resources/${name}`;
-  let { update_date } = await get_json(ui_resources_url);
-  let getting_latest = dt >= Datetime.from(update_date).round({
-    smallestUnit: 'month',
-    roundingMode: 'floor',
-  });
-  if (last_updated === update_date && getting_latest) {
-    throw new Error('No update needed');
-  }
-  return update_date;
-}
+async function download_cds(name, request, api_key) {
+  let constraints_url = `${base_url}/retrieve/v1/processes/${name}/constraints`;
 
-async function download_cds(name, request, auth) {
-  let resource_url = `${base_url}/resources/${name}`
+  let constraints = await post_json(constraints_url, { inputs: request });
+  let data_available = Object.entries(request).every(([key, val]) => {
+    val = Array.isArray(val) ? val : [val]
+    return val.every(v => constraints[key].includes(v))
+  })
+  if (!data_available) throw new Error('Requested data not yet available');
 
-  let response = await post_json(resource_url, request, { auth });
-  let task_url = `${base_url}/tasks/${response.request_id}`;
+  let submit_url = `${base_url}/retrieve/v1/processes/${name}/execution`;
+  let headers = { 'PRIVATE-TOKEN': api_key };
+
+  let response = await post_json(submit_url, { inputs: request }, { headers });
+  if (response.status !== 'accepted') throw new Error('Process not accepted');
+
+  let monitor_url = response.links.find(l => l.rel === 'monitor').href;
 
   let sleep_time = 1e3;
-  let reply = await get_json(task_url, { auth });
+  let reply = await get_json(monitor_url, { headers });
 
-  while(['queued', 'running'].includes(reply.state)) {
+  while(['accepted', 'running'].includes(reply.status)) {
     await sleep(sleep_time);
     sleep_time = Math.min(sleep_time * 1.5, 120e3);
-    reply = await get_json(task_url, { auth });
+    reply = await get_json(monitor_url, { headers });
     parentPort?.postMessage('keepalive');
   }
 
-  if (reply.state !== 'completed') throw new Error(reply.error.message);
+  // TODO: pretty print status === 'failed' case (see cads_api_client code)
+  if (reply.status !== 'successful') throw new Error(`Process ${reply.status}`);
 
-  let download_url = reply.location.startsWith('https://')
-    ? reply.location
-    : `${base_url}/${reply.location}`;
+  let results_url = reply.links.find(l => l.rel === 'results').href
+  let results = await get_json(results_url, { headers })
 
-  return download(download_url, { auth });
+  return download(results.asset.value.href, { headers });
 }
