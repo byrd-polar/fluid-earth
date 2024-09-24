@@ -44,15 +44,14 @@ Changes to files in `src` will be automatically displayed from the dev server.
 
 First, complete the frontend-only setup.
 
-Then, [create an account](https://cds.climate.copernicus.eu/user/register) to
-access CDS. Once logged in, [accept the Copernicus
-license](https://cds.climate.copernicus.eu/cdsapp/#!/terms/licence-to-use-copernicus-products)
-and use your [CDS API key](https://cds.climate.copernicus.eu/api-how-to) to
+Then, [create an account](https://cds-beta.climate.copernicus.eu/) to
+access CDS. Once logged in, [accept the Copernicus license](https://cds-beta.climate.copernicus.eu/datasets/reanalysis-era5-single-levels-monthly-means?tab=download)
+and use your [CDS API key](https://cds-beta.climate.copernicus.eu/how-to-api) to
 create a `.env` file in the root of this Git repository with the following
 content, replacing the `X`s with your key:
 
 ```env
-CDS_API_KEY=XXXXXX:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+CDS_API_KEY=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 ```
 
 Similarly, [create an account](https://urs.earthdata.nasa.gov/users/new) to
