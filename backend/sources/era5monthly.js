@@ -122,11 +122,16 @@ async function download_cds(name, request, api_key) {
     parentPort?.postMessage('keepalive');
   }
 
-  // TODO: pretty print status === 'failed' case (see cads_api_client code)
-  if (reply.status !== 'successful') throw new Error(`Process ${reply.status}`);
+  if (reply.status !== 'successful' && reply.status !== 'failed') {
+    throw new Error(`Process ${reply.status}`);
+  }
 
   let results_url = reply.links.find(l => l.rel === 'results').href
   let results = await get_json(results_url, { headers })
+
+  if (reply.status === 'failed') {
+    throw new Error(`Process failed: ${results.json}`)
+  }
 
   return download(results.asset.value.href, { headers });
 }
