@@ -80,6 +80,7 @@
       "svelte-range-slider-pips@2.2.3": "patches/svelte-range-slider-pips@2.2.3.patch",
       "tippy.js@6.3.7": "patches/tippy.js@6.3.7.patch"
     },
+    "allowNonAppliedPatches": true,
     "peerDependencyRules": {
       "ignoreMissing": [
         "@types/*"
