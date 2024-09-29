@@ -92,7 +92,7 @@ async function get_normal(normals, dt, variable) {
   return output;
 }
 
-const base_url = 'https://cds-beta.climate.copernicus.eu/api';
+const base_url = 'https://cds.climate.copernicus.eu/api';
 
 async function download_cds(name, request, api_key) {
   let constraints_url = `${base_url}/retrieve/v1/processes/${name}/constraints`;
