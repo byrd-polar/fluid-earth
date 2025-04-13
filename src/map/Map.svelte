@@ -293,8 +293,8 @@
 
 <div class="layers">
   <slot name="background"></slot>
-  <canvas bind:this={backgroundCanvas}/>
-  <canvas bind:this={particleCanvas}/>
+  <canvas bind:this={backgroundCanvas}></canvas>
+  <canvas bind:this={particleCanvas}></canvas>
   <slot></slot>
   {#if webglError}
     <div class="error">
