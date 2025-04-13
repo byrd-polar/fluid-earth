@@ -8,9 +8,9 @@ patchedDependencies:
   '@slightlyoff/lite-vimeo@0.1.2':
     hash: a5xcetozjprisz4vjh6z2qcn6e
     path: patches/@slightlyoff__lite-vimeo@0.1.2.patch
-  esm-seedrandom@3.0.5:
-    hash: 6gcdzpmuhyfz6r3soy4gimvrvm
-    path: patches/esm-seedrandom@3.0.5.patch
+  esm-seedrandom@3.0.5-esm.2:
+    hash: lvw2sy6dzzus5dj3pfstdpnzgu
+    path: patches/esm-seedrandom@3.0.5-esm.2.patch
   glslify@7.1.1:
     hash: bmxodjeauj7ktnr5fnvhqyafsa
     path: patches/glslify@7.1.1.patch
@@ -71,8 +71,8 @@ dependencies:
     specifier: ^16.4.5
     version: 16.4.5
   esm-seedrandom:
-    specifier: github:shanewholloway/js-esm-seedrandom
-    version: github.com/shanewholloway/js-esm-seedrandom/68545d76e5c49116dafd90411034529e2fbeff7a(patch_hash=6gcdzpmuhyfz6r3soy4gimvrvm)
+    specifier: 3.0.5-esm.2
+    version: 3.0.5-esm.2(patch_hash=lvw2sy6dzzus5dj3pfstdpnzgu)
   focus-trap:
     specifier: ^7.6.0
     version: 7.6.0
@@ -1125,6 +1125,11 @@ packages:
     optionalDependencies:
       source-map: 0.6.1
     dev: true
+
+  /esm-seedrandom@3.0.5-esm.2(patch_hash=lvw2sy6dzzus5dj3pfstdpnzgu):
+    resolution: {integrity: sha512-K6/g/blFdwYWCvBJwbYQGDTlvP3ElnsXwIvbwLjwcP7grVtcqCC6VOPe47/z3gSfwCLkcWGeB8CffwMNYr35HQ==}
+    dev: false
+    patched: true
 
   /esm@3.2.25:
     resolution: {integrity: sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==}
@@ -2397,11 +2402,3 @@ packages:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
     engines: {node: '>=0.4'}
     dev: true
-
-  github.com/shanewholloway/js-esm-seedrandom/68545d76e5c49116dafd90411034529e2fbeff7a(patch_hash=6gcdzpmuhyfz6r3soy4gimvrvm):
-    resolution: {tarball: https://codeload.github.com/shanewholloway/js-esm-seedrandom/tar.gz/68545d76e5c49116dafd90411034529e2fbeff7a}
-    id: github.com/shanewholloway/js-esm-seedrandom/68545d76e5c49116dafd90411034529e2fbeff7a
-    name: esm-seedrandom
-    version: 3.0.5
-    dev: false
-    patched: true
