@@ -58,7 +58,7 @@
     "js-quantities": "^1.8.0",
     "pretty-bytes": "^6.1.1",
     "pretty-ms": "^8.0.0",
-    "svelte-range-slider-pips": "2.2.3",
+    "svelte-range-slider-pips": "3.2.2",
     "svelte-toggle": "^4.0.1",
     "tippy.js": "^6.3.7",
     "topojson-client": "^3.1.0",
@@ -77,7 +77,6 @@
       "js-quantities@1.8.0": "patches/js-quantities@1.8.0.patch",
       "rollup-plugin-glslify@1.3.1": "patches/rollup-plugin-glslify@1.3.1.patch",
       "svelte@4.2.19": "patches/svelte@4.2.19.patch",
-      "svelte-range-slider-pips@2.2.3": "patches/svelte-range-slider-pips@2.2.3.patch",
       "tippy.js@6.3.7": "patches/tippy.js@6.3.7.patch"
     },
     "allowUnusedPatches": true,

@@ -20,9 +20,6 @@ patchedDependencies:
   rollup-plugin-glslify@1.3.1:
     hash: 00a4dd3755f5cda4fd97901ed3c41f0f33cf1dcf028ec7e3365d860061af8be9
     path: patches/rollup-plugin-glslify@1.3.1.patch
-  svelte-range-slider-pips@2.2.3:
-    hash: c17fdd203ae6f0735588b0b15b8f270ee0e4b38a90634af1ed8bc371827791cf
-    path: patches/svelte-range-slider-pips@2.2.3.patch
   svelte@4.2.19:
     hash: 87ecb45e15de4f369ded4e60f6a9c89e1fcc9599958dfb51259d92a2f9ba37b8
     path: patches/svelte@4.2.19.patch
@@ -92,8 +89,8 @@ importers:
         specifier: ^8.0.0
         version: 8.0.0
       svelte-range-slider-pips:
-        specifier: 2.2.3
-        version: 2.2.3(patch_hash=c17fdd203ae6f0735588b0b15b8f270ee0e4b38a90634af1ed8bc371827791cf)
+        specifier: 3.2.2
+        version: 3.2.2(svelte@5.26.2)
       svelte-toggle:
         specifier: ^4.0.1
         version: 4.0.1
@@ -1471,8 +1468,10 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  svelte-range-slider-pips@2.2.3:
-    resolution: {integrity: sha512-ZAwX9+NDOE6cdqUTMfwBw27YI7NFgSXyPS1ARx3Zuaish2q6FuAtgx5d9+uqNzxQ7WVFhxgM7iQp8MvCpvy4Jw==}
+  svelte-range-slider-pips@3.2.2:
+    resolution: {integrity: sha512-Q2+hn5jEP2CtbWFrvFZoThRUURbijWSCsoOR6Z8UUKjA5ftYQI7Z+mHYxHQpnGd3LCb9OlkHX2wM1If+Vbci6g==}
+    peerDependencies:
+      svelte: ^4.2.7 || ^5.0.0
 
   svelte-toggle@4.0.1:
     resolution: {integrity: sha512-omE2zHKmijXebDoNNjfV4JKEoUTSIBSoqg16/gzCfHKcwnafk0DAN9d4mwIg5F7ipyYc51sd9A9B2qwmbxypLw==}
@@ -2850,7 +2849,9 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte-range-slider-pips@2.2.3(patch_hash=c17fdd203ae6f0735588b0b15b8f270ee0e4b38a90634af1ed8bc371827791cf): {}
+  svelte-range-slider-pips@3.2.2(svelte@5.26.2):
+    dependencies:
+      svelte: 5.26.2
 
   svelte-toggle@4.0.1: {}
 
