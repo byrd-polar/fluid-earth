@@ -163,9 +163,8 @@
   let timesCalled = 0;
 
   async function updateDataAndVariables(griddedDataset, particleDataset, date) {
-    // ignore the call to this once on initial page load, and again to
-    // workaround Svelte bug with initial bindings
-    if (timesCalled < 2) { timesCalled++; return; }
+    // ignore the call to this once on initial page load
+    if (timesCalled < 1) { timesCalled++; return; }
 
     controller.abort();
     controller = new AbortController();

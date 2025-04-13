@@ -62,22 +62,22 @@
   {/if}
 </form>
 {#if formSubmitted}
-  <p transition:fade>
+  <div transition:fade>
     {#if formSubmittedSuccessfully}
       Form submitted successfully. Thank you for your feedback!
     {:else}
-      There was a problem with submitting the form; please email
+      <p>There was a problem with submitting the form; please email
       <a href="mailto:gravina.2@osu.edu">gravina.2@osu.edu</a> with your
       feedback instead.
-      <p>Thank you, and apologies for the inconvenience.
+      <p>Thank you, and apologies for the inconvenience.</p>
 
       <!-- svelte-ignore missing-declaration -->
       {#if !__production__}
         <p><strong>NOTE:</strong> Form submission is only expected to work when
-        hosted on Netlify. (This note is not visible in production.)
+        hosted on Netlify. (This note is not visible in production.)</p>
       {/if}
     {/if}
-  </p>
+  </div>
 {/if}
 </details>
 
