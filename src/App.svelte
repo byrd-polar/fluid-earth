@@ -326,13 +326,6 @@
 {#if !__production__}
   <Menu bind:openedMenu menuName="Developer-Only Tools">
     <DeveloperOnlyTools
-      {minZoom}
-      {maxZoom}
-      bind:zoom
-      {minLat}
-      {maxLat}
-      {minLong}
-      {maxLong}
       bind:centerLatitude
       bind:centerLongitude
       {gDatasets}
