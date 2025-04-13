@@ -68,7 +68,7 @@
   "engines": {
     "node": ">=16"
   },
-  "packageManager": "pnpm@8.7.1",
+  "packageManager": "pnpm@10.8.0+sha512.0e82714d1b5b43c74610193cb20734897c1d00de89d0e18420aebc5977fa13d780a9cb05734624e81ebd81cc876cd464794850641c48b9544326b5622ca29971",
   "pnpm": {
     "patchedDependencies": {
       "@slightlyoff/lite-vimeo@0.1.2": "patches/@slightlyoff__lite-vimeo@0.1.2.patch",
@@ -80,11 +80,15 @@
       "svelte-range-slider-pips@2.2.3": "patches/svelte-range-slider-pips@2.2.3.patch",
       "tippy.js@6.3.7": "patches/tippy.js@6.3.7.patch"
     },
-    "allowNonAppliedPatches": true,
+    "allowUnusedPatches": true,
     "peerDependencyRules": {
       "ignoreMissing": [
         "@types/*"
       ]
-    }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "msgpackr-extract"
+    ]
   }
 }
