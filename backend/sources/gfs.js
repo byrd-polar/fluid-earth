@@ -21,20 +21,19 @@ export async function forage(current_state, datasets) {
       : typical_metadata(d, dt, shared_metadata);
   });
 
-  let base_url = choose_base_url(current_state);
-  let url = gfs_url({ forecast, offset, system, base_url });
+  let url = gfs_url({ forecast, offset, system });
   let compression_level = system === 'gdas' && offset < 6 ? 11 : 6;
 
   let simple_datasets = datasets.filter(d => !d.accumulation);
   await convert_simple(url, simple_datasets, dt, compression_level);
 
   if (offset !== 0) {
-    let urls = [url, gfs_url({ ...current_state, base_url })];
+    let urls = [url, gfs_url({ ...current_state })];
     let accum_datasets = datasets.filter(d => d.accumulation);
     await convert_accum(urls, accum_datasets, dt, offset, compression_level);
   }
 
-  return { metadatas, new_state: { forecast, offset, system, base_url } };
+  return { metadatas, new_state: { forecast, offset, system } };
 }
 
 export function increment_state(current_state) {
@@ -52,20 +51,9 @@ export function increment_state(current_state) {
   return { forecast, offset, system };
 }
 
-const ftpprd_url = 'https://ftpprd.ncep.noaa.gov/data/nccf/com/';
-const nomads_url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/';
+export const base_url = 'https://nomads.ncep.noaa.gov/pub/data/nccf/com/';
 
-export function choose_base_url({ last_successful_update, base_url }) {
-  if (!(base_url && last_successful_update))
-    return ftpprd_url;
-
-  if (new Date() - new Date(last_successful_update) < 5 * 60_000)
-    return base_url;
-
-  return base_url === ftpprd_url ? nomads_url : ftpprd_url;
-}
-
-function gfs_url({ forecast, offset, system, base_url }) {
+function gfs_url({ forecast, offset, system }) {
   let fdt = Datetime.from(forecast);
 
   return base_url

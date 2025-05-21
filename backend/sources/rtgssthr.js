@@ -1,4 +1,4 @@
-import { choose_base_url } from './gfs.js';
+import { base_url } from './gfs.js';
 import { Datetime } from '../datetime.js';
 import { download } from '../download.js';
 import { grib2 } from '../file-conversions.js';
@@ -25,7 +25,6 @@ export async function forage(current_state, datasets) {
 
   let metadatas = datasets.map(d => typical_metadata(d, dt, metadata));
 
-  let base_url = choose_base_url(current_state);
   let url = base_url
     + 'nsst/prod/'
     + `nsst.${dt.year}${dt.p_month}${dt.p_day}/`
