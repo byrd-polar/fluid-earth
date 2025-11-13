@@ -30,9 +30,7 @@
   <div class="wrapper" out:fade={{ duration: 250 }}>
     <section>
       <div>
-        Fluid Earth will be discontinued on December 31, 2025. Project funding ended years ago, and the
-        team does not have funds to continue paying server expenses. If you are looking for a similar
-        weather tool for education, please try <a href="https://earth.nullschool.net" target="_blank">Earth</a>.
+        Good news! We are working with a partner to continue to offer this service beyond December 2025.
       </div>
       <button on:click={action}>
         View tutorial
