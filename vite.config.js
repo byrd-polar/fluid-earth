@@ -76,6 +76,9 @@ export default async ({ mode }) => {
     // For .svelte files
     svelte({
       preprocess: [customPreprocess()],
+      compilerOptions: {
+        warningFilter: (w) => w.code !== 'element_implicitly_closed',
+      },
     }),
     // For GLSL .vert and .frag files
     glslify({
