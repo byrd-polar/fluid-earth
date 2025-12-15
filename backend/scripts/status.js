@@ -38,7 +38,6 @@ up.assert(
 up.assert(
   state.sources.geos, 'forecast',
   18 * hours, 'GEOS is delayed',
-  true,
 );
 up.assert(
   state.sources.gfs, 'forecast',
@@ -59,7 +58,6 @@ up.assert(
 up.assert(
   state.sources.era5monthly, 'date',
   70 * days, 'ERA5-monthly is delayed',
-  true,
 );
 
 if (!up.down) console.log('\nAll sources up to date.');
