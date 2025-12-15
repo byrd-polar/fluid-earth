@@ -1,15 +1,15 @@
 [Unit]
 Description=Fluid Earth Tera Data File Generator
-RequiresMountsFor=/export/data/fev2r/repository /usr/local/bin/npm
+RequiresMountsFor=/home/zqianem/fluid-earth /usr/bin/npm
 After=nss-user-lookup.target
 
 [Service]
-User=gravina.2
-Group=outreach
+User=zqianem
+Group=wxfever
 UMask=0002
 WorkingDirectory=/export/data/fev2r/repository
-Environment=UV_THREADPOOL_SIZE=16
-ExecStart=/usr/local/bin/npm run tera
+Environment=UV_THREADPOOL_SIZE=8
+ExecStart=/usr/bin/npm run tera
 Restart=on-failure
 RestartSec=1min
 
